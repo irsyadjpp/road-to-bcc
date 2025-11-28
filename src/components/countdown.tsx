@@ -55,6 +55,11 @@ export function Countdown({ targetDate }: CountdownProps) {
             <span className="text-4xl md:text-5xl font-bold font-headline leading-none">{String(timeLeft.minutes).padStart(2, '0')}</span>
             <span className="text-xs text-primary-foreground/80">Menit</span>
         </div>
+        <span className="text-3xl md:text-4xl font-bold font-headline -mb-1">:</span>
+        <div className="flex flex-col items-center">
+            <span className="text-4xl md:text-5xl font-bold font-headline leading-none">{String(timeLeft.seconds).padStart(2, '0')}</span>
+            <span className="text-xs text-primary-foreground/80">Detik</span>
+        </div>
     </div>
   );
 }
