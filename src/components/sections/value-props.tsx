@@ -18,16 +18,19 @@ const valueProps = [
     icon: <ShieldCheck className="w-8 h-8 text-primary" />,
     title: "Sistem Anti-Sandbagging",
     description: "Kompetisi adil dengan verifikasi video untuk setiap pemain, memastikan integritas turnamen.",
+    imageId: "value-prop-shield"
   },
   {
     icon: <Trophy className="w-8 h-8 text-primary" />,
     title: "Total Hadiah Rp 42 Juta+",
     description: "Rebut total hadiah lebih dari 42 juta Rupiah dan buktikan supremasi komunitasmu.",
+    imageId: "value-prop-trophy"
   },
   {
     icon: <PartyPopper className="w-8 h-8 text-primary" />,
     title: "WBD Celebration",
     description: "Rayakan World Basketball Day pada 5 Juli 2026 dengan acara puncak yang meriah dan tak terlupakan.",
+    imageId: "value-prop-celebration"
   },
 ];
 
@@ -36,7 +39,8 @@ export function ValuePropositionSection() {
   const [current, setCurrent] = React.useState(0)
   const [count, setCount] = React.useState(0)
 
-  const sliderImage = PlaceHolderImages.find(img => img.id === 'slider-phone-mockup');
+  const currentProp = valueProps[current - 1];
+  const sliderImage = currentProp ? PlaceHolderImages.find(img => img.id === currentProp.imageId) : null;
 
   React.useEffect(() => {
     if (!api) {
@@ -64,34 +68,41 @@ export function ValuePropositionSection() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="flex justify-center items-center">
-            {sliderImage && (
-              <Image
-                src={sliderImage.imageUrl}
-                alt={sliderImage.description}
-                width={400}
-                height={800}
-                className="rounded-xl shadow-lg"
-                data-ai-hint={sliderImage.imageHint}
-              />
-            )}
+            <div className="relative w-[400px] h-[400px]">
+              {valueProps.map((prop, index) => {
+                  const image = PlaceHolderImages.find(img => img.id === prop.imageId);
+                  return image ? (
+                      <Image
+                        key={prop.imageId}
+                        src={image.imageUrl}
+                        alt={image.description}
+                        fill
+                        className={`rounded-xl shadow-lg object-cover transition-opacity duration-500 ease-in-out ${ current -1 === index ? 'opacity-100' : 'opacity-0'}`}
+                        data-ai-hint={image.imageHint}
+                      />
+                  ) : null
+              })}
+            </div>
           </div>
           <div className="text-left">
             <h3 className="font-headline text-sm font-semibold text-primary uppercase tracking-widest mb-2">Kenapa Harus Ikut?</h3>
             
-            <Carousel setApi={setApi} className="w-full">
-              <CarouselContent>
-                {valueProps.map((prop, index) => (
-                  <CarouselItem key={index}>
-                      <div>
-                        <h2 className="text-4xl md:text-5xl font-black font-headline text-foreground mb-4">{prop.title}</h2>
-                        <p className="text-lg text-muted-foreground font-body">
-                          {prop.description}
-                        </p>
-                      </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
+            <div className="relative h-48">
+              <Carousel setApi={setApi} className="w-full h-full">
+                <CarouselContent className="h-full">
+                  {valueProps.map((prop, index) => (
+                    <CarouselItem key={index} className="h-full">
+                        <div className="flex flex-col justify-center h-full">
+                          <h2 className="text-4xl md:text-5xl font-black font-headline text-foreground mb-4">{prop.title}</h2>
+                          <p className="text-lg text-muted-foreground font-body">
+                            {prop.description}
+                          </p>
+                        </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+            </div>
             
             <div className="flex items-center gap-4 mt-8">
                 <div className="font-mono text-lg font-medium text-foreground">
