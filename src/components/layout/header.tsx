@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Dribbble, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 
 const NavLink = ({ href, children, onClick, isExternal = false }: { href: string; children: React.ReactNode; onClick?: () => void; isExternal?: boolean }) => {
   const commonProps = {
@@ -12,17 +12,19 @@ const NavLink = ({ href, children, onClick, isExternal = false }: { href: string
     className: "font-medium text-foreground/80 hover:text-primary transition-all duration-300",
   };
 
+  const linkContent = <span className="text-2xl md:text-base">{children}</span>;
+
   if (isExternal) {
     return (
       <a href={href} target="_blank" rel="noopener noreferrer" {...commonProps}>
-        {children}
+        {linkContent}
       </a>
     );
   }
 
   return (
     <Link href={href} {...commonProps}>
-      {children}
+      {linkContent}
     </Link>
   );
 };
@@ -42,9 +44,15 @@ export function Header() {
 
   const navItems = (closeSheet: () => void) => (
     <>
-      <NavLink href="/" onClick={closeSheet}>Home</NavLink>
-      <NavLink href="https://ayo.co.id/" isExternal>Jadwal</NavLink>
-      <a href="#contact" onClick={(e) => { handleScroll(e); closeSheet(); }} className="font-medium text-foreground/80 hover:text-primary transition-all duration-300">Kontak</a>
+      <SheetClose asChild>
+        <NavLink href="/" onClick={closeSheet}>Home</NavLink>
+      </SheetClose>
+      <SheetClose asChild>
+        <NavLink href="https://ayo.co.id/" isExternal>Jadwal</NavLink>
+      </SheetClose>
+      <SheetClose asChild>
+         <a href="#contact" onClick={(e) => { handleScroll(e); closeSheet(); }} className="font-medium text-foreground/80 hover:text-primary transition-all duration-300 text-2xl md:text-base">Kontak</a>
+      </SheetClose>
     </>
   );
   
@@ -57,7 +65,9 @@ export function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
-          {navItems(() => {})}
+           <NavLink href="/" onClick={() => {}}>Home</NavLink>
+           <NavLink href="https://ayo.co.id/" isExternal>Jadwal</NavLink>
+           <a href="#contact" onClick={(e) => { handleScroll(e); }} className="font-medium text-foreground/80 hover:text-primary transition-all duration-300 text-base">Kontak</a>
         </nav>
 
         <div className="md:hidden">
@@ -69,7 +79,7 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="bg-background/95">
-              <div className="flex flex-col items-center justify-center h-full space-y-8 text-2xl">
+              <div className="flex flex-col items-center justify-center h-full space-y-8">
                 {navItems(() => setIsOpen(false))}
               </div>
             </SheetContent>
