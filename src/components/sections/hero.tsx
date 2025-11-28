@@ -12,23 +12,23 @@ export function HeroSection() {
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-stadium');
 
   return (
-    <section className="relative h-[110vh] min-h-[800px] w-full flex items-center justify-center text-foreground overflow-hidden">
+    <section className="relative pt-24 pb-48 md:pt-32 md:pb-64 flex items-center justify-center text-foreground overflow-hidden bg-background">
       {heroImage && (
         <Image
           src={heroImage.imageUrl}
           alt={heroImage.description}
           fill
           priority
-          className="object-cover"
+          className="object-cover opacity-10"
           data-ai-hint={heroImage.imageHint}
         />
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-white/80 to-white/60" />
-      <div className="relative z-10 container mx-auto px-4 text-center mt-[-15vh]">
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black font-headline uppercase tracking-tighter mb-4 animate-fade-in-down bg-clip-text text-transparent bg-gradient-to-b from-foreground via-foreground/80 to-foreground/60">
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/50" />
+      <div className="relative z-10 container mx-auto px-4 text-center">
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black font-headline uppercase tracking-tighter mb-4 text-foreground animate-fade-in-down">
           Bandung Community Championship 2026
         </h1>
-        <p className="text-xl md:text-2xl text-foreground/80 max-w-3xl mx-auto mb-12 font-body animate-fade-in-up">
+        <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 font-body animate-fade-in-up">
           Integritas, Solidaritas, <span className="text-primary font-bold">Kejayaan.</span>
         </p>
         <div className="animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
@@ -39,11 +39,12 @@ export function HeroSection() {
             </Link>
           </Button>
         </div>
-
-        <div className="absolute bottom-[-130px] left-1/2 -translate-x-1/2 w-[90%] max-w-4xl">
-            <Card className="bg-background/80 backdrop-blur-lg border-t-2 border-primary/50 shadow-2xl shadow-black/10">
-                <CardContent className="p-4 md:p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-foreground">
+      </div>
+      
+      <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl z-20">
+          <Card className="bg-background border-t-4 border-primary shadow-2xl shadow-black/10">
+              <CardContent className="p-4 md:p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-foreground">
                     <div className="flex flex-col items-center justify-center p-2 rounded-lg">
                         <Users className="h-7 w-7 mb-2 text-primary" />
                         <h3 className="font-headline text-base font-semibold text-muted-foreground uppercase tracking-widest">Slot Terisi</h3>
@@ -56,10 +57,9 @@ export function HeroSection() {
                         <Countdown targetDate="2026-06-13" />
                         <p className="text-sm text-muted-foreground">Hari Menuju Kick-off</p>
                     </div>
-                    </div>
-                </CardContent>
-            </Card>
-        </div>
+                  </div>
+              </CardContent>
+          </Card>
       </div>
     </section>
   );

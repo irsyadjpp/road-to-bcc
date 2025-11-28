@@ -3,12 +3,12 @@ import Link from 'next/link';
 
 export function Footer() {
   return (
-    <footer id="contact" className="bg-secondary text-secondary-foreground">
+    <footer id="contact" className="bg-background text-foreground border-t">
       <div className="container mx-auto px-4 py-8 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
           <div>
             <h3 className="font-headline text-lg font-bold mb-4 text-primary">Kontak Kami</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 text-muted-foreground">
               <li className="flex items-center justify-center md:justify-start">
                 <Mail className="w-4 h-4 mr-2 text-primary/70" />
                 <a href="mailto:sekretariat@bccbandung.com" className="hover:text-primary transition-colors">
@@ -25,7 +25,7 @@ export function Footer() {
           </div>
           <div>
             <h3 className="font-headline text-lg font-bold mb-4 text-primary">Informasi</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 text-muted-foreground">
                <li className="flex items-center justify-center md:justify-start">
                 <BookOpen className="w-4 h-4 mr-2 text-primary/70" />
                 <a href="/technical-handbook.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">

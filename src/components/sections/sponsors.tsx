@@ -4,16 +4,16 @@ const SponsorLogo = ({ name, size = 'md' }: { name: string, size?: 'md' | 'lg' }
     const sizeClasses = size === 'lg' ? 'text-3xl md:text-4xl' : 'text-xl md:text-2xl';
     return (
         <div className="flex items-center justify-center h-24">
-            <span className={`${sizeClasses} font-bold text-muted-foreground/80 font-headline`}>{name}</span>
+            <span className={`${sizeClasses} font-bold text-muted-foreground/50 hover:text-muted-foreground/80 transition-colors font-headline`}>{name}</span>
         </div>
     );
 };
 
 export function SponsorsSection() {
     return (
-        <section className="py-16 md:py-24 bg-background">
+        <section className="py-16 md:py-24 bg-secondary">
             <div className="container mx-auto px-4">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 font-headline">
+                <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 font-headline text-foreground">
                     Didukung Oleh
                 </h2>
 

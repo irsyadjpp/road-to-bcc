@@ -27,7 +27,7 @@ export default function AboutPage() {
       <Header />
       <main className="flex-grow container mx-auto px-4 py-16">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-black font-headline text-primary">Tentang BCC 2026</h1>
+          <h1 className="text-5xl font-black font-headline text-foreground">Tentang BCC 2026</h1>
           <p className="mt-4 text-xl text-muted-foreground max-w-3xl mx-auto">
             Visi, Misi, dan Keunikan Bandung Community Championship 2026.
           </p>
@@ -42,7 +42,7 @@ export default function AboutPage() {
                     {prop.icon}
                   </div>
                   <div>
-                    <CardTitle className="font-headline text-2xl font-bold mb-2">{prop.title}</CardTitle>
+                    <CardTitle className="font-headline text-2xl font-bold mb-2 text-foreground">{prop.title}</CardTitle>
                     <CardDescription className="font-body text-base text-muted-foreground">
                       {prop.description}
                     </CardDescription>

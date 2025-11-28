@@ -9,7 +9,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/s
 const NavLink = ({ href, children, onClick, isExternal = false }: { href: string; children: React.ReactNode; onClick?: () => void; isExternal?: boolean }) => {
   const commonProps = {
     onClick: onClick,
-    className: "font-medium text-foreground/60 hover:text-primary relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full",
+    className: "font-medium text-foreground/80 hover:text-primary transition-colors",
   };
 
   const linkContent = <span className="text-sm">{children}</span>;
@@ -58,16 +58,16 @@ export function Header() {
       <SheetClose asChild><NavLink href="/about" onClick={closeSheet}>Tentang BCC</NavLink></SheetClose>
       <SheetClose asChild><NavLink href="/technical-handbook.pdf" isExternal onClick={closeSheet}>Regulasi</NavLink></SheetClose>
       <SheetClose asChild><NavLink href="/partners" onClick={closeSheet}>Mitra Kami</NavLink></SheetClose>
-      <SheetClose asChild><a href="#contact" onClick={closeSheetAndScroll} className="font-medium text-foreground/60 hover:text-primary transition-all duration-300 py-2 rounded-md hover:bg-secondary text-2xl md:text-sm">Kontak</a></SheetClose>
+      <SheetClose asChild><a href="#contact" onClick={closeSheetAndScroll} className="font-medium text-foreground/80 hover:text-primary transition-colors text-2xl md:text-sm">Kontak</a></SheetClose>
     </>
   );
   
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-lg">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background">
       <div className="container flex h-16 items-center">
-        <div className="mr-auto flex items-center">
+        <div className="mr-8 flex items-center">
             <Link href="/" className="flex items-center gap-2">
-            <span className="font-bold font-headline text-xl tracking-tighter">BCC 2026</span>
+            <span className="font-extrabold font-headline text-xl tracking-tighter">BCC 2026</span>
             </Link>
         </div>
 
@@ -76,7 +76,7 @@ export function Header() {
            <NavLink href="/about">Tentang BCC</NavLink>
            <NavLink href="/technical-handbook.pdf" isExternal>Regulasi</NavLink>
            <NavLink href="/partners">Mitra Kami</NavLink>
-           <a href="#contact" onClick={handleScroll} className="font-medium text-foreground/60 hover:text-primary relative after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full text-sm">Kontak</a>
+           <a href="#contact" onClick={handleScroll} className="font-medium text-foreground/80 hover:text-primary transition-colors text-sm">Kontak</a>
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
@@ -98,7 +98,7 @@ export function Header() {
                   <span className="sr-only">Open Menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-background/95 w-[280px]">
+              <SheetContent side="right" className="bg-background w-[280px]">
                 <div className="flex flex-col items-start justify-center h-full space-y-6 p-6">
                   {navItems()}
                    <div className="flex flex-col gap-4 w-full pt-4 border-t border-border">
