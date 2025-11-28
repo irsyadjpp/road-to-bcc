@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Dribbble, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const NavLink = ({ href, children, onClick, isExternal = false }: { href: string; children: React.ReactNode; onClick?: () => void; isExternal?: boolean }) => {
   const commonProps = {
     onClick: onClick,
-    className: "text-sm font-medium text-foreground/80 hover:text-foreground transition-colors",
+    className: "font-medium text-foreground/80 hover:text-primary transition-all duration-300",
   };
 
   if (isExternal) {
@@ -40,37 +40,37 @@ export function Header() {
     setIsOpen(false);
   };
 
-  const navItems = (
+  const navItems = (closeSheet: () => void) => (
     <>
-      <NavLink href="/" onClick={() => setIsOpen(false)}>Home</NavLink>
+      <NavLink href="/" onClick={closeSheet}>Home</NavLink>
       <NavLink href="https://ayo.co.id/" isExternal>Jadwal</NavLink>
-      <a href="#contact" onClick={handleScroll} className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">Kontak</a>
+      <a href="#contact" onClick={(e) => { handleScroll(e); closeSheet(); }} className="font-medium text-foreground/80 hover:text-primary transition-all duration-300">Kontak</a>
     </>
   );
   
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 max-w-screen-2xl items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-lg">
+      <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <Dribbble className="h-6 w-6 text-primary" />
-          <span className="font-bold font-headline text-lg">BCC 2026</span>
+          <Dribbble className="h-7 w-7 text-primary animate-pulse" />
+          <span className="font-bold font-headline text-xl tracking-tighter">BCC 2026</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6">
-          {navItems}
+        <nav className="hidden md:flex items-center gap-8">
+          {navItems(() => {})}
         </nav>
 
         <div className="md:hidden">
            <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
-                <Menu />
+                <Menu className="h-6 w-6"/>
                 <span className="sr-only">Open Menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right">
-              <div className="flex flex-col space-y-6 mt-10">
-                {navItems}
+            <SheetContent side="right" className="bg-background/95">
+              <div className="flex flex-col items-center justify-center h-full space-y-8 text-2xl">
+                {navItems(() => setIsOpen(false))}
               </div>
             </SheetContent>
           </Sheet>
