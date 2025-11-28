@@ -12,7 +12,7 @@ export function HeroSection() {
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-stadium');
 
   return (
-    <section className="relative h-[110vh] min-h-[750px] w-full flex items-center justify-center text-white overflow-hidden">
+    <section className="relative h-[120vh] min-h-[850px] w-full flex items-center justify-center text-white overflow-hidden">
       {heroImage && (
         <Image
           src={heroImage.imageUrl}
@@ -40,7 +40,7 @@ export function HeroSection() {
           </Button>
         </div>
 
-        <div className="absolute bottom-[-200px] left-1/2 -translate-x-1/2 w-[90%] max-w-4xl">
+        <div className="absolute bottom-[-300px] left-1/2 -translate-x-1/2 w-[90%] max-w-4xl">
             <Card className="bg-background/50 backdrop-blur-xl border-t-2 border-primary/50 shadow-2xl shadow-primary/10">
                 <CardContent className="p-4 md:p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-foreground">
