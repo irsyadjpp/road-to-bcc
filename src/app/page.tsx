@@ -4,6 +4,7 @@ import { HeroSection } from '@/components/sections/hero';
 import { ValuePropositionSection } from '@/components/sections/value-props';
 import { CategoriesSection } from '@/components/sections/categories';
 import { SponsorsSection } from '@/components/sections/sponsors';
+import { MobilitySection } from '@/components/sections/mobility';
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
         <HeroSection />
         <ValuePropositionSection />
         <CategoriesSection />
+        <MobilitySection />
         <SponsorsSection />
       </main>
       <Footer />
