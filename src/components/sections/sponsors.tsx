@@ -19,30 +19,12 @@ export function SponsorsSection() {
 
                 <div className="mb-12">
                     <h3 className="text-center text-sm uppercase text-muted-foreground font-semibold mb-6 font-headline tracking-widest">Sponsor Utama</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-8 items-center">
-                        <div className="col-span-2 md:col-span-1 flex justify-center">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-2xl mx-auto">
+                        <div className="flex justify-center">
                              <SponsorLogo name="Ayo Indonesia" size="lg" />
                         </div>
                         <div className="flex justify-center">
                             <SponsorLogo name="Bank BJB" size="lg" />
-                        </div>
-                        <div className="flex justify-center">
-                             <SponsorLogo name="AutoSponsor" size="lg" />
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 className="text-center text-sm uppercase text-muted-foreground font-semibold mb-6 font-headline tracking-widest">Partner Operasional</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-8 items-center max-w-4xl mx-auto">
-                        <div className="flex justify-center">
-                            <SponsorLogo name="Flypower" />
-                        </div>
-                        <div className="flex justify-center">
-                            <SponsorLogo name="Pocari Sweat" />
-                        </div>
-                         <div className="flex justify-center">
-                            <SponsorLogo name="Bebas Cedera" />
                         </div>
                     </div>
                 </div>
