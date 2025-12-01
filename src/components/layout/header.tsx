@@ -49,8 +49,8 @@ export function Header() {
           <div className="flex items-center gap-2">
             <div className="hidden md:flex">
               <Button asChild>
-                <Link href="/contact">
-                  Hubungi Kami
+                <Link href="/register">
+                  Daftar Sekarang
                 </Link>
               </Button>
             </div>
@@ -67,8 +67,8 @@ export function Header() {
                     {navItems()}
                     <div className="flex flex-col gap-4 w-full pt-4 border-t border-border">
                       <Button asChild className="w-full">
-                          <Link href="/contact" onClick={closeSheet}>
-                            Hubungi Kami
+                          <Link href="/register" onClick={closeSheet}>
+                            Daftar Sekarang
                           </Link>
                         </Button>
                     </div>
