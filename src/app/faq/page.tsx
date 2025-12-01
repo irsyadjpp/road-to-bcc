@@ -40,10 +40,6 @@ export default function FAQPage() {
           a: "Dilarang istirahat/duduk di bench. Pemain boleh minum cepat di sisi lapangan saat bola mati, tapi tidak boleh menerima instruksi pelatih yang memakan waktu (Coaching)."
         },
         {
-          q: "Apakah benar tidak ada jus/setting di Fase Grup (Sistem 30 Poin)?",
-          a: "Benar. Kami menggunakan sistem SUDDEN DEATH. Jika skor imbang 29-29, pemain yang mencapai poin ke-30 lebih dulu adalah pemenangnya."
-        },
-        {
           q: "Bagaimana jika Tim saya sudah menang 3-0 di Fase Grup? Bolehkah partai sisa tidak dimainkan?",
           a: "Di Fase Grup, seluruh 5 partai WAJIB dimainkan. Jika bermain tidak serius (main sabun), itu akan merugikan Selisih Poin tim Anda sendiri di klasemen akhir."
         },
