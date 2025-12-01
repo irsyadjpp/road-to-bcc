@@ -44,23 +44,27 @@ export function Header() {
   
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background">
-      <div className="container flex h-16 items-center">
-        <Link href="/" className="mr-8 flex items-center gap-2">
-          <Image src="/images/logo.png" alt="BCC 2026 Logo" width={28} height={28} />
-          <span className="font-semibold font-headline text-xl tracking-tighter">BCC 2026</span>
-        </Link>
+      <div className="container flex h-16 items-center justify-between">
+        <div className="flex items-center gap-8">
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/images/logo.png" alt="BCC 2026 Logo" width={28} height={28} />
+            <span className="font-semibold font-headline text-xl tracking-tighter">BCC 2026</span>
+          </Link>
 
-        <nav className="hidden md:flex items-center gap-6">
-           <NavLink href="/">Beranda</NavLink>
-           <a href="#contact" onClick={handleScroll} className="font-medium text-foreground/80 hover:text-primary transition-colors text-sm">Kontak</a>
-        </nav>
+          <nav className="hidden md:flex items-center gap-6">
+            <NavLink href="/">Beranda</NavLink>
+            <a href="#contact" onClick={handleScroll} className="font-medium text-foreground/80 hover:text-primary transition-colors text-sm">Kontak</a>
+          </nav>
+        </div>
 
-        <div className="flex flex-1 items-center justify-end gap-2">
-           <Button asChild>
-            <a href="#contact" onClick={handleScroll}>
-              Hubungi Kami
-            </a>
-          </Button>
+        <div className="flex items-center gap-2">
+           <div className="hidden md:flex">
+             <Button asChild>
+              <a href="#contact" onClick={handleScroll}>
+                Hubungi Kami
+              </a>
+            </Button>
+           </div>
           <div className="flex items-center md:hidden">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
