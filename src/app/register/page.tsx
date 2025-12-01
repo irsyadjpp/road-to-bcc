@@ -13,10 +13,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, Trash2, Info, AlertTriangle, CheckCircle2, Instagram } from "lucide-react";
+import { Loader2, Plus, Trash2, Info, AlertTriangle, CheckCircle2, Instagram, ChevronsUpDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import confetti from 'canvas-confetti';
 import Link from "next/link";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 export default function RegistrationPage() {
   const { toast } = useToast();
@@ -49,6 +50,10 @@ export default function RegistrationPage() {
     control: form.control,
   });
 
+  const playerCount = fields.length;
+  const registrationFee = 100000;
+  const totalFee = playerCount * registrationFee;
+
   // Efek Confetti saat Sukses
   useEffect(() => {
     if (isSuccess) {
@@ -75,21 +80,17 @@ export default function RegistrationPage() {
   async function onSubmit(data: RegistrationFormValues) {
     setIsSubmitting(true);
     
-    // Simulasi Pengiriman Data
     console.log("Form Data Submitted:", data);
     
-    // Simulasi delay server
     await new Promise((resolve) => setTimeout(resolve, 2000)); 
 
     setIsSubmitting(false);
-    setSubmittedTeamName(data.teamName); // Simpan nama tim untuk pesan sukses
-    setIsSuccess(true); // Tampilkan halaman sukses
+    setSubmittedTeamName(data.teamName);
+    setIsSuccess(true);
     
-    // Scroll ke atas agar user melihat pesan
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // --- TAMPILAN SUKSES (SETELAH SUBMIT) ---
   if (isSuccess) {
     return (
       <div className="flex flex-col min-h-screen bg-background">
@@ -164,7 +165,6 @@ export default function RegistrationPage() {
     );
   }
 
-  // --- TAMPILAN FORMULIR ---
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
@@ -182,7 +182,7 @@ export default function RegistrationPage() {
                 <ul className="list-disc pl-5 space-y-1">
                   <li>Data digunakan untuk verifikasi TPF, BPJS Ketenagakerjaan, dan database Ayo Indonesia.</li>
                   <li><strong>Wajib Video Uncut:</strong> 1 Game Full untuk setiap pemain.</li>
-                  <li><strong>Biaya Pendaftaran:</strong> Rp 1.000.000,- per Tim.</li>
+                  <li><strong>Biaya Pendaftaran:</strong> Rp 100.000,- per Orang.</li>
                   <li><strong>Deadline:</strong> 30 Mei 2026.</li>
                 </ul>
               </CardContent>
@@ -317,118 +317,115 @@ export default function RegistrationPage() {
                     <span className="text-destructive font-semibold">*NIK & Nama Ibu Kandung WAJIB valid untuk klaim asuransi BPJS TK.</span>
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="p-6 space-y-8">
+                <CardContent className="p-6 space-y-4">
                   {fields.map((field, index) => (
-                    <div key={field.id} className="relative p-6 border rounded-xl bg-card shadow-sm">
-                      <div className="absolute top-4 right-4 bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-bold">
-                        Pemain {index + 1} {index < 10 ? "(Wajib)" : "(Cadangan)"}
+                    <Collapsible key={field.id} defaultOpen={index < 3} className="border rounded-xl bg-card shadow-sm transition-all has-[[data-state=open]]:bg-secondary/10">
+                      <div className="flex items-center justify-between p-4">
+                        <CollapsibleTrigger className="flex items-center gap-3 text-left w-full">
+                          <ChevronsUpDown className="h-5 w-5 text-muted-foreground transition-transform data-[state=open]:rotate-180" />
+                          <div className="flex-1">
+                            <h4 className="text-lg font-bold text-primary">Data Pemain #{index + 1}</h4>
+                            <span className="text-sm text-muted-foreground">{form.getValues(`players.${index}.fullName`) || 'Belum diisi'}</span>
+                          </div>
+                        </CollapsibleTrigger>
+                         {index >= 10 && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                            onClick={() => remove(index)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        )}
                       </div>
-                      
-                      <h4 className="text-lg font-bold mb-4 text-primary">Data Pemain #{index + 1}</h4>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Nama & NIK */}
-                        <FormField
-                          control={form.control}
-                          name={`players.${index}.fullName`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Nama Lengkap (Sesuai KTP)</FormLabel>
-                              <FormControl><Input {...field} /></FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name={`players.${index}.nik`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>NIK (16 Digit KTP)</FormLabel>
-                              <FormControl><Input maxLength={16} {...field} /></FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        {/* Ibu Kandung & Ayo ID */}
-                        <FormField
-                          control={form.control}
-                          name={`players.${index}.motherName`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Nama Ibu Kandung</FormLabel>
-                              <FormControl><Input {...field} /></FormControl>
-                              <FormDescription className="text-xs">Syarat wajib BPJS TK.</FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name={`players.${index}.ayoId`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Username Ayo Indonesia</FormLabel>
-                              <FormControl><Input placeholder="@username" {...field} /></FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        {/* Level & Video */}
-                        <FormField
-                          control={form.control}
-                          name={`players.${index}.level`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Level Didaftarkan</FormLabel>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Pilih Level" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="Beginner">Beginner</SelectItem>
-                                  <SelectItem value="Intermediate">Intermediate</SelectItem>
-                                  <SelectItem value="Advance">Advance</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name={`players.${index}.videoUrl`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Link Video YouTube</FormLabel>
-                              <FormControl><Input placeholder="https://youtube.com/..." {...field} /></FormControl>
-                              <FormDescription className="text-xs">Full game, uncut, angle belakang.</FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
-                      {/* Tombol Hapus (Hanya untuk pemain ke-11 ke atas) */}
-                      {index >= 10 && (
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          size="sm"
-                          className="mt-4"
-                          onClick={() => remove(index)}
-                        >
-                          <Trash2 className="w-4 h-4 mr-2" /> Hapus Pemain Ini
-                        </Button>
-                      )}
-                    </div>
+                      <CollapsibleContent className="p-6 pt-0 space-y-6 animate-in fade-in-0 zoom-in-95">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <FormField
+                            control={form.control}
+                            name={`players.${index}.fullName`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Nama Lengkap (Sesuai KTP)</FormLabel>
+                                <FormControl><Input {...field} /></FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`players.${index}.nik`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>NIK (16 Digit KTP)</FormLabel>
+                                <FormControl><Input maxLength={16} {...field} /></FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`players.${index}.motherName`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Nama Ibu Kandung</FormLabel>
+                                <FormControl><Input {...field} /></FormControl>
+                                <FormDescription className="text-xs">Syarat wajib BPJS TK.</FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`players.${index}.ayoId`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Username Ayo Indonesia</FormLabel>
+                                <FormControl><Input placeholder="@username" {...field} /></FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`players.${index}.level`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Level Didaftarkan</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Pilih Level" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="Beginner">Beginner</SelectItem>
+                                    <SelectItem value="Intermediate">Intermediate</SelectItem>
+                                    <SelectItem value="Advance">Advance</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`players.${index}.videoUrl`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Link Video YouTube</FormLabel>
+                                <FormControl><Input placeholder="https://youtube.com/..." {...field} /></FormControl>
+                                <FormDescription className="text-xs">Full game, uncut, angle belakang.</FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
                   ))}
 
-                  {/* Tombol Tambah Pemain */}
                   {fields.length < 14 && (
                     <Button
                       type="button"
@@ -450,14 +447,20 @@ export default function RegistrationPage() {
                   <CardTitle className="text-xl font-headline text-primary">BAGIAN 3: ADMINISTRASI & PEMBAYARAN</CardTitle>
                 </CardHeader>
                 <CardContent className="p-6 space-y-6">
-                  <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg flex gap-4 items-start">
-                    <AlertTriangle className="w-6 h-6 text-yellow-600 shrink-0 mt-1" />
-                    <div className="text-sm text-yellow-800">
-                      <p className="font-bold mb-1">Instruksi Transfer:</p>
-                      <p>Silakan transfer ke <strong>Bank BJB</strong></p>
-                      <p>No. Rekening: <strong>0123-4567-8900</strong> a.n Panitia BCC 2026</p>
-                      <p className="mt-2">Mohon tambahkan <strong>3 digit terakhir nomor HP</strong> manajer pada nominal transfer untuk verifikasi otomatis.</p>
-                      <p>Contoh: Rp 1.000.<strong>123</strong></p>
+                  <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                    <div className="flex justify-between items-center mb-4">
+                         <h4 className="font-bold text-yellow-900">Total Pembayaran</h4>
+                         <div className="text-right">
+                           <p className="text-2xl font-black text-yellow-900 font-mono">
+                                {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(totalFee)}
+                           </p>
+                           <p className="text-xs text-yellow-800 font-medium">({playerCount} pemain x Rp 100.000)</p>
+                         </div>
+                    </div>
+                    <div className="text-sm text-yellow-800 space-y-2 border-t border-yellow-300 pt-4">
+                      <p className="font-bold">Instruksi Transfer:</p>
+                      <p>Silakan transfer ke <strong>Bank BJB</strong> No. Rek: <strong>0123-4567-8900</strong> a.n Panitia BCC 2026.</p>
+                      <p>Untuk verifikasi, tambahkan <strong>3 digit terakhir No. HP Manajer</strong> pada nominal. Contoh: Rp {new Intl.NumberFormat('id-ID').format(totalFee)}.<strong>123</strong></p>
                     </div>
                   </div>
 
