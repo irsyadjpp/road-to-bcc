@@ -35,7 +35,7 @@ export function HeroSection() {
               BANDUNG COMMUNITY CHAMPIONSHIP 2026
             </p>
             <h1 className="text-4xl md:text-[64px] leading-tight font-bold font-headline uppercase tracking-tighter mb-4 animate-fade-in-down">
-              Integritas, Solidaritas, dan Kejayaan
+              Integritas, Solidaritas, dan Sportivitas
             </h1>
             <p className="text-lg md:text-xl text-gray-200 max-w-3xl mb-8 font-body animate-fade-in-up">
               Turnamen bulutangkis antar komunitas terbesar di Bandung akan segera hadir.
