@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -23,6 +24,15 @@ type MatchMode = 'GROUP' | 'KNOCKOUT';
 export default function MatchControlPage() {
   const params = useParams();
   const { toast } = useToast();
+
+  // --- MOCK DATA PERTANDINGAN (Biasanya dari Database) ---
+  const matchData = {
+    category: "MD Intermediate",
+    teamA: "PB Djarum",
+    playersA: "Kevin Sanjaya / Marcus Gideon", // Nama Pemain Tim A
+    teamB: "PB Jaya Raya",
+    playersB: "Hendra Setiawan / M. Ahsan",   // Nama Pemain Tim B
+  };
 
   // --- CONFIGURATION ---
   const [mode, setMode] = useState<MatchMode>('GROUP');
@@ -141,7 +151,7 @@ export default function MatchControlPage() {
 
         setScoreA(newA);
         setScoreB(newB);
-        setServer(team); // Pemenang reli menjadi server
+        setServer(team); 
 
         const statusMsg = checkGameStatus(newA, newB);
         if (statusMsg) {
@@ -171,7 +181,7 @@ export default function MatchControlPage() {
         <div className="text-left w-full md:w-auto">
             <div className="text-xs text-zinc-500 font-mono">MATCH ID: {params.id}</div>
             <div className="flex items-center gap-2">
-                <span className="font-bold text-lg text-primary">MD Intermediate</span>
+                <span className="font-bold text-lg text-primary">{matchData.category}</span>
                 <Badge variant="outline" className="border-zinc-600 text-zinc-300 text-[10px]">
                     {mode === 'GROUP' ? '1x30' : '3x15'}
                 </Badge>
@@ -225,7 +235,10 @@ export default function MatchControlPage() {
             )}
             
             <div className="mt-4 text-center md:text-left">
-                <h2 className="text-xl md:text-4xl font-black truncate text-white leading-tight">PB Djarum</h2>
+                <h2 className="text-xl md:text-4xl font-black truncate text-white leading-tight">{matchData.teamA}</h2>
+                {/* NAMA PEMAIN DITAMPILKAN DI SINI */}
+                <p className="text-zinc-400 text-sm md:text-base font-medium truncate mt-1">{matchData.playersA}</p>
+                
                 {mode === 'KNOCKOUT' && <div className="text-yellow-500 font-black text-2xl md:text-5xl mt-2">SET {setA}</div>}
             </div>
 
@@ -233,7 +246,6 @@ export default function MatchControlPage() {
                 <div className="text-[100px] md:text-[220px] leading-none font-black font-mono select-none tracking-tighter text-white">
                     {scoreA}
                 </div>
-                {/* Posisi Visual */}
                 <div className="flex gap-8 mt-4 text-zinc-600 font-mono text-sm md:text-lg">
                     <span className={scoreA % 2 !== 0 ? "text-white font-bold" : ""}>KIRI</span>
                     <span className={scoreA % 2 === 0 ? "text-white font-bold" : ""}>KANAN</span>
@@ -262,7 +274,10 @@ export default function MatchControlPage() {
             )}
             
             <div className="mt-4 text-center md:text-right">
-                <h2 className="text-xl md:text-4xl font-black truncate text-white leading-tight">PB Jaya</h2>
+                <h2 className="text-xl md:text-4xl font-black truncate text-white leading-tight">{matchData.teamB}</h2>
+                {/* NAMA PEMAIN DITAMPILKAN DI SINI */}
+                <p className="text-zinc-400 text-sm md:text-base font-medium truncate mt-1">{matchData.playersB}</p>
+                
                 {mode === 'KNOCKOUT' && <div className="text-yellow-500 font-black text-2xl md:text-5xl mt-2">SET {setB}</div>}
             </div>
 
@@ -270,7 +285,6 @@ export default function MatchControlPage() {
                 <div className="text-[100px] md:text-[220px] leading-none font-black font-mono select-none tracking-tighter text-white">
                     {scoreB}
                 </div>
-                {/* Posisi Visual */}
                 <div className="flex gap-8 mt-4 text-zinc-600 font-mono text-sm md:text-lg">
                     <span className={scoreB % 2 !== 0 ? "text-white font-bold" : ""}>KIRI</span>
                     <span className={scoreB % 2 === 0 ? "text-white font-bold" : ""}>KANAN</span>
@@ -338,3 +352,5 @@ export default function MatchControlPage() {
     </div>
   );
 }
+
+    
