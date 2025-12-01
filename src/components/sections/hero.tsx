@@ -2,14 +2,12 @@
 
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { CalendarClock, ArrowRight } from 'lucide-react';
 import { Countdown } from '@/components/countdown';
 
 export function HeroSection() {
-  const heroImage = PlaceHolderImages.find(img => img.id === 'hero-stadium');
   
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
@@ -22,16 +20,13 @@ export function HeroSection() {
   return (
     <section className="relative bg-background text-foreground">
       <div className="relative h-[70vh] md:h-[75vh] flex items-center justify-start text-white">
-        {heroImage && (
-          <Image
-            src={heroImage.imageUrl}
-            alt={heroImage.description}
-            fill
-            priority
-            className="object-cover"
-            data-ai-hint={heroImage.imageHint}
-          />
-        )}
+        <Image
+          src="/images/gor-koni.jpg"
+          alt="GOR KONI Bandung"
+          fill
+          priority
+          className="object-cover"
+        />
         <div className="absolute inset-0 bg-black/50" />
         
         <div className="relative z-10 container mx-auto px-4 text-left">
