@@ -186,7 +186,8 @@ export default function RegistrationPage() {
                   <li>Data digunakan untuk verifikasi TPF, BPJS Ketenagakerjaan, dan database Ayo Indonesia.</li>
                   <li><strong>Wajib Video Uncut:</strong> 1 Game Full untuk setiap pemain.</li>
                   <li><strong>Biaya Pendaftaran:</strong> Rp 100.000,- per Orang.</li>
-                  <li><strong>Deadline:</strong> 30 Mei 2026.</li>
+                  <li><strong>Deadline Pendaftaran:</strong> Akhir bulan Maret 2026.</li>
+                  <li><strong>Pergantian Pemain (Ditolak TPF):</strong> Pertengahan bulan Mei 2026.</li>
                 </ul>
               </CardContent>
             </Card>
