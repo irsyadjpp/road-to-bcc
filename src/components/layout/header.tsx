@@ -45,12 +45,10 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background">
       <div className="container flex h-16 items-center">
-        <div className="mr-8 flex items-center">
-            <Link href="/" className="flex items-center gap-2">
-            <Image src="/images/logo.png" alt="BCC 2026 Logo" width={28} height={28} />
-            <span className="font-semibold font-headline text-xl tracking-tighter">BCC 2026</span>
-            </Link>
-        </div>
+        <Link href="/" className="mr-8 flex items-center gap-2">
+          <Image src="/images/logo.png" alt="BCC 2026 Logo" width={28} height={28} />
+          <span className="font-semibold font-headline text-xl tracking-tighter">BCC 2026</span>
+        </Link>
 
         <nav className="hidden md:flex items-center gap-6">
            <NavLink href="/">Beranda</NavLink>
