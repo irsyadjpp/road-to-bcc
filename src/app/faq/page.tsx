@@ -6,7 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, Sparkles } from "lucide-react";
+import { CourtLines } from '@/components/ui/court-lines';
 
 export default function FAQPage() {
   const faqs = [
@@ -60,35 +61,41 @@ export default function FAQPage() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-secondary">
       <Header />
-      <main className="flex-grow py-16 md:py-24">
-        <div className="container mx-auto px-4 max-w-3xl">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
-                <HelpCircle className="w-8 h-8 text-primary" />
+      <main className="flex-grow py-16 md:py-24 relative">
+        <CourtLines />
+
+        <div className="container mx-auto px-4 max-w-4xl relative z-10">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4 ring-4 ring-primary/5">
+                <Sparkles className="w-8 h-8 text-primary" />
             </div>
-            <h1 className="text-3xl md:text-4xl font-black font-headline text-foreground mb-4">
-              Pertanyaan Umum (FAQ)
+            <h1 className="text-4xl md:text-5xl font-black font-headline text-foreground mb-4">
+              KEPOIN BCC 2026
             </h1>
             <p className="text-lg text-muted-foreground">
-              Jawaban atas pertanyaan yang sering diajukan terkait teknis dan regulasi BCC 2026.
+              Semua yang perlu kamu tahu biar gak salah langkah. Baca baik-baik ya!
             </p>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-12">
             {faqs.map((section, idx) => (
-              <div key={idx} className="bg-card border rounded-xl p-6 shadow-sm">
-                <h3 className="text-xl font-bold font-headline mb-4 text-primary border-b pb-2">
+              <div key={idx}>
+                <h3 className="text-2xl font-bold font-headline mb-6 text-primary border-l-4 border-primary pl-4">
                   {section.category}
                 </h3>
-                <Accordion type="single" collapsible className="w-full">
+                <Accordion type="single" collapsible className="w-full space-y-4">
                   {section.items.map((item, itemIdx) => (
-                    <AccordionItem key={itemIdx} value={`item-${idx}-${itemIdx}`}>
-                      <AccordionTrigger className="text-left font-medium text-foreground hover:text-primary transition-colors">
+                    <AccordionItem 
+                      key={itemIdx} 
+                      value={`item-${idx}-${itemIdx}`}
+                      className="bg-card border-l-4 border-transparent rounded-lg shadow-sm hover:border-primary/50 transition-colors duration-300 data-[state=open]:border-primary/80 data-[state=open]:shadow-md"
+                    >
+                      <AccordionTrigger className="text-left font-bold text-lg text-foreground p-6 hover:no-underline data-[state=open]:text-primary">
                         {item.q}
                       </AccordionTrigger>
-                      <AccordionContent className="text-muted-foreground leading-relaxed">
+                      <AccordionContent className="px-6 pb-6 text-muted-foreground leading-relaxed">
                         {item.a}
                       </AccordionContent>
                     </AccordionItem>
