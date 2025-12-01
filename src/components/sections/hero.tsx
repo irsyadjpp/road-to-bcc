@@ -54,7 +54,7 @@ export function HeroSection() {
             <h1 className="text-5xl md:text-[80px] leading-[0.9] font-black font-headline text-white mb-6 animate-fade-in-up tracking-tighter drop-shadow-2xl">
               INTEGRITAS.<br/>
               SOLIDARITAS.<br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-600">KEJAYAAN.</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-600">SPORTIVITAS.</span>
             </h1>
             
             <p className="text-lg md:text-2xl text-gray-300 max-w-2xl mb-10 font-body animate-fade-in-up leading-relaxed" style={{ animationDelay: '0.3s' }}>
