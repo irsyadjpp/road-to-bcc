@@ -1,7 +1,6 @@
 'use client';
 
-// Gunakan 'react-dom' untuk Next.js 14/React 18
-import { useFormState } from 'react-dom'; 
+import { useActionState } from 'react';
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,7 +11,7 @@ import { submitCheckin } from './actions';
 import { VoteWidget } from '@/components/checkin/vote-widget';
 import confetti from 'canvas-confetti';
 
-// State awal untuk useFormState
+// State awal untuk useActionState
 const initialState = {
   success: false,
   voucherCode: '',
@@ -22,7 +21,7 @@ const initialState = {
 };
 
 export default function CheckInPage() {
-  const [state, formAction] = useFormState(submitCheckin, initialState);
+  const [state, formAction] = useActionState(submitCheckin, initialState);
 
   // Efek Confetti saat sukses check-in baru
   useEffect(() => {
