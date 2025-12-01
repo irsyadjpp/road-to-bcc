@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'BCC 2026 Landing',
+  title: 'Bandung Community Championship 2026',
   description: 'BANDUNG COMMUNITY CHAMPIONSHIP 2026: Integritas, Solidaritas, dan Sportivitas.',
 };
 
