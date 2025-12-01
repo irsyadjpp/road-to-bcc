@@ -51,7 +51,7 @@ export const registrationFormSchema = z.object({
   agreementRules: z.literal(true, { errorMap: () => ({ message: "Persetujuan diperlukan" }) }),
 })
 .superRefine((data, ctx) => {
-  // VALIDASI KUOTA TIM (UPDATE: Limit Dinamis)
+  // VALIDASI KUOTA DINAMIS
   const counts: Record<string, number> = {
     "Beregu PUTRA": 0,
     "Beregu PUTRI": 0,
@@ -65,14 +65,15 @@ export const registrationFormSchema = z.object({
   });
 
   Object.entries(counts).forEach(([cat, count]) => {
-    // Tentukan batas maksimal berdasarkan kategori
+    // ATURAN KUOTA BARU
+    const minLimit = cat === "Beregu PUTRI" ? 11 : 10;
     const maxLimit = cat === "Beregu PUTRI" ? 18 : 14;
     
     if (count > 0) {
-      if (count < 10) {
+      if (count < minLimit) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: `${cat}: Kurang pemain! (Baru ${count}, Minimal 10)`,
+          message: `${cat}: Kurang pemain! (Baru ${count}, Minimal ${minLimit})`,
           path: ["players"]
         });
       }

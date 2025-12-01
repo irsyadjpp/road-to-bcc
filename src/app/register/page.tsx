@@ -12,10 +12,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, Trash2, Info, Users, AlertCircle, CheckCircle2, Receipt, Wallet } from "lucide-react";
+import { Loader2, Plus, Trash2, Info, Users, AlertCircle, CheckCircle2, Receipt, Wallet, Save } from "lucide-react";
 import { useState, useEffect } from "react";
 import confetti from 'canvas-confetti';
 import { Badge } from "@/components/ui/badge";
+
+const STORAGE_KEY = "bcc_registration_draft";
 
 export default function RegistrationPage() {
   const { toast } = useToast();
@@ -32,7 +34,6 @@ export default function RegistrationPage() {
       managerEmail: "",
       basecamp: "",
       players: [
-        // UPDATE: Default value untuk field baru
         { fullName: "", nik: "", phone: "", dob: "", motherName: "", ayoId: "", level: undefined, videoUrl: "", participation: [] }
       ], 
     },
@@ -42,6 +43,40 @@ export default function RegistrationPage() {
     name: "players",
     control: form.control,
   });
+  
+  // --- LOAD DRAFT SAAT MOUNT ---
+  useEffect(() => {
+    const savedData = localStorage.getItem(STORAGE_KEY);
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+        form.reset(parsed); 
+        toast({
+          title: "Draft Ditemukan",
+          description: "Melanjutkan pengisian formulir terakhir Anda.",
+          duration: 3000,
+        });
+      } catch (e) {
+        console.error("Gagal load draft", e);
+      }
+    }
+  }, [form, toast]);
+
+
+  // --- LOGIC SAVE DRAFT ---
+  const handleSaveDraft = () => {
+    const currentValues = form.getValues();
+    const { transferProof, ...dataToSave } = currentValues; 
+    
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+    toast({
+      title: "Draft Disimpan!",
+      description: "Anda bisa menutup browser dan melanjutkannya nanti.",
+      variant: "default", 
+      className: "bg-green-50 border-green-200"
+    });
+  };
+
 
   const watchedPlayers = form.watch("players");
   
@@ -80,9 +115,13 @@ export default function RegistrationPage() {
   async function onSubmit(data: RegistrationFormValues) {
     setIsSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 2000));
+    
+    localStorage.removeItem(STORAGE_KEY);
+    
     setSubmittedData(data);
     setIsSuccess(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setIsSubmitting(false);
   }
 
   if (isSuccess) {
@@ -128,10 +167,10 @@ export default function RegistrationPage() {
           <div className="lg:col-span-2 space-y-8">
              <div className="space-y-2">
                 <h1 className="text-3xl font-black font-headline text-primary">REGISTRASI KOMUNITAS</h1>
-                <p className="text-muted-foreground">
-                  Biaya: <strong>Rp 100.000</strong> / atlet / kategori. <br/>
-                  Putri Maksimal 18 Orang, Lainnya 14 Orang.
-                </p>
+                <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
+                   <span className="bg-white px-2 py-1 rounded border">Putra/Campuran: Min 10</span>
+                   <span className="bg-white px-2 py-1 rounded border">Putri: Min 11</span>
+                </div>
              </div>
 
              <Form {...form}>
@@ -166,9 +205,14 @@ export default function RegistrationPage() {
                   <CardHeader className="bg-primary/5 border-b pb-4">
                     <div className="flex justify-between items-center">
                         <CardTitle className="text-lg text-primary font-bold">2. Data Pemain</CardTitle>
-                        <Badge variant="secondary">{fields.length} Pemain Terdaftar</Badge>
+                        <div className="flex gap-2">
+                             <Button type="button" variant="secondary" size="sm" onClick={handleSaveDraft} className="hidden sm:flex">
+                                <Save className="w-4 h-4 mr-2" /> Simpan Draft
+                            </Button>
+                            <Badge variant="secondary">{fields.length} Pemain</Badge>
+                        </div>
                     </div>
-                    <CardDescription>Isi data lengkap pemain termasuk No HP & Tanggal Lahir.</CardDescription>
+                    <CardDescription>Putri maks 18 pemain, lainnya maks 14 pemain.</CardDescription>
                   </CardHeader>
                   <CardContent className="p-6 space-y-6">
                     
@@ -185,7 +229,6 @@ export default function RegistrationPage() {
                             <h4 className="font-bold text-sm text-foreground">Identitas Pemain</h4>
                         </div>
                         
-                        {/* Grid 1: Nama, NIK */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                              <FormField control={form.control} name={`players.${index}.fullName`} render={({ field }) => (
                                 <FormItem><FormLabel>Nama Lengkap (KTP)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
@@ -195,17 +238,15 @@ export default function RegistrationPage() {
                              )} />
                         </div>
 
-                        {/* Grid 2: HP, Tgl Lahir (BARU) */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                              <FormField control={form.control} name={`players.${index}.phone`} render={({ field }) => (
-                                <FormItem><FormLabel>No. Handphone (WA)</FormLabel><FormControl><Input type="tel" placeholder="08..." {...field} /></FormControl><FormMessage /></FormItem>
+                                <FormItem><FormLabel>No. Handphone (WA)</FormLabel><FormControl><Input type="tel" {...field} /></FormControl><FormMessage /></FormItem>
                              )} />
                              <FormField control={form.control} name={`players.${index}.dob`} render={({ field }) => (
                                 <FormItem><FormLabel>Tanggal Lahir</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem>
                              )} />
                         </div>
 
-                        {/* Grid 3: Ayo ID, Level */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                               <FormField control={form.control} name={`players.${index}.ayoId`} render={({ field }) => (
                                 <FormItem><FormLabel>Username Ayo Indonesia</FormLabel><FormControl><Input placeholder="@username" {...field} /></FormControl><FormMessage /></FormItem>
@@ -226,7 +267,6 @@ export default function RegistrationPage() {
                              )} />
                         </div>
                         
-                        {/* Grid 4: Ibu, Video */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <FormField control={form.control} name={`players.${index}.motherName`} render={({ field }) => (
                                 <FormItem><FormLabel>Nama Ibu Kandung</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
@@ -253,7 +293,6 @@ export default function RegistrationPage() {
                                     <div className="flex flex-wrap gap-4">
                                         {CATEGORIES.map((cat) => {
                                             let isDisabled = false;
-                                            // Logika: Jika pilih Putra, Putri mati. Jika pilih Putri, Putra mati.
                                             if (cat === "Beregu PUTRA" && isFemaleSelected) isDisabled = true;
                                             if (cat === "Beregu PUTRI" && isMaleSelected) isDisabled = true;
 
@@ -289,7 +328,6 @@ export default function RegistrationPage() {
                       </div>
                     ))}
 
-                    {/* UPDATE: Batas pemain diperbolehkan hingga 18 (untuk mengakomodasi kuota Putri) */}
                     {fields.length < 18 && (
                       <Button
                         type="button"
@@ -368,49 +406,52 @@ export default function RegistrationPage() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         {Object.entries(stats).filter(([k]) => k !== 'totalSlots').map(([key, val]) => {
-                            // UPDATE: Max Limit Dinamis (Putri 18, Lainnya 14)
+                            const min = key === 'Beregu PUTRI' ? 11 : 10;
                             const max = key === 'Beregu PUTRI' ? 18 : 14;
                             return (
                             <div key={key} className="space-y-1">
                                 <div className="flex justify-between text-sm font-medium">
                                     <span>{key.replace('Beregu ', '')}</span>
-                                    <span className={val < 10 || val > max ? 'text-destructive' : 'text-green-600'}>
-                                        {val}/{max}
+                                    <span className={val < min || val > max ? 'text-destructive' : 'text-green-600'}>
+                                        {val}/{max} (Min {min})
                                     </span>
                                 </div>
                                 <div className="w-full bg-secondary h-2 rounded-full overflow-hidden">
                                     <div 
-                                        className={`h-full transition-all ${val < 10 || val > max ? 'bg-destructive' : 'bg-green-500'}`} 
+                                        className={`h-full transition-all ${val < min || val > max ? 'bg-destructive' : 'bg-green-500'}`} 
                                         style={{ width: `${Math.min((val / max) * 100, 100)}%` }} 
                                     />
                                 </div>
                                 <p className="text-xs text-muted-foreground">
-                                    {val === 0 ? 'Belum ada pemain' : val < 10 ? `Kurang ${10 - val} lagi` : val > max ? `Kelebihan ${val - max}` : 'Kuota Terpenuhi'}
+                                    {val === 0 ? 'Belum ada pemain' : val < min ? `Kurang ${min - val} lagi` : val > max ? `Kelebihan ${val - max}` : 'Siap!'}
                                 </p>
                             </div>
                         )})}
                     </CardContent>
-                    <CardFooter className="flex-col items-start pt-4 border-t">
-                        <div className="w-full flex justify-between items-center mb-1">
-                            <div className="flex items-center gap-2 text-muted-foreground">
-                                <Receipt className="w-4 h-4" />
-                                <span className="text-sm">Total Tagihan</span>
-                            </div>
-                            <span className="text-xl font-black text-primary">
-                                Rp {potentialBill.toLocaleString('id-ID')}
-                            </span>
+                    <CardFooter className="flex-col items-start pt-4 border-t gap-3">
+                        <div className="w-full flex justify-between items-center">
+                            <span className="text-sm text-muted-foreground">Tagihan</span>
+                            <span className="text-xl font-black text-primary">Rp {potentialBill.toLocaleString('id-ID')}</span>
                         </div>
-                        <div className="w-full text-xs text-muted-foreground mb-4 text-right">
-                            ({stats.totalSlots} Slot x Rp 100rb)
+                        
+                        <div className="grid grid-cols-2 gap-2 w-full">
+                            <Button 
+                                type="button"
+                                onClick={handleSaveDraft} 
+                                variant="secondary" 
+                                className="w-full font-bold border border-primary/20"
+                            >
+                                <Save className="w-4 h-4 mr-2" /> Draft
+                            </Button>
+
+                            <Button 
+                                onClick={form.handleSubmit(onSubmit)} 
+                                className="w-full font-bold shadow-md" 
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "KIRIM"}
+                            </Button>
                         </div>
-                        <Button 
-                            onClick={form.handleSubmit(onSubmit)} 
-                            className="w-full font-bold shadow-md hover:shadow-lg transition-all" 
-                            size="lg"
-                            disabled={isSubmitting}
-                        >
-                             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "KIRIM PENDAFTARAN"}
-                        </Button>
                     </CardFooter>
                 </Card>
              </div>
