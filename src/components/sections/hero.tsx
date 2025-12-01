@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -23,7 +23,7 @@ export function HeroSection() {
         
         <div className="relative z-10 container mx-auto px-4 text-left">
           <div className="max-w-xl">
-             <p className="text-lg md:text-xl text-primary font-bold mb-4 font-body animate-fade-in-up">
+             <p className="text-lg md:text-xl text-black font-bold mb-4 font-body animate-fade-in-up">
               BANDUNG COMMUNITY CHAMPIONSHIP 2026
             </p>
             <h1 className="text-4xl md:text-[64px] leading-tight font-bold font-headline uppercase tracking-tighter mb-4 animate-fade-in-down">
