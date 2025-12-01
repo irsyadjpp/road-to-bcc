@@ -6,6 +6,7 @@ import { ValuePropositionSection } from '@/components/sections/value-props';
 import { CategoriesSection } from '@/components/sections/categories';
 import { LevelingGuideSection } from '@/components/sections/leveling-guide';
 import { RegistrationInfoSection } from '@/components/sections/registration-info';
+import { LocationSection } from '@/components/sections/location';
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
         <ValuePropositionSection />
         <LevelingGuideSection />
         <RegistrationInfoSection />
+        <LocationSection />
         <CategoriesSection />
         <SponsorsSection />
       </main>
