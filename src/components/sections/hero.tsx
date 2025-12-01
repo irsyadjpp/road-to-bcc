@@ -41,7 +41,7 @@ export function HeroSection() {
                 </span>
             </div>
 
-            <p className="text-lg md:text-xl text-primary font-bold mb-2 font-body tracking-widest uppercase animate-fade-in-up">
+            <p className="text-lg md:text-xl text-black font-bold mb-2 font-body tracking-widest uppercase animate-fade-in-up">
               Bandung Community Championship 2026
             </p>
             
