@@ -10,6 +10,8 @@ import { Ticket, Loader2, CheckCircle2, RefreshCw } from 'lucide-react';
 import { submitCheckin } from './actions';
 import { VoteWidget } from '@/components/checkin/vote-widget';
 import confetti from 'canvas-confetti';
+import { PassportWidget } from '@/components/checkin/passport-widget';
+import { LeaderboardWidget } from '@/components/checkin/leaderboard-widget';
 
 // State awal untuk useActionState
 const initialState = {
@@ -72,42 +74,52 @@ export default function CheckInPage() {
         
         <CardContent className="pb-8">
           {state.success ? (
-            // --- TAMPILAN SETELAH SUKSES (VOUCHER) ---
-            <div className="text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
-              
-              <div className="bg-secondary/30 p-6 rounded-2xl border-2 border-dashed border-primary/30 mb-6 relative overflow-hidden group">
-                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <p className="text-sm text-muted-foreground mb-2 font-medium uppercase tracking-wider">Kode Voucher Anda</p>
-                <div className="text-5xl font-black font-mono text-primary tracking-wider select-all drop-shadow-sm">
-                  {state.voucherCode}
+            <div className="text-center animate-in fade-in slide-in-from-bottom-4 duration-700 pb-20">
+    
+                {/* 1. KODE VOUCHER (Tetap Paling Atas) */}
+                <div className="bg-secondary/30 p-6 rounded-2xl border-2 border-dashed border-primary/30 mb-6 relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <p className="text-sm text-muted-foreground mb-2 font-medium uppercase tracking-wider">Kode Voucher Anda</p>
+                  <div className="text-5xl font-black font-mono text-primary tracking-wider select-all drop-shadow-sm">
+                    {state.voucherCode}
+                  </div>
                 </div>
-              </div>
-              
-              <div className="space-y-4 mb-8">
-                <div className={`flex items-center justify-center gap-2 font-bold ${state.isExisting ? 'text-amber-600' : 'text-green-600'}`}>
-                  <CheckCircle2 className="w-6 h-6" />
-                  {state.isExisting ? "Data Sudah Terdaftar" : "Check-in Berhasil!"}
+                
+                <div className="space-y-4 mb-8">
+                  <div className={`flex items-center justify-center gap-2 font-bold ${state.isExisting ? 'text-amber-600' : 'text-green-600'}`}>
+                    <CheckCircle2 className="w-6 h-6" />
+                    {state.isExisting ? "Data Sudah Terdaftar" : "Check-in Berhasil!"}
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed px-4">
+                    📸 <strong>Screenshot layar ini sekarang!</strong><br/>
+                    Tunjukkan kode ini saat pengundian Doorprise di Grand Final (5 Juli 2026).
+                  </p>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed px-4">
-                  📸 <strong>Screenshot layar ini sekarang!</strong><br/>
-                  Tunjukkan kode ini saat pengundian Doorprise di Grand Final (5 Juli 2026).
-                </p>
+            
+                {/* 2. SPONSOR PASSPORT (Game) - BARU */}
+                <div className="mb-6 text-left">
+                    <PassportWidget visitorId={state.visitorId} />
+                </div>
+            
+                {/* 3. VOTING (Interaksi) - EXISTING */}
+                <div className="mb-6 text-left">
+                   <VoteWidget visitorId={state.visitorId} />
+                </div>
+            
+                {/* 4. LEADERBOARD (Hasil) - BARU */}
+                <div className="mb-6 text-left">
+                   <LeaderboardWidget />
+                </div>
+                
+                <Button 
+                  onClick={() => window.location.reload()} 
+                  variant="ghost" 
+                  className="w-full mt-8 text-muted-foreground hover:text-foreground"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Simulasi User Baru
+                </Button>
               </div>
-
-              {/* WIDGET VOTING */}
-              <div className="border-t border-border pt-2">
-                 <VoteWidget visitorId={state.visitorId} />
-              </div>
-              
-              <Button 
-                onClick={() => window.location.reload()} 
-                variant="ghost" 
-                className="w-full mt-8 text-muted-foreground hover:text-foreground"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Check-in Ulang (Testing)
-              </Button>
-            </div>
           ) : (
             // --- FORMULIR INPUT ---
             <form action={formAction} className="space-y-5">

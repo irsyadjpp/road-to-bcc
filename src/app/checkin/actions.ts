@@ -66,3 +66,40 @@ export async function submitVote(visitorId: string, teamName: string) {
   
   return { success: true };
 }
+
+
+// --- TAMBAHAN BARU ---
+
+// 1. Simulasi Data Booth Sponsor
+const SPONSORS = [
+  { id: 'bjb', name: 'Bank BJB', icon: '🏦' },
+  { id: 'yonex', name: 'Yonex', icon: '🏸' },
+  { id: 'pocari', name: 'Pocari Sweat', icon: '💧' },
+  { id: 'kopi', name: 'Kopi Kenangan', icon: '☕' },
+];
+
+// 2. Action: Visit Booth (Scan QR Tenant)
+export async function visitBooth(visitorId: string, boothId: string) {
+  await new Promise((resolve) => setTimeout(resolve, 500)); // Simulasi delay
+
+  const sponsor = SPONSORS.find(s => s.id === boothId);
+  if (!sponsor) return { success: false, message: "Booth tidak valid" };
+
+  // Di real app, simpan ke database: collection('visits').add(...)
+  return { 
+    success: true, 
+    sponsorName: sponsor.name,
+    message: `Berhasil check-in di ${sponsor.name}!`,
+    totalStamps: Math.floor(Math.random() * 3) + 1 // Simulasi: user punya 1-3 stamp
+  };
+}
+
+// 3. Action: Get Leaderboard (Klasemen Dukungan)
+export async function getLeaderboard() {
+  // Di real app, gunakan query aggregation: count()
+  return [
+    { team: "PB Djarum", votes: 1250, percent: 45 },
+    { team: "Jaya Raya", votes: 980, percent: 35 },
+    { team: "SGS PLN", votes: 560, percent: 20 },
+  ];
+}
