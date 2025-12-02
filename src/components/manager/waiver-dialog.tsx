@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
@@ -15,6 +15,14 @@ interface WaiverDialogProps {
 
 export function WaiverDialog({ open, onOpenChange, onAccept }: WaiverDialogProps) {
     const [scrolledToBottom, setScrolledToBottom] = useState(false);
+    const [dateString, setDateString] = useState('');
+
+    useEffect(() => {
+        const date = new Date();
+        const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+        const formattedDate = date.toLocaleDateString('id-ID', options);
+        setDateString(formattedDate);
+    }, []);
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const target = e.currentTarget;
@@ -72,7 +80,9 @@ export function WaiverDialog({ open, onOpenChange, onAccept }: WaiverDialogProps
                         
                         <Separator className='my-4'/>
 
-                        <p className='text-xs text-right'>Bandung, .............................. 2026</p>
+                        <p className='text-sm text-right'>
+                            Bandung, <strong className='font-bold'>{dateString}</strong>
+                        </p>
 
                     </div>
                 </ScrollArea>
