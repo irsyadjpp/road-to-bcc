@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu } from 'lucide-react';
+import { Menu, UserShield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 
@@ -51,7 +51,13 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <div className="hidden md:flex">
+            <div className="hidden md:flex items-center gap-2">
+              <Button asChild variant="ghost">
+                <Link href="/admin">
+                  <UserShield className="w-4 h-4 mr-2" />
+                  Admin
+                </Link>
+              </Button>
               <Button asChild>
                 <Link href="/manager/login">
                   Manager Area
@@ -74,7 +80,12 @@ export function Header() {
                           <Link href="/manager/login" onClick={closeSheet}>
                             Manager Area
                           </Link>
-                        </Button>
+                      </Button>
+                       <Button asChild variant="outline" className="w-full">
+                          <Link href="/admin" onClick={closeSheet}>
+                            Admin Login
+                          </Link>
+                      </Button>
                     </div>
                   </div>
                 </SheetContent>
