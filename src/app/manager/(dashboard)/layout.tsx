@@ -5,7 +5,7 @@ import { redirect, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { 
   LayoutDashboard, Users, LogOut, Settings, CheckCircle, 
-  Download, Menu, Home, FileText
+  Download, Menu, Home, FileText, AlertCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { logoutManager } from '../actions';
@@ -26,6 +26,7 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
     { name: "Dashboard", href: "/manager/dashboard", icon: LayoutDashboard },
     { name: "Registrasi Tim", href: "/manager/register-team", icon: Users },
     { name: "Status & Verifikasi", href: "/manager/status", icon: CheckCircle },
+    { name: "Ajukan Protes", href: "/manager/protest/submit", icon: AlertCircle },
     { name: "Dokumen & Unduh", href: "/manager/downloads", icon: Download },
     { name: "Cetak Waiver", href: "/manager/documents/waiver", icon: FileText, isExternal: true },
     { name: "Pengaturan Akun", href: "/manager/settings", icon: Settings },
@@ -50,7 +51,7 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
         </div>
         <nav className="flex-1 px-4 space-y-1">
           {menus.map((menu) => {
-            const isActive = pathname === menu.href;
+            const isActive = pathname.startsWith(menu.href);
             return (
               <Link 
                 key={menu.href} 
@@ -95,7 +96,7 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
                       </div>
                       <nav className="p-4 space-y-1">
                           {menus.map((menu) => {
-                            const isActive = pathname === menu.href;
+                            const isActive = pathname.startsWith(menu.href);
                             return (
                               <Link 
                                 key={menu.href} 
