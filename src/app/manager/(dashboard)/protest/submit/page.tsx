@@ -15,6 +15,8 @@ import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
 
 // Mock Data - Biasanya dari Session/DB
 const MOCK_SESSION_MANAGER = { name: "Rizki Karami", team: "PB Super", wa: "081119522228" };
@@ -37,7 +39,7 @@ export default function ProtestSubmissionPage() {
       category: undefined,
       incidentTime: "",
       courtNumber: "",
-      partaiNumber: "",
+      partaiNumber: undefined,
       opponentTeam: "",
       opponentPlayer: "",
       violationType: [],
@@ -100,14 +102,31 @@ export default function ProtestSubmissionPage() {
                 )} />
                 
                 <div className="grid grid-cols-3 gap-4">
-                    <FormField control={form.control} name="incidentTime" render={({ field }) => (<FormItem><FormLabel>Waktu Kejadian (WIB)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={form.control} name="courtNumber" render={({ field }) => (<FormItem><FormLabel>No. Lapangan</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={form.control} name="partaiNumber" render={({ field }) => (<FormItem><FormLabel>Partai Ke-</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="incidentTime" render={({ field }) => (<FormItem><FormLabel>Waktu Kejadian</FormLabel><FormControl><Input type="time" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="courtNumber" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>No. Lapangan</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Pilih..." />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                {[1, 2, 3, 4, 5].map(num => (
+                                    <SelectItem key={num} value={String(num)}>{num}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+                    <FormField control={form.control} name="partaiNumber" render={({ field }) => (<FormItem><FormLabel>Partai Ke-</FormLabel><FormControl><Input type="number" min="1" {...field} /></FormControl><FormMessage /></FormItem>)} />
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
-                    <FormField control={form.control} name="opponentTeam" render={({ field }) => (<FormItem><FormLabel>Nama Tim Terlapor</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={form.control} name="opponentPlayer" render={({ field }) => (<FormItem><FormLabel>Nama Pemain Terlapor</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="opponentTeam" render={({ field }) => (<FormItem><FormLabel>Nama Tim Terlapor</FormLabel><FormControl><Input {...field} pattern="[A-Za-z\s]+" title="Hanya boleh berisi huruf dan spasi" /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="opponentPlayer" render={({ field }) => (<FormItem><FormLabel>Nama Pemain Terlapor</FormLabel><FormControl><Input {...field} pattern="[A-Za-z\s]+" title="Hanya boleh berisi huruf dan spasi" /></FormControl><FormMessage /></FormItem>)} />
                 </div>
                 </CardContent>
             </Card>
