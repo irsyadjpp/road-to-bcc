@@ -54,7 +54,7 @@ export function Header() {
             <div className="hidden md:flex">
               <Button asChild>
                 <Link href="/manager/login">
-                  Daftar Sekarang
+                  Manager Area
                 </Link>
               </Button>
             </div>
@@ -72,7 +72,7 @@ export function Header() {
                     <div className="flex flex-col gap-4 w-full pt-4 border-t border-border">
                       <Button asChild className="w-full">
                           <Link href="/manager/login" onClick={closeSheet}>
-                            Daftar Sekarang
+                            Manager Area
                           </Link>
                         </Button>
                     </div>
