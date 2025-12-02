@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, Trophy, BarChart3, LogOut, Lock, ClipboardCheck } from 'lucide-react';
+import { LayoutDashboard, Users, Trophy, BarChart3, LogOut, Lock, ClipboardCheck, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
@@ -119,9 +119,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       
                       <Button 
                           type="submit" 
-                          className="w-full h-12 bg-primary text-white font-bold rounded-lg transition-all hover:bg-primary/90"
+                          className="w-full h-14 bg-primary text-white font-bold rounded-lg transition-all hover:bg-primary/90 text-lg group"
                       >
                           Masuk Dashboard
+                          <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                       </Button>
                   </form>
               </div>
