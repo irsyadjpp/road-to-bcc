@@ -179,7 +179,7 @@ export default function ProtestSubmissionPage() {
 
        {/* KOLOM KANAN: PROSEDUR */}
       <div className="hidden lg:block lg:col-span-1">
-        <div className="sticky top-6 space-y-6">
+        <div className="sticky top-24 space-y-6">
             <Card className="border-yellow-500/50 bg-yellow-500/5">
                  <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-yellow-800">
