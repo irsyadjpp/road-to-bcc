@@ -10,13 +10,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { AlertCircle, FileText, Send, Loader2, Info, Youtube, Video } from 'lucide-react';
+import { AlertCircle, FileText, Send, Loader2, Info, Youtube, Video, CreditCard, Printer } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
+import { submitProtest } from '../actions';
 
 // Mock Data - Biasanya dari Session/DB
 const MOCK_SESSION_MANAGER = { name: "Rizki Karami", team: "PB Super", wa: "081119522228" };
@@ -29,6 +29,8 @@ const VIOLATIONS = [
 export default function ProtestSubmissionPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [protestResult, setProtestResult] = useState<any>(null);
 
   const form = useForm<ProtestFormValues>({
     resolver: zodResolver(protestFormSchema),
@@ -52,18 +54,66 @@ export default function ProtestSubmissionPage() {
 
   async function onSubmit(data: ProtestFormValues) {
     setIsSubmitting(true);
-    // Di sini akan dipanggil Server Action submitProtest(data)
-    console.log("Protest Submitted:", data);
-    
-    await new Promise((resolve) => setTimeout(resolve, 2000)); 
+    const result = await submitProtest(data); 
 
     setIsSubmitting(false);
-    toast({
-      title: "Pengajuan Protes Diterima!",
-      description: "Tim Match Control telah menerima notifikasi Anda. Segera serahkan formulir cetak dan uang jaminan ke Meja Panitia.",
-      variant: "default",
-      className: "bg-red-600 text-white"
-    });
+    if (result.success) {
+        setProtestResult(result);
+        setCurrentStep(2);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        toast({ title: "Gagal", description: result.message, variant: "destructive" });
+    }
+  }
+
+  const PaymentConfirmationScreen = () => (
+    <div className="flex items-center justify-center py-10">
+        <Card className="w-full max-w-2xl shadow-2xl border-t-8 border-t-primary animate-in fade-in zoom-in-95">
+            <CardHeader className="text-center space-y-3 pt-8">
+                <AlertCircle className="w-12 h-12 text-primary mx-auto" />
+                <CardTitle className="text-2xl text-primary">Pengajuan Dicatat!</CardTitle>
+                <CardDescription>
+                    {protestResult.message}
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6 px-8 pb-8">
+                <div className="bg-secondary/30 p-4 rounded-lg text-center">
+                    <p className="text-sm text-muted-foreground">Nomor Registrasi Protes Anda:</p>
+                    <p className="font-black text-3xl font-mono text-foreground">{protestResult.protestId}</p>
+                </div>
+
+                <div className="border p-4 rounded-lg space-y-3 bg-red-50 border-red-200">
+                    <h3 className="font-bold text-lg flex items-center gap-2 text-red-600">
+                        <CreditCard className="w-5 h-5"/> Wajib Deposit Rp 500.000,- Tunai
+                    </h3>
+                    <p className="text-sm text-red-800">
+                        Pengajuan baru akan diproses setelah uang jaminan diserahkan ke Panitia di Meja Sekretariat GOR KONI.
+                    </p>
+                    
+                    <div className="bg-white p-3 rounded-md text-sm border border-red-100">
+                        <p className="font-bold">Transfer Bank Jaminan (Opsional sebelum setor tunai):</p>
+                        <p className="font-mono text-base">Bank BJB: <span className='font-bold'>0123-4567-8900</span> a.n Panitia BCC 2026</p>
+                    </div>
+
+                    <p className="text-xs font-semibold text-red-700">
+                        *Catatan: Uang jaminan WAJIB diserahkan tunai bersama formulir cetak. Transfer hanya memudahkan pencatatan awal.
+                    </p>
+                </div>
+
+                <div className="text-center pt-4">
+                    <Button asChild className="bg-green-600 hover:bg-green-700 h-14 text-lg" size="lg">
+                        <Link href="/manager/protest/form-print" target="_blank">
+                            <Printer className="w-5 h-5 mr-2" /> Cetak Formulir & Serahkan Deposit
+                        </Link>
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
+    </div>
+  );
+
+  if (currentStep === 2) {
+    return <PaymentConfirmationScreen />;
   }
 
   return (
@@ -245,16 +295,16 @@ export default function ProtestSubmissionPage() {
                             Lengkapi semua field di samping untuk notifikasi awal ke Match Control.
                         </li>
                         <li>
-                            <span className="font-bold">Cetak Formulir Fisik:</span>
-                            Gunakan tombol di bawah untuk mencetak formulir protes resmi.
+                            <span className="font-bold">Lanjutkan ke Pembayaran:</span>
+                            Setelah submit, Anda akan diarahkan ke halaman konfirmasi pembayaran deposit.
                         </li>
                          <li>
-                            <span className="font-bold">Serahkan Berkas:</span>
+                            <span className="font-bold">Serahkan Berkas Fisik:</span>
                             Bawa formulir cetak yang sudah ditandatangani & bermaterai, beserta uang jaminan tunai <strong>Rp 500.000</strong> ke Meja Panitia.
                         </li>
                          <li>
                             <span className="font-bold">Tunggu Keputusan:</span>
-                            Referee akan melakukan investigasi dan memberikan keputusan mutlak.
+                            Referee akan melakukan investigasi dan memberikan keputusan mutlak yang dapat dilihat di halaman Admin.
                         </li>
                    </ol>
                    <Button asChild className="w-full" variant="outline">
