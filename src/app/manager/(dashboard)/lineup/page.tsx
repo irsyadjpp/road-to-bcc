@@ -12,6 +12,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Checkbox } from "@/components/ui/checkbox";
 import { Users, Save, Printer, Calendar, MapPin, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 // DEFINISI PARTAI PER KATEGORI (Sesuai Handbook)
 const MATCH_STRUCTURE = {
@@ -47,7 +52,7 @@ export default function LineupPage() {
     defaultValues: {
       category: "Beregu PUTRA", // Default
       round: "Penyisihan Grup",
-      date: "",
+      date: format(new Date(), "yyyy-MM-dd"), // Default ke hari ini
       court: "",
       time: "",
       opponent: "",
@@ -149,13 +154,63 @@ export default function LineupPage() {
 
                         <div className="grid grid-cols-3 gap-4 col-span-1 md:col-span-2">
                              <FormField control={form.control} name="date" render={({ field }) => (
-                                <FormItem><FormLabel>Tanggal</FormLabel><FormControl><div className="flex items-center"><Calendar className="w-4 h-4 mr-2 opacity-50"/><Input type="date" {...field} /></div></FormControl><FormMessage /></FormItem>
+                                <FormItem>
+                                    <FormLabel>Tanggal</FormLabel>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <FormControl>
+                                                <Button
+                                                    variant={"outline"}
+                                                    className={cn(
+                                                        "w-full pl-3 text-left font-normal",
+                                                        !field.value && "text-muted-foreground"
+                                                    )}
+                                                >
+                                                    {field.value ? (
+                                                        format(new Date(field.value), "PPP")
+                                                    ) : (
+                                                        <span>Pilih tanggal</span>
+                                                    )}
+                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                </Button>
+                                            </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0" align="start">
+                                            <CalendarComponent
+                                                mode="single"
+                                                selected={field.value ? new Date(field.value) : undefined}
+                                                onSelect={(date) => field.onChange(date ? format(date, "yyyy-MM-dd") : "")}
+                                                disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() - 1))}
+                                                initialFocus
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                    <FormMessage />
+                                </FormItem>
                              )} />
                              <FormField control={form.control} name="time" render={({ field }) => (
                                 <FormItem><FormLabel>Jam</FormLabel><FormControl><div className="flex items-center"><Clock className="w-4 h-4 mr-2 opacity-50"/><Input type="time" {...field} /></div></FormControl><FormMessage /></FormItem>
                              )} />
                              <FormField control={form.control} name="court" render={({ field }) => (
-                                <FormItem><FormLabel>Lapangan</FormLabel><FormControl><div className="flex items-center"><MapPin className="w-4 h-4 mr-2 opacity-50"/><Input placeholder="Cth: 1" {...field} /></div></FormControl><FormMessage /></FormItem>
+                                <FormItem>
+                                    <FormLabel>Lapangan</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <div className="flex items-center">
+                                                <MapPin className="w-4 h-4 mr-2 opacity-50"/>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Pilih..." />
+                                                </SelectTrigger>
+                                            </div>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {[1, 2, 3, 4, 5].map(num => (
+                                                <SelectItem key={num} value={String(num)}>{`Lapangan ${num}`}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
                              )} />
                         </div>
 
