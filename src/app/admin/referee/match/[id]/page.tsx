@@ -124,9 +124,11 @@ export default function MatchControlPage({ params }: { params: { id: string } })
 
         const isDeuce = newA >= (winPoint - 1) && newB >= (winPoint - 1);
         if (isDeuce) {
+            if (newA === (winPoint - 1) && newB === (winPoint - 1)) {
+              msg = "SETTING / JUS";
+            }
             if (Math.abs(newA - newB) >= 2) return handleSetWin(newA > newB ? 'A' : 'B');
             if (newA === maxScore || newB === maxScore) return handleSetWin(newA === maxScore ? 'A' : 'B');
-            msg = "SETTING / JUS";
         } else {
             if (newA >= winPoint) return handleSetWin('A');
             if (newB >= winPoint) return handleSetWin('B');
@@ -138,23 +140,28 @@ export default function MatchControlPage({ params }: { params: { id: string } })
 
   const handleSetWin = (winner: 'A' | 'B') => {
       setIsTimerRunning(false);
-      if (winner === 'A') {
-          const newSet = setA + 1;
-          setSetA(newSet);
-          if (newSet === 2) return handleMatchEnd('A');
-      } else {
-          const newSet = setB + 1;
-          setSetB(newSet);
-          if (newSet === 2) return handleMatchEnd('B');
-      }
 
+      const newSetA = winner === 'A' ? setA + 1 : setA;
+      const newSetB = winner === 'B' ? setB + 1 : setB;
+      setSetA(newSetA);
+      setSetB(newSetB);
+
+      if (newSetA === 2 || newSetB === 2) {
+        return handleMatchEnd(winner);
+      }
+      
+      toast({title: `Set ${gameSet} Dimenangkan Tim ${winner}`, description: "Skor akan direset untuk set berikutnya."})
+
+      // Reset untuk set berikutnya
       setTimeout(() => {
-          if (confirm(`Set ${gameSet} Selesai. Pemenang: Tim ${winner}. Lanjut Set Berikutnya?`)) {
-              setGameSet(g => g + 1);
-              setScoreA(0); setScoreB(0); 
-              setTime(0); setIsTimerRunning(true);
-          }
+        if (confirm(`Set ${gameSet} Selesai. Pemenang: Tim ${winner}. Lanjut Set Berikutnya?`)) {
+            setGameSet(g => g + 1);
+            setScoreA(0); setScoreB(0); 
+            // setTime(0); // Optional: reset timer per set
+            setIsTimerRunning(true);
+        }
       }, 500);
+
       return `SET ${gameSet} WON BY ${winner}`;
   };
 
@@ -168,7 +175,8 @@ export default function MatchControlPage({ params }: { params: { id: string } })
   const handleMatchEnd = (winner: 'A' | 'B') => {
       setStatus('FINISHED');
       setIsTimerRunning(false);
-      return `PERTANDINGAN SELESAI. PEMENANG: TIM ${winner}`;
+      toast({title: `PERTANDINGAN SELESAI`, description: `Pemenang: Tim ${winner}`, className: "bg-green-600 text-white"});
+      return `MATCH WON BY ${winner}`;
   }
 
   // --- LOGIC 3: KARTU & SANKSI ---
@@ -216,7 +224,9 @@ export default function MatchControlPage({ params }: { params: { id: string } })
         setScoreA(newA); setScoreB(newB);
 
         const msg = checkGameStatus(newA, newB);
-        if (msg) toast({ title: msg, className: "bg-blue-600 text-white" });
+        if (msg && !msg.startsWith('SET') && !msg.startsWith('MATCH')) {
+          toast({ title: msg, className: "bg-blue-600 text-white" });
+        }
 
     } else {
         // UNDO
