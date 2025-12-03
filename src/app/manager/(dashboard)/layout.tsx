@@ -5,13 +5,14 @@ import { redirect, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { 
   LayoutDashboard, Users, LogOut, Settings, CheckCircle, 
-  Download, Menu, Home, FileText, AlertCircle
+  Download, Menu, Home, FileText, AlertCircle, Swords
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { logoutManager } from '../actions';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { Separator } from '@/components/ui/separator';
 
 export default function ManagerLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -22,21 +23,74 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
   //   redirect('/manager/login');
   // }
   
-  const menus = [
-    { name: "Dashboard", href: "/manager/dashboard", icon: LayoutDashboard },
-    { name: "Registrasi Tim", href: "/manager/register-team", icon: Users },
-    { name: "Susunan Pemain (Line-Up)", href: "/manager/lineup", icon: Users },
-    { name: "Status & Verifikasi", href: "/manager/status", icon: CheckCircle },
-    { name: "Ajukan Protes", href: "/manager/protest/submit", icon: AlertCircle },
-    { name: "Dokumen & Unduh", href: "/manager/downloads", icon: Download },
-    { name: "Cetak Waiver", href: "/manager/documents/waiver", icon: FileText, isExternal: true },
-    { name: "Pengaturan Akun", href: "/manager/settings", icon: Settings },
+  const menuGroups = [
+    {
+        title: "MENU UTAMA",
+        items: [
+            { name: "Dashboard", href: "/manager/dashboard", icon: LayoutDashboard },
+        ]
+    },
+    {
+        title: "MANAJEMEN TIM",
+        items: [
+            { name: "Registrasi Tim", href: "/manager/register-team", icon: Users },
+            { name: "Status & Verifikasi", href: "/manager/status", icon: CheckCircle },
+        ]
+    },
+    {
+        title: "OPERASIONAL",
+        items: [
+            { name: "Susunan Pemain", href: "/manager/lineup", icon: Swords },
+            { name: "Ajukan Protes", href: "/manager/protest/submit", icon: AlertCircle },
+        ]
+    },
+    {
+        title: "DOKUMEN",
+        items: [
+            { name: "Dokumen & Unduh", href: "/manager/downloads", icon: Download },
+            { name: "Cetak Waiver", href: "/manager/documents/waiver", icon: FileText, isExternal: true },
+        ]
+    },
+    {
+        title: "AKUN",
+        items: [
+            { name: "Pengaturan Akun", href: "/manager/settings", icon: Settings },
+        ]
+    }
   ];
   
   const handleLogout = async () => {
       await logoutManager();
       // Redirect di server action akan menangani pengalihan
   };
+
+  const renderNavLinks = (isSheet: boolean = false) => menuGroups.map((group, groupIndex) => (
+    <div key={groupIndex} className="space-y-1">
+        {!isSheet && group.title && <p className="px-4 pt-4 pb-2 text-xs font-semibold text-muted-foreground tracking-wider">{group.title}</p>}
+        {group.items.map((menu) => {
+            const isActive = pathname.startsWith(menu.href);
+            const NavLinkComponent = (
+                 <Link 
+                    key={menu.href} 
+                    href={menu.href}
+                    target={menu.isExternal ? "_blank" : undefined}
+                    className={cn(
+                      'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors group',
+                      isActive 
+                        ? 'bg-primary/10 text-primary font-bold shadow-inner shadow-primary/10' 
+                        : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground font-medium'
+                    )}
+                  >
+                    {!isSheet && <div className={cn('absolute left-0 w-1 h-6 rounded-r-full bg-primary transition-all', isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-50')} />}
+                    <menu.icon className="w-5 h-5" />
+                    <span>{menu.name}</span>
+                </Link>
+            );
+            return isSheet ? <SheetClose asChild>{NavLinkComponent}</SheetClose> : NavLinkComponent;
+        })}
+    </div>
+  ));
+
 
   return (
     <div className="dark flex min-h-screen bg-background text-foreground">
@@ -47,31 +101,11 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
             MANAGER AREA
           </h1>
         </div>
-        <div className="p-4 space-y-2">
-            <p className="text-xs font-semibold text-muted-foreground px-4 uppercase">Hi, Manager!</p>
-        </div>
-        <nav className="flex-1 px-4 space-y-1">
-          {menus.map((menu) => {
-            const isActive = pathname.startsWith(menu.href);
-            return (
-              <Link 
-                key={menu.href} 
-                href={menu.href}
-                target={menu.isExternal ? "_blank" : undefined}
-                className={cn(
-                  'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors group',
-                  isActive 
-                    ? 'bg-primary/10 text-primary font-bold shadow-inner shadow-primary/10' 
-                    : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground font-medium'
-                )}
-              >
-                <div className={cn('absolute left-0 w-1 h-6 rounded-r-full bg-primary transition-all', isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-50')} />
-                <menu.icon className="w-5 h-5" />
-                <span>{menu.name}</span>
-              </Link>
-            )
-          })}
+        
+        <nav className="flex-1 space-y-2 py-4">
+          {renderNavLinks()}
         </nav>
+
         <div className="p-4 border-t border-border">
           <form action={handleLogout}>
             <Button variant="outline" className="w-full">
@@ -95,26 +129,8 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
                       <div className="p-6 border-b border-border">
                         <h1 className="font-headline font-black text-xl text-primary">MANAGER AREA</h1>
                       </div>
-                      <nav className="p-4 space-y-1">
-                          {menus.map((menu) => {
-                            const isActive = pathname.startsWith(menu.href);
-                            return (
-                              <Link 
-                                key={menu.href} 
-                                href={menu.href}
-                                target={menu.isExternal ? "_blank" : undefined}
-                                className={cn(
-                                  'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
-                                  isActive 
-                                    ? 'bg-primary text-primary-foreground font-bold' 
-                                    : 'text-muted-foreground hover:bg-secondary'
-                                )}
-                              >
-                                <menu.icon className="w-5 h-5" />
-                                {menu.name}
-                              </Link>
-                            )
-                          })}
+                      <nav className="p-4 space-y-2">
+                        {renderNavLinks(true)}
                       </nav>
                   </SheetContent>
               </Sheet>
