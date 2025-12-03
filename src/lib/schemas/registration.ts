@@ -36,7 +36,7 @@ export const registrationFormSchema = z.object({
   managerName: z.string().min(2, "Nama manajer wajib diisi"),
   managerWhatsapp: z.string().min(10, "Nomor WhatsApp tidak valid"),
   managerEmail: z.string().email("Email tidak valid"),
-  basecamp: z.string().min(2, "Basecamp wajib diisi"),
+  basecamp: z.string().min(2, "Basecamp mabar wajib diisi"),
   instagram: z.string().optional(),
   players: z.array(playerSchema),
   transferProof: z.any()

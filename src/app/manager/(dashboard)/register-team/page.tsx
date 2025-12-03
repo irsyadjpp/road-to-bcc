@@ -203,7 +203,7 @@ export default function RegistrationPage() {
                       <FormItem><FormLabel>Nama Komunitas</FormLabel><FormControl><Input placeholder="PB Juara Bandung" {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
                   <FormField control={form.control} name="basecamp" render={({ field }) => (
-                      <FormItem><FormLabel>Basecamp Latihan</FormLabel><FormControl><Input placeholder="GOR Susi Susanti" {...field} /></FormControl><FormMessage /></FormItem>
+                      <FormItem><FormLabel>Basecamp Mabar</FormLabel><FormControl><Input placeholder="GOR Susi Susanti" {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
                   </CardContent>
               </Card>
