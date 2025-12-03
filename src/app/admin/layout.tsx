@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, Users, Trophy, BarChart3, LogOut, Lock, 
   ClipboardCheck, ArrowRight, Menu, Home, Settings, AlertOctagon,
-  FileCheck, Shield, Mic, Ticket
+  FileCheck, Shield, Mic, Ticket, Award
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -178,6 +178,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             { name: "Data Pengunjung", href: "/admin/visitors", icon: Users },
             { name: "Laporan Sponsor", href: "/admin/analytics", icon: BarChart3 },
             { name: "Undian Doorprize", href: "/admin/raffle", icon: Ticket },
+        ]
+    },
+    {
+        title: "SEKRETARIAT & MEDIA",
+        items: [
+            { name: "Generator Sertifikat", href: "/admin/secretary/cert-gen", icon: Award },
         ]
     }
   ];
