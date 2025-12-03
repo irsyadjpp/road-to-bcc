@@ -20,6 +20,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import { WaiverDialog } from "@/components/manager/waiver-dialog";
 
+// --- PETA HARGA BARU ---
+const COST_PER_LEVEL: Record<string, number> = {
+  Beginner: 150000,
+  Intermediate: 150000,
+  Advance: 200000,
+  undefined: 0, // Fallback jika level belum dipilih
+};
+// -----------------------
+
+
 const STORAGE_KEY = "bcc_registration_draft";
 
 export default function RegistrationPage() {
@@ -111,7 +121,20 @@ export default function RegistrationPage() {
     totalSlots: 0
   };
 
+  // --- LOGIC PERHITUNGAN BIAYA DINAMIS ---
+  let totalBillEstimate = 0;
+
   watchedPlayers?.forEach(p => {
+    // 1. Ambil harga per pemain berdasarkan level deklarasi
+    const costPerPlayer = COST_PER_LEVEL[p.level as keyof typeof COST_PER_LEVEL] || 0;
+    
+    // 2. Hitung jumlah kategori yang diikuti pemain ini (slots)
+    const slotsTaken = p.participation?.length || 0;
+
+    // 3. Tambahkan ke total bill estimate
+    totalBillEstimate += costPerPlayer * slotsTaken;
+
+    // 4. Update stats (kuota)
     if (p.participation && p.participation.length > 0) {
         p.participation.forEach((cat: any) => {
             if (stats[cat as keyof typeof stats] !== undefined) {
@@ -122,8 +145,8 @@ export default function RegistrationPage() {
     }
   });
 
-  const COST_PER_SLOT = 100000;
-  const potentialBill = stats.totalSlots * COST_PER_SLOT;
+  const potentialBill = totalBillEstimate;
+  // --- END LOGIC ---
 
   useEffect(() => {
     if (isSuccess) {
@@ -161,7 +184,7 @@ export default function RegistrationPage() {
                         <span className="font-bold">{stats.totalSlots} Slot</span>
                     </div>
                      <div className="flex justify-between pt-2 text-lg text-primary">
-                        <span className="font-bold">Total Biaya:</span>
+                        <span className="font-bold">Estimasi Biaya:</span>
                         <span className="font-black">Rp {potentialBill.toLocaleString('id-ID')}</span>
                     </div>
                 </div>
@@ -186,8 +209,7 @@ export default function RegistrationPage() {
               <div className="space-y-2">
               <h1 className="text-3xl font-black font-headline text-primary">Formulir Pendaftaran Tim</h1>
               <p className="text-muted-foreground">
-                  Biaya: <strong>Rp 100.000</strong> / atlet / kategori. 
-                  Min. 11 pemain untuk Putri, min. 10 untuk lainnya.
+                  Biaya dihitung per level pemain: Beginner/Intermediate <strong>Rp 150rb</strong>, Advance <strong>Rp 200rb</strong>.
               </p>
               </div>
 
@@ -264,9 +286,9 @@ export default function RegistrationPage() {
                                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                                   <FormControl><SelectTrigger><SelectValue placeholder="Pilih" /></SelectTrigger></FormControl>
                                   <SelectContent>
-                                      <SelectItem value="Beginner">Beginner</SelectItem>
-                                      <SelectItem value="Intermediate">Intermediate</SelectItem>
-                                      <SelectItem value="Advance">Advance</SelectItem>
+                                      <SelectItem value="Beginner">Beginner (Rp 150.000)</SelectItem>
+                                      <SelectItem value="Intermediate">Intermediate (Rp 150.000)</SelectItem>
+                                      <SelectItem value="Advance">Advance (Rp 200.000)</SelectItem>
                                   </SelectContent>
                                   </Select>
                                   <FormMessage />
@@ -295,7 +317,7 @@ export default function RegistrationPage() {
                               <FormItem className="bg-secondary/30 p-3 rounded-lg mt-2">
                                   <div className="mb-3 font-semibold text-sm flex items-center gap-2">
                                       <Wallet className="w-4 h-4 text-primary" />
-                                      Pilih Kategori (Rp 100.000/kategori):
+                                      Pilih Kategori:
                                   </div>
                                   <div className="flex flex-wrap gap-4">
                                       {CATEGORIES.map((cat) => {
@@ -398,14 +420,13 @@ export default function RegistrationPage() {
                     )}
                   />
 
-                   <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-md mb-6">
-                      <p className="text-sm text-blue-800 mb-1">
-                          Total Tagihan Anda: <strong>Rp {potentialBill.toLocaleString('id-ID')}</strong>
-                      </p>
-                      <p className="text-xs text-blue-600">
-                          ({stats.totalSlots} slot pemain x Rp 100.000)
-                      </p>
-                  </div>
+                   <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-md mb-4">
+                        <p className="text-sm text-yellow-800">
+                            **PERHATIAN: Biaya di bawah ini adalah **ESTIMASI AWAL**. <br/>
+                            Biaya Final akan disesuaikan setelah TPF mengesahkan level pemain Anda.
+                        </p>
+                    </div>
+
                   
                   <Tabs defaultValue="transfer" className="w-full">
                       <TabsList className="grid w-full grid-cols-2 mb-4">
@@ -550,11 +571,13 @@ export default function RegistrationPage() {
                   </CardContent>
                   <CardFooter className="flex-col items-start pt-4 border-t gap-3">
                       <div className="w-full flex justify-between items-center">
-                          <span className="text-sm text-muted-foreground">Tagihan</span>
+                          <span className="text-sm text-muted-foreground">Estimasi Tagihan</span>
                           <span className="text-xl font-black text-primary">Rp {potentialBill.toLocaleString('id-ID')}</span>
                       </div>
                       
-                      <div className="grid grid-cols-2 gap-2 w-full">
+                       <p className="text-xs text-yellow-600 text-right w-full font-semibold">*Biaya final setelah TPF</p>
+                      
+                      <div className="grid grid-cols-2 gap-2 w-full mt-2">
                           <Button 
                               type="button"
                               onClick={handleSaveDraft} 
@@ -581,3 +604,4 @@ export default function RegistrationPage() {
     </>
   );
 }
+
