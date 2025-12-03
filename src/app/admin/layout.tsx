@@ -1,20 +1,50 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, Users, Trophy, BarChart3, LogOut, Lock, 
-  ClipboardCheck, ArrowRight, Menu, Home, Settings, AlertOctagon
+  ClipboardCheck, ArrowRight, Menu, Home, Settings, AlertOctagon,
+  FileCheck, Shield, Mic, Ticket
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
+import { Separator } from '@/components/ui/separator';
 
 const ADMIN_PIN = "2026"; 
+
+interface NavLinkProps {
+  href: string;
+  children: ReactNode;
+  onClick?: () => void;
+  isActive: boolean;
+  isSheet: boolean;
+}
+
+const NavLink = ({ href, children, onClick, isActive, isSheet }: NavLinkProps) => {
+  const linkContent = (
+    <Link 
+      href={href}
+      onClick={onClick}
+      className={cn(
+        'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors group',
+        isActive 
+          ? 'bg-primary/10 text-primary font-bold shadow-inner shadow-primary/10' 
+          : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground font-medium'
+      )}
+    >
+      {!isSheet && <div className={cn('absolute left-0 w-1 h-6 rounded-r-full bg-primary transition-all', isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-50')} />}
+      {children}
+    </Link>
+  );
+  
+  return isSheet ? <SheetClose asChild>{linkContent}</SheetClose> : linkContent;
+};
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -120,17 +150,53 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
-  const menus = [
-    { name: "Overview", href: "/admin", icon: LayoutDashboard },
-    { name: "Manajemen Tim", href: "/admin/teams", icon: Users },
-    { name: "Input Skor (Live)", href: "/admin/matches", icon: Trophy },
-    { name: "Area Wasit", href: "/admin/referee", icon: Trophy },
-    { name: "Manajemen Protes", href: "/admin/protests", icon: AlertOctagon },
-    { name: "Data Pengunjung", href: "/admin/visitors", icon: Users },
-    { name: "Undian Doorprize", href: "/admin/raffle", icon: Trophy },
-    { name: "Laporan Sponsor", href: "/admin/analytics", icon: BarChart3 },
-    { name: "Verifikasi TPF", href: "/admin/tpf", icon: ClipboardCheck },
+  const menuGroups = [
+    {
+      title: "UTAMA",
+      items: [
+        { name: "Overview", href: "/admin", icon: LayoutDashboard },
+      ],
+    },
+    {
+      title: "MANAJEMEN PESERTA",
+      items: [
+        { name: "Pendaftaran Tim", href: "/admin/teams", icon: Users },
+        { name: "Verifikasi TPF", href: "/admin/tpf", icon: FileCheck },
+      ],
+    },
+    {
+      title: "OPERASIONAL PERTANDINGAN",
+      items: [
+        { name: "Area Wasit", href: "/admin/referee", icon: Shield },
+        { name: "Manajemen Protes", href: "/admin/protests", icon: AlertOctagon },
+        { name: "Input Skor (MLO)", href: "/admin/matches", icon: Mic },
+      ],
+    },
+    {
+        title: "LAPORAN & AKTIVASI",
+        items: [
+            { name: "Data Pengunjung", href: "/admin/visitors", icon: Users },
+            { name: "Laporan Sponsor", href: "/admin/analytics", icon: BarChart3 },
+            { name: "Undian Doorprize", href: "/admin/raffle", icon: Ticket },
+        ]
+    }
   ];
+
+  const renderNavLinks = (isSheet: boolean = false) => menuGroups.map((group, groupIndex) => (
+    <div key={groupIndex} className="space-y-1">
+        {!isSheet && group.title && <p className="px-4 pt-4 pb-2 text-xs font-semibold text-muted-foreground tracking-wider">{group.title}</p>}
+        {group.items.map((menu) => {
+            const isActive = pathname.startsWith(menu.href) && (menu.href !== '/admin' || pathname === '/admin');
+            return (
+              <NavLink key={menu.href} href={menu.href} isActive={isActive} isSheet={isSheet}>
+                <menu.icon className="w-5 h-5" />
+                <span>{menu.name}</span>
+              </NavLink>
+            )
+        })}
+        {groupIndex < menuGroups.length - 1 && !isSheet && <Separator className="my-2" />}
+    </div>
+  ));
 
   return (
     <div className="dark flex min-h-screen bg-background text-foreground">
@@ -142,26 +208,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             BCC ADMIN
           </h1>
         </div>
-        <nav className="flex-1 p-4 space-y-1">
-          {menus.map((menu) => {
-            const isActive = pathname.startsWith(menu.href) && (menu.href !== '/admin' || pathname === '/admin');
-            return (
-              <Link 
-                key={menu.href} 
-                href={menu.href}
-                className={cn(
-                  'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors group',
-                  isActive 
-                    ? 'bg-primary/10 text-primary font-bold shadow-inner shadow-primary/10' 
-                    : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground font-medium'
-                )}
-              >
-                <div className={cn('absolute left-0 w-1 h-6 rounded-r-full bg-primary transition-all', isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-50')} />
-                <menu.icon className="w-5 h-5" />
-                <span>{menu.name}</span>
-              </Link>
-            )
-          })}
+        <nav className="flex-1 py-2">
+          {renderNavLinks()}
         </nav>
         <div className="p-4 border-t border-border">
           <Button variant="outline" className="w-full" onClick={handleLogout}>
@@ -186,22 +234,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         <h1 className="font-headline font-black text-2xl text-primary">BCC ADMIN</h1>
                       </div>
                       <nav className="p-4 space-y-1">
-                          {menus.map((menu) => {
+                          {menuGroups.flatMap(group => group.items).map((menu) => {
                             const isActive = pathname.startsWith(menu.href) && (menu.href !== '/admin' || pathname === '/admin');
                             return (
-                              <Link 
-                                key={menu.href} 
-                                href={menu.href}
-                                className={cn(
-                                  'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
-                                  isActive 
-                                    ? 'bg-primary text-primary-foreground font-bold' 
-                                    : 'text-muted-foreground hover:bg-secondary'
-                                )}
-                              >
-                                <menu.icon className="w-5 h-5" />
-                                {menu.name}
-                              </Link>
+                              <SheetClose key={menu.href} asChild>
+                                <Link 
+                                  href={menu.href}
+                                  className={cn(
+                                    'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+                                    isActive 
+                                      ? 'bg-primary text-primary-foreground font-bold' 
+                                      : 'text-muted-foreground hover:bg-secondary'
+                                  )}
+                                >
+                                  <menu.icon className="w-5 h-5" />
+                                  {menu.name}
+                                </Link>
+                              </SheetClose>
                             )
                           })}
                       </nav>
