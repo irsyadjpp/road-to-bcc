@@ -39,7 +39,7 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
         ]
     },
     {
-        title: "OPERASIONAL",
+        title: "OPERASIONAL PERTANDINGAN",
         items: [
             { name: "Susunan Pemain", href: "/manager/lineup", icon: Swords },
             { name: "Ajukan Protes", href: "/manager/protest/submit", icon: AlertCircle },
@@ -98,7 +98,7 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
           </h1>
         </div>
         
-        <nav className="flex-1 space-y-2 py-4 overflow-y-auto">
+        <nav className="flex-1 space-y-2 py-4 overflow-y-auto no-scrollbar">
           {renderNavLinks()}
         </nav>
 
