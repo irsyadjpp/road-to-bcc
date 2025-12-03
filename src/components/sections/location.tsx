@@ -36,6 +36,12 @@ export function LocationSection() {
                     referrerPolicy="no-referrer-when-downgrade"
                     className="absolute inset-0 grayscale hover:grayscale-0 transition-all duration-500"
                 ></iframe>
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="relative animate-bounce">
+                        <MapPin className="w-12 h-12 text-primary drop-shadow-lg" />
+                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-2 bg-black/30 rounded-full blur-sm" />
+                    </div>
+                </div>
             </div>
         </div>
       </div>
