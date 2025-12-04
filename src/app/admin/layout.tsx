@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useState, useEffect, type ReactNode } from 'react';
@@ -36,6 +34,8 @@ const ADMIN_CODES: Record<string, { name: string; role: string }> = {
   // 3. BIDANG KOMERSIAL (BUSINESS)
   "301": { name: "Teri Taufiq (Koord. Bisnis)", role: "BUSINESS_LEAD" },
   "302": { name: "Ali/Risca (Sponsorship/Tenant)", role: "BUSINESS" },
+  "445": { name: "Hera (Tenant)", role: "TENANT_RELATIONS" },
+
 
   // 4. BIDANG ACARA & KREATIF (SHOW & MEDIA)
   "401": { name: "Rizki Karami (Show Director)", role: "SHOW_DIR" },
@@ -162,7 +162,7 @@ const NavLink = ({ href, children, onClick, isActive }: NavLinkProps) => {
       href={href}
       onClick={onClick}
       className={cn(
-        'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors',
+        'flex items-center gap-3 rounded-md text-sm transition-colors px-3 py-2',
         isActive 
           ? 'bg-primary/10 text-primary font-bold' 
           : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground font-medium'
@@ -281,28 +281,30 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       const isParentActive = menu.subItems.some((sub: any) => pathname.startsWith(sub.href));
       return (
         <Collapsible key={idx} defaultOpen={isParentActive}>
-          <CollapsibleTrigger className="flex justify-between items-center w-full group">
+          <CollapsibleTrigger className="flex justify-between items-center w-full group rounded-md hover:bg-secondary/50">
               <div className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-colors w-full',
-                isParentActive ? 'text-primary' : 'text-foreground/80 hover:bg-secondary/50'
+                'flex items-center gap-3 px-3 py-2.5 text-sm font-bold',
+                isParentActive ? 'text-primary' : 'text-foreground/80'
               )}>
                 <menu.icon className="w-5 h-5" />
                 <span>{menu.name}</span>
               </div>
               <ChevronDown className={cn(
-                  'w-4 h-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-180',
+                  'w-4 h-4 mr-2 text-muted-foreground transition-transform group-data-[state=open]:rotate-180',
                   isParentActive && 'text-primary'
               )} />
           </CollapsibleTrigger>
-          <CollapsibleContent className="pl-6 border-l border-border ml-5 mt-1 space-y-1">
-            {menu.subItems.map((subItem: any) => {
-              const isActive = pathname.startsWith(subItem.href) && (subItem.href !== '/admin' || pathname === '/admin');
-              return (
-                <NavLink key={subItem.href} href={subItem.href!} isActive={isActive}>
-                  <span>{subItem.name}</span>
-                </NavLink>
-              );
-            })}
+          <CollapsibleContent className="pl-5 mt-1">
+             <div className="pl-6 border-l border-border space-y-1">
+                {menu.subItems.map((subItem: any) => {
+                  const isActive = pathname.startsWith(subItem.href) && (subItem.href !== '/admin' || pathname === '/admin');
+                  return (
+                    <NavLink key={subItem.href} href={subItem.href!} isActive={isActive}>
+                      <span>{subItem.name}</span>
+                    </NavLink>
+                  );
+                })}
+             </div>
           </CollapsibleContent>
         </Collapsible>
       );
@@ -353,28 +355,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         <h1 className="font-headline font-black text-xl text-primary">BCC ADMIN</h1>
                       </div>
                       <nav className="p-4 space-y-2">
-                        {currentMenus.map((menu:any, idx) => {
-                            if (menu.subItems) {
-                              return <p key={idx} className="text-muted-foreground text-xs font-bold uppercase pt-4 px-2">{menu.name}</p>;
-                            }
-                            const isActive = pathname.startsWith(menu.href!) && (menu.href !== '/admin' || pathname === '/admin');
-                            return (
-                              <SheetClose key={menu.href} asChild>
-                                <Link 
-                                  href={menu.href!}
-                                  className={cn(
-                                    'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
-                                    isActive 
-                                      ? 'bg-primary text-primary-foreground font-bold' 
-                                      : 'text-muted-foreground hover:bg-secondary'
-                                  )}
-                                >
-                                  {menu.icon && <menu.icon className="w-5 h-5" />}
-                                  {menu.name}
-                                </Link>
-                              </SheetClose>
-                            )
-                          })}
+                        {renderNavLinks(true)}
                       </nav>
                       <div className="p-4 border-t border-border absolute bottom-0 w-full">
                         <Button variant="outline" className="w-full" onClick={handleLogout}>
@@ -411,3 +392,5 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     </div>
   );
 }
+
+    
