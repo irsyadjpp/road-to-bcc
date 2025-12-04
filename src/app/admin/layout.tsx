@@ -228,11 +228,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 {menu.subItems.map((subItem: any) => {
                   const isActive = pathname.startsWith(subItem.href) && (subItem.href !== '/admin' || pathname === '/admin');
                   const NavContent = () => (
-                    <NavLink key={subItem.href} href={subItem.href!} isActive={isActive}>
+                    <NavLink href={subItem.href!} isActive={isActive}>
                       <span>{subItem.name}</span>
                     </NavLink>
                   );
-                  return isSheet ? <SheetClose asChild><NavContent /></SheetClose> : <NavContent />;
+                  if (isSheet) {
+                    return <SheetClose asChild key={subItem.href}><NavContent /></SheetClose>;
+                  }
+                  return <NavContent key={subItem.href} />;
                 })}
              </div>
           </CollapsibleContent>
@@ -242,12 +245,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     const isActive = menu.href ? pathname.startsWith(menu.href) && (menu.href !== '/admin' || pathname === '/admin') : false;
     const NavContent = () => (
-      <NavLink key={menu.href} href={menu.href!} isActive={isActive}>
+      <NavLink href={menu.href!} isActive={isActive}>
         {menu.icon && <menu.icon className="w-5 h-5" />}
         <span>{menu.name}</span>
       </NavLink>
     );
-    return isSheet ? <SheetClose asChild><NavContent /></SheetClose> : <NavContent />;
+    if (isSheet) {
+        return <SheetClose asChild key={menu.href}><NavContent /></SheetClose>;
+    }
+    return <NavContent key={menu.href} />;
   });
 
 
