@@ -58,6 +58,17 @@ const getMenusByRole = (role: string) => {
     // --- CORE ---
     { name: "Dashboard", href: "/admin", icon: LayoutDashboard, roles: ['ALL'] },
 
+    // --- DIRECTOR ---
+    { 
+      name: "Director's Office", 
+      icon: Shield,
+      roles: ['DIRECTOR'],
+      subItems: [
+        { name: "Struktur Panitia", href: "/admin/director/committee", roles: ['DIRECTOR'] },
+        { name: "Generator SK", href: "/admin/director/sk-generator", roles: ['DIRECTOR'] },
+      ]
+    },
+
     // --- FINANCE ---
     { 
       name: "Keuangan", 
