@@ -15,13 +15,15 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useParams } from 'next/navigation';
 
 type MatchMode = 'GROUP' | 'KNOCKOUT';
 type MatchStatus = 'PRE_MATCH' | 'IN_PROGRESS' | 'FINISHED';
 
-export default function MatchControlPage({ params }: { params: { id: string } }) {
+export default function MatchControlPage() {
   const { toast } = useToast();
-  const matchId = params.id;
+  const params = useParams();
+  const matchId = params.id as string;
 
   // --- MOCK DATA ---
   const matchData = {
@@ -468,3 +470,5 @@ function TeamPanel({ teamName, players, score, setScore, isServing, pos, onPoint
         </div>
     )
 }
+
+    
