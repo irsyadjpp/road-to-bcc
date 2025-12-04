@@ -137,8 +137,8 @@ export default function MatchControlPage() {
         const maxScore = 20;
         const winPoint = 15;
         
-        if (gameSet === 3) {
-             if (!intervalTriggeredInSet && ((newA === 8 && newB < 8) || (newB === 8 && newA < 8))) {
+        if (!intervalTriggeredInSet && gameSet === 3) {
+             if ((newA === 8 && newB < 8) || (newB === 8 && newA < 8)) {
                  msg = "INTERVAL RUBBER: PINDAH TEMPAT (SKOR 8)";
                  setIsTimerRunning(false);
                  switchSides();
@@ -384,7 +384,7 @@ export default function MatchControlPage() {
       <div className="mt-3 grid grid-cols-4 gap-4">
          <Dialog>
             <DialogTrigger asChild>
-                <Button variant="secondary" className="h-14 flex flex-col gap-0">
+                <Button variant="secondary" className="h-14 flex flex-col gap-0" disabled={status === 'FINISHED'}>
                     <Gavel className="w-5 h-5 text-red-500" />
                     <span className="text-[9px] font-bold uppercase">Sanksi</span>
                 </Button>
@@ -408,7 +408,7 @@ export default function MatchControlPage() {
             </DialogContent>
          </Dialog>
 
-         <Button variant="secondary" className="h-14 flex flex-col gap-0" onClick={() => setServer(server === 'A' ? 'B' : 'A')}>
+         <Button variant="secondary" className="h-14 flex flex-col gap-0" onClick={() => setServer(server === 'A' ? 'B' : 'A')} disabled={status === 'FINISHED'}>
             <ArrowLeftRight className="w-5 h-5" />
             <span className="text-[9px] font-bold uppercase">Service Over</span>
          </Button>
@@ -417,7 +417,7 @@ export default function MatchControlPage() {
              <span className="text-[8px] text-muted-foreground uppercase">SHUTTLE</span>
              <div className="flex items-center gap-2">
                  <span className="font-mono font-bold text-lg">{shuttles}</span>
-                 <button onClick={() => setShuttles(s=>s+1)} className="text-green-500 text-xs bg-secondary px-1 rounded">+</button>
+                 <button onClick={() => setShuttles(s=>s+1)} disabled={status === 'FINISHED'} className="text-green-500 text-xs bg-secondary px-1 rounded disabled:opacity-50 disabled:cursor-not-allowed">+</button>
              </div>
          </div>
 
