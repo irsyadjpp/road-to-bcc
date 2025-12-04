@@ -142,12 +142,13 @@ const NavLink = ({ href, children, onClick, isActive }: NavLinkProps) => {
       href={href}
       onClick={onClick}
       className={cn(
-        'flex items-center gap-3 rounded-md text-sm transition-colors px-3 py-2',
+        'group relative flex items-center gap-3 rounded-md text-sm transition-colors px-3 py-2.5',
         isActive 
           ? 'bg-primary/10 text-primary font-bold' 
           : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground font-medium'
       )}
     >
+      <div className={cn('absolute left-0 h-6 w-1 rounded-r-full bg-primary transition-transform duration-300', isActive ? 'scale-y-100' : 'scale-y-0 group-hover:scale-y-50')} />
       {children}
     </Link>
   );
@@ -213,7 +214,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <Collapsible key={idx} defaultOpen={isParentActive}>
           <CollapsibleTrigger className="flex justify-between items-center w-full group rounded-md hover:bg-secondary/50">
               <div className={cn(
-                'flex items-center gap-3 px-3 py-2.5 text-sm font-bold',
+                'flex items-center gap-3 px-3 py-2.5 text-sm font-bold font-headline',
                 isParentActive ? 'text-primary' : 'text-foreground/80'
               )}>
                 <menu.icon className="w-5 h-5" />
@@ -224,8 +225,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   isParentActive && 'text-primary'
               )} />
           </CollapsibleTrigger>
-          <CollapsibleContent className="pl-5 mt-1">
-             <div className="pl-6 border-l border-border space-y-1">
+          <CollapsibleContent className="pl-6 mt-1">
+             <div className="pl-5 border-l-2 border-border/50 space-y-1">
                 {menu.subItems.map((subItem: any) => {
                   const isActive = pathname.startsWith(subItem.href) && (subItem.href !== '/admin' || pathname === '/admin');
                   const NavContent = () => (
@@ -248,7 +249,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const NavContent = () => (
       <NavLink href={menu.href!} isActive={isActive}>
         {menu.icon && <menu.icon className="w-5 h-5" />}
-        <span>{menu.name}</span>
+        <span className="font-bold">{menu.name}</span>
       </NavLink>
     );
     if (isSheet) {
@@ -261,14 +262,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="dark flex min-h-screen bg-background text-foreground">
       {/* Sidebar */}
-      <aside className="w-64 bg-card border-r border-border hidden md:flex flex-col fixed h-full">
+      <aside className="w-72 bg-card border-r border-border hidden md:flex flex-col fixed h-full">
         <div className="p-6 border-b border-border flex items-center gap-3">
           <Image src="/images/logo.png" alt="Logo" width={32} height={32} />
           <h1 className="font-headline font-black text-2xl text-transparent bg-clip-text bg-gradient-to-r from-primary to-fuchsia-500">
             BCC ADMIN
           </h1>
         </div>
-        <nav className="flex-1 py-4 px-2 overflow-y-auto no-scrollbar space-y-1">
+        <nav className="flex-1 py-4 px-3 overflow-y-auto no-scrollbar space-y-1">
           {renderNavLinks()}
         </nav>
         <div className="p-4 border-t border-border">
@@ -281,7 +282,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col md:ml-64">
+      <div className="flex-1 flex flex-col md:ml-72">
         <header className="h-16 border-b border-border bg-card/50 backdrop-blur-sm flex items-center justify-between px-6 sticky top-0 z-10 md:justify-end">
              <div className="md:hidden">
               <Sheet>
