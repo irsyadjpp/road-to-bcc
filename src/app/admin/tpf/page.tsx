@@ -17,7 +17,7 @@ import {
 import { TpfAssessmentModal } from "@/components/admin/tpf-assessment-modal";
 import { getVerificationQueue, getSpotChecks, submitSpotCheck, type PlayerVerification, type SpotCheckLog } from "./actions";
 import { useToast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 
 export default function TpfDashboard() {
   const { toast } = useToast();
