@@ -1,13 +1,13 @@
 
 'use client';
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState, useEffect, useState } from "react";
+import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Lock, Loader2, Mail } from "lucide-react";
 import { loginAdminByCode, loginAdminGoogle } from "../actions";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -29,7 +29,7 @@ export default function AdminLoginPage() {
   const { toast } = useToast();
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   
-  const [state, formAction] = useFormState(loginAdminByCode, { success: false, message: '' });
+  const [state, formAction] = useActionState(loginAdminByCode, { success: false, message: '' });
 
   useEffect(() => {
     if (state.success) {
@@ -167,5 +167,3 @@ export default function AdminLoginPage() {
     </div>
   );
 }
-
-    
