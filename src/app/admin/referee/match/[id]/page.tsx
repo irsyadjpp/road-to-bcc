@@ -55,6 +55,8 @@ export default function MatchControlPage() {
 
   // --- STATE BARU: Posisi Tim di Layar ---
   const [teamSides, setTeamSides] = useState<{ teamA: TeamSide, teamB: TeamSide }>({ teamA: 'LEFT', teamB: 'RIGHT' });
+  const [intervalTriggeredInSet, setIntervalTriggeredInSet] = useState(false);
+
 
   // --- COIN TOSS STATE ---
   const [tossWinner, setTossWinner] = useState<'A' | 'B'>('A');
@@ -97,9 +99,17 @@ export default function MatchControlPage() {
     } else if (tossChoice === 'RECEIVE') {
         setServer(tossWinner === 'A' ? 'B' : 'A');
     } else {
-        switchSides();
-        setServer(tossWinner); 
-        toast({ title: "Pindah Tempat", description: `Tim ${tossWinner === 'A' ? matchData.teamA : matchData.teamB} memilih sisi lapangan.` });
+        // Jika pilih sisi, tim lain yang service pertama
+        if(tossWinner === 'A') {
+          // A pilih sisi, B service
+          setTeamSides({ teamA: 'RIGHT', teamB: 'LEFT'}); // Contoh A pilih sisi kanan
+          setServer('B');
+        } else {
+          // B pilih sisi, A service
+          setTeamSides({ teamA: 'LEFT', teamB: 'RIGHT'});
+          setServer('A');
+        }
+        toast({ title: "Pilih Tempat", description: `Tim ${tossWinner === 'A' ? matchData.teamA : matchData.teamB} memilih sisi lapangan.` });
     }
     
     setStatus('IN_PROGRESS');
@@ -113,10 +123,11 @@ export default function MatchControlPage() {
     
     if (mode === 'GROUP') {
         // ATURAN PENYISIHAN (1 x 30 Poin)
-        if ((newA === 15 && newB < 15) || (newB === 15 && newA < 15)) {
+        if (!intervalTriggeredInSet && ((newA === 15 && newB < 15) || (newB === 15 && newA < 15))) {
              msg = "INTERVAL: PINDAH TEMPAT (SKOR 15)";
              setIsTimerRunning(false);
-             switchSides(); // Trigger pindah sisi
+             switchSides();
+             setIntervalTriggeredInSet(true);
         }
         if (newA === 29 && newB === 29) msg = "SUDDEN DEATH: Poin Selanjutnya Menang!";
         else if (newA >= 30 || newB >= 30) return handleGameWin(newA > newB ? 'A' : 'B');
@@ -127,10 +138,11 @@ export default function MatchControlPage() {
         const winPoint = 15;
         
         if (gameSet === 3) {
-             if ((newA === 8 && newB < 8) || (newB === 8 && newA < 8)) {
+             if (!intervalTriggeredInSet && ((newA === 8 && newB < 8) || (newB === 8 && newA < 8))) {
                  msg = "INTERVAL RUBBER: PINDAH TEMPAT (SKOR 8)";
                  setIsTimerRunning(false);
-                 switchSides(); // Trigger pindah sisi
+                 switchSides();
+                 setIntervalTriggeredInSet(true);
              }
         }
 
@@ -170,6 +182,7 @@ export default function MatchControlPage() {
             setScoreA(0); setScoreB(0); 
             setIsTimerRunning(true);
             switchSides(); // Pindah sisi di awal set baru
+            setIntervalTriggeredInSet(false); // Reset interval trigger for new set
         }
       }, 500);
 
