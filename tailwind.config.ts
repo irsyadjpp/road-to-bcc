@@ -88,6 +88,10 @@ export default {
             height: '0',
           },
         },
+        'fade-in': {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
         'fade-in-down': {
           '0%': {
             opacity: '0',
@@ -108,7 +112,6 @@ export default {
             transform: 'translateY(0)',
           },
         },
-        // --- KEYFRAMES BARU ---
         'zoom-slow': {
           '0%': { transform: 'scale(1)' },
           '100%': { transform: 'scale(1.1)' },
@@ -127,11 +130,11 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out',
         'fade-in-down': 'fade-in-down 0.6s ease-out forwards',
         'fade-in-up': 'fade-in-up 0.6s ease-out forwards',
-        // --- TAMBAHAN BARU ---
         'zoom-slow': 'zoom-slow 20s infinite alternate', // Efek kamera stadion
         'float': 'float 6s ease-in-out infinite', // Efek shuttlecock melayang
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite', // Efek cahaya 'breathing'
         'shuttle-fly': 'shuttle-fly 1.5s ease-out forwards', // Efek smash masuk
+        'fade-in': 'fade-in 0.3s ease-in-out',
       },
     },
   },
