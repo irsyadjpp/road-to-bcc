@@ -10,7 +10,7 @@ import {
   ClipboardCheck, ArrowRight, Menu, Home, Settings, AlertOctagon,
   FileCheck, Shield, Mic, Ticket, Award, Wallet,
   ClipboardList, Activity, Gavel, Gift, Stethoscope, Receipt, CheckCircle, FileText,
-  Store, Video, QrCode, Archive, ShieldAlert
+  Store, Video, QrCode, Archive, ShieldAlert, DollarSign
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -59,8 +59,10 @@ const getMenusByRole = (role: string) => {
 
     // --- FINANCE ---
     { header: "Keuangan" },
+    { name: "Dashboard Keuangan", href: "/admin/finance", icon: DollarSign, roles: ['FINANCE', 'DIRECTOR'] },
     { name: "Verifikasi Pendaftaran", href: "/admin/teams", icon: Receipt, roles: ['FINANCE', 'DIRECTOR', 'BUSINESS_LEAD'] },
-    { name: "Reimbursement & Jurnal", href: "/admin/finance/reimbursement-approval", icon: Wallet, roles: ['FINANCE', 'DIRECTOR'] },
+    { name: "Approval Reimbursement", href: "/admin/finance/reimbursement-approval", icon: Wallet, roles: ['FINANCE', 'DIRECTOR'] },
+    { name: "Tagihan Sponsor", href: "/admin/finance/invoices", icon: FileText, roles: ['FINANCE', 'DIRECTOR', 'BUSINESS_LEAD'] },
     { name: "Manajemen Tenant", href: "/admin/tenants", icon: Store, roles: ['FINANCE', 'BUSINESS', 'BUSINESS_LEAD'] },
 
     // --- MATCH CONTROL ---
@@ -77,6 +79,7 @@ const getMenusByRole = (role: string) => {
     { name: "Log Medis", href: "/admin/medical", icon: Stethoscope, roles: ['MEDIC', 'OPS_LEAD'] },
     { name: "Logistik Kok", href: "/admin/logistics", icon: Archive, roles: ['LOGISTICS', 'OPS_LEAD', 'MATCH_COORD'] },
     { name: "Undian Doorprize", href: "/admin/raffle", icon: Gift, roles: ['OPS_LEAD', 'DIRECTOR', 'SHOW_DIR', 'MEDIA'] },
+    { name: "Pengajuan Reimbursement", href: "/admin/reimbursement/submit", icon: Wallet, roles: ['ALL'] },
 
     // --- COMMERCIAL & MEDIA ---
     { header: "Bisnis & Media" },
