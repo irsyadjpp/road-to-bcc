@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -33,34 +34,36 @@ export default function VolunteerPage() {
     },
   });
 
-  // Logic Khusus: "SAYA SIAP SEMUA TANGGAL"
+    // Logic Khusus: "SAYA SIAP SEMUA TANGGAL"
   const handleAvailabilityChange = (checked: boolean, value: string, field: any) => {
     const allDates = ["Week 1 (13-14 Juni)", "Week 2 (20-21 Juni)", "Week 3 (27-28 Juni)", "Grand Final (5 Juli) - WAJIB"];
-    let current = field.value || [];
+    let newValues = field.value || [];
 
     if (value === "ALL") {
       if (checked) {
-        field.onChange([...allDates, "ALL"]);
+        newValues = [...allDates, "ALL"];
       } else {
-        field.onChange([]);
+        newValues = [];
       }
     } else {
       if (checked) {
-        current = [...current, value];
+        newValues = [...newValues, value];
       } else {
-        // Jika uncheck satu tanggal, uncheck juga "ALL"
-        current = current.filter((v: string) => v !== value && v !== "ALL");
+        newValues = newValues.filter((v: string) => v !== value);
       }
       
-      const allOtherDatesSelected = allDates.every(date => current.includes(date));
-      if (allOtherDatesSelected && !current.includes("ALL")) {
-          current.push("ALL");
+      // Uncheck "ALL" if any date is unchecked
+      if (newValues.includes("ALL") && !allDates.every(date => newValues.includes(date))) {
+         newValues = newValues.filter((v:string) => v !== "ALL");
       }
-      
-      field.onChange(current);
-    }
-  };
 
+      // Check "ALL" if all other dates are checked
+      if (allDates.every(date => newValues.includes(date)) && !newValues.includes("ALL")) {
+          newValues.push("ALL");
+      }
+    }
+    field.onChange(newValues);
+  };
 
   async function onSubmit(data: VolunteerFormValues) {
     setIsSubmitting(true);
@@ -111,22 +114,20 @@ export default function VolunteerPage() {
           <div className="text-center space-y-4 mb-10">
             <Badge className="bg-primary text-white px-4 py-1 text-sm mb-2">OPEN RECRUITMENT</Badge>
             <h1 className="text-3xl md:text-5xl font-black font-headline text-primary">VOLUNTEER BCC 2026</h1>
-            <p className="text-xl font-bold text-foreground">Jadilah Bagian dari Sejarah Baru Badminton Bandung!</p>
+            <p className="text-xl font-bold text-foreground">"Be Part of The History: Integritas, Solidaritas, Sportivitas"</p>
             
             <Card className="bg-white border-primary/20 text-left shadow-sm mt-6">
               <CardContent className="p-6 space-y-4 text-sm md:text-base">
+                <p className="text-center">Halo Calon Pemenang! Kami memanggil kamu, pemuda-pemudi aktif Bandung, untuk bergabung dalam tim penyelenggara turnamen badminton komunitas terbesar tahun ini. Silakan isi data di bawah ini dengan jujur dan teliti.</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                        <h4 className="font-bold flex items-center gap-2"><Megaphone className="w-4 h-4 text-primary"/> Tema Event</h4>
-                        <p className="text-muted-foreground">"Integritas, Solidaritas, & Sportivitas"</p>
-                    </div>
-                    <div className="space-y-2">
-                         <h4 className="font-bold flex items-center gap-2"><CalendarCheck className="w-4 h-4 text-primary"/> Periode</h4>
+                        <h4 className="font-bold flex items-center gap-2"><CalendarCheck className="w-4 h-4 text-primary"/> Waktu</h4>
                          <p className="text-muted-foreground">Setiap Sabtu & Minggu (Juni - Juli 2026)</p>
                     </div>
-                </div>
-                <div className="bg-secondary/20 p-4 rounded-lg border border-secondary">
-                    <span className="font-bold text-primary">Benefit:</span> Honorarium Harian, Uang Makan, Sertifikat Resmi, Jersey Eksklusif, & Pengalaman Manajemen Event.
+                    <div className="space-y-2">
+                         <h4 className="font-bold flex items-center gap-2"><Briefcase className="w-4 h-4 text-primary"/> Benefit</h4>
+                         <p className="text-muted-foreground">Uang Saku Harian, Konsumsi, Sertifikat Resmi, Jersey Eksklusif, & Networking.</p>
+                    </div>
                 </div>
               </CardContent>
             </Card>
@@ -135,25 +136,24 @@ export default function VolunteerPage() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               
-              {/* BAGIAN 1: DATA PRIBADI */}
               <Card>
-                <CardHeader className="bg-primary/5 border-b"><CardTitle className="flex items-center gap-2"><User className="w-5 h-5"/> 1. Data Pribadi</CardTitle></CardHeader>
+                <CardHeader className="bg-primary/5 border-b"><CardTitle className="flex items-center gap-2"><User className="w-5 h-5"/> 1. Data Pribadi (Personal Data)</CardTitle></CardHeader>
                 <CardContent className="p-6 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormField control={form.control} name="fullName" render={({ field }) => (
-                            <FormItem><FormLabel>Nama Lengkap (KTP)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                            <FormItem><FormLabel>Nama Lengkap (Sesuai KTP) *</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                         )} />
                         <FormField control={form.control} name="nickname" render={({ field }) => (
-                            <FormItem><FormLabel>Nama Panggilan</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                            <FormItem><FormLabel>Nama Panggilan *</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                         )} />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormField control={form.control} name="dob" render={({ field }) => (
-                            <FormItem><FormLabel>Tanggal Lahir</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem>
+                            <FormItem><FormLabel>Tanggal Lahir *</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem>
                         )} />
                         <FormField control={form.control} name="gender" render={({ field }) => (
                             <FormItem className="space-y-3">
-                                <FormLabel>Jenis Kelamin</FormLabel>
+                                <FormLabel>Jenis Kelamin *</FormLabel>
                                 <FormControl>
                                     <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex flex-row gap-4">
                                         <FormItem className="flex items-center space-x-2"><FormControl><RadioGroupItem value="Laki-laki" /></FormControl><FormLabel className="font-normal">Laki-laki</FormLabel></FormItem>
@@ -165,30 +165,29 @@ export default function VolunteerPage() {
                         )} />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormField control={form.control} name="whatsapp" render={({ field }) => (
-                            <FormItem><FormLabel>No. WhatsApp Aktif</FormLabel><FormControl><Input type="tel" {...field} /></FormControl><FormMessage /></FormItem>
+                       <FormField control={form.control} name="whatsapp" render={({ field }) => (
+                            <FormItem><FormLabel>Nomor WhatsApp Aktif *</FormLabel><FormControl><Input type="tel" {...field} /></FormControl><FormDescription>Pastikan nomor ini terhubung dengan WA.</FormDescription><FormMessage /></FormItem>
                         )} />
                         <FormField control={form.control} name="email" render={({ field }) => (
-                            <FormItem><FormLabel>Email</FormLabel><FormControl><Input type="email" {...field} /></FormControl><FormMessage /></FormItem>
+                            <FormItem><FormLabel>Alamat Email *</FormLabel><FormControl><Input type="email" {...field} /></FormControl><FormMessage /></FormItem>
                         )} />
                     </div>
                     <FormField control={form.control} name="address" render={({ field }) => (
-                        <FormItem><FormLabel>Alamat Domisili di Bandung</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
+                        <FormItem><FormLabel>Alamat Domisili di Bandung *</FormLabel><FormControl><Textarea placeholder="Sebutkan Kecamatan/Kelurahan." {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                     <FormField control={form.control} name="instagram" render={({ field }) => (
-                        <FormItem><FormLabel>Akun Instagram (Jangan Private)</FormLabel><FormControl><Input placeholder="@username" {...field} /></FormControl><FormMessage /></FormItem>
+                        <FormItem><FormLabel>Akun Instagram *</FormLabel><FormControl><Input placeholder="@username" {...field} /></FormControl><FormDescription>Pastikan akun tidak di-private selama masa seleksi.</FormDescription><FormMessage /></FormItem>
                     )} />
                 </CardContent>
               </Card>
 
-              {/* BAGIAN 2: LATAR BELAKANG */}
               <Card>
-                <CardHeader className="bg-primary/5 border-b"><CardTitle className="flex items-center gap-2"><GraduationCap className="w-5 h-5"/> 2. Latar Belakang</CardTitle></CardHeader>
+                <CardHeader className="bg-primary/5 border-b"><CardTitle className="flex items-center gap-2"><GraduationCap className="w-5 h-5"/> 2. Latar Belakang (Education & Background)</CardTitle><CardDescription className="px-6 -mt-2">Bagian ini penting untuk pemetaan keahlian.</CardDescription></CardHeader>
                 <CardContent className="p-6 space-y-4">
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormField control={form.control} name="education" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Pendidikan Terakhir</FormLabel>
+                                <FormLabel>Pendidikan Terakhir *</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl><SelectTrigger><SelectValue placeholder="Pilih Jenjang" /></SelectTrigger></FormControl>
                                     <SelectContent>
@@ -202,16 +201,16 @@ export default function VolunteerPage() {
                             </FormItem>
                         )} />
                          <FormField control={form.control} name="institution" render={({ field }) => (
-                            <FormItem><FormLabel>Nama Institusi / Kampus</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                            <FormItem><FormLabel>Nama Institusi / Kampus *</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                         )} />
                      </div>
                      <FormField control={form.control} name="major" render={({ field }) => (
-                        <FormItem><FormLabel>Jurusan / Program Studi</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                        <FormItem><FormLabel>Jurusan / Program Studi *</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                     
                     <FormField control={form.control} name="status" render={({ field }) => (
                         <FormItem className="space-y-3">
-                            <FormLabel>Status Saat Ini</FormLabel>
+                            <FormLabel>Status Saat Ini *</FormLabel>
                             <FormControl>
                                 <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                     {["Mahasiswa Aktif", "Fresh Graduate (Belum Bekerja)", "Karyawan / Profesional", "Freelancer / Wirausaha"].map((item) => (
@@ -226,19 +225,18 @@ export default function VolunteerPage() {
                         </FormItem>
                     )} />
                      <FormField control={form.control} name="expertise" render={({ field }) => (
-                        <FormItem><FormLabel>Bidang Keahlian / Pekerjaan</FormLabel><FormControl><Input placeholder="Contoh: Desain Grafis, Medis, IT Support..." {...field} /></FormControl><FormMessage /></FormItem>
+                        <FormItem><FormLabel>Bidang Keahlian / Pekerjaan *</FormLabel><FormControl><Input placeholder="Contoh: Desain Grafis, Medis, IT Support..." {...field} /></FormControl><FormDescription>Jelaskan jurusan kuliah atau bidang keahlian pekerjaan Anda (Bukan nama perusahaan).</FormDescription><FormMessage /></FormItem>
                     )} />
                 </CardContent>
               </Card>
 
-              {/* BAGIAN 3: DIVISI */}
               <Card>
-                <CardHeader className="bg-primary/5 border-b"><CardTitle className="flex items-center gap-2"><Briefcase className="w-5 h-5"/> 3. Pilihan Divisi</CardTitle></CardHeader>
+                <CardHeader className="bg-primary/5 border-b"><CardTitle className="flex items-center gap-2"><Briefcase className="w-5 h-5"/> 3. Posisi & Minat (Role Preference)</CardTitle><CardDescription className="px-6 -mt-2">Pilih posisi yang paling sesuai dengan skill Anda.</CardDescription></CardHeader>
                 <CardContent className="p-6 space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                          <FormField control={form.control} name="division1" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Pilihan 1 (Prioritas Utama)</FormLabel>
+                                <FormLabel>Pilihan Divisi 1 (Prioritas Utama) *</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl><SelectTrigger><SelectValue placeholder="Pilih Divisi Utama" /></SelectTrigger></FormControl>
                                     <SelectContent>{VOLUNTEER_DIVISIONS.map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}</SelectContent>
@@ -248,7 +246,7 @@ export default function VolunteerPage() {
                         )} />
                         <FormField control={form.control} name="division2" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Pilihan 2 (Cadangan)</FormLabel>
+                                <FormLabel>Pilihan Divisi 2 (Cadangan) *</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl><SelectTrigger><SelectValue placeholder="Pilih Divisi Cadangan" /></SelectTrigger></FormControl>
                                     <SelectContent>{VOLUNTEER_DIVISIONS.map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}</SelectContent>
@@ -260,13 +258,12 @@ export default function VolunteerPage() {
                 </CardContent>
               </Card>
 
-              {/* BAGIAN 4: KEAHLIAN & PENGALAMAN */}
               <Card>
-                <CardHeader className="bg-primary/5 border-b"><CardTitle className="flex items-center gap-2"><Wrench className="w-5 h-5"/> 4. Keahlian & Pengalaman</CardTitle></CardHeader>
+                <CardHeader className="bg-primary/5 border-b"><CardTitle className="flex items-center gap-2"><Wrench className="w-5 h-5"/> 4. Keahlian & Aset</CardTitle></CardHeader>
                 <CardContent className="p-6 space-y-6">
                     <FormField control={form.control} name="experience" render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Ceritakan pengalaman organisasi/kepanitiaan (khususnya olahraga)</FormLabel>
+                            <FormLabel>Ceritakan pengalaman organisasi/kepanitiaan (khususnya olahraga) *</FormLabel>
                             <FormControl><Textarea {...field} rows={4} placeholder="Sebutkan nama event, tahun, dan posisi Anda..." /></FormControl>
                             <FormMessage />
                         </FormItem>
@@ -274,13 +271,13 @@ export default function VolunteerPage() {
                     
                     <FormField control={form.control} name="skills" render={() => (
                         <FormItem>
-                            <div className="mb-4"><FormLabel>Keahlian Khusus (Centang yang dikuasai)</FormLabel></div>
+                            <div className="mb-4"><FormLabel>Keahlian Teknis (Centang semua yang dikuasai)</FormLabel></div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                {["Fotografi/Videografi (Punya Kamera)", "Desain Grafis (Canva/Adobe)", "Microsoft Office/Google Sheets", "Public Speaking/MC", "P3K/Fisioterapi Dasar", "Instalasi Jaringan/IT", "Setir Mobil (SIM A)"].map((item) => (
+                                {["Fotografi/Videografi (Punya Kamera)", "Desain Grafis (Canva/Adobe)", "Public Speaking/MC", "Microsoft Office/Google Sheets (Advanced)", "P3K/Fisioterapi Dasar", "Instalasi Jaringan/IT", "Setir Mobil (SIM A)"].map((item) => (
                                     <FormField key={item} control={form.control} name="skills" render={({ field }) => (
                                         <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                                             <FormControl>
-                                                <Checkbox checked={field.value?.includes(item)} onCheckedChange={(checked) => checked ? field.onChange([...field.value || [], item]) : field.onChange(field.value?.filter((v) => v !== item))} />
+                                                <Checkbox checked={field.value?.includes(item)} onCheckedChange={(checked) => checked ? field.onChange([...(field.value || []), item]) : field.onChange((field.value || []).filter((v) => v !== item))} />
                                             </FormControl>
                                             <FormLabel className="font-normal cursor-pointer">{item}</FormLabel>
                                         </FormItem>
@@ -293,7 +290,7 @@ export default function VolunteerPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField control={form.control} name="hasVehicle" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Punya Kendaraan Pribadi (Motor)?</FormLabel>
+                                <FormLabel>Punya Kendaraan Pribadi (Motor)? *</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl><SelectTrigger><SelectValue placeholder="Pilih" /></SelectTrigger></FormControl>
                                     <SelectContent><SelectItem value="Ya">Ya</SelectItem><SelectItem value="Tidak">Tidak</SelectItem></SelectContent>
@@ -303,7 +300,7 @@ export default function VolunteerPage() {
                         )} />
                         <FormField control={form.control} name="hasLaptop" render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Punya Laptop (Bisa dibawa)?</FormLabel>
+                                <FormLabel>Punya Laptop (Bisa dibawa)? *</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl><SelectTrigger><SelectValue placeholder="Pilih" /></SelectTrigger></FormControl>
                                     <SelectContent><SelectItem value="Ya">Ya</SelectItem><SelectItem value="Tidak">Tidak</SelectItem></SelectContent>
@@ -315,21 +312,20 @@ export default function VolunteerPage() {
                 </CardContent>
               </Card>
 
-               {/* BAGIAN 5: KOMITMEN & STUDI KASUS */}
                <Card>
                 <CardHeader className="bg-primary/5 border-b"><CardTitle className="flex items-center gap-2"><CalendarCheck className="w-5 h-5"/> 5. Komitmen & Studi Kasus</CardTitle></CardHeader>
                 <CardContent className="p-6 space-y-6">
                      <FormField control={form.control} name="availability" render={({ field }) => (
                         <FormItem>
-                            <div className="mb-4"><FormLabel>Ketersediaan Waktu (Wajib Komitmen)</FormLabel></div>
+                            <div className="mb-4"><FormLabel>Ketersediaan Waktu (Event Full Day di akhir pekan) *</FormLabel></div>
                             <div className="space-y-2 border p-4 rounded bg-secondary/10">
                                 {["Week 1 (13-14 Juni)", "Week 2 (20-21 Juni)", "Week 3 (27-28 Juni)", "Grand Final (5 Juli) - WAJIB", "ALL"].map((item) => (
-                                    <FormField key={item} control={form.control} name="availability" render={({ field: formField }) => (
+                                    <FormField key={item} control={form.control} name="availability" render={({ field }) => (
                                         <FormItem className="flex flex-row items-center space-x-3 space-y-0">
                                             <FormControl>
                                                 <Checkbox 
-                                                    checked={formField.value?.includes(item)} 
-                                                    onCheckedChange={(checked) => handleAvailabilityChange(!!checked, item, formField)} 
+                                                    checked={item === 'ALL' ? field.value?.length === 5 : field.value?.includes(item)}
+                                                    onCheckedChange={(checked) => handleAvailabilityChange(!!checked, item, field)} 
                                                 />
                                             </FormControl>
                                             <FormLabel className={`font-normal cursor-pointer ${item === "ALL" ? "font-bold text-primary" : ""}`}>
@@ -346,14 +342,14 @@ export default function VolunteerPage() {
                     <div className="space-y-4 pt-4 border-t">
                         <FormField control={form.control} name="caseStudy1" render={({ field }) => (
                             <FormItem>
-                                <FormLabel className="leading-relaxed font-bold">Studi Kasus 1: Jika Anda melihat teman sesama panitia duduk santai main HP padahal antrian peserta sedang panjang, apa yang akan Anda lakukan?</FormLabel>
+                                <FormLabel className="leading-relaxed font-bold">Studi Kasus 1: Jika Anda melihat teman sesama panitia duduk santai main HP padahal antrian peserta sedang panjang, apa yang akan Anda lakukan? *</FormLabel>
                                 <FormControl><Textarea {...field} placeholder="Jawaban Anda..." /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )} />
                         <FormField control={form.control} name="caseStudy2" render={({ field }) => (
                             <FormItem>
-                                <FormLabel className="leading-relaxed font-bold">Studi Kasus 2: Ada peserta yang marah-marah karena dilarang masuk akibat belum install aplikasi wajib. Bagaimana cara Anda menanganinya?</FormLabel>
+                                <FormLabel className="leading-relaxed font-bold">Studi Kasus 2: Ada peserta yang marah-marah karena dilarang masuk akibat belum install aplikasi wajib. Bagaimana cara Anda menanganinya? *</FormLabel>
                                 <FormControl><Textarea {...field} placeholder="Jawaban Anda..." /></FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -362,7 +358,6 @@ export default function VolunteerPage() {
                 </CardContent>
               </Card>
 
-              {/* BAGIAN 6: PERNYATAAN */}
               <Card className="border-l-4 border-l-primary">
                 <CardContent className="p-6 space-y-4">
                      <div className="flex items-center gap-2 text-primary font-bold mb-2">
@@ -380,7 +375,6 @@ export default function VolunteerPage() {
                             </FormItem>
                         )} />
                     ))}
-                    {/* Global Error */}
                     {Object.keys(form.formState.errors).some(k => k.startsWith('agree')) && (
                          <p className="text-destructive text-sm font-medium pt-2">Anda wajib menyetujui semua pernyataan di atas.</p>
                     )}
