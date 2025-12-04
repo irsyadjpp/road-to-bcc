@@ -1,168 +1,151 @@
+
 'use client';
 
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PlayCircle, StopCircle, Clock, Save, Trophy } from "lucide-react";
+import { 
+  Activity, Clock, AlertTriangle, Mic, 
+  MoreVertical, ArrowRightCircle, Users 
+} from "lucide-react";
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 
-// Mock Data Pertandingan
-const initialMatches = [
-  { 
-    id: 1, 
-    court: "Lapangan 1", 
-    category: "Beregu PUTRA", 
-    teamA: "PB Djarum KW", 
-    teamB: "PB Jaya Raya", 
-    scoreA: [21, 18, 5], 
-    scoreB: [19, 21, 2], 
-    status: "LIVE", // UPCOMING, LIVE, FINISHED
-    currentSet: 3 
-  },
-  { 
-    id: 2, 
-    court: "Lapangan 2", 
-    category: "Beregu PUTRI", 
-    teamA: "PB Smash", 
-    teamB: "PB Exist", 
-    scoreA: [0, 0, 0], 
-    scoreB: [0, 0, 0], 
-    status: "UPCOMING", 
-    currentSet: 1 
-  },
-  { 
-    id: 3, 
-    court: "Lapangan 3", 
-    category: "Beregu CAMPURAN", 
-    teamA: "PB Tangkas", 
-    teamB: "PB Mutiara", 
-    scoreA: [30, 0, 0],
-    scoreB: [28, 0, 0],
-    status: "FINISHED", 
-    currentSet: 1 
-  },
+// Mock Data: Status 5 Lapangan
+const initialCourts = [
+  { id: 1, status: "LIVE", match: "MD-A (Djarum vs Jaya)", score: "21-19, 5-2", umpire: "Budi", time: "15:00" },
+  { id: 2, status: "WARMUP", match: "XD-B (SGS vs Exist)", score: "-", umpire: "Ani", time: "02:00" },
+  { id: 3, status: "INTERVAL", match: "WD-C (Mutiara vs Tangkas)", score: "11-8", umpire: "Cipto", time: "00:45" },
+  { id: 4, status: "EMPTY", match: "-", score: "-", umpire: "-", time: "-" },
+  { id: 5, status: "LIVE", match: "MD-C (Falcon vs Eagle)", score: "18-18", umpire: "Dedi", time: "22:10" },
 ];
 
-export default function MatchInputPage() {
-  const [matches, setMatches] = useState(initialMatches);
+// Mock Data: Antrean (Call Room)
+const queue = [
+  { id: 101, category: "MD Beginner", teamA: "PB A", teamB: "PB B", status: "READY" },
+  { id: 102, category: "XD Advance", teamA: "PB X", teamB: "PB Y", status: "CHECKING" },
+  { id: 103, category: "WD Inter", teamA: "PB 1", teamB: "PB 2", status: "WAITING" },
+];
 
-  // Fungsi update skor (Simulasi)
-  const handleScoreChange = (id: number, team: 'A' | 'B', setIdx: number, val: string) => {
-    const newMatches = matches.map(m => {
-      if (m.id === id) {
-        const newScores = team === 'A' ? [...m.scoreA] : [...m.scoreB];
-        newScores[setIdx] = parseInt(val) || 0;
-        return team === 'A' ? { ...m, scoreA: newScores } : { ...m, scoreB: newScores };
-      }
-      return m;
-    });
-    setMatches(newMatches);
-  };
+export default function MatchControlDashboard() {
+  const [courts, setCourts] = useState(initialCourts);
 
-  const handleStatusChange = (id: number, status: string) => {
-    setMatches(matches.map(m => m.id === id ? { ...m, status } : m));
+  const handlePushToCourt = (courtId: number, matchId: number) => {
+      // Logika memindahkan match dari antrean ke lapangan kosong
+      alert(`Memindahkan Match #${matchId} ke Lapangan ${courtId}`);
   };
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-            <h2 className="text-3xl font-bold font-headline">Input Skor (Live Match)</h2>
-            <p className="text-muted-foreground">Update skor pertandingan secara real-time.</p>
+            <h2 className="text-3xl font-bold font-headline text-primary">Match Control Center</h2>
+            <p className="text-muted-foreground">Monitoring Rolling System & Status Lapangan.</p>
         </div>
-        <div className="flex gap-2">
-             <Badge variant="secondary" className="text-lg px-4 py-2 h-auto">
-                {matches.filter(m => m.status === 'LIVE').length} Pertandingan LIVE
-             </Badge>
+        <div className="flex gap-3">
+            <Button variant="destructive" className="animate-pulse shadow-red-200 shadow-lg">
+                <AlertTriangle className="w-4 h-4 mr-2" /> Darurat Medis
+            </Button>
+            <Button className="bg-blue-600 hover:bg-blue-700">
+                <Mic className="w-4 h-4 mr-2" /> Panggil Suara (Announcer)
+            </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {matches.map((match) => (
-          <Card key={match.id} className={`border-2 ${match.status === 'LIVE' ? 'border-red-500 shadow-red-100 shadow-lg' : 'border-border'}`}>
-            <CardHeader className="pb-2 border-b bg-secondary/10">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="bg-background">{match.court}</Badge>
-                        <span className="text-xs font-bold text-muted-foreground uppercase">{match.category}</span>
+      {/* MONITOR 5 LAPANGAN */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        {courts.map((court) => (
+          <Card key={court.id} className={`border-t-4 ${
+              court.status === 'LIVE' ? 'border-t-green-500 shadow-md' : 
+              court.status === 'WARMUP' ? 'border-t-yellow-500' :
+              court.status === 'INTERVAL' ? 'border-t-blue-500' :
+              'border-t-gray-300 bg-gray-50'
+          }`}>
+            <CardContent className="p-4 flex flex-col h-full justify-between">
+                <div>
+                    <div className="flex justify-between items-center mb-2">
+                        <span className="font-black text-xl">COURT {court.id}</span>
+                        <Badge variant="outline" className="text-[10px]">{court.status}</Badge>
                     </div>
-                    <Select 
-                        defaultValue={match.status} 
-                        onValueChange={(val) => handleStatusChange(match.id, val)}
-                    >
-                        <SelectTrigger className={`w-[130px] h-8 text-xs font-bold ${match.status === 'LIVE' ? 'bg-red-100 text-red-600 border-red-200' : ''}`}>
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="UPCOMING">BELUM MAIN</SelectItem>
-                            <SelectItem value="LIVE">SEDANG MAIN</SelectItem>
-                            <SelectItem value="FINISHED">SELESAI</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-            </CardHeader>
-            
-            <CardContent className="pt-6">
-                {/* SKOR BOARD */}
-                <div className="flex items-center justify-between gap-4 mb-6">
-                    {/* TIM A */}
-                    <div className="text-center w-1/3">
-                        <h3 className="font-black text-lg leading-tight mb-2">{match.teamA}</h3>
-                        <div className="flex flex-col gap-2">
-                            {match.scoreA.map((score, idx) => (
-                                <Input 
-                                    key={`A-${idx}`}
-                                    type="number" 
-                                    className={`text-center font-mono font-bold text-lg h-12 ${match.status === 'LIVE' && idx === match.currentSet - 1 ? 'border-primary ring-2 ring-primary/20' : ''}`}
-                                    value={score}
-                                    onChange={(e) => handleScoreChange(match.id, 'A', idx, e.target.value)}
-                                    disabled={match.status === 'FINISHED'}
-                                />
-                            ))}
+                    
+                    {court.status !== 'EMPTY' ? (
+                        <>
+                            <div className="text-sm font-bold truncate mb-1" title={court.match}>{court.match}</div>
+                            <div className="text-2xl font-mono font-black text-primary mb-2">{court.score}</div>
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <Users className="w-3 h-3" /> Wasit: {court.umpire}
+                            </div>
+                            {court.status === 'WARMUP' || court.status === 'INTERVAL' ? (
+                                <div className="mt-2 bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-center font-mono text-xs animate-pulse">
+                                    <Clock className="w-3 h-3 inline mr-1" /> {court.time}
+                                </div>
+                            ) : (
+                                <div className="mt-2 text-xs text-gray-400 text-center">Durasi: {court.time}</div>
+                            )}
+                        </>
+                    ) : (
+                        <div className="h-24 flex items-center justify-center text-gray-400 text-sm italic">
+                            Lapangan Kosong
                         </div>
-                    </div>
-
-                    {/* VS / SET */}
-                    <div className="text-center text-muted-foreground font-bold text-xs space-y-4 pt-8">
-                        <div>SET 1</div>
-                        <div>SET 2</div>
-                        <div>SET 3</div>
-                    </div>
-
-                    {/* TIM B */}
-                    <div className="text-center w-1/3">
-                        <h3 className="font-black text-lg leading-tight mb-2">{match.teamB}</h3>
-                        <div className="flex flex-col gap-2">
-                            {match.scoreB.map((score, idx) => (
-                                <Input 
-                                    key={`B-${idx}`}
-                                    type="number" 
-                                    className={`text-center font-mono font-bold text-lg h-12 ${match.status === 'LIVE' && idx === match.currentSet - 1 ? 'border-primary ring-2 ring-primary/20' : ''}`}
-                                    value={score}
-                                    onChange={(e) => handleScoreChange(match.id, 'B', idx, e.target.value)}
-                                    disabled={match.status === 'FINISHED'}
-                                />
-                            ))}
-                        </div>
-                    </div>
+                    )}
                 </div>
 
-                {/* ACTION BUTTONS */}
-                <div className="flex justify-between items-center border-t pt-4">
-                    <div className="text-xs text-muted-foreground">
-                        {match.status === 'LIVE' && <span className="flex items-center gap-1 text-red-600 animate-pulse"><Clock className="w-3 h-3" /> Live Update</span>}
-                    </div>
-                    <Button size="sm" className="bg-primary hover:bg-primary/90">
-                        <Save className="w-4 h-4 mr-2" /> Simpan Skor
-                    </Button>
+                {/* MENU AKSI PER LAPANGAN */}
+                <div className="mt-4 pt-3 border-t flex justify-end">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm" className="h-6 w-6 p-0"><MoreVertical className="w-4 h-4" /></Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem>Ubah Wasit</DropdownMenuItem>
+                            <DropdownMenuItem>Koreksi Skor</DropdownMenuItem>
+                            <DropdownMenuItem className="text-red-600">Hentikan Pertandingan</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </CardContent>
           </Card>
         ))}
       </div>
+
+      {/* ANTREAN & CALL ROOM (ROLLING SYSTEM) */}
+      <Card className="border-2 border-primary/10">
+        <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2">
+                <ArrowRightCircle className="w-5 h-5 text-primary" />
+                Antrean Pertandingan (Call Room)
+            </CardTitle>
+        </CardHeader>
+        <CardContent>
+            <div className="space-y-2">
+                {queue.map((q) => (
+                    <div key={q.id} className="flex items-center justify-between p-3 bg-secondary/10 rounded-lg hover:bg-secondary/20 transition-colors">
+                        <div className="flex items-center gap-4">
+                            <div className="font-mono text-sm font-bold text-muted-foreground">#{q.id}</div>
+                            <div>
+                                <div className="font-bold text-sm">{q.category}</div>
+                                <div className="text-xs text-muted-foreground">{q.teamA} vs {q.teamB}</div>
+                            </div>
+                            <Badge className={q.status === 'READY' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}>
+                                {q.status}
+                            </Badge>
+                        </div>
+                        
+                        <div className="flex gap-2">
+                             {/* Assign ke Lapangan Kosong (Misal Court 4) */}
+                             <Button size="sm" variant="outline" onClick={() => handlePushToCourt(4, q.id)} disabled={q.status !== 'READY'}>
+                                Masuk Court 4
+                             </Button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
+
+    
