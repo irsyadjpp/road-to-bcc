@@ -1,7 +1,7 @@
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Card, CardContent } from "@/components/ui/card";
-import { Shield, Users, Trophy, Target } from 'lucide-react';
+import { Shield, Users, Trophy } from 'lucide-react';
 import Image from 'next/image';
 
 export default function AboutPage() {
@@ -23,7 +23,7 @@ export default function AboutPage() {
                 {[
                     { title: "Integritas", icon: Shield, desc: "Mengutamakan kejujuran level permainan melalui verifikasi ketat." },
                     { title: "Solidaritas", icon: Users, desc: "Mempererat tali persaudaraan antar komunitas di Bandung Raya." },
-                    { title: "Kejayaan", icon: Trophy, desc: "Panggung prestisius untuk melahirkan juara sejati." }
+                    { title: "Sportivitas", icon: Trophy, desc: "Panggung prestisius untuk melahirkan juara sejati." }
                 ].map((item, i) => (
                     <Card key={i} className="shadow-xl border-t-4 border-t-orange-500">
                         <CardContent className="pt-8 text-center">
@@ -45,11 +45,11 @@ export default function AboutPage() {
                     </p>
                     <ul className="space-y-4">
                         <li className="flex gap-3">
-                            <Target className="w-6 h-6 text-primary shrink-0" />
+                            <Trophy className="w-6 h-6 text-primary shrink-0" />
                             <span>Menjadi barometer turnamen komunitas di Jawa Barat.</span>
                         </li>
                         <li className="flex gap-3">
-                            <Target className="w-6 h-6 text-primary shrink-0" />
+                            <Trophy className="w-6 h-6 text-primary shrink-0" />
                             <span>Menciptakan ekosistem olahraga yang sehat dan kompetitif.</span>
                         </li>
                     </ul>

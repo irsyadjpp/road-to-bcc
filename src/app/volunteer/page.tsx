@@ -118,7 +118,7 @@ export default function VolunteerPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                         <h4 className="font-bold flex items-center gap-2"><Megaphone className="w-4 h-4 text-primary"/> Tema Event</h4>
-                        <p className="text-muted-foreground">"Integritas, Solidaritas, & Kejayaan"</p>
+                        <p className="text-muted-foreground">"Integritas, Solidaritas, & Sportivitas"</p>
                     </div>
                     <div className="space-y-2">
                          <h4 className="font-bold flex items-center gap-2"><CalendarCheck className="w-4 h-4 text-primary"/> Periode</h4>
