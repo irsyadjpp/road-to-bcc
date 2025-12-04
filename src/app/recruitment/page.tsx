@@ -380,7 +380,7 @@ export default function RecruitmentPage() {
               <Card className="border-l-4 border-l-primary">
                 <CardContent className="p-6 space-y-4">
                     {[
-                        { id: "agreeData", label: "Saya menyatakan data di atas benar." },
+                        { id: "agreeData", label: "Saya menyatakan data di atas adalah benar." },
                         { id: "agreeRules", label: "Saya bersedia mematuhi aturan panitia dan bekerja dalam tim." },
                         { id: "agreeCompetitive", label: "Saya memahami bahwa seleksi ini bersifat kompetitif." }
                     ].map((item) => (

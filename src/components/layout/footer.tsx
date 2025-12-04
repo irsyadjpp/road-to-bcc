@@ -1,4 +1,4 @@
-import { Mail, Phone, BookOpen, ArrowRight, HelpCircle, Users } from 'lucide-react';
+import { Mail, Phone, BookOpen, ArrowRight, HelpCircle, Users, HeartHandshake } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 
@@ -24,9 +24,9 @@ export function Footer() {
             <h3 className="font-headline text-lg font-bold mb-4 text-primary">Informasi</h3>
             <ul className="space-y-2 text-muted-foreground">
                <li className="flex items-center justify-center md:justify-start">
-                <Users className="w-4 h-4 mr-2 text-primary/70" />
-                <Link href="/recruitment" className="hover:text-primary transition-colors">
-                  Rekrutmen Panitia
+                <HeartHandshake className="w-4 h-4 mr-2 text-primary/70" />
+                <Link href="/volunteer" className="hover:text-primary transition-colors">
+                  Jadi Volunteer
                 </Link>
               </li>
                <li className="flex items-center justify-center md:justify-start">
