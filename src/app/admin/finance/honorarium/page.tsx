@@ -126,7 +126,7 @@ export default function HonorariumPage() {
             <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground">Rata-rata Kinerja</CardTitle></CardHeader>
             <CardContent>
                 <div className="text-2xl font-bold">
-                    {staffList.length > 0 
+                    {staffList.length > 0 && totalPointsAllStaff > 0
                         ? (staffList.reduce((a,b) => a + b.weightedScore, 0) / staffList.length).toFixed(1) 
                         : 0}%
                 </div>
