@@ -21,31 +21,33 @@ import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 
 const ADMIN_CODES: Record<string, { name: string; role: string }> = {
-  // --- STEERING COMMITTEE ---
-  "001": { name: "Irsyad Jamal (Director)", role: "DIRECTOR" },
-  "111": { name: "Rizki/Annisa (Sekretaris)", role: "SECRETARY" },
-  "222": { name: "Selvi Yulia (Bendahara)", role: "FINANCE" },
+  // 1. PIMPINAN INTI (STEERING COMMITTEE)
+  "001": { name: "Irsyad Jamal (Project Director)", role: "DIRECTOR" },
+  "101": { name: "Rizki/Annisa (Sekretaris)", role: "SECRETARY" },
+  "102": { name: "Selvi Yulia (Bendahara)", role: "FINANCE" },
 
-  // --- MATCH CONTROL ---
-  "333": { name: "Agung (Koord. Pertandingan)", role: "MATCH_COORD" },
-  "334": { name: "Sarah (MLO)", role: "MLO" },
-  "335": { name: "Tim TPF", role: "TPF" },
-  "336": { name: "Referee Utama", role: "REFEREE" },
-  
-  // --- BUSINESS ---
-  "444": { name: "Risca/Laras (Komersial)", role: "BUSINESS" },
-  "445": { name: "Hera (Tenant)", role: "TENANT_RELATIONS" },
+  // 2. BIDANG PERTANDINGAN (MATCH CONTROL)
+  "201": { name: "Agung (Koord. Pertandingan)", role: "MATCH_COORD" },
+  "202": { name: "Sarah Fatmawati (MLO)", role: "MLO" },
+  "203": { name: "Tim Verifikasi (TPF)", role: "TPF" }, // Anindiffa, Aulia, Faiz
+  "204": { name: "Referee Utama", role: "REFEREE" }, // Jabatan Fungsional Khusus
 
-  // --- SHOW & MEDIA ---
-  "555": { name: "Rizki K. (Show Dir)", role: "MEDIA" },
-  
-  // --- OPERATIONS ---
-  "666": { name: "Kevin/Terri (Ops)", role: "OPERATIONS" },
-  "667": { name: "Sidiq (Security/Gate)", role: "GATE" },
-  "668": { name: "Nanda (Medis)", role: "MEDIC" },
-  
-  // --- IT ---
-  "777": { name: "Kevin (IT)", role: "IT_ADMIN" } // Full Access System
+  // 3. BIDANG KOMERSIAL (BUSINESS)
+  "301": { name: "Teri Taufiq (Koord. Bisnis)", role: "BUSINESS_LEAD" },
+  "302": { name: "Ali/Risca (Sponsorship/Tenant)", role: "BUSINESS" },
+
+  // 4. BIDANG ACARA & KREATIF (SHOW & MEDIA)
+  "401": { name: "Rizki Karami (Show Director)", role: "SHOW_DIR" },
+  "402": { name: "Susi/Sarah/Rizky (Media)", role: "MEDIA" },
+
+  // 5. BIDANG OPERASIONAL UMUM (OPERATIONS)
+  "501": { name: "Kevin Deriansyah (Koord. Ops)", role: "OPS_LEAD" },
+  "502": { name: "M. Nur Sidiq (Keamanan/Gate)", role: "GATE" },
+  "503": { name: "Ananda Putri (Medis)", role: "MEDIC" },
+  "504": { name: "Norma/Alfin (Reg/Logistik)", role: "LOGISTICS" },
+
+  // 6. BIDANG IT & DIGITAL
+  "601": { name: "Tim IT Support", role: "IT_ADMIN" } 
 };
 
 // --- DEFINISI MENU ---
@@ -57,34 +59,35 @@ const getMenusByRole = (role: string) => {
 
     // --- FINANCE ---
     { header: "Keuangan" },
-    { name: "Verifikasi Pendaftaran", href: "/admin/teams", icon: Receipt, roles: ['FINANCE', 'DIRECTOR'] },
+    { name: "Verifikasi Pendaftaran", href: "/admin/teams", icon: Receipt, roles: ['FINANCE', 'DIRECTOR', 'BUSINESS_LEAD'] },
     { name: "Reimbursement & Jurnal", href: "/admin/finance/reimbursement-approval", icon: Wallet, roles: ['FINANCE', 'DIRECTOR'] },
-    { name: "Manajemen Tenant", href: "/admin/tenants", icon: Store, roles: ['FINANCE', 'TENANT_RELATIONS', 'BUSINESS'] },
+    { name: "Manajemen Tenant", href: "/admin/tenants", icon: Store, roles: ['FINANCE', 'BUSINESS', 'BUSINESS_LEAD'] },
 
     // --- MATCH CONTROL ---
     { header: "Pertandingan" },
-    { name: "Jadwal & Lapangan", href: "/admin/matches", icon: Activity, roles: ['MATCH_COORD', 'REFEREE', 'IT_ADMIN'] },
+    { name: "Jadwal & Lapangan", href: "/admin/matches", icon: Activity, roles: ['MATCH_COORD', 'REFEREE', 'IT_ADMIN', 'DIRECTOR', 'OPS_LEAD'] },
     { name: "Verifikasi TPF", href: "/admin/tpf", icon: CheckCircle, roles: ['TPF', 'MATCH_COORD', 'DIRECTOR'] },
     { name: "Cek Line-Up (MLO)", href: "/admin/lineups", icon: ClipboardList, roles: ['MLO', 'MATCH_COORD'] },
-    { name: "Keputusan Protes", href: "/admin/protests", icon: Gavel, roles: ['REFEREE', 'MATCH_COORD'] },
+    { name: "Keputusan Protes", href: "/admin/protests", icon: Gavel, roles: ['REFEREE', 'MATCH_COORD', 'DIRECTOR'] },
+    { name: "Papan Skor Wasit", href: "/admin/referee", icon: Gavel, roles: ['REFEREE', 'MATCH_COORD', 'IT_ADMIN'] },
 
     // --- OPERATIONS ---
     { header: "Operasional" },
-    { name: "Gate Check-in", href: "/admin/gate", icon: QrCode, roles: ['GATE', 'OPERATIONS', 'IT_ADMIN'] },
-    { name: "Log Medis", href: "/admin/medical", icon: Stethoscope, roles: ['MEDIC', 'OPERATIONS'] },
-    { name: "Logistik Kok", href: "/admin/logistics", icon: Archive, roles: ['OPERATIONS', 'MATCH_COORD'] },
-    { name: "Undian Doorprize", href: "/admin/raffle", icon: Gift, roles: ['OPERATIONS', 'DIRECTOR', 'MEDIA'] },
+    { name: "Gate Check-in", href: "/admin/gate", icon: QrCode, roles: ['GATE', 'OPS_LEAD', 'IT_ADMIN'] },
+    { name: "Log Medis", href: "/admin/medical", icon: Stethoscope, roles: ['MEDIC', 'OPS_LEAD'] },
+    { name: "Logistik Kok", href: "/admin/logistics", icon: Archive, roles: ['LOGISTICS', 'OPS_LEAD', 'MATCH_COORD'] },
+    { name: "Undian Doorprize", href: "/admin/raffle", icon: Gift, roles: ['OPS_LEAD', 'DIRECTOR', 'SHOW_DIR', 'MEDIA'] },
 
     // --- COMMERCIAL & MEDIA ---
     { header: "Bisnis & Media" },
-    { name: "Data Pengunjung", href: "/admin/visitors", icon: Users, roles: ['BUSINESS', 'DIRECTOR'] },
-    { name: "Laporan Sponsor", href: "/admin/analytics", icon: BarChart3, roles: ['BUSINESS', 'DIRECTOR'] },
-    { name: "Manajemen Media", href: "/admin/media", icon: Video, roles: ['MEDIA'] },
+    { name: "Data Pengunjung", href: "/admin/visitors", icon: Users, roles: ['BUSINESS_LEAD', 'BUSINESS', 'DIRECTOR'] },
+    { name: "Laporan Sponsor", href: "/admin/analytics", icon: BarChart3, roles: ['BUSINESS_LEAD', 'BUSINESS', 'DIRECTOR'] },
+    { name: "Manajemen Media", href: "/admin/media", icon: Video, roles: ['SHOW_DIR', 'MEDIA', 'DIRECTOR'] },
 
     // --- SECRETARY ---
     { header: "Sekretariat" },
     { name: "Dokumen Legal", href: "/admin/secretary/archive", icon: ShieldAlert, roles: ['SECRETARY', 'DIRECTOR'] },
-    { name: "Generator Sertifikat", href: "/admin/secretary/cert-gen", icon: FileText, roles: ['SECRETARY', 'DIRECTOR'] },
+    { name: "Generator Sertifikat", href: "/admin/secretary/cert-gen", icon: FileText, roles: ['SECRETARY', 'DIRECTOR', 'SHOW_DIR'] },
     
     // --- SYSTEM ---
     { header: "System" },
@@ -95,7 +98,7 @@ const getMenusByRole = (role: string) => {
     if (m.header) return true;
     if (!m.roles) return false;
     if (m.roles.includes('ALL')) return true;
-    if (role === 'IT_ADMIN') return true;
+    if (role === 'IT_ADMIN' || role === 'DIRECTOR') return true;
     return m.roles.includes(role);
   });
 };
@@ -139,15 +142,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   useEffect(() => {
     const sessionStr = sessionStorage.getItem('admin_session');
     if (sessionStr) {
-        const storedSession = JSON.parse(sessionStr);
-        setSession(storedSession);
-        setIsAuthenticated(true);
+        try {
+            const storedSession = JSON.parse(sessionStr);
+            if (storedSession && storedSession.isLoggedIn) {
+                setSession(storedSession);
+                setIsAuthenticated(true);
+            }
+        } catch (error) {
+            console.error("Failed to parse admin session", error);
+            sessionStorage.removeItem('admin_session');
+        }
     }
   }, []);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    const user = ADMIN_CODES[pin];
+    const user = ADMIN_CODES[pin as keyof typeof ADMIN_CODES];
     if (user) {
         const newSession = { isLoggedIn: true, role: user.role, name: user.name };
         setSession(newSession);
@@ -162,6 +172,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const handleLogout = () => {
     setIsAuthenticated(false);
     setPin('');
+    setSession({ isLoggedIn: false, role: 'DIRECTOR', name: 'Admin Super' });
     sessionStorage.removeItem('admin_session');
   };
 
@@ -227,9 +238,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const renderNavLinks = (isSheet: boolean = false) => currentMenus.map((menu, idx) => {
       // Logic to not render a header if no items in its group are visible
       if (menu.header) {
-        const nextItem = currentMenus[idx + 1];
-        if (!nextItem || nextItem.header) return null; // Don't render if it's the last item or followed by another header
+        const nextItemIndex = currentMenus.findIndex((m, i) => i > idx && !m.header);
+        if (nextItemIndex === -1) return null; // No items after this header
         
+        const itemsInGroup = currentMenus.slice(idx + 1, nextItemIndex > -1 ? nextItemIndex : currentMenus.length).filter(m => !m.header);
+        if (itemsInGroup.length === 0) return null; // Don't render header if its group is empty for the current role
+
         return !isSheet && (
           <div key={idx} className="px-4 pt-4 pb-2 text-xs font-semibold text-muted-foreground tracking-wider">
             {menu.header}
@@ -277,17 +291,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                           <Menu className="w-5 h-5"/>
                       </Button>
                   </SheetTrigger>
-                  <SheetContent side="left" className="p-0 w-72 bg-card">
-                      <div className="p-6 border-b border-border flex items-center gap-3">
-                        <Image src="/images/logo.png" alt="Logo" width={32} height={32} />
-                        <h1 className="font-headline font-black text-2xl text-primary">BCC ADMIN</h1>
+                  <SheetContent side="left" className="p-0 w-72 bg-card overflow-y-auto no-scrollbar">
+                      <div className="p-6 border-b border-border">
+                        <h1 className="font-headline font-black text-xl text-primary">BCC ADMIN</h1>
                       </div>
-                      <nav className="p-4 space-y-1">
-                          {currentMenus.map((menu, idx) => {
-                            if(menu.header) {
-                               const nextItem = currentMenus[idx + 1];
-                               if (!nextItem || nextItem.header) return null;
-                               return <Separator key={idx} className="my-2" />;
+                      <nav className="p-4 space-y-2">
+                        {currentMenus.map((menu, idx) => {
+                            if (menu.header) {
+                                const nextItemIndex = currentMenus.findIndex((m, i) => i > idx && !m.header);
+                                if (nextItemIndex === -1 && idx !== currentMenus.length -1) return <Separator key={idx} className="my-2" />;
+                                if(currentMenus[idx+1] && currentMenus[idx+1].header) return null;
+                                return <Separator key={idx} className="my-2" />;
                             }
                             const isActive = pathname.startsWith(menu.href!) && (menu.href !== '/admin' || pathname === '/admin');
                             return (
@@ -308,6 +322,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                             )
                           })}
                       </nav>
+                      <div className="p-4 border-t border-border absolute bottom-0 w-full">
+                        <Button variant="outline" className="w-full" onClick={handleLogout}>
+                          <LogOut className="w-4 h-4 mr-2" /> Logout
+                        </Button>
+                      </div>
                   </SheetContent>
               </Sheet>
              </div>
@@ -321,11 +340,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </Button>
                 <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                        <span className="font-bold text-primary">{session.role.charAt(0)}</span>
+                        <span className="font-bold text-primary">{session.name.charAt(0)}</span>
                     </div>
                     <div className="text-sm hidden sm:block">
                         <p className="font-bold">{session.name.split('(')[0].trim()}</p>
-                        <p className="text-xs text-muted-foreground">{session.role}</p>
+                        <p className="text-xs text-muted-foreground">{session.role.replace('_', ' ')}</p>
                     </div>
                 </div>
              </div>
@@ -338,3 +357,5 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     </div>
   );
 }
+
+    
