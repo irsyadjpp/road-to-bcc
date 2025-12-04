@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -113,20 +112,14 @@ export default function HonorariumPage() {
             <p className="text-muted-foreground">Distribusi keuntungan untuk Inisiator, Pemilik Wadah, Panitia & Kontributor.</p>
         </div>
         
-        {/* TOTAL PROFIT INPUT */}
+        {/* TOTAL PROFIT LABEL */}
         <Card className="w-full md:w-auto bg-secondary/30 border-primary/20">
             <CardContent className="p-4 flex items-center gap-4">
                 <div className="p-3 bg-green-100 text-green-700 rounded-full"><Coins className="w-6 h-6" /></div>
                 <div>
                     <p className="text-xs text-muted-foreground uppercase font-bold">Total Keuntungan (Net)</p>
-                    <div className="flex items-center gap-2">
-                        <span className="font-bold text-lg">Rp</span>
-                        <Input 
-                            type="number" 
-                            value={totalProfit} 
-                            onChange={(e) => setTotalProfit(Number(e.target.value))} 
-                            className="h-8 w-40 font-mono font-bold bg-white text-right"
-                        />
+                    <div className="font-bold text-xl text-foreground">
+                        Rp {totalProfit.toLocaleString('id-ID')}
                     </div>
                 </div>
             </CardContent>
