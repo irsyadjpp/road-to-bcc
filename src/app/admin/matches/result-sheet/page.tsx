@@ -1,260 +1,272 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent } from "@/components/ui/card";
-import { Printer, Save, Trophy, Eraser } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Save, Trophy, Users, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import Image from 'next/image';
+import { submitTieResult, type TieResult, type MatchParty } from "../actions";
 
 // Struktur Partai Default
-const DEFAULT_MATCHES = [
-  { id: 1, label: "MD BEGINNER 1", pA1: "", pA2: "", pB1: "", pB2: "", score: "", duration: "", winner: "" },
-  { id: 2, label: "MD INTERMEDIATE 1", pA1: "", pA2: "", pB1: "", pB2: "", score: "", duration: "", winner: "" },
-  { id: 3, label: "MD ADVANCE / BEG 2", pA1: "", pA2: "", pB1: "", pB2: "", score: "", duration: "", winner: "" },
-  { id: 4, label: "MD INTERMEDIATE 2", pA1: "", pA2: "", pB1: "", pB2: "", score: "", duration: "", winner: "" },
-  { id: 5, label: "MD BEGINNER 2", pA1: "", pA2: "", pB1: "", pB2: "", score: "", duration: "", winner: "" },
+const DEFAULT_MATCHES: MatchParty[] = [
+  { id: 1, category: "MD BEGINNER 1", playerA1: "", playerA2: "", playerB1: "", playerB2: "", score: "", winner: null },
+  { id: 2, category: "MD INTERMEDIATE 1", playerA1: "", playerA2: "", playerB1: "", playerB2: "", score: "", winner: null },
+  { id: 3, category: "MD ADVANCE / 3-ON-3", playerA1: "", playerA2: "", playerB1: "", playerB2: "", score: "", winner: null },
+  { id: 4, category: "MD INTERMEDIATE 2", playerA1: "", playerA2: "", playerB1: "", playerB2: "", score: "", winner: null },
+  { id: 5, category: "MD BEGINNER 2", playerA1: "", playerA2: "", playerB1: "", playerB2: "", score: "", winner: null },
 ];
 
-export default function TieResultPage() {
+export default function DigitalResultSheetPage() {
   const { toast } = useToast();
-  const [category, setCategory] = useState("PA");
-  const [matches, setMatches] = useState(DEFAULT_MATCHES);
-  
-  // Form State
-  const [info, setInfo] = useState({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+
+  // State Data Utama
+  const [formData, setFormData] = useState<TieResult>({
+      id: `TIE-${Date.now()}`,
       date: new Date().toISOString().split('T')[0],
-      timeStart: "", timeEnd: "",
-      round: "Grup", pool: "", court: "",
-      teamA: "", teamB: "",
-      managerA: "", managerB: "", referee: ""
+      court: "1",
+      round: "Penyisihan Grup",
+      teamA: "",
+      teamB: "",
+      matches: DEFAULT_MATCHES,
+      finalScoreA: 0,
+      finalScoreB: 0,
+      winnerTeam: "",
+      managerA_verified: false,
+      managerB_verified: false,
+      referee_verified: false,
+      status: 'DRAFT'
   });
 
-  // Update Label Partai jika Kategori Putri (3-on-3)
-  useEffect(() => {
-    const newMatches = [...matches];
-    if (category === 'PI') {
-        newMatches[2].label = "TRIPLES (3-ON-3)";
-        newMatches[4].label = "MD INTERMEDIATE 2";
-    } else {
-        newMatches[2].label = "MD ADVANCE / BEG 2";
-        newMatches[4].label = "MD BEGINNER 2";
-    }
-    setMatches(newMatches);
-  }, [category]);
+  // --- LOGIC UPDATE SCORE ---
+  const updateMatch = (index: number, field: keyof MatchParty, value: any) => {
+      const updatedMatches = [...formData.matches];
+      updatedMatches[index] = { ...updatedMatches[index], [field]: value };
+      
+      // Hitung Ulang Skor Akhir Otomatis
+      let scoreA = 0;
+      let scoreB = 0;
+      updatedMatches.forEach(m => {
+          if (m.winner === 'A') scoreA++;
+          if (m.winner === 'B') scoreB++;
+      });
 
-  // Update Data Match
-  const updateMatch = (index: number, field: string, value: string) => {
-      const updated = [...matches];
-      updated[index] = { ...updated[index], [field]: value };
-      setMatches(updated);
+      setFormData({
+          ...formData,
+          matches: updatedMatches,
+          finalScoreA: scoreA,
+          finalScoreB: scoreB,
+          winnerTeam: scoreA > scoreB ? formData.teamA : (scoreB > scoreA ? formData.teamB : "SERI")
+      });
   };
 
-  // Hitung Skor Akhir Otomatis
-  const scoreTeamA = matches.filter(m => m.winner === 'A').length;
-  const scoreTeamB = matches.filter(m => m.winner === 'B').length;
-  const winnerTeam = scoreTeamA > scoreTeamB ? info.teamA : (scoreTeamB > scoreTeamA ? info.teamB : "SERI");
+  const handleSubmit = async () => {
+      // Validasi
+      if (!formData.teamA || !formData.teamB) return toast({title: "Error", description: "Nama Tim wajib diisi", variant: "destructive"});
+      if (!formData.managerA_verified || !formData.managerB_verified) return toast({title: "Validasi Kurang", description: "Kedua Manajer Wajib Menyetujui Hasil (Centang Verifikasi)", variant: "destructive"});
 
-  const handlePrint = () => {
-      window.print();
+      setIsSubmitting(true);
+      const res = await submitTieResult(formData);
+      setIsSubmitting(false);
+
+      if (res.success) {
+          setIsCompleted(true);
+          toast({ title: "Berhasil", description: res.message, className: "bg-green-600 text-white" });
+      }
   };
+
+  if (isCompleted) {
+      return (
+          <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+              <Card className="w-full max-w-md text-center p-8 border-t-8 border-t-green-600 shadow-2xl">
+                  <CheckCircle2 className="w-20 h-20 text-green-600 mx-auto mb-4" />
+                  <h1 className="text-2xl font-black text-primary mb-2">HASIL TERCATAT</h1>
+                  <div className="text-4xl font-mono font-bold mb-4">
+                      {formData.teamA} <span className="text-muted-foreground mx-2">{formData.finalScoreA} - {formData.finalScoreB}</span> {formData.teamB}
+                  </div>
+                  <p className="text-muted-foreground mb-8">Pemenang: <strong>{formData.winnerTeam}</strong></p>
+                  <Button onClick={() => window.location.reload()} variant="outline">Input Pertandingan Baru</Button>
+              </Card>
+          </div>
+      );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 md:p-8 flex justify-center">
-      
-      {/* CONTAINER KERTAS A4 */}
-      <div className="bg-white w-full max-w-[210mm] min-h-[297mm] shadow-xl p-[10mm] md:p-[15mm] relative text-black font-sans text-sm">
+    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
+      <div className="max-w-4xl mx-auto space-y-6">
         
-        {/* --- TOOLBAR (HIDDEN SAAT PRINT) --- */}
-        <div className="absolute top-0 right-[-150px] hidden xl:flex flex-col gap-3 print:hidden">
-            <Button onClick={handlePrint} className="bg-blue-600 hover:bg-blue-700 shadow-lg w-32">
-                <Printer className="w-4 h-4 mr-2" /> Cetak PDF
-            </Button>
-            <Button variant="outline" className="bg-white w-32" onClick={() => window.location.reload()}>
-                <Eraser className="w-4 h-4 mr-2" /> Reset
-            </Button>
-        </div>
-        <div className="mb-6 flex justify-end gap-2 xl:hidden print:hidden">
-             <Button onClick={handlePrint} size="sm"><Printer className="w-4 h-4 mr-2" /> Cetak</Button>
-        </div>
-        {/* ---------------------------------- */}
+        {/* HEADER IDENTITAS */}
+        <Card className="border-t-4 border-t-primary">
+            <CardHeader>
+                <div className="flex justify-between items-start">
+                    <div>
+                        <CardTitle className="text-2xl font-black font-headline text-primary">BERITA ACARA DIGITAL</CardTitle>
+                        <CardDescription>Official Tie Result Sheet • BCC 2026</CardDescription>
+                    </div>
+                    <Badge variant="outline" className="text-lg px-3 py-1 bg-white">
+                        COURT {formData.court}
+                    </Badge>
+                </div>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                    <Label>Tim A (Kiri)</Label>
+                    <Input 
+                        placeholder="Nama Tim A" 
+                        className="text-lg font-bold border-primary/20 bg-blue-50/50" 
+                        value={formData.teamA}
+                        onChange={e => setFormData({...formData, teamA: e.target.value})}
+                    />
+                </div>
+                <div className="space-y-2">
+                    <Label>Tim B (Kanan)</Label>
+                    <Input 
+                        placeholder="Nama Tim B" 
+                        className="text-lg font-bold border-primary/20 bg-red-50/50"
+                        value={formData.teamB}
+                        onChange={e => setFormData({...formData, teamB: e.target.value})}
+                    />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4 md:col-span-2">
+                    <div><Label>Babak</Label><Input value={formData.round} onChange={e => setFormData({...formData, round: e.target.value})} /></div>
+                    <div><Label>Tanggal</Label><Input type="date" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} /></div>
+                </div>
+            </CardContent>
+        </Card>
 
-        {/* HEADER KOP */}
-        <div className="flex items-center justify-between border-b-2 border-black pb-4 mb-4">
-            <div className="flex items-center gap-4">
-                {/* Logo Placeholder */}
-                <div className="w-16 h-16 relative grayscale opacity-80">
-                    <Image src="/images/logo.png" alt="Logo" fill className="object-contain"/>
-                </div>
-                <div>
-                    <h1 className="font-bold text-xl uppercase leading-tight">BERITA ACARA HASIL PERTANDINGAN</h1>
-                    <p className="text-xs font-bold text-gray-600">(OFFICIAL TIE RESULT SHEET)</p>
-                    <p className="text-sm font-bold mt-1">BANDUNG COMMUNITY CHAMPIONSHIP 2026</p>
-                </div>
-            </div>
-            <div className="text-right text-xs">
-                <p>GOR KONI Bandung</p>
-                <p>Juni - Juli 2026</p>
-            </div>
-        </div>
+        {/* DAFTAR PARTAI (ACCORDION) */}
+        <Card>
+            <CardHeader className="pb-2"><CardTitle>Input Hasil Partai</CardTitle></CardHeader>
+            <CardContent>
+                <Accordion type="single" collapsible className="w-full" defaultValue="item-0">
+                    {formData.matches.map((match, idx) => (
+                        <AccordionItem key={match.id} value={`item-${idx}`}>
+                            <AccordionTrigger className="hover:no-underline bg-secondary/20 px-4 rounded-lg mb-2">
+                                <div className="flex justify-between w-full items-center pr-4">
+                                    <span className="font-bold text-sm text-primary">PARTAI {idx + 1}: {match.category}</span>
+                                    {match.winner ? (
+                                        <Badge className={match.winner === 'A' ? 'bg-blue-600' : 'bg-red-600'}>
+                                            WIN: {match.winner === 'A' ? 'TIM A' : 'TIM B'}
+                                        </Badge>
+                                    ) : <Badge variant="outline">Belum Input</Badge>}
+                                </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="px-4 py-4 border rounded-lg mt-[-8px]">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                                    {/* TIM A PLAYER */}
+                                    <div className="space-y-2 p-3 bg-blue-50 rounded border border-blue-100">
+                                        <Label className="text-blue-800">Pemain Tim A</Label>
+                                        <Input placeholder="Pemain 1" value={match.playerA1} onChange={e => updateMatch(idx, 'playerA1', e.target.value)} className="bg-white"/>
+                                        <Input placeholder="Pemain 2" value={match.playerA2} onChange={e => updateMatch(idx, 'playerA2', e.target.value)} className="bg-white"/>
+                                        <Button 
+                                            variant={match.winner === 'A' ? "default" : "outline"} 
+                                            className={`w-full mt-2 ${match.winner === 'A' ? 'bg-blue-600 hover:bg-blue-700' : 'text-blue-600 border-blue-200'}`}
+                                            onClick={() => updateMatch(idx, 'winner', 'A')}
+                                        >
+                                            {match.winner === 'A' ? <CheckCircle2 className="w-4 h-4 mr-2"/> : null}
+                                            Set Pemenang: TIM A
+                                        </Button>
+                                    </div>
 
-        {/* INFORMASI PERTANDINGAN */}
-        <div className="mb-6 border border-black p-4 bg-gray-50 print:bg-transparent">
-            <h3 className="font-bold border-b border-gray-300 mb-2 pb-1">I. INFORMASI PERTANDINGAN</h3>
-            <div className="grid grid-cols-2 gap-x-8 gap-y-2">
-                <div className="flex items-center">
-                    <span className="w-32">Hari / Tanggal</span>: 
-                    <input type="date" className="ml-2 bg-transparent border-b border-gray-400 focus:outline-none print:border-none" value={info.date} onChange={e => setInfo({...info, date: e.target.value})}/>
+                                    {/* TIM B PLAYER */}
+                                    <div className="space-y-2 p-3 bg-red-50 rounded border border-red-100">
+                                        <Label className="text-red-800">Pemain Tim B</Label>
+                                        <Input placeholder="Pemain 1" value={match.playerB1} onChange={e => updateMatch(idx, 'playerB1', e.target.value)} className="bg-white"/>
+                                        <Input placeholder="Pemain 2" value={match.playerB2} onChange={e => updateMatch(idx, 'playerB2', e.target.value)} className="bg-white"/>
+                                        <Button 
+                                            variant={match.winner === 'B' ? "default" : "outline"} 
+                                            className={`w-full mt-2 ${match.winner === 'B' ? 'bg-red-600 hover:bg-red-700' : 'text-red-600 border-red-200'}`}
+                                            onClick={() => updateMatch(idx, 'winner', 'B')}
+                                        >
+                                            {match.winner === 'B' ? <CheckCircle2 className="w-4 h-4 mr-2"/> : null}
+                                            Set Pemenang: TIM B
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label>Skor Detail (Game 1, 2, 3)</Label>
+                                    <Input 
+                                        placeholder="Contoh: 21-19, 18-21, 21-15" 
+                                        className="font-mono text-center text-lg" 
+                                        value={match.score}
+                                        onChange={e => updateMatch(idx, 'score', e.target.value)}
+                                    />
+                                </div>
+                            </AccordionContent>
+                        </AccordionItem>
+                    ))}
+                </Accordion>
+            </CardContent>
+        </Card>
+
+        {/* SKOR AKHIR & VALIDASI DIGITAL */}
+        <Card className="bg-zinc-900 text-white border-none shadow-xl">
+            <CardContent className="p-8">
+                <div className="text-center mb-8">
+                    <p className="text-sm text-zinc-400 uppercase tracking-widest mb-2">HASIL AKHIR (TIE SCORE)</p>
+                    <div className="text-6xl font-black font-mono flex justify-center items-center gap-4">
+                        <span className="text-blue-400">{formData.finalScoreA}</span>
+                        <span className="text-zinc-600">-</span>
+                        <span className="text-red-400">{formData.finalScoreB}</span>
+                    </div>
+                    <p className="mt-4 text-xl font-bold text-yellow-500">
+                        PEMENANG: {formData.winnerTeam || "..."}
+                    </p>
                 </div>
-                <div className="flex items-center">
-                    <span className="w-32">Babak</span>: 
-                    <select className="ml-2 bg-transparent border-b border-gray-400 focus:outline-none print:appearance-none" value={info.round} onChange={e => setInfo({...info, round: e.target.value})}>
-                        <option value="Grup">Penyisihan Grup</option>
-                        <option value="Gugur">Gugur (Knockout)</option>
-                    </select>
-                </div>
-                <div className="flex items-center">
-                    <span className="w-32">Waktu Main</span>: 
-                    <input className="ml-2 w-16 text-center border-b border-gray-400 focus:outline-none print:border-none" placeholder="Mulai" value={info.timeStart} onChange={e => setInfo({...info, timeStart: e.target.value})} />
-                    <span className="mx-1">s/d</span>
-                    <input className="ml-2 w-16 text-center border-b border-gray-400 focus:outline-none print:border-none" placeholder="Selesai" value={info.timeEnd} onChange={e => setInfo({...info, timeEnd: e.target.value})} />
-                    <span className="ml-1">WIB</span>
-                </div>
-                 <div className="flex items-center">
-                    <span className="w-32">Grup / Pool</span>: 
-                    <input className="ml-2 w-full border-b border-gray-400 focus:outline-none print:border-none" placeholder="..." value={info.pool} onChange={e => setInfo({...info, pool: e.target.value})} />
-                </div>
-                <div className="flex items-center">
-                    <span className="w-32">Lapangan</span>: 
-                    <input className="ml-2 w-full border-b border-gray-400 focus:outline-none print:border-none" placeholder="Court..." value={info.court} onChange={e => setInfo({...info, court: e.target.value})} />
-                </div>
-                <div className="flex items-center">
-                    <span className="w-32">Kategori</span>: 
-                    <div className="flex gap-4 ml-2">
-                        {['PA', 'PI', 'MIX'].map(c => (
-                            <label key={c} className="flex items-center gap-1 cursor-pointer">
-                                <input type="radio" name="cat" checked={category === c} onChange={() => setCategory(c)} className="print:hidden"/>
-                                <span className={category === c ? "font-bold border-2 border-black px-1 rounded print:border-2" : "print:opacity-30"}>{c}</span>
-                            </label>
-                        ))}
+
+                <div className="bg-white/5 p-4 rounded-lg border border-white/10 space-y-4">
+                    <h4 className="font-bold flex items-center gap-2 text-sm uppercase tracking-wider">
+                        <Users className="w-4 h-4" /> Digital Signature (Verifikasi Manajer)
+                    </h4>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className={`p-3 rounded border cursor-pointer transition-all ${formData.managerA_verified ? 'bg-green-900/30 border-green-500 text-green-400' : 'bg-black/20 border-white/10 text-zinc-400 hover:bg-white/5'}`}
+                             onClick={() => setFormData({...formData, managerA_verified: !formData.managerA_verified})}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Checkbox checked={formData.managerA_verified} className="border-zinc-500 data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500" />
+                                <div>
+                                    <div className="text-sm font-bold">Manajer Tim A</div>
+                                    <div className="text-[10px]">Saya menyetujui hasil ini.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={`p-3 rounded border cursor-pointer transition-all ${formData.managerB_verified ? 'bg-green-900/30 border-green-500 text-green-400' : 'bg-black/20 border-white/10 text-zinc-400 hover:bg-white/5'}`}
+                             onClick={() => setFormData({...formData, managerB_verified: !formData.managerB_verified})}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Checkbox checked={formData.managerB_verified} className="border-zinc-500 data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500" />
+                                <div>
+                                    <div className="text-sm font-bold">Manajer Tim B</div>
+                                    <div className="text-[10px]">Saya menyetujui hasil ini.</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        {/* SKOR AKHIR BESAR */}
-        <div className="flex items-center justify-between border-2 border-black mb-6">
-            <div className="flex-1 p-4 text-center border-r border-black bg-blue-50 print:bg-transparent">
-                <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">TIM A (KIRI)</p>
-                <input 
-                    className="w-full text-center text-xl font-bold bg-transparent focus:outline-none placeholder:text-gray-300" 
-                    placeholder="Nama Tim A"
-                    value={info.teamA}
-                    onChange={e => setInfo({...info, teamA: e.target.value})}
-                />
-            </div>
-            <div className="w-48 p-2 text-center bg-black text-white print:bg-white print:text-black print:border-x-2 print:border-black">
-                <div className="text-xs uppercase tracking-widest mb-1">SKOR AKHIR</div>
-                <div className="text-4xl font-black font-mono">
-                    {scoreTeamA} - {scoreTeamB}
-                </div>
-            </div>
-            <div className="flex-1 p-4 text-center border-l border-black bg-red-50 print:bg-transparent">
-                <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">TIM B (KANAN)</p>
-                <input 
-                    className="w-full text-center text-xl font-bold bg-transparent focus:outline-none placeholder:text-gray-300" 
-                    placeholder="Nama Tim B"
-                    value={info.teamB}
-                    onChange={e => setInfo({...info, teamB: e.target.value})}
-                />
-            </div>
-        </div>
-
-        {/* TABEL DETAIL */}
-        <div className="mb-6">
-            <h3 className="font-bold mb-2">II. RINCIAN HASIL PARTAI</h3>
-            <table className="w-full border-collapse border border-black text-xs md:text-sm">
-                <thead>
-                    <tr className="bg-gray-200 print:bg-gray-300">
-                        <th className="border border-black p-2 w-8">#</th>
-                        <th className="border border-black p-2 w-40">KATEGORI</th>
-                        <th className="border border-black p-2">PEMAIN TIM A</th>
-                        <th className="border border-black p-2">PEMAIN TIM B</th>
-                        <th className="border border-black p-2 w-32">SKOR</th>
-                        <th className="border border-black p-2 w-16">DURASI</th>
-                        <th className="border border-black p-2 w-24 print:hidden">WINNER</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {matches.map((m, idx) => (
-                        <tr key={m.id}>
-                            <td className="border border-black p-2 text-center font-bold">{idx + 1}</td>
-                            <td className="border border-black p-2 font-bold bg-gray-50 print:bg-transparent">{m.label}</td>
-                            
-                            {/* PEMAIN A */}
-                            <td className={`border border-black p-1 ${m.winner === 'A' ? 'bg-green-100 print:bg-transparent print:font-bold relative' : ''}`}>
-                                <input className="w-full mb-1 border-b border-dotted border-gray-300 focus:outline-none bg-transparent" placeholder="Pemain 1..." value={m.pA1} onChange={e => updateMatch(idx, 'pA1', e.target.value)} />
-                                <input className="w-full border-dotted border-gray-300 focus:outline-none bg-transparent" placeholder="Pemain 2..." value={m.pA2} onChange={e => updateMatch(idx, 'pA2', e.target.value)} />
-                                {m.winner === 'A' && <div className="hidden print:block absolute right-1 top-1 text-[10px] border border-black px-1 rounded-full">WIN</div>}
-                            </td>
-
-                            {/* PEMAIN B */}
-                            <td className={`border border-black p-1 ${m.winner === 'B' ? 'bg-green-100 print:bg-transparent print:font-bold relative' : ''}`}>
-                                <input className="w-full mb-1 border-b border-dotted border-gray-300 focus:outline-none bg-transparent" placeholder="Pemain 1..." value={m.pB1} onChange={e => updateMatch(idx, 'pB1', e.target.value)} />
-                                <input className="w-full border-dotted border-gray-300 focus:outline-none bg-transparent" placeholder="Pemain 2..." value={m.pB2} onChange={e => updateMatch(idx, 'pB2', e.target.value)} />
-                                {m.winner === 'B' && <div className="hidden print:block absolute right-1 top-1 text-[10px] border border-black px-1 rounded-full">WIN</div>}
-                            </td>
-
-                            <td className="border border-black p-1 text-center">
-                                <textarea className="w-full h-full text-center resize-none focus:outline-none bg-transparent" rows={2} placeholder="21-19, 15-21..." value={m.score} onChange={e => updateMatch(idx, 'score', e.target.value)}></textarea>
-                            </td>
-                            
-                            <td className="border border-black p-1 text-center">
-                                <input className="w-full text-center focus:outline-none bg-transparent" placeholder="mnt" value={m.duration} onChange={e => updateMatch(idx, 'duration', e.target.value)} />
-                            </td>
-
-                            <td className="border border-black p-1 text-center print:hidden">
-                                <div className="flex justify-center gap-1">
-                                    <button onClick={() => updateMatch(idx, 'winner', 'A')} className={`w-6 h-6 rounded text-xs font-bold ${m.winner === 'A' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>A</button>
-                                    <button onClick={() => updateMatch(idx, 'winner', 'B')} className={`w-6 h-6 rounded text-xs font-bold ${m.winner === 'B' ? 'bg-red-600 text-white' : 'bg-gray-200'}`}>B</button>
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            {category === 'PI' && <p className="text-[10px] mt-1 italic">*Keterangan: Partai ke-3 Triples (3-on-3)</p>}
-        </div>
-
-        {/* FOOTER PENGESAHAN */}
-        <div className="border-t-2 border-black pt-4">
-            <div className="flex items-center gap-2 mb-6 p-2 bg-yellow-50 print:bg-transparent">
-                <Trophy className="w-5 h-5 text-yellow-600" />
-                <span className="font-bold">PEMENANG TIE:</span>
-                <input className="flex-1 border-b-2 border-black font-bold text-lg bg-transparent focus:outline-none uppercase" value={winnerTeam} readOnly placeholder="Otomatis terisi..." />
-            </div>
-
-            <p className="text-center text-xs italic mb-8">
-                Dengan ini kedua belah pihak menyatakan menerima hasil pertandingan di atas dengan prinsip Fair Play dan tanpa paksaan.
-            </p>
-
-            <div className="flex justify-between text-center pt-4">
-                <div className="w-1/3">
-                    <p className="mb-16 font-bold">Manajer Tim A</p>
-                    <input className="w-full text-center border-b border-black focus:outline-none bg-transparent" placeholder="Nama Jelas" value={info.managerA} onChange={e => setInfo({...info, managerA: e.target.value})} />
-                </div>
-                <div className="w-1/3">
-                    <p className="mb-16 font-bold">Manajer Tim B</p>
-                    <input className="w-full text-center border-b border-black focus:outline-none bg-transparent" placeholder="Nama Jelas" value={info.managerB} onChange={e => setInfo({...info, managerB: e.target.value})} />
-                </div>
-                <div className="w-1/3">
-                    <p className="mb-16 font-bold">REFEREE / PENGAWAS</p>
-                    <input className="w-full text-center border-b border-black focus:outline-none bg-transparent" placeholder="Nama & Stempel" value={info.referee} onChange={e => setInfo({...info, referee: e.target.value})} />
-                </div>
-            </div>
-        </div>
+            </CardContent>
+            <CardFooter className="bg-zinc-950 p-4 flex justify-end border-t border-white/10">
+                 <Button 
+                    size="lg" 
+                    className="font-bold text-lg px-8 bg-green-600 hover:bg-green-700 text-white w-full md:w-auto"
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting ? <><Loader2 className="w-5 h-5 mr-2 animate-spin"/> MENYIMPAN...</> : <><Save className="w-5 h-5 mr-2"/> SAHKAN HASIL</>}
+                </Button>
+            </CardFooter>
+        </Card>
 
       </div>
     </div>
