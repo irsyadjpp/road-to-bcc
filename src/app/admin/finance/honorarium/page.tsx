@@ -158,7 +158,7 @@ export default function HonorariumPage() {
         </div>
         
         {/* TOTAL PROFIT LABEL */}
-        <Card className="w-full md:w-auto bg-secondary/30 border-primary/20">
+        <Card className="w-full md:w-auto bg-secondary/30">
             <CardContent className="p-4 flex items-center gap-4">
                 <div className="p-3 bg-green-100 text-green-700 rounded-full"><Coins className="w-6 h-6" /></div>
                 <div>
@@ -376,8 +376,6 @@ export default function HonorariumPage() {
             </DialogFooter>
         </DialogContent>
       </Dialog>
-
     </div>
   );
-
-    
+}
