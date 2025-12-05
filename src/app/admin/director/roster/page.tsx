@@ -20,7 +20,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { getCommitteeRoster, addCommitteeMember, updateCommitteeMember, deleteCommitteeMember, type CommitteeMember, committeeMemberSchema } from './actions';
+import { getCommitteeRoster, addCommitteeMember, updateCommitteeMember, deleteCommitteeMember } from './actions';
+import { type CommitteeMember, committeeMemberSchema } from '@/lib/schemas/committee';
 
 export default function RosterPage() {
   const { toast } = useToast();
