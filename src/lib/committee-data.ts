@@ -24,11 +24,13 @@ export const INITIAL_COMMITTEE_STRUCTURE: CommitteeDivision[] = [
   },
   {
     id: "MATCH",
-    title: "BIDANG PERTANDINGAN (MATCH CONTROL)",
+    title: "BIDANG PERTANDINGAN & INTEGRITAS",
     members: [
-      { position: "Koordinator", name: "Agung" },
+      { position: "Koordinator", name: "Wicky (PBSI)" },
       { position: "Match Liaison Officer (MLO)", name: "Sarah Fatmawati" },
-      { position: "Tim Verifikasi (TPF)", name: "Anindiffa, Aulia, Faiz" },
+      { position: "Ketua Tim Verifikasi (TPF)", name: "Anindiffa Pandu Prayuda" },
+      { position: "Anggota TPF", name: "Aulia Febrianto" },
+      { position: "Anggota TPF", name: "Faiz Azilla Syaehon" },
     ]
   },
   {
@@ -55,9 +57,28 @@ export const INITIAL_COMMITTEE_STRUCTURE: CommitteeDivision[] = [
     title: "BIDANG OPERASIONAL UMUM",
     members: [
       { position: "Koordinator", name: "Kevin Deriansyah Budiman" },
-      { position: "Keamanan & Gate", name: "Muhammad Nur Sidiq" },
+      { position: "Keamanan & Gate", name: "Muhammad Nur Sidiq Buana" },
       { position: "Medis", name: "Ananda Putri" },
-      { position: "Logistik & Registrasi", name: "Norma Ayu / Alfin" },
+      { position: "Registrasi & Check-in", name: "Norma Ayu Laras Tyas" },
+      { position: "Logistik", name: "Alfin" },
+    ]
+  },
+  {
+    id: "IT",
+    title: "BIDANG IT & DIGITAL",
+    members: [
+        { position: "Koordinator", name: "Irsyad Jamal Pratama Putra" },
+        { position: "System Information", name: "" }, // Vacant
+        { position: "Website & Platform", name: "" }, // Volunteer
+    ]
+  },
+   {
+    id: "LEGAL",
+    title: "BIDANG HUKUM & KEPATUHAN",
+    members: [
+        { position: "Koordinator", name: "Lidya" },
+        { position: "Perizinan", name: "" }, // Vacant
+        { position: "Legal & Regulasi", name: "" }, // Vacant
     ]
   }
 ];
