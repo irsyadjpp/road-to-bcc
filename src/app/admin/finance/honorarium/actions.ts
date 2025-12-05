@@ -65,9 +65,11 @@ let STAFF_LIST: StaffEvaluation[] = [
   { id: "19", name: "Norma Ayu Laras Tyas", jabatan: "Registrasi", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
   { id: "20", name: "Alfin", jabatan: "Logistik", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
 
-  // --- IT & LEGAL (VACANT) ---
-  // Ditambahkan jika sudah ada nama
-  { id: "21", name: "Lidya", jabatan: "Koord. Legal", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  // --- IT & DIGITAL (Irsyad rangkap jabatan) ---
+  { id: "21", name: "Irsyad Jamal Pratama Putra", jabatan: "Koord. IT & Digital", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+
+  // --- LEGAL ---
+  { id: "22", name: "Lidya", jabatan: "Koord. Legal", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
   
   // Non-Panitia (Kontributor)
   { id: "NP1", name: "Aris Indro", jabatan: "Penasihat", type: 'NON_PANITIA', scores: { np1:5, np2:5, np3:5, np4:5 }, rawScore: 20 },

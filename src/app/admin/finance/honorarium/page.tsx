@@ -191,8 +191,8 @@ export default function HonorariumPage() {
         <TabsContent value="panitia">
             <Card>
                 <CardHeader>
-                    <CardTitle>Distribusi Honor Panitia</CardTitle>
-                    <CardDescription>Total Poin Terkumpul: {totalPoinPanitia} | Estimasi Rate: Rp {Math.round(nilaiPerPoinPanitia).toLocaleString()}</CardDescription>
+                    <CardTitle>Distribusi Honor Panitia ({listPanitia.length} Orang)</CardTitle>
+                    <CardDescription>Total Poin Terkumpul: {totalPoinPanitia} | Estimasi Rate: Rp {Math.round(nilaiPerPoinPanitia).toLocaleString()}/poin</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Table>
@@ -232,7 +232,7 @@ export default function HonorariumPage() {
              <Card>
                 <CardHeader>
                     <CardTitle>Distribusi Honor Kontributor</CardTitle>
-                    <CardDescription>Total Poin Terkumpul: {totalPoinNP} | Estimasi Rate: Rp {Math.round(nilaiPerPoinNP).toLocaleString()}</CardDescription>
+                    <CardDescription>Total Poin Terkumpul: {totalPoinNP} | Estimasi Rate: Rp {Math.round(nilaiPerPoinNP).toLocaleString()}/poin</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Table>
@@ -340,36 +340,23 @@ export default function HonorariumPage() {
             
             <div className="py-4">
                 {selectedStaff?.type === 'PANITIA' ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Parameter Panitia P1-P16 */}
-                        <div className="border p-4 rounded-lg bg-slate-50 dark:bg-card">
-                            <h4 className="font-bold text-primary mb-4">1. STRUKTUR</h4>
-                            <ScoreInput id="p1" label="Risiko Jabatan" />
-                            <ScoreInput id="p2" label="Keahlian Khusus" />
-                            <ScoreInput id="p3" label="Durasi Kontrak" />
-                            <ScoreInput id="p4" label="Posisi Hirarki" />
-                        </div>
-                        <div className="border p-4 rounded-lg bg-slate-50 dark:bg-card">
-                            <h4 className="font-bold text-primary mb-4">2. KINERJA</h4>
-                            <ScoreInput id="p5" label="Eksekusi" />
-                            <ScoreInput id="p6" label="Inisiatif" />
-                            <ScoreInput id="p7" label="Kehadiran" />
-                            <ScoreInput id="p8" label="Respon" />
-                            <ScoreInput id="p9" label="Beban Fisik" />
-                        </div>
-                        <div className="border p-4 rounded-lg bg-slate-50 dark:bg-card">
-                            <h4 className="font-bold text-primary mb-4">3. DAMPAK</h4>
-                            <ScoreInput id="p10" label="Kompleksitas" />
-                            <ScoreInput id="p11" label="Interdependency" />
-                            <ScoreInput id="p12" label="Criticality" />
-                        </div>
-                        <div className="border p-4 rounded-lg bg-slate-50 dark:bg-card">
-                            <h4 className="font-bold text-primary mb-4">4. PROFESIONAL</h4>
-                            <ScoreInput id="p13" label="Dokumentasi" />
-                            <ScoreInput id="p14" label="Komunikasi" />
-                            <ScoreInput id="p15" label="Kerjasama" />
-                            <ScoreInput id="p16" label="Stress Mgmt" />
-                        </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
+                      <ScoreInput id="p1" label="Kehadiran & Disiplin" />
+                      <ScoreInput id="p2" label="Komitmen Tugas" />
+                      <ScoreInput id="p3" label="Kualitas Output" />
+                      <ScoreInput id="p4" label="Inisiatif & Proaktif" />
+                      <ScoreInput id="p5" label="Problem Solving" />
+                      <ScoreInput id="p6" label="Kerja Sama Tim" />
+                      <ScoreInput id="p7" label="Komunikasi" />
+                      <ScoreInput id="p8" label="Manajemen Waktu" />
+                      <ScoreInput id="p9" label="Tanggung Jawab" />
+                      <ScoreInput id="p10" label="Adaptasi" />
+                      <ScoreInput id="p11" label="Kontribusi Ide" />
+                      <ScoreInput id="p12" label="Eksekusi Lapangan" />
+                      <ScoreInput id="p13" label="Beban Kerja Real" />
+                      <ScoreInput id="p14" label="Keahlian Teknis" />
+                      <ScoreInput id="p15" label="Sikap & Etika" />
+                      <ScoreInput id="p16" label="Peran Strategis" />
                     </div>
                 ) : (
                     <div className="border p-4 rounded-lg bg-orange-50 dark:bg-card">
