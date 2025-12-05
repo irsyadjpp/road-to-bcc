@@ -10,10 +10,9 @@ import {
   ClipboardCheck, ArrowRight, Menu, Home, Settings, AlertOctagon,
   FileText, Shield, Mic, Ticket, Award, Wallet,
   ClipboardList, Activity, Gavel, Gift, Stethoscope, Receipt, CheckCircle,
-  Store, Video, QrCode, Archive, ShieldAlert, DollarSign, ArrowRightCircle, Megaphone, Calculator, ChevronDown, Loader2, UserCog, UserPlus
+  Store, Video, QrCode, Archive, ShieldCheck, DollarSign, ArrowRightCircle, Megaphone, Calculator, ChevronDown, Loader2, UserCog, UserPlus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -30,7 +29,7 @@ const getMenusByRole = (role: string) => {
     // --- DIRECTOR ---
     { 
       name: "Director's Office", 
-      icon: Shield,
+      icon: ShieldCheck,
       roles: ['DIRECTOR'],
       subItems: [
         { name: "Master Roster Panitia", href: "/admin/director/roster", icon: UserPlus, roles: ['DIRECTOR'] },
@@ -44,12 +43,12 @@ const getMenusByRole = (role: string) => {
       icon: DollarSign, 
       roles: ['FINANCE', 'DIRECTOR', 'BUSINESS_LEAD', 'TENANT_RELATIONS', 'BUSINESS'],
       subItems: [
-        { name: "Dashboard Keuangan", href: "/admin/finance", roles: ['FINANCE', 'DIRECTOR'] },
-        { name: "Verifikasi Pendaftaran", href: "/admin/teams", roles: ['FINANCE', 'DIRECTOR', 'BUSINESS_LEAD'] },
-        { name: "Approval Reimbursement", href: "/admin/finance/reimbursement-approval", roles: ['FINANCE', 'DIRECTOR'] },
-        { name: "Tagihan Sponsor", href: "/admin/finance/invoices", roles: ['FINANCE', 'DIRECTOR', 'BUSINESS_LEAD'] },
-        { name: "Manajemen Tenant", href: "/admin/tenants", roles: ['FINANCE', 'TENANT_RELATIONS', 'BUSINESS_LEAD', 'BUSINESS'] },
-        { name: "Skema Honorarium", href: "/admin/finance/honorarium", roles: ['DIRECTOR'] },
+        { name: "Dashboard Keuangan", href: "/admin/finance", icon: LayoutDashboard, roles: ['FINANCE', 'DIRECTOR'] },
+        { name: "Verifikasi Pendaftaran", href: "/admin/teams", icon: Users, roles: ['FINANCE', 'DIRECTOR', 'BUSINESS_LEAD'] },
+        { name: "Approval Reimbursement", href: "/admin/finance/reimbursement-approval", icon: CheckCircle, roles: ['FINANCE', 'DIRECTOR'] },
+        { name: "Tagihan Sponsor", href: "/admin/finance/invoices", icon: Receipt, roles: ['FINANCE', 'DIRECTOR', 'BUSINESS_LEAD'] },
+        { name: "Manajemen Tenant", href: "/admin/tenants", icon: Store, roles: ['FINANCE', 'TENANT_RELATIONS', 'BUSINESS_LEAD', 'BUSINESS'] },
+        { name: "Skema Honorarium", href: "/admin/finance/honorarium", icon: Calculator, roles: ['DIRECTOR'] },
       ]
     },
 
@@ -59,13 +58,13 @@ const getMenusByRole = (role: string) => {
       icon: Activity, 
       roles: ['MATCH_COORD', 'REFEREE', 'IT_ADMIN', 'DIRECTOR', 'OPS_LEAD', 'TPF', 'MLO'],
       subItems: [
-        { name: "Match Control Center", href: "/admin/matches", roles: ['MATCH_COORD', 'REFEREE', 'IT_ADMIN', 'DIRECTOR', 'OPS_LEAD'] },
-        { name: "Berita Acara Hasil", href: "/admin/matches/result-sheet", roles: ['REFEREE', 'MATCH_COORD'] },
-        { name: "Verifikasi TPF", href: "/admin/tpf", roles: ['TPF', 'MATCH_COORD', 'DIRECTOR'] },
-        { name: "Call Room (Antrean)", href: "/admin/mlo/dashboard", roles: ['MLO', 'MATCH_COORD'] },
-        { name: "Verifikasi Line-Up", href: "/admin/mlo/lineups", roles: ['MLO', 'MATCH_COORD'] },
-        { name: "Keputusan Protes", href: "/admin/protests", roles: ['REFEREE', 'MATCH_COORD', 'DIRECTOR'] },
-        { name: "Papan Skor Wasit", href: "/admin/referee", roles: ['REFEREE', 'MATCH_COORD', 'IT_ADMIN'] },
+        { name: "Match Control Center", href: "/admin/matches", icon: LayoutDashboard, roles: ['MATCH_COORD', 'REFEREE', 'IT_ADMIN', 'DIRECTOR', 'OPS_LEAD'] },
+        { name: "Berita Acara Hasil", href: "/admin/matches/result-sheet", icon: FileText, roles: ['REFEREE', 'MATCH_COORD'] },
+        { name: "Verifikasi TPF", href: "/admin/tpf", icon: ShieldCheck, roles: ['TPF', 'MATCH_COORD', 'DIRECTOR'] },
+        { name: "Call Room (Antrean)", href: "/admin/mlo/dashboard", icon: Megaphone, roles: ['MLO', 'MATCH_COORD'] },
+        { name: "Verifikasi Line-Up", href: "/admin/mlo/lineups", icon: ClipboardCheck, roles: ['MLO', 'MATCH_COORD'] },
+        { name: "Keputusan Protes", href: "/admin/protests", icon: Gavel, roles: ['REFEREE', 'MATCH_COORD', 'DIRECTOR'] },
+        { name: "Papan Skor Wasit", href: "/admin/referee", icon: Trophy, roles: ['REFEREE', 'MATCH_COORD', 'IT_ADMIN'] },
       ]
     },
 
@@ -75,10 +74,10 @@ const getMenusByRole = (role: string) => {
       icon: Users,
       roles: ['GATE', 'OPS_LEAD', 'IT_ADMIN', 'MEDIC', 'LOGISTICS', 'DIRECTOR', 'SHOW_DIR', 'MEDIA', 'ALL'],
       subItems: [
-        { name: "Gate Check-in", href: "/admin/gate", roles: ['GATE', 'OPS_LEAD', 'IT_ADMIN'] },
-        { name: "Log Medis", href: "/admin/medical", roles: ['MEDIC', 'OPS_LEAD', 'DIRECTOR'] },
-        { name: "Undian Doorprize", href: "/admin/raffle", roles: ['OPS_LEAD', 'DIRECTOR', 'SHOW_DIR', 'MEDIA'] },
-        { name: "Pengajuan Reimbursement", href: "/admin/reimbursement/submit", roles: ['ALL'] },
+        { name: "Gate Check-in", href: "/admin/gate", icon: QrCode, roles: ['GATE', 'OPS_LEAD', 'IT_ADMIN'] },
+        { name: "Log Medis", href: "/admin/medical", icon: Stethoscope, roles: ['MEDIC', 'OPS_LEAD', 'DIRECTOR'] },
+        { name: "Undian Doorprize", href: "/admin/raffle", icon: Gift, roles: ['OPS_LEAD', 'DIRECTOR', 'SHOW_DIR', 'MEDIA'] },
+        { name: "Pengajuan Reimbursement", href: "/admin/reimbursement/submit", icon: ArrowRightCircle, roles: ['ALL'] },
       ]
     },
 
@@ -88,9 +87,9 @@ const getMenusByRole = (role: string) => {
       icon: BarChart3,
       roles: ['BUSINESS_LEAD', 'BUSINESS', 'DIRECTOR', 'SHOW_DIR', 'MEDIA'],
       subItems: [
-        { name: "Data Pengunjung", href: "/admin/visitors", roles: ['BUSINESS_LEAD', 'BUSINESS', 'DIRECTOR'] },
-        { name: "Laporan Sponsor", href: "/admin/analytics", roles: ['BUSINESS_LEAD', 'BUSINESS', 'DIRECTOR'] },
-        { name: "Manajemen Media", href: "/admin/media", roles: ['SHOW_DIR', 'MEDIA', 'DIRECTOR'] },
+        { name: "Data Pengunjung", href: "/admin/visitors", icon: Users, roles: ['BUSINESS_LEAD', 'BUSINESS', 'DIRECTOR'] },
+        { name: "Laporan Sponsor", href: "/admin/analytics", icon: BarChart3, roles: ['BUSINESS_LEAD', 'BUSINESS', 'DIRECTOR'] },
+        { name: "Manajemen Media", href: "/admin/media", icon: Video, roles: ['SHOW_DIR', 'MEDIA', 'DIRECTOR'] },
       ]
     },
 
@@ -100,7 +99,7 @@ const getMenusByRole = (role: string) => {
       icon: FileText,
       roles: ['SECRETARY', 'DIRECTOR', 'SHOW_DIR'],
       subItems: [
-        { name: "Generator Sertifikat", href: "/admin/secretary/cert-gen", roles: ['SECRETARY', 'DIRECTOR', 'SHOW_DIR'] },
+        { name: "Generator Sertifikat", href: "/admin/secretary/cert-gen", icon: Award, roles: ['SECRETARY', 'DIRECTOR', 'SHOW_DIR'] },
       ]
     },
     
@@ -274,7 +273,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar */}
       <aside className="w-72 bg-card hidden md:flex flex-col fixed h-full">
         <div className="p-6 flex items-center gap-3">
-          <Image src="/images/logo.png" alt="Logo" width={32} height={32} />
+          <svg className="w-8 h-8 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18.81 9.5L12 2.69L5.19 9.5H18.81ZM12 21.31L5.19 14.5H18.81L12 21.31Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+          </svg>
           <h1 className="font-headline font-black text-2xl text-transparent bg-clip-text bg-gradient-to-r from-primary to-fuchsia-500">
             BCC ADMIN
           </h1>
@@ -282,7 +284,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <nav className="flex-1 py-4 px-4 overflow-y-auto no-scrollbar space-y-2">
           {renderNavLinks()}
         </nav>
-        <div className="p-4 border-t">
+        <div className="p-4">
           <form action={handleLogout}>
             <Button variant="outline" className="w-full">
                 <LogOut className="w-4 h-4 mr-2" /> Logout
@@ -308,7 +310,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       <nav className="p-4 space-y-2">
                         {renderNavLinks(true)}
                       </nav>
-                      <div className="p-4 border-t absolute bottom-0 w-full">
+                      <div className="p-4 absolute bottom-0 w-full">
                         <form action={handleLogout}>
                             <Button variant="outline" className="w-full">
                                 <LogOut className="w-4 h-4 mr-2" /> Logout
