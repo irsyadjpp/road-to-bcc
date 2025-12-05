@@ -1,3 +1,4 @@
+
 'use server';
 
 // Tipe Data Skor Panitia (P1-P16)
@@ -34,12 +35,42 @@ function createZeroNPScores(): NonPanitiaScores {
 // MOCK DATA INITIALIZATION
 let STAFF_LIST: StaffEvaluation[] = [
   // Panitia
-  { id: "1", name: "Irsyad Jamal", jabatan: "Project Director", type: 'PANITIA', scores: { ...createZeroPanitiaScores(), p1:5, p2:5, p3:5, p4:4, p5:4, p6:4, p7:4, p8:3, p9:5, p10:5, p11:4, p12:4, p13:5, p14:4, p15:4, p16:5 }, rawScore: 69 },
+  // --- INTI ---
+  { id: "1", name: "Irsyad Jamal Pratama Putra", jabatan: "Project Director", type: 'PANITIA', scores: { ...createZeroPanitiaScores(), p1:5, p2:5, p3:5, p4:4, p5:4, p6:4, p7:4, p8:3, p9:5, p10:5, p11:4, p12:4, p13:5, p14:4, p15:4, p16:5 }, rawScore: 69 },
   { id: "2", name: "Selvi Yulia", jabatan: "Bendahara", type: 'PANITIA', scores: { ...createZeroPanitiaScores(), p1:5, p2:4, p3:5, p4:4, p5:4, p6:4, p7:4, p8:3, p9:4, p10:4, p11:4, p12:5, p13:5, p14:3, p15:4, p16:5 }, rawScore: 66 },
-  { id: "3", name: "Agung", jabatan: "Koord. Pertandingan", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  { id: "3", name: "Rizki Karami", jabatan: "Sekretaris 1", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  { id: "4", name: "Annisa Syafira", jabatan: "Sekretaris 2", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  
+  // --- MATCH CONTROL ---
+  { id: "5", name: "Wicky (PBSI)", jabatan: "Koord. Pertandingan", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  { id: "6", name: "Sarah Fatmawati", jabatan: "MLO", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  { id: "7", name: "Anindiffa Pandu P", jabatan: "TPF", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  { id: "8", name: "Aulia Febrianto", jabatan: "TPF", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  { id: "9", name: "Faiz Azilla Syaehon", jabatan: "TPF", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  
+  // --- BUSINESS ---
+  { id: "10", name: "Teri Taufiq Mulyadi", jabatan: "Koord. Bisnis", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  { id: "11", name: "Ali Wardana", jabatan: "Sponsorship", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  { id: "12", name: "Risca Amalia", jabatan: "Tenant Relations", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+
+  // --- SHOW & MEDIA ---
+  { id: "13", name: "Susi", jabatan: "Media & Sosmed", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  { id: "14", name: "Sarah Maulidina", jabatan: "Content Creator", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  { id: "15", name: "Rizky Mauludin", jabatan: "Dokumentasi", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+
+  // --- OPERATIONS ---
+  { id: "16", name: "Kevin Deriansyah B", jabatan: "Koord. Operasional", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  { id: "17", name: "M. Nur Sidiq Buana", jabatan: "Keamanan & Gate", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  { id: "18", name: "Ananda Putri", jabatan: "Medis", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  { id: "19", name: "Norma Ayu Laras Tyas", jabatan: "Registrasi", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+  { id: "20", name: "Alfin", jabatan: "Logistik", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
+
+  // --- IT & LEGAL (VACANT) ---
+  // Ditambahkan jika sudah ada nama
+  { id: "21", name: "Lidya", jabatan: "Koord. Legal", type: 'PANITIA', scores: createZeroPanitiaScores(), rawScore: 0 },
   
   // Non-Panitia (Kontributor)
-  { id: "NP1", name: "Indro", jabatan: "Advisor / Kontributor", type: 'NON_PANITIA', scores: { np1:5, np2:5, np3:5, np4:5 }, rawScore: 20 },
+  { id: "NP1", name: "Aris Indro", jabatan: "Penasihat", type: 'NON_PANITIA', scores: { np1:5, np2:5, np3:5, np4:5 }, rawScore: 20 },
 ];
 
 // Helper: Hitung Raw Score
