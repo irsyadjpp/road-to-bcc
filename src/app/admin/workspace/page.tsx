@@ -52,13 +52,13 @@ export default function WorkspacePage() {
 
       {/* 1. PENGUMUMAN (NOTICE BOARD) */}
       {data.announcements.length > 0 && (
-          <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg shadow-sm mb-6">
+          <div className="bg-yellow-50 dark:bg-yellow-500/10 border-l-4 border-yellow-500 p-4 rounded-r-lg shadow-sm mb-6">
               <div className="flex items-start gap-3">
                   <Bell className="w-5 h-5 text-yellow-600 mt-1 animate-bounce" />
                   <div>
-                      <h4 className="font-bold text-yellow-800 text-lg">{data.announcements[0].title}</h4>
-                      <p className="text-yellow-700">{data.announcements[0].content}</p>
-                      <p className="text-xs text-yellow-600 mt-1 font-mono">Posted by: {data.announcements[0].author} • {data.announcements[0].date}</p>
+                      <h4 className="font-bold text-yellow-800 dark:text-yellow-300 text-lg">{data.announcements[0].title}</h4>
+                      <p className="text-yellow-700 dark:text-yellow-400">{data.announcements[0].content}</p>
+                      <p className="text-xs text-yellow-600 dark:text-yellow-500 mt-1 font-mono">Posted by: {data.announcements[0].author} • {data.announcements[0].date}</p>
                   </div>
               </div>
           </div>
@@ -97,8 +97,8 @@ export default function WorkspacePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* KOLOM TODO */}
-                <div className="bg-gray-100 p-4 rounded-lg min-h-[300px]">
-                    <h3 className="font-bold text-gray-500 mb-4 flex items-center gap-2"><Clock className="w-4 h-4"/> TO DO</h3>
+                <div className="bg-muted/30 p-4 rounded-lg min-h-[300px]">
+                    <h3 className="font-bold text-muted-foreground mb-4 flex items-center gap-2"><Clock className="w-4 h-4"/> TO DO</h3>
                     <div className="space-y-3">
                         {data.tasks.filter((t: Task) => t.status === 'TODO').map((t: Task) => (
                             <TaskCard key={t.id} task={t} onNext={() => handleStatusClick(t)} />
@@ -106,7 +106,7 @@ export default function WorkspacePage() {
                     </div>
                 </div>
                 {/* KOLOM IN PROGRESS */}
-                <div className="bg-blue-50 p-4 rounded-lg min-h-[300px]">
+                <div className="bg-blue-500/5 p-4 rounded-lg min-h-[300px]">
                     <h3 className="font-bold text-blue-500 mb-4 flex items-center gap-2"><AlertCircle className="w-4 h-4"/> IN PROGRESS</h3>
                     <div className="space-y-3">
                         {data.tasks.filter((t: Task) => t.status === 'IN_PROGRESS').map((t: Task) => (
@@ -115,7 +115,7 @@ export default function WorkspacePage() {
                     </div>
                 </div>
                 {/* KOLOM DONE */}
-                <div className="bg-green-50 p-4 rounded-lg min-h-[300px]">
+                <div className="bg-green-500/5 p-4 rounded-lg min-h-[300px]">
                     <h3 className="font-bold text-green-600 mb-4 flex items-center gap-2"><CheckCircle2 className="w-4 h-4"/> DONE</h3>
                     <div className="space-y-3">
                         {data.tasks.filter((t: Task) => t.status === 'DONE').map((t: Task) => (
@@ -168,13 +168,13 @@ export default function WorkspacePage() {
 
         {/* --- TAB 3: RAPOR KINERJA (LINK KE SKEMA HONOR) --- */}
         <TabsContent value="performance">
-            <Card className="bg-gradient-to-r from-purple-50 to-white border-purple-200">
+            <Card className="bg-gradient-to-r from-purple-50 to-white dark:from-purple-900/10 dark:to-background border-purple-200 dark:border-purple-800">
                 <CardContent className="p-8 text-center space-y-4">
-                    <div className="mx-auto bg-purple-100 p-4 rounded-full w-fit">
-                        <Star className="w-10 h-10 text-purple-600" />
+                    <div className="mx-auto bg-purple-100 dark:bg-purple-500/10 p-4 rounded-full w-fit">
+                        <Star className="w-10 h-10 text-purple-600 dark:text-purple-400" />
                     </div>
-                    <h3 className="text-2xl font-bold text-purple-900">Penilaian Kinerja Bulanan</h3>
-                    <p className="text-purple-700 max-w-lg mx-auto">
+                    <h3 className="text-2xl font-bold text-purple-900 dark:text-purple-200">Penilaian Kinerja Bulanan</h3>
+                    <p className="text-purple-700 dark:text-purple-300 max-w-lg mx-auto">
                         Penilaian ini terintegrasi langsung dengan <strong>Skema Honorarium</strong>. 
                         Pastikan Anda mengisi log aktivitas dan menyelesaikan tugas tepat waktu untuk mendapatkan poin maksimal.
                     </p>
@@ -193,7 +193,7 @@ export default function WorkspacePage() {
 // Sub-component untuk Kartu Tugas
 function TaskCard({ task, onNext }: { task: Task, onNext: () => void }) {
     return (
-        <div className="bg-white p-3 rounded border shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={onNext}>
+        <div className="bg-card p-3 rounded border shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={onNext}>
             <div className="flex justify-between items-start mb-2">
                 <Badge variant="outline" className="text-[10px]">{task.division}</Badge>
                 {task.priority === 'HIGH' && <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" title="High Priority"></span>}

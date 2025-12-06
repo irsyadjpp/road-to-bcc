@@ -62,7 +62,7 @@ export default function DirectorDashboard() {
                 <p className="text-sm text-zinc-400">Current Cash Balance</p>
               </div>
               <div className="text-right">
-                <p className="text-xl font-bold text-white">Rp {stats.totalIncome.toLocaleString('id-ID')}</p>
+                <p className="text-xl font-bold">Rp {stats.totalIncome.toLocaleString('id-ID')}</p>
                 <p className="text-xs text-zinc-500">Total Revenue</p>
               </div>
             </div>
@@ -71,22 +71,22 @@ export default function DirectorDashboard() {
                 <span>Budget Usage</span>
                 <span>{stats.budgetUsed}%</span>
               </div>
-              <Progress value={stats.budgetUsed} className="h-2 bg-zinc-800" />
+              <Progress value={stats.budgetUsed} className="h-2 bg-zinc-800" indicatorClassName="bg-green-500" />
             </div>
           </CardContent>
         </Card>
 
         {/* 2. LIVE CROWD */}
-        <Card className="bg-white border-zinc-200 shadow-sm hover:shadow-md transition-all">
+        <Card className="bg-card border-border shadow-sm hover:shadow-md transition-all">
           <CardHeader className="pb-2">
-            <CardTitle className="text-zinc-500 text-xs uppercase tracking-widest font-bold flex items-center gap-2">
+            <CardTitle className="text-muted-foreground text-xs uppercase tracking-widest font-bold flex items-center gap-2">
               <Users className="w-4 h-4 text-blue-600" /> Live Crowd
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-baseline gap-1">
-              <span className="text-5xl font-black text-zinc-900">{stats.visitorsNow}</span>
-              <span className="text-sm font-bold text-zinc-400">pax</span>
+              <span className="text-5xl font-black text-foreground">{stats.visitorsNow}</span>
+              <span className="text-sm font-bold text-muted-foreground">pax</span>
             </div>
             <p className="text-xs text-green-600 font-bold mt-2 flex items-center">
               <TrendingUp className="w-3 h-3 mr-1" /> +12% dari kemarin
@@ -95,39 +95,39 @@ export default function DirectorDashboard() {
         </Card>
 
         {/* 3. MATCH STATUS (KPI: ZERO DELAY) */}
-        <Card className={`${stats.matchDelay > 0 ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'}`}>
+        <Card className={`${stats.matchDelay > 0 ? 'bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/20' : 'bg-green-50 dark:bg-green-500/10 border-green-200 dark:border-green-500/20'}`}>
           <CardHeader className="pb-2">
-            <CardTitle className="text-xs uppercase tracking-widest font-bold flex items-center gap-2 text-zinc-600">
+            <CardTitle className="text-xs uppercase tracking-widest font-bold flex items-center gap-2 text-muted-foreground">
               <Timer className="w-4 h-4" /> Schedule Status
             </CardTitle>
           </CardHeader>
           <CardContent>
             {stats.matchDelay === 0 ? (
                <>
-                 <div className="text-3xl font-black text-green-700">ON TIME</div>
-                 <p className="text-xs text-green-800 mt-1">Zero Delay Achieved</p>
+                 <div className="text-3xl font-black text-green-700 dark:text-green-400">ON TIME</div>
+                 <p className="text-xs text-green-800 dark:text-green-500 mt-1">Zero Delay Achieved</p>
                </>
             ) : (
                <>
-                 <div className="text-3xl font-black text-red-600">+{stats.matchDelay} MNT</div>
-                 <p className="text-xs text-red-800 mt-1">Keterlambatan Akumulatif</p>
+                 <div className="text-3xl font-black text-red-600 dark:text-red-400">+{stats.matchDelay} MNT</div>
+                 <p className="text-xs text-red-800 dark:text-red-500 mt-1">Keterlambatan Akumulatif</p>
                </>
             )}
           </CardContent>
         </Card>
 
         {/* 4. INTEGRITY ALERT (TPF) */}
-        <Card className="bg-zinc-50 border-zinc-200">
+        <Card className="bg-card border-border">
            <CardHeader className="pb-2">
-            <CardTitle className="text-zinc-500 text-xs uppercase tracking-widest font-bold flex items-center gap-2">
+            <CardTitle className="text-muted-foreground text-xs uppercase tracking-widest font-bold flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-orange-500" /> Integrity (TPF)
             </CardTitle>
           </CardHeader>
           <CardContent>
              <div className="flex justify-between items-center">
                 <div>
-                   <div className="text-3xl font-black text-zinc-800">{stats.tpfPending}</div>
-                   <p className="text-xs text-zinc-500">Pending Review</p>
+                   <div className="text-3xl font-black text-foreground">{stats.tpfPending}</div>
+                   <p className="text-xs text-muted-foreground">Pending Review</p>
                 </div>
                 <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => window.location.href='/admin/tpf'}>
                    Audit <ArrowUpRight className="w-3 h-3 ml-1" />
@@ -137,15 +137,15 @@ export default function DirectorDashboard() {
         </Card>
 
         {/* 5. MEDICAL / SAFETY */}
-        <Card className="bg-zinc-50 border-zinc-200">
+        <Card className="bg-card border-border">
            <CardHeader className="pb-2">
-            <CardTitle className="text-zinc-500 text-xs uppercase tracking-widest font-bold flex items-center gap-2">
+            <CardTitle className="text-muted-foreground text-xs uppercase tracking-widest font-bold flex items-center gap-2">
               <Activity className="w-4 h-4 text-red-500" /> Safety Log
             </CardTitle>
           </CardHeader>
           <CardContent>
-             <div className="text-3xl font-black text-zinc-800">{stats.medicalIncidents}</div>
-             <p className="text-xs text-zinc-500">Insiden Medis Hari Ini</p>
+             <div className="text-3xl font-black text-foreground">{stats.medicalIncidents}</div>
+             <p className="text-xs text-muted-foreground">Insiden Medis Hari Ini</p>
           </CardContent>
         </Card>
 
@@ -158,7 +158,7 @@ export default function DirectorDashboard() {
                  <p className="text-sm text-blue-100">Menuju target Rp 200 Juta</p>
               </div>
               <div className="h-16 w-16 rounded-full border-4 border-white/30 flex items-center justify-center">
-                 <Trophy className="w-8 h-8 text-white" />
+                 <Trophy className="w-8 h-8" />
               </div>
            </CardContent>
         </Card>

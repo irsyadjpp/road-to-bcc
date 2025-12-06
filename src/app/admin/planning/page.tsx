@@ -25,7 +25,7 @@ export default function PlanningPage() {
   
   // Form State (Pengajuan)
   const [newProg, setNewProg] = useState({
-    title: "", objective: "", deadline: "", costEstimate: "", priority: "MUST"
+    title: "", objective: "", deadline: "", costEstimate: "", priority: "MUST" as 'MUST' | 'SHOULD' | 'COULD' | 'WONT'
   });
 
   // Review State
@@ -182,7 +182,7 @@ export default function PlanningPage() {
                 {/* TAB APPROVED (MONITORING) */}
                 <TabsContent value="approved" className="space-y-4 mt-4">
                     {programs.filter(p => p.status === 'APPROVED').map((prog) => (
-                        <div key={prog.id} className="flex items-center justify-between p-4 bg-white border rounded-lg shadow-sm">
+                        <div key={prog.id} className="flex items-center justify-between p-4 bg-card border rounded-lg shadow-sm">
                             <div>
                                 <div className="flex items-center gap-2 mb-1">
                                     <Badge className="bg-green-600">ACC</Badge>
@@ -200,7 +200,7 @@ export default function PlanningPage() {
                 {/* TAB REJECTED */}
                 <TabsContent value="rejected" className="space-y-4 mt-4">
                      {programs.filter(p => ['REJECTED', 'REVISION'].includes(p.status)).map((prog) => (
-                        <div key={prog.id} className="p-4 bg-gray-50 border rounded-lg opacity-70 hover:opacity-100 transition-opacity">
+                        <div key={prog.id} className="p-4 bg-gray-50 dark:bg-card border rounded-lg opacity-70 hover:opacity-100 transition-opacity">
                             <div className="flex justify-between mb-2">
                                 <span className="font-bold line-through">{prog.title}</span>
                                 <Badge variant="outline">{prog.status}</Badge>
