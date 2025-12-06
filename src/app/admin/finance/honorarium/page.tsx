@@ -136,7 +136,7 @@ export default function HonorariumPage() {
   );
   
   const AllocationCard = ({ title, amount, color, description, subDescription }: { title:string, amount:number, color:string, description?:string, subDescription?:string}) => (
-    <Card className={`bg-${color}-50 border-${color}-200 dark:bg-${color}-500/10 dark:border-${color}-500/20`}>
+    <Card className={`bg-${color}-50 border-${color}-200 dark:bg-${color}-900/20 dark:border-${color}-500/30`}>
         <CardHeader className="pb-2">
             <CardTitle className={`text-xs uppercase text-${color}-700 dark:text-${color}-400 font-bold`}>{title}</CardTitle>
             {description && <CardDescription className="text-xs">{description}</CardDescription>}
@@ -158,9 +158,9 @@ export default function HonorariumPage() {
         </div>
         
         {/* TOTAL PROFIT LABEL */}
-        <Card className="w-full md:w-auto bg-secondary/30">
+        <Card className="w-full md:w-auto bg-card">
             <CardContent className="p-4 flex items-center gap-4">
-                <div className="p-3 bg-green-100 text-green-700 rounded-full"><Coins className="w-6 h-6" /></div>
+                <div className="p-3 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full"><Coins className="w-6 h-6" /></div>
                 <div>
                     <p className="text-xs text-muted-foreground uppercase font-bold">Total Keuntungan (Net)</p>
                     <div className="font-bold text-xl text-foreground">
