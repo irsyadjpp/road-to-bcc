@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -21,6 +20,51 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 type MatchMode = 'GROUP' | 'KNOCKOUT';
 type MatchStatus = 'PRE_MATCH' | 'IN_PROGRESS' | 'FINISHED';
 type TeamSide = 'LEFT' | 'RIGHT';
+
+function TeamPanel({ teamName, players, score, setScore, isServing, pos, onPointAdd, onPointMin, side, scoreEven, mode, disabled }: any) {
+    const playerNames = players.split(" / ");
+    
+    return (
+        <Card className={`relative p-4 flex flex-col justify-between border-2 transition-all duration-300 ${isServing ? 'border-yellow-500 bg-yellow-500/5' : ''}`}>
+            {isServing && (
+                <div className="absolute top-0 right-0 bg-yellow-500 text-black px-2 py-0.5 text-[10px] font-black rounded-bl-lg rounded-tr-md">
+                    SERVICE
+                </div>
+            )}
+            
+            <div className="mt-2 text-center">
+                <h2 className="text-lg md:text-2xl font-black text-foreground truncate leading-none mb-1">{teamName}</h2>
+                {mode === 'KNOCKOUT' && <div className="text-yellow-600 font-bold text-xl">SET {setScore}</div>}
+            </div>
+
+            <div className="flex-grow flex flex-col items-center justify-center py-2">
+                <div className="text-[90px] md:text-[160px] leading-none font-black font-mono text-foreground select-none">
+                    {score}
+                </div>
+
+                <div className="grid grid-cols-2 gap-1 w-full mt-2">
+                    <div className={`p-1 text-center rounded-md border ${!scoreEven ? 'border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-500' : 'text-muted-foreground'}`}>
+                        <div className="text-[8px] uppercase">KIRI (Ganjil)</div>
+                        <div className="text-xs font-bold truncate">{playerNames[pos[1]]}</div>
+                    </div>
+                    <div className={`p-1 text-center rounded-md border ${scoreEven ? 'border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-500' : 'text-muted-foreground'}`}>
+                        <div className="text-[8px] uppercase">KANAN (Genap)</div>
+                        <div className="text-xs font-bold truncate">{playerNames[pos[0]]}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 mt-2">
+                 <Button className="h-16" variant="outline" onClick={onPointMin} disabled={disabled}>
+                    <Minus className="w-8 h-8" />
+                 </Button>
+                 <Button className="h-16" onClick={onPointAdd} disabled={disabled}>
+                    <Plus className="w-10 h-10" />
+                 </Button>
+            </div>
+        </Card>
+    )
+}
 
 export default function MatchControlPage() {
   const { toast } = useToast();
@@ -261,7 +305,7 @@ export default function MatchControlPage() {
       return (
           <div className="flex items-center justify-center min-h-full p-4">
               <Card className="max-w-md w-full">
-                <CardHeader className="text-center border-b pb-4">
+                <CardHeader className="text-center pb-4">
                     <Coins className="w-12 h-12 text-yellow-500 mx-auto mb-2" />
                     <CardTitle className="text-2xl font-black font-headline">COIN TOSS</CardTitle>
                     <p className="text-muted-foreground text-sm">Persiapan Pertandingan</p>
@@ -282,11 +326,11 @@ export default function MatchControlPage() {
                       <div className="space-y-3">
                           <Label>Pemenang Undian (Tos)</Label>
                           <RadioGroup value={tossWinner} onValueChange={(v: 'A'|'B') => setTossWinner(v)} className="grid grid-cols-2 gap-4">
-                              <Label htmlFor="winnerA" className={`border rounded-lg p-3 cursor-pointer flex items-center justify-center gap-2 ${tossWinner === 'A' ? 'bg-primary/20 border-primary' : 'border-border'}`}>
+                              <Label htmlFor="winnerA" className={`border rounded-lg p-3 cursor-pointer flex items-center justify-center gap-2 ${tossWinner === 'A' ? 'bg-primary/20 border-primary' : ''}`}>
                                   <RadioGroupItem value="A" id="winnerA" />
                                   <span className="font-bold">TIM A</span>
                               </Label>
-                              <Label htmlFor="winnerB" className={`border rounded-lg p-3 cursor-pointer flex items-center justify-center gap-2 ${tossWinner === 'B' ? 'bg-primary/20 border-primary' : 'border-border'}`}>
+                              <Label htmlFor="winnerB" className={`border rounded-lg p-3 cursor-pointer flex items-center justify-center gap-2 ${tossWinner === 'B' ? 'bg-primary/20 border-primary' : ''}`}>
                                   <RadioGroupItem value="B" id="winnerB" />
                                   <span className="font-bold">TIM B</span>
                               </Label>
@@ -297,7 +341,7 @@ export default function MatchControlPage() {
                           <Label>Pemenang Memilih</Label>
                           <RadioGroup value={tossChoice} onValueChange={(v: any) => setTossChoice(v)} className="grid grid-cols-3 gap-2">
                               {['SERVE', 'RECEIVE', 'SIDE'].map((choice) => (
-                                  <Label key={choice} htmlFor={choice} className={`border rounded-lg p-2 cursor-pointer flex flex-col items-center justify-center text-center ${tossChoice === choice ? 'bg-green-100 dark:bg-green-900/30 border-green-600' : 'border-border'}`}>
+                                  <Label key={choice} htmlFor={choice} className={`border rounded-lg p-2 cursor-pointer flex flex-col items-center justify-center text-center ${tossChoice === choice ? 'bg-green-100 dark:bg-green-900/30 border-green-600' : ''}`}>
                                       <RadioGroupItem value={choice} id={choice} className="sr-only" />
                                       <span className="font-bold text-xs">{choice}</span>
                                   </Label>
@@ -351,7 +395,7 @@ export default function MatchControlPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col md:flex-row justify-between items-center bg-card p-3 rounded-lg gap-4 border">
+      <div className="flex flex-col md:flex-row justify-between items-center bg-card p-3 rounded-lg gap-4">
          <div className="text-left w-full md:w-auto">
              <div className="flex items-center gap-2 mb-1">
                 <Badge variant="outline" className="text-[10px]">MATCH #{matchId}</Badge>
@@ -361,13 +405,13 @@ export default function MatchControlPage() {
          </div>
          
          <div className="flex items-center gap-2">
-            <div className="bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-300 dark:border-yellow-600/50 px-4 py-1 rounded-md flex flex-col items-center min-w-[100px]">
+            <div className="bg-yellow-100 dark:bg-yellow-900/30 px-4 py-1 rounded-md flex flex-col items-center min-w-[100px]">
                 <span className="text-[8px] text-yellow-600 dark:text-yellow-500 uppercase font-bold">SERVICE</span>
                 <span className="text-sm font-black text-foreground truncate max-w-[120px]">
                     {server === 'A' ? matchData.teamA : matchData.teamB}
                 </span>
             </div>
-            <div className="bg-card px-3 py-1 rounded-md border text-center cursor-pointer" onClick={() => setIsTimerRunning(!isTimerRunning)}>
+            <div className="px-3 py-1 rounded-md text-center cursor-pointer" onClick={() => setIsTimerRunning(!isTimerRunning)}>
                 <div className="text-[8px] text-muted-foreground uppercase">TIME</div>
                 <div className={`font-mono font-bold text-xl leading-none ${isTimerRunning ? 'text-green-500' : 'text-red-500'}`}>
                     {formatTime(time)}
@@ -396,13 +440,13 @@ export default function MatchControlPage() {
                         <p className="text-xs text-center text-muted-foreground">TIM A</p>
                         <Button onClick={() => handleCard('A', 'YELLOW')} className="w-full bg-yellow-500 text-black hover:bg-yellow-400">Kuning</Button>
                         <Button onClick={() => handleCard('A', 'RED')} className="w-full bg-red-600 hover:bg-red-500">Merah (+1 Lawan)</Button>
-                        <Button onClick={() => handleCard('A', 'BLACK')} className="w-full bg-black text-white border">Hitam (WO)</Button>
+                        <Button onClick={() => handleCard('A', 'BLACK')} className="w-full bg-black text-white">Hitam (WO)</Button>
                     </div>
                     <div className="space-y-2">
                         <p className="text-xs text-center text-muted-foreground">TIM B</p>
                         <Button onClick={() => handleCard('B', 'YELLOW')} className="w-full bg-yellow-500 text-black hover:bg-yellow-400">Kuning</Button>
                         <Button onClick={() => handleCard('B', 'RED')} className="w-full bg-red-600 hover:bg-red-500">Merah (+1 Lawan)</Button>
-                        <Button onClick={() => handleCard('B', 'BLACK')} className="w-full bg-black text-white border">Hitam (WO)</Button>
+                        <Button onClick={() => handleCard('B', 'BLACK')} className="w-full bg-black text-white">Hitam (WO)</Button>
                     </div>
                 </div>
             </DialogContent>
@@ -413,7 +457,7 @@ export default function MatchControlPage() {
             <span className="text-[9px] font-bold uppercase">Service Over</span>
          </Button>
 
-         <div className="h-14 bg-card border rounded-md flex flex-col items-center justify-center">
+         <div className="h-14 rounded-md flex flex-col items-center justify-center">
              <span className="text-[8px] text-muted-foreground uppercase">SHUTTLE</span>
              <div className="flex items-center gap-2">
                  <span className="font-mono font-bold text-lg">{shuttles}</span>
@@ -426,56 +470,11 @@ export default function MatchControlPage() {
                  <MonitorPlay className="w-4 h-4 mr-1" /> SELESAI
              </Button>
          ) : (
-             <div className="h-14 flex items-center justify-center bg-card border rounded-md">
+             <div className="h-14 flex items-center justify-center rounded-md">
                  <span className="text-green-500 font-bold text-xs animate-pulse">● LIVE</span>
              </div>
          )}
       </div>
     </div>
   );
-}
-
-function TeamPanel({ teamName, players, score, setScore, isServing, pos, onPointAdd, onPointMin, side, scoreEven, mode, disabled }: any) {
-    const playerNames = players.split(" / ");
-    
-    return (
-        <Card className={`relative p-4 flex flex-col justify-between border-2 transition-all duration-300 ${isServing ? 'border-yellow-500 bg-yellow-500/5' : 'border-border'}`}>
-            {isServing && (
-                <div className="absolute top-0 right-0 bg-yellow-500 text-black px-2 py-0.5 text-[10px] font-black rounded-bl-lg rounded-tr-md">
-                    SERVICE
-                </div>
-            )}
-            
-            <div className="mt-2 text-center">
-                <h2 className="text-lg md:text-2xl font-black text-foreground truncate leading-none mb-1">{teamName}</h2>
-                {mode === 'KNOCKOUT' && <div className="text-yellow-600 font-bold text-xl">SET {setScore}</div>}
-            </div>
-
-            <div className="flex-grow flex flex-col items-center justify-center py-2">
-                <div className="text-[90px] md:text-[160px] leading-none font-black font-mono text-foreground select-none">
-                    {score}
-                </div>
-
-                <div className="grid grid-cols-2 gap-1 w-full mt-2">
-                    <div className={`p-1 text-center rounded-md border ${!scoreEven ? 'border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-500' : 'border-zinc-200 dark:border-zinc-800 text-muted-foreground'}`}>
-                        <div className="text-[8px] uppercase">KIRI (Ganjil)</div>
-                        <div className="text-xs font-bold truncate">{playerNames[pos[1]]}</div>
-                    </div>
-                    <div className={`p-1 text-center rounded-md border ${scoreEven ? 'border-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-500' : 'border-zinc-200 dark:border-zinc-800 text-muted-foreground'}`}>
-                        <div className="text-[8px] uppercase">KANAN (Genap)</div>
-                        <div className="text-xs font-bold truncate">{playerNames[pos[0]]}</div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 mt-2">
-                 <Button className="h-16" variant="outline" onClick={onPointMin} disabled={disabled}>
-                    <Minus className="w-8 h-8" />
-                 </Button>
-                 <Button className="h-16" onClick={onPointAdd} disabled={disabled}>
-                    <Plus className="w-10 h-10" />
-                 </Button>
-            </div>
-        </Card>
-    )
 }

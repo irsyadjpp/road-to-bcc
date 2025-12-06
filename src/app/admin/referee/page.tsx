@@ -21,7 +21,7 @@ export default function RefereeDashboard() {
 
       <div className="grid gap-4">
         {myMatches.map((match) => (
-          <Card key={match.id} className={`border-l-8 ${match.status === 'READY' ? 'border-l-green-500' : 'border-l-secondary'}`}>
+          <Card key={match.id} className={`${match.status === 'READY' ? 'border-green-500' : ''}`}>
             <CardContent className="p-6 flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
