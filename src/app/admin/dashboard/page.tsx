@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { clockIn, redeemMeal, completeMission, getCommitteeData, getMyDutyRoster } from "./actions";
 import { Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 type Mission = {
   id: number;
@@ -196,7 +197,7 @@ export default function CommitteeDashboard() {
                             </span>
                         </div>
                         {mission.status === 'TODO' && (
-                            <Dialog open={selectedMission?.id === mission.id} onOpenChange={(open) => !open && setSelectedMission(null)}>
+                            <Dialog open={selectedMission?.id === mission.id && isMissionModalOpen} onOpenChange={(open) => { if (!open) setSelectedMission(null); setIsMissionModalOpen(open); }}>
                                 <DialogTrigger asChild>
                                     <Button size="sm" variant="ghost" className="text-primary hover:text-primary hover:bg-primary/10" onClick={() => setSelectedMission(mission)}>
                                         <Upload className="w-4 h-4 mr-1"/> Selesaikan Misi
@@ -274,7 +275,7 @@ export default function CommitteeDashboard() {
         </Tabs>
       </div>
 
-      <Dialog open={!!selectedMission} onOpenChange={(open) => !open && setSelectedMission(null)}>
+      <Dialog open={!!selectedMission && isMissionModalOpen} onOpenChange={setIsMissionModalOpen}>
         <DialogContent className="bg-zinc-900 border-zinc-800 text-white">
             <DialogHeader>
                 <DialogTitle>Selesaikan Misi: {selectedMission?.title}</DialogTitle>
