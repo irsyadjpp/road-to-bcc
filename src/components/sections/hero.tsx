@@ -65,14 +65,14 @@ export function HeroSection() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg h-14 px-8 rounded-lg shadow-[0_0_20px_rgba(210,35,42,0.4)] hover:shadow-[0_0_30px_rgba(210,35,42,0.6)] transition-all transform hover:-translate-y-1">
+              <Button asChild size="lg" className="font-bold text-lg h-14 px-8 rounded-lg">
                 <Link href="/manager/login">
                   DAFTAR SEKARANG
                   <ArrowRight className="ml-2 h-6 w-6" />
                 </Link>
               </Button>
               
-              <Button asChild variant="outline" size="lg" className="bg-transparent border-white/30 text-white hover:bg-white/10 font-bold text-lg h-14 px-8 rounded-lg backdrop-blur-sm transition-all">
+              <Button asChild variant="outline" size="lg" className="bg-transparent border-white/30 text-white hover:bg-white/10 font-bold text-lg h-14 px-8 rounded-lg backdrop-blur-sm">
                 <a href="/handbook-bcc-2026.pdf" target="_blank" rel="noopener noreferrer">
                   <FileDown className="mr-2 h-6 w-6" />
                   UNDUH HANDBOOK
