@@ -24,7 +24,9 @@ type ReimbursementItem = {
 const MOCK_USER_SESSION = {
     name: "Teri Taufiq Mulyadi",
     division: "OPERATIONS",
-    phone: "081233334444"
+    phone: "081233334444",
+    bankAccountName: "Teri Taufiq Mulyadi",
+    bankAccountNumber: "0123456789"
 };
 
 export default function SubmitReimbursementPage() {
@@ -39,7 +41,7 @@ export default function SubmitReimbursementPage() {
   const [items, setItems] = useState<ReimbursementItem[]>([]);
   const [newItem, setNewItem] = useState({ desc: "", cat: "", qty: "", price: "", total: "" });
 
-  // -- BARU: EFEK UNTUK MENGISI DATA DIRI OTOMATIS --
+  // -- EFEK UNTUK MENGISI DATA DIRI & BANK OTOMATIS --
   useEffect(() => {
     // Di aplikasi nyata, data ini akan diambil dari session login
     setApplicant(prev => ({
@@ -47,6 +49,11 @@ export default function SubmitReimbursementPage() {
         name: MOCK_USER_SESSION.name,
         division: MOCK_USER_SESSION.division,
         phone: MOCK_USER_SESSION.phone
+    }));
+    setBank(prev => ({
+        ...prev,
+        number: MOCK_USER_SESSION.bankAccountNumber,
+        holder: MOCK_USER_SESSION.bankAccountName
     }));
   }, []);
   
@@ -94,7 +101,7 @@ export default function SubmitReimbursementPage() {
     toast({ title: "Terkirim!", description: "Klaim Anda sedang direview Bendahara.", className: "bg-green-600 text-white" });
     // Reset form (kecuali data diri)
     setItems([]);
-    setBank({ name: "Bank BJB", number: "", holder: "" });
+    setBank(prev => ({...prev, number: MOCK_USER_SESSION.bankAccountNumber, holder: MOCK_USER_SESSION.bankAccountName}));
     setApplicant(prev => ({ ...prev, date: "" }));
   };
   
@@ -151,8 +158,8 @@ export default function SubmitReimbursementPage() {
                 <CardContent className="space-y-4">
                     <div className="space-y-1.5"><Label>Nama Bank</Label><Input value={bank.name} readOnly className="font-bold bg-secondary/50"/></div>
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-1.5"><Label>No. Rekening</Label><Input type="number" value={bank.number} onChange={e => setBank({...bank, number: e.target.value})} /></div>
-                        <div className="space-y-1.5"><Label>Atas Nama</Label><Input value={bank.holder} onChange={e => setBank({...bank, holder: e.target.value})} /></div>
+                        <div className="space-y-1.5"><Label>No. Rekening (Otomatis)</Label><Input type="number" value={bank.number} readOnly className="font-bold bg-secondary/50" /></div>
+                        <div className="space-y-1.5"><Label>Atas Nama (Otomatis)</Label><Input value={bank.holder} readOnly className="font-bold bg-secondary/50" /></div>
                     </div>
                 </CardContent>
             </Card>
@@ -243,4 +250,5 @@ export default function SubmitReimbursementPage() {
       </div>
     </div>
   );
-}
+
+    
