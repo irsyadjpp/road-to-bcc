@@ -11,8 +11,13 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { updateProfile } from "./actions"; // Import server action
-import { Camera, Upload, Save, Loader2, ShieldCheck, PenTool, User } from "lucide-react";
+import { Camera, Upload, Save, Loader2, ShieldCheck, PenTool, User, Download, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { IdCardTemplate } from "@/components/admin/id-card-template";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+
 
 // MOCK DATA USER (Nanti diambil dari Session/DB)
 const MOCK_USER = {
@@ -55,6 +60,42 @@ export default function ProfilePage() {
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const signatureInputRef = useRef<HTMLInputElement>(null);
 
+  const idCardRef = useRef<HTMLDivElement>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  // FUNGSI DOWNLOAD PDF
+  const handleDownloadIdCard = async () => {
+    if (!idCardRef.current) return;
+    setIsGenerating(true);
+
+    try {
+      // 1. Capture Element HTML jadi Gambar
+      const canvas = await html2canvas(idCardRef.current, {
+        scale: 2, // Biar tajam (High Res)
+        backgroundColor: null,
+        useCORS: true // Supaya gambar avatar dari URL luar bisa ke-load
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+
+      // 2. Buat PDF (A4 Landscape biar muat 2 sisi)
+      const pdf = new jsPDF('l', 'mm', 'a4');
+      const imgWidth = 200; // Lebar di PDF (mm) - sesuaikan rasio
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+      pdf.save(`ID-CARD-${MOCK_USER.id_number}.pdf`);
+
+      toast({ title: "Berhasil!", description: "ID Card berhasil diunduh.", className: "bg-green-600 text-white" });
+    } catch (err) {
+      console.error(err);
+      toast({ title: "Gagal", description: "Terjadi kesalahan saat generate PDF.", variant: "destructive" });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+
   // Handle File Change (Preview)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'avatar' | 'signature') => {
     const file = e.target.files?.[0];
@@ -93,7 +134,52 @@ export default function ProfilePage() {
                <h2 className="text-2xl font-bold font-headline text-white">{MOCK_USER.division}</h2>
             </div>
           </div>
+            <div className="flex justify-end gap-3 -mt-6">
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button variant="outline" className="border-primary/50 text-primary hover:bg-primary/10">
+                            <CreditCard className="mr-2 w-4 h-4"/> PREVIEW ID CARD
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-3xl bg-zinc-950 border-zinc-800">
+                        <div className="flex flex-col items-center space-y-6 py-6">
+                            <h2 className="text-xl font-headline font-bold text-white uppercase tracking-widest">
+                                ID Card Preview
+                            </h2>
+                            
+                            {/* Visual Render untuk User Lihat */}
+                            <div className="scale-75 md:scale-100 origin-center p-4 border border-zinc-800 rounded-xl bg-black">
+                                <IdCardTemplate 
+                                    user={{
+                                        ...MOCK_USER,
+                                        photoUrl: avatarPreview || undefined
+                                    }} 
+                                />
+                            </div>
 
+                            <Button onClick={handleDownloadIdCard} disabled={isGenerating} size="lg" className="w-full max-w-sm">
+                                {isGenerating ? <Loader2 className="animate-spin mr-2"/> : <Download className="mr-2 w-4 h-4"/>}
+                                {isGenerating ? "GENERATING PDF..." : "DOWNLOAD PDF SIAP CETAK"}
+                            </Button>
+                            
+                            <p className="text-xs text-zinc-500 text-center">
+                                *PDF berisi sisi depan & belakang. Silakan cetak menggunakan kertas PVC/Art Paper 260gr.
+                            </p>
+                        </div>
+                    </DialogContent>
+                </Dialog>
+            </div>
+
+            {/* Hidden Template for PDF Generation (Invisible but rendered) */}
+            <div className="absolute top-[-9999px] left-[-9999px]">
+                 <IdCardTemplate 
+                    ref={idCardRef} 
+                    user={{
+                        ...MOCK_USER,
+                        photoUrl: avatarPreview || undefined
+                    }} 
+                />
+            </div>
           <form action={formAction}>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               
