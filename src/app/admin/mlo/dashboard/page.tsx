@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Megaphone, CheckCircle2, Clock, Users, ClipboardCheck } from "lucide-react";
+import { Megaphone, CheckCircle2, Clock, Users, ClipboardCheck, Send } from "lucide-react";
 import { getCallRoomQueue, updateMatchStatus } from "../actions";
 import { useToast } from "@/hooks/use-toast";
 
@@ -28,8 +28,25 @@ export default function MloDashboard() {
     }
   };
 
+  const KanbanColumn = ({ title, icon, items, status, children }: { title: string, icon: React.ReactNode, items: any[], status: string, children: React.ReactNode }) => (
+    <div className="flex-1 min-w-[300px] h-full">
+        <div className="flex items-center gap-2 mb-4">
+            {icon}
+            <h3 className="font-bold uppercase tracking-wider text-sm text-muted-foreground">{title} ({items.length})</h3>
+        </div>
+        <div className="space-y-3 h-full">
+            {children}
+            {items.length === 0 && (
+                <div className="h-48 flex items-center justify-center text-sm text-muted-foreground border-2 border-dashed rounded-xl">
+                    Kosong
+                </div>
+            )}
+        </div>
+    </div>
+  );
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 flex flex-col h-full">
       <div className="flex justify-between items-center">
         <div>
             <h2 className="text-3xl font-bold font-headline text-primary">MLO Command Post</h2>
@@ -40,85 +57,69 @@ export default function MloDashboard() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="flex-grow flex flex-col md:flex-row gap-6">
         
         {/* KOLOM 1: MENUNGGU (WAITING) */}
-        <Card className="border-t-4 border-t-gray-400 bg-gray-50/50">
-            <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-bold uppercase tracking-wider text-gray-600 flex items-center gap-2">
-                    <Clock className="w-4 h-4" /> Antrean (Waiting)
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-                {queue.filter(m => m.status === 'WAITING').map(match => (
-                    <div key={match.id} className="bg-white p-3 rounded border shadow-sm">
-                        <div className="flex justify-between mb-1">
+        <KanbanColumn title="Menunggu Panggilan" icon={<Clock className="w-5 h-5 text-stone-500"/>} items={queue.filter(m => m.status === 'WAITING')} status="WAITING">
+            {queue.filter(m => m.status === 'WAITING').map(match => (
+                <Card key={match.id} className="bg-card shadow-sm hover:shadow-md transition-shadow">
+                    <CardContent className="p-4">
+                        <div className="flex justify-between items-center mb-2">
                             <Badge variant="outline">{match.id}</Badge>
                             <span className="text-xs font-mono text-muted-foreground">{match.time}</span>
                         </div>
-                        <div className="font-bold text-sm">{match.teamA} vs {match.teamB}</div>
-                        <div className="text-xs text-muted-foreground mb-3">{match.category}</div>
+                        <p className="font-bold text-sm text-foreground">{match.teamA} vs {match.teamB}</p>
+                        <p className="text-xs text-muted-foreground mb-4">{match.category}</p>
                         <Button size="sm" className="w-full bg-blue-600 hover:bg-blue-700" onClick={() => handleStatusChange(match.id, 'CALLED')}>
-                            <Megaphone className="w-3 h-3 mr-2" /> Panggil Tim
+                            <Megaphone className="w-4 h-4 mr-2" /> Panggil Tim
                         </Button>
-                    </div>
-                ))}
-                 {queue.filter(m => m.status === 'WAITING').length === 0 && <div className="text-center text-xs text-muted-foreground py-4">Tidak ada antrean.</div>}
-            </CardContent>
-        </Card>
+                    </CardContent>
+                </Card>
+            ))}
+        </KanbanColumn>
 
         {/* KOLOM 2: DIPANGGIL (CALLED) */}
-        <Card className="border-t-4 border-t-yellow-500 bg-yellow-50/30">
-            <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-bold uppercase tracking-wider text-yellow-700 flex items-center gap-2">
-                    <Megaphone className="w-4 h-4" /> Sedang Dipanggil
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-                {queue.filter(m => m.status === 'CALLED').map(match => (
-                    <div key={match.id} className="bg-white p-3 rounded border border-yellow-200 shadow-sm">
-                        <div className="flex justify-between mb-1">
-                            <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">{match.id}</Badge>
+        <KanbanColumn title="Sedang Dipanggil" icon={<Megaphone className="w-5 h-5 text-amber-500"/>} items={queue.filter(m => m.status === 'CALLED')} status="CALLED">
+            {queue.filter(m => m.status === 'CALLED').map(match => (
+                <Card key={match.id} className="bg-amber-100/30 dark:bg-amber-900/20 border-amber-500/50 shadow-sm">
+                    <CardContent className="p-4">
+                        <div className="flex justify-between items-center mb-2">
+                            <Badge className="bg-amber-100 text-amber-800 border-amber-300 hover:bg-amber-100">{match.id}</Badge>
                             <span className="text-xs font-bold text-red-500 animate-pulse">PANGGILAN KE-1</span>
                         </div>
-                        <div className="font-bold text-sm">{match.teamA} vs {match.teamB}</div>
-                        <div className="text-xs text-muted-foreground mb-3">{match.category}</div>
+                        <p className="font-bold text-sm text-foreground">{match.teamA} vs {match.teamB}</p>
+                        <p className="text-xs text-muted-foreground mb-4">{match.category}</p>
                         <div className="flex gap-2">
                             <Button size="sm" variant="outline" className="flex-1" onClick={() => handleStatusChange(match.id, 'CALLED')}>
                                 Panggil Ulang
                             </Button>
                             <Button size="sm" className="flex-1 bg-green-600 hover:bg-green-700" onClick={() => handleStatusChange(match.id, 'READY')}>
-                                <CheckCircle2 className="w-3 h-3 mr-2" /> Tim Hadir
+                                <CheckCircle2 className="w-4 h-4 mr-2" /> Tim Hadir
                             </Button>
                         </div>
-                    </div>
-                ))}
-            </CardContent>
-        </Card>
+                    </CardContent>
+                </Card>
+            ))}
+        </KanbanColumn>
 
         {/* KOLOM 3: SIAP (READY) */}
-        <Card className="border-t-4 border-t-green-500 bg-green-50/30">
-            <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-bold uppercase tracking-wider text-green-700 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4" /> Siap Masuk Lapangan
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-                {queue.filter(m => m.status === 'READY').map(match => (
-                    <div key={match.id} className="bg-white p-3 rounded border border-green-200 shadow-sm">
-                        <div className="flex justify-between mb-1">
-                            <Badge className="bg-green-100 text-green-800 hover:bg-green-100">{match.id}</Badge>
+        <KanbanColumn title="Siap ke Lapangan" icon={<CheckCircle2 className="w-5 h-5 text-green-500"/>} items={queue.filter(m => m.status === 'READY')} status="READY">
+            {queue.filter(m => m.status === 'READY').map(match => (
+                <Card key={match.id} className="bg-green-100/30 dark:bg-green-900/20 border-green-500/50 shadow-sm">
+                    <CardContent className="p-4">
+                         <div className="flex justify-between items-center mb-2">
+                            <Badge className="bg-green-100 text-green-800 border-green-300 hover:bg-green-100">{match.id}</Badge>
                             <span className="text-xs font-bold text-green-600">VERIFIED</span>
                         </div>
-                        <div className="font-bold text-sm">{match.teamA} vs {match.teamB}</div>
-                        <div className="text-xs text-muted-foreground mb-3">{match.category}</div>
-                        <div className="p-2 bg-secondary/20 rounded text-xs text-center mb-2">
-                            Menunggu Lapangan Kosong...
-                        </div>
-                    </div>
-                ))}
-            </CardContent>
-        </Card>
+                        <p className="font-bold text-sm text-foreground">{match.teamA} vs {match.teamB}</p>
+                        <p className="text-xs text-muted-foreground mb-4">{match.category}</p>
+                        <Button size="sm" variant="secondary" className="w-full bg-secondary/80">
+                            <Send className="w-4 h-4 mr-2" /> Kirim ke Match Control
+                        </Button>
+                    </CardContent>
+                </Card>
+            ))}
+        </KanbanColumn>
 
       </div>
     </div>
