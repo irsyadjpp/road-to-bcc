@@ -103,3 +103,9 @@ export async function submitVerificationResult(playerId: string, result: any) {
     await new Promise(r => setTimeout(r, 1000));
     return { success: true, message: `Status pemain ${playerId} diperbarui.` };
 }
+
+export async function getPlayerById(id: string) {
+  // Simulasi fetch dari database
+  const queue = await getVerificationQueue();
+  return queue.find(p => p.id === id) || null;
+}

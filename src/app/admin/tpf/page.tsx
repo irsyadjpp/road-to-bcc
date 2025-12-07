@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,12 +15,12 @@ import {
   PlayCircle, Search, Eye, AlertTriangle, CheckCircle2, 
   FileText, Siren, PlusCircle 
 } from "lucide-react";
-import { TpfAssessmentModal } from "@/components/admin/tpf-assessment-modal";
 import { getVerificationQueue, getSpotChecks, submitSpotCheck, type PlayerVerification, type SpotCheckLog } from "./actions";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 
 export default function TpfDashboard() {
+  const router = useRouter(); // Initialize router
   const { toast } = useToast();
   
   // Data State
@@ -27,8 +28,6 @@ export default function TpfDashboard() {
   const [spotChecks, setSpotChecks] = useState<SpotCheckLog[]>([]);
   
   // Modal State
-  const [selectedPlayer, setSelectedPlayer] = useState<PlayerVerification | null>(null);
-  const [isAssessModalOpen, setIsAssessModalOpen] = useState(false);
   const [isSpotCheckModalOpen, setIsSpotCheckModalOpen] = useState(false);
 
   // Form State (Spot Check)
@@ -41,11 +40,6 @@ export default function TpfDashboard() {
       getVerificationQueue().then(setVerifications);
       getSpotChecks().then(setSpotChecks);
   }, []);
-
-  const handleAssess = (player: PlayerVerification) => {
-    setSelectedPlayer(player);
-    setIsAssessModalOpen(true);
-  };
 
   const handleSubmitSpotCheck = async () => {
       if (!newSpotCheck.player || !newSpotCheck.issue) return alert("Lengkapi data!");
@@ -126,7 +120,7 @@ export default function TpfDashboard() {
                                     {player.status === 'REJECTED' && <Badge variant="destructive">Ditolak</Badge>}
                                 </TableCell>
                                 <TableCell className="text-right">
-                                    <Button size="sm" onClick={() => handleAssess(player)} className={player.status === 'PENDING' ? 'bg-primary' : 'bg-secondary text-foreground'}>
+                                    <Button size="sm" onClick={() => router.push(`/admin/tpf/assess/${player.id}`)} className={player.status === 'PENDING' ? 'bg-primary' : 'bg-secondary text-foreground'}>
                                         <PlayCircle className="w-4 h-4 mr-2" />
                                         {player.status === 'PENDING' ? 'Audit Sekarang' : 'Lihat Hasil'}
                                     </Button>
@@ -220,15 +214,6 @@ export default function TpfDashboard() {
             </div>
         </TabsContent>
       </Tabs>
-
-      {/* MODAL PENILAIAN VIDEO (EXISTING COMPONENT) */}
-      {selectedPlayer && (
-        <TpfAssessmentModal 
-            isOpen={isAssessModalOpen} 
-            onClose={() => setIsAssessModalOpen(false)} 
-            player={selectedPlayer} 
-        />
-      )}
     </div>
   );
 }
