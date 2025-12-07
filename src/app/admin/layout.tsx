@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, type ReactNode } from 'react';
@@ -20,6 +21,9 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { ThemeToggle } from '@/components/theme-toggle';
 import { IntegrityPactModal } from '@/components/admin/integrity-pact-modal';
 import { EmergencyButton } from '@/components/admin/emergency-button';
+import { Toaster } from "@/components/ui/toaster";
+import { Separator } from "@/components/ui/separator";
+import { NotificationBell } from "@/components/admin/notification-bell";
 
 // --- DEFINISI MENU ---
 const getMenusByRole = (role: string) => {
@@ -282,8 +286,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col md:ml-72">
-        <header className="h-16 bg-card/50 backdrop-blur-sm flex items-center justify-between px-6 sticky top-0 z-10 md:justify-end">
-             <div className="md:hidden">
+        <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b border-zinc-800 px-4 bg-black/50 backdrop-blur sticky top-0 z-40">
+             <div className="flex items-center gap-2 md:hidden">
               <Sheet>
                   <SheetTrigger asChild>
                       <Button variant="ghost" size="icon">
@@ -308,11 +312,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </Sheet>
              </div>
              
-             <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon" asChild>
-                  <Link href="/"><Home className="w-4 h-4" /></Link>
-                </Button>
-                 <ThemeToggle />
+             <div className="flex items-center gap-4 ml-auto">
+                <NotificationBell />
+                <ThemeToggle />
                 <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
                         <span className="font-bold text-primary">{session.name.charAt(0)}</span>
@@ -329,6 +331,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {children}
         </main>
         <EmergencyButton />
+        <Toaster />
       </div>
     </div>
     </>
