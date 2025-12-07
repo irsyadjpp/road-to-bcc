@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -12,7 +13,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getWorkspaceData, updateTaskStatus, uploadResource, createTask, createAnnouncement, type Task } from "./actions";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
@@ -380,3 +381,5 @@ function TaskCard({ task, onNext }: { task: Task, onNext: () => void }) {
         </div>
     )
 }
+
+    
