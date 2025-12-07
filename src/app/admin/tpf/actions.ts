@@ -1,4 +1,50 @@
+
 'use server';
+
+// Tipe untuk Indikator Utama (Skor 1-5)
+export type AuditScores = {
+  grip: number;
+  footwork: number;
+  backhand: number;
+  attack: number;
+  defense: number;
+  gameIq: number;
+  physique: number;
+};
+
+// Tipe untuk Skill Modifier (Bonus)
+export type SkillModifiers = {
+  // A. Attack
+  jumpingSmash: boolean;
+  stickSmash: boolean;
+  backhandSmash: boolean;
+  netKill: boolean;
+  flickServe: boolean;
+  
+  // B. Control
+  spinningNet: boolean;
+  crossNet: boolean;
+  backhandDrop: boolean;
+  backhandClear: boolean;
+  crossDefense: boolean;
+  
+  // C. IQ
+  splitStep: boolean;
+  divingDefense: boolean;
+  deception: boolean;
+  intercept: boolean;
+  judgement: boolean;
+};
+
+// Tipe Hasil Audit
+export type AuditResult = {
+  rawScoreA: number; // Total Skor A
+  bonusScoreB: number; // Total Bonus B
+  finalScore: number; // (A x 2) + B
+  level: string; // BEGINNER / INTERMEDIATE / ADVANCE / REJECTED
+  tier: string;
+  notes: string;
+};
 
 export type PlayerVerification = {
   id: string;
