@@ -1,3 +1,4 @@
+
 'use server';
 
 import { revalidatePath } from "next/cache";
@@ -25,9 +26,17 @@ export async function redeemMeal() {
 }
 
 // --- 3. MISI (GAMIFICATION) ---
-export async function completeMission(missionId: number) {
-  await new Promise(r => setTimeout(r, 800));
-  return { success: true, xpGained: 50, newTotalXp: 1250 };
+export async function completeMission(missionId: number, proofImage: FormData) {
+  await new Promise(r => setTimeout(r, 1000)); // Simulasi upload
+  // 1. Upload foto ke storage (logic di sini)
+  // 2. Simpan status mission jadi "PENDING_REVIEW"
+  console.log("Proof received for mission:", missionId);
+  // 3. XP baru masuk SETELAH di-approve Koordinator Divisi
+  return { 
+    success: true, 
+    status: "PENDING_REVIEW", 
+    message: "Bukti dikirim! Menunggu validasi Koordinator." 
+  };
 }
 
 // --- 4. PANIC BUTTON ---
@@ -41,6 +50,12 @@ export async function triggerSOS(type: string, location: string) {
 // --- DATA INITIAL (Simulasi Load Data) ---
 export async function getCommitteeData() {
   return {
+    dutyRoster: {
+      time: "08:00 - 12:00",
+      location: "Gate Utama (Ticket Checking)",
+      supervisor: "Budi Santoso (Head Security)",
+      status: "CURRENT"
+    },
     honorarium: {
       total: 450000,
       breakdown: [
@@ -50,9 +65,9 @@ export async function getCommitteeData() {
       ]
     },
     missions: [
-      { id: 1, title: "Datang sebelum jam 07:00", xp: 50, completed: true },
-      { id: 2, title: "Input skor 10 pertandingan", xp: 100, completed: false },
-      { id: 3, title: "Bantu bersihkan area VIP", xp: 75, completed: false },
+      { id: 1, title: "Datang sebelum jam 07:00", xp: 50, status: 'DONE' },
+      { id: 2, title: "Input skor 10 pertandingan", xp: 100, status: 'TODO' },
+      { id: 3, title: "Bantu bersihkan area VIP", xp: 75, status: 'PENDING_REVIEW' },
     ]
   };
 }
