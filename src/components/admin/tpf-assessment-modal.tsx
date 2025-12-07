@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -179,13 +179,24 @@ export function TpfAssessmentModal({ isOpen, onClose, player }: { isOpen: boolea
                          <div className="space-y-2 mb-6">
                             <Label className="font-bold">Status Video</Label>
                             <div className="grid grid-cols-2 gap-2">
-                                <Button variant={videoStatus === 'VALID' ? 'default' : 'outline'} className="bg-green-600 hover:bg-green-700" onClick={() => setVideoStatus('VALID')}>Valid</Button>
-                                <Button variant={videoStatus === 'INVALID' ? 'destructive' : 'outline'} onClick={() => setVideoStatus('INVALID')}>Tidak Valid</Button>
+                                <Button 
+                                    variant={videoStatus === 'VALID' ? 'default' : 'outline'} 
+                                    className={videoStatus === 'VALID' ? "bg-green-600 hover:bg-green-700" : ""}
+                                    onClick={() => setVideoStatus('VALID')}
+                                >
+                                    Valid
+                                </Button>
+                                <Button 
+                                    variant={videoStatus === 'INVALID' ? 'destructive' : 'outline'}
+                                    onClick={() => setVideoStatus('INVALID')}
+                                >
+                                    Tidak Valid
+                                </Button>
                             </div>
                          </div>
                         
                         <div className={videoStatus === 'INVALID' ? 'opacity-30 pointer-events-none' : ''}>
-                            <TabsContent value="visual" className="mt-0 space-y-6">
+                           <TabsContent value="visual" className="mt-0 space-y-6">
                                 {RUBRIC_GUIDELINES.map(rubric => (
                                      <ScoreSlider 
                                         key={rubric.id}
@@ -231,7 +242,7 @@ export function TpfAssessmentModal({ isOpen, onClose, player }: { isOpen: boolea
                     </ScrollArea>
 
                     {/* FOOTER ACTIONS */}
-                    <div className="p-4 border-t bg-white space-y-3 shrink-0">
+                    <DialogFooter className="p-4 border-t bg-white space-y-3 shrink-0">
                         <Textarea 
                             placeholder="Catatan Khusus (Wajib diisi jika video tidak valid). Contoh: 'Video highlight, bukan uncut.' atau 'Pemain melakukan backhand smash di menit 02:15, wajib Advance.'" 
                             value={notes} 
@@ -241,7 +252,7 @@ export function TpfAssessmentModal({ isOpen, onClose, player }: { isOpen: boolea
                         <Button className="w-full h-12 text-lg font-bold" onClick={handleSubmit}>
                             <CheckCircle2 className="w-5 h-5 mr-2" /> TETAPKAN HASIL VERIFIKASI
                         </Button>
-                    </div>
+                    </DialogFooter>
                 </Tabs>
             </div>
         </div>
@@ -325,5 +336,3 @@ function CheatItem({ title, bad, good }: any) {
         </div>
     )
 }
-
-    
