@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -10,21 +11,20 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { AlertCircle, FileText, Send, Loader2, Info, Youtube, Video, CreditCard, Printer } from 'lucide-react';
+import { AlertCircle, FileText, Send, Loader2, Info, Youtube, Video, CreditCard, Printer, Clock, MapPin, ListOrdered, User, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { submitProtest } from '../actions';
 
 // Mock Data - Biasanya dari Session/DB
 const MOCK_SESSION_MANAGER = { name: "Rizki Karami", team: "PB Super", wa: "081119522228" };
 const VIOLATIONS = [
-  { id: "SANDBAGGING", label: "SANDBAGGING (Manipulasi Level)" },
-  { id: "JOKI", label: "JOKI (Pemalsuan Identitas)" },
-  { id: "ADMINISTRASI", label: "ADMINISTRASI (Double Play)" },
+  { id: "SANDBAGGING", label: "SANDBAGGING (Manipulasi Level)", description: "Kemampuan teknis pemain lawan jauh melebihi level yang didaftarkan." },
+  { id: "JOKI", label: "JOKI (Pemalsuan Identitas)", description: "Wajah pemain di lapangan tidak sesuai dengan KTP/Video." },
+  { id: "ADMINISTRASI", label: "ADMINISTRASI (Double Play)", description: "Pemain lawan bermain rangkap dalam satu pertemuan." },
 ];
 
 export default function ProtestSubmissionPage() {
@@ -145,41 +145,28 @@ export default function ProtestSubmissionPage() {
                 </div>
                 
                 <FormField control={form.control} name="category" render={({ field }) => (
-                    <FormItem><FormLabel>Kategori Pertandingan</FormLabel>
-                        <RadioGroup onValueChange={field.onChange} className="flex gap-4">
-                            {["Putra", "Putri", "Campuran"].map((cat) => (
-                            <FormItem key={cat} className="flex items-center space-x-2"><FormControl><RadioGroupItem value={cat} /></FormControl><FormLabel>{cat}</FormLabel></FormItem>
-                            ))}
-                        </RadioGroup>
-                    <FormMessage /></FormItem>
+                    <FormItem>
+                        <FormLabel>Kategori Pertandingan</FormLabel>
+                        <FormControl>
+                            <ToggleGroup type="single" onValueChange={field.onChange} defaultValue={field.value} className="grid grid-cols-3">
+                                <ToggleGroupItem value="Putra">Putra</ToggleGroupItem>
+                                <ToggleGroupItem value="Putri">Putri</ToggleGroupItem>
+                                <ToggleGroupItem value="Campuran">Campuran</ToggleGroupItem>
+                            </ToggleGroup>
+                        </FormControl>
+                    <FormMessage />
+                    </FormItem>
                 )} />
                 
                 <div className="grid grid-cols-3 gap-4">
-                    <FormField control={form.control} name="incidentTime" render={({ field }) => (<FormItem><FormLabel>Waktu Kejadian</FormLabel><FormControl><Input type="time" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={form.control} name="courtNumber" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>No. Lapangan</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Pilih..." />
-                                </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                                {[1, 2, 3, 4, 5].map(num => (
-                                    <SelectItem key={num} value={String(num)}>{num}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
-                    <FormField control={form.control} name="partaiNumber" render={({ field }) => (<FormItem><FormLabel>Partai Ke-</FormLabel><FormControl><Input type="number" min="1" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="incidentTime" render={({ field }) => (<FormItem><FormLabel>Waktu Kejadian</FormLabel><FormControl><div className="relative flex items-center"><Clock className="w-4 h-4 absolute left-3 text-muted-foreground" /><Input type="time" className="pl-9" {...field} /></div></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="courtNumber" render={({ field }) => (<FormItem><FormLabel>No. Lapangan</FormLabel><FormControl><div className="relative flex items-center"><MapPin className="w-4 h-4 absolute left-3 text-muted-foreground" /><Input type="number" min="1" max="5" className="pl-9" {...field} /></div></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="partaiNumber" render={({ field }) => (<FormItem><FormLabel>Partai Ke-</FormLabel><FormControl><div className="relative flex items-center"><ListOrdered className="w-4 h-4 absolute left-3 text-muted-foreground" /><Input type="number" min="1" max="5" className="pl-9" {...field} /></div></FormControl><FormMessage /></FormItem>)} />
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
-                    <FormField control={form.control} name="opponentTeam" render={({ field }) => (<FormItem><FormLabel>Nama Tim Terlapor</FormLabel><FormControl><Input {...field} pattern="[A-Za-z\s]+" title="Hanya boleh berisi huruf dan spasi" /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={form.control} name="opponentPlayer" render={({ field }) => (<FormItem><FormLabel>Nama Pemain Terlapor</FormLabel><FormControl><Input {...field} pattern="[A-Za-z\s]+" title="Hanya boleh berisi huruf dan spasi" /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="opponentTeam" render={({ field }) => (<FormItem><FormLabel>Nama Tim Terlapor</FormLabel><FormControl><div className="relative flex items-center"><Users className="w-4 h-4 absolute left-3 text-muted-foreground" /><Input className="pl-9" {...field} pattern="[A-Za-z\s]+" title="Hanya boleh berisi huruf dan spasi" /></div></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="opponentPlayer" render={({ field }) => (<FormItem><FormLabel>Nama Pemain Terlapor</FormLabel><FormControl><div className="relative flex items-center"><User className="w-4 h-4 absolute left-3 text-muted-foreground" /><Input className="pl-9" {...field} pattern="[A-Za-z\s]+" title="Hanya boleh berisi huruf dan spasi" /></div></FormControl><FormMessage /></FormItem>)} />
                 </div>
                 </CardContent>
             </Card>
@@ -200,7 +187,7 @@ export default function ProtestSubmissionPage() {
                                     </FormControl>
                                     <FormLabel className="font-normal cursor-pointer leading-tight">
                                         <span className="font-semibold">{item.label}</span>
-                                        <p className="text-xs text-muted-foreground">{item.id === 'SANDBAGGING' ? 'Kemampuan teknis pemain lawan jauh melebihi level yang didaftarkan.' : item.id === 'JOKI' ? 'Wajah pemain di lapangan tidak sesuai dengan KTP/Video.' : 'Pemain lawan bermain rangkap dalam satu pertemuan.'}</p>
+                                        <p className="text-xs text-muted-foreground">{item.description}</p>
                                     </FormLabel>
                                 </FormItem>
                             )}/>
@@ -325,3 +312,5 @@ export default function ProtestSubmissionPage() {
     </div>
   );
 }
+
+    

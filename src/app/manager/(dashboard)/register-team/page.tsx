@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, Trash2, Info, Users, AlertCircle, CheckCircle2, Receipt, Wallet, Save, QrCode, CreditCard, Download } from "lucide-react";
+import { Loader2, Plus, Trash2, Info, Users, AlertCircle, CheckCircle2, Receipt, Wallet, Save, QrCode, CreditCard, Download, User, Building, Phone } from "lucide-react";
 import { useState, useEffect } from "react";
 import confetti from 'canvas-confetti';
 import { Badge } from "@/components/ui/badge";
@@ -198,9 +198,9 @@ export default function RegistrationPage() {
               
               <Card>
                   <CardHeader className="bg-primary/5 border-b pb-4">
-                  <CardTitle className="text-lg text-primary font-bold">1. Identitas Komunitas</CardTitle>
+                  <CardTitle className="text-lg text-primary font-bold flex items-center gap-2"><Building className="w-5 h-5"/>1. Identitas Komunitas</CardTitle>
                   </CardHeader>
-                  <CardContent className="p-6 space-y-4">
+                  <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField control={form.control} name="communityName" render={({ field }) => (
                       <FormItem><FormLabel>Nama Komunitas</FormLabel><FormControl><Input placeholder="PB Juara Bandung" {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
@@ -209,11 +209,25 @@ export default function RegistrationPage() {
                   )} />
                   </CardContent>
               </Card>
+              
+              <Card>
+                  <CardHeader className="bg-primary/5 border-b pb-4">
+                  <CardTitle className="text-lg text-primary font-bold flex items-center gap-2"><User className="w-5 h-5"/>2. Kontak Manajer Tim</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                   <FormField control={form.control} name="managerName" render={({ field }) => (
+                      <FormItem><FormLabel>Nama Manajer</FormLabel><FormControl><Input placeholder="Nama lengkap Anda" {...field} /></FormControl><FormMessage /></FormItem>
+                  )} />
+                  <FormField control={form.control} name="managerWhatsapp" render={({ field }) => (
+                      <FormItem><FormLabel>No. WhatsApp</FormLabel><FormControl><div className="relative flex items-center"><Phone className="w-4 h-4 absolute left-3 text-muted-foreground" /><Input type="tel" className="pl-9" {...field} /></div></FormControl><FormMessage /></FormItem>
+                  )} />
+                  </CardContent>
+              </Card>
 
               <Card>
                   <CardHeader className="bg-primary/5 border-b pb-4">
                   <div className="flex justify-between items-center">
-                      <CardTitle className="text-lg text-primary font-bold">2. Data Pemain</CardTitle>
+                      <CardTitle className="text-lg text-primary font-bold flex items-center gap-2"><Users className="w-5 h-5"/>3. Data Pemain</CardTitle>
                       <div className="flex gap-2">
                           <Button type="button" variant="secondary" size="sm" onClick={handleSaveDraft} className="hidden sm:flex">
                               <Save className="w-4 h-4 mr-2" /> Simpan Draft
@@ -360,7 +374,7 @@ export default function RegistrationPage() {
 
               <Card>
                 <CardHeader className="bg-primary/5 border-b pb-4">
-                  <CardTitle className="text-lg text-primary font-bold">3. Administrasi & Persetujuan</CardTitle>
+                  <CardTitle className="text-lg text-primary font-bold">4. Administrasi & Persetujuan</CardTitle>
                 </CardHeader>
                 <CardContent className="p-6 space-y-6">
                   
@@ -532,3 +546,5 @@ export default function RegistrationPage() {
     </>
   );
 }
+
+    
