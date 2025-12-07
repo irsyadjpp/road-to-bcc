@@ -64,7 +64,7 @@ export function TpfAssessmentModal({ isOpen, onClose, player }: { isOpen: boolea
     // 4. Logika Level & Tier
     let level = "REJECTED";
     let tier = "Over Spec / Joki";
-    let color = "bg-red-100 text-red-800 border-red-500";
+    let color = "bg-destructive/10 text-destructive border-destructive";
     
     if (videoStatus === 'INVALID') {
         level = "REJECTED";
