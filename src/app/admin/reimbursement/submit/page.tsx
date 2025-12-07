@@ -26,7 +26,7 @@ const MOCK_USER_SESSION = {
     division: "OPERATIONS",
     phone: "081233334444",
     bankAccountName: "Teri Taufiq Mulyadi",
-    bankAccountNumber: "0123456789"
+    bankAccountNumber: "0030214714101"
 };
 
 export default function SubmitReimbursementPage() {
@@ -250,5 +250,7 @@ export default function SubmitReimbursementPage() {
       </div>
     </div>
   );
+
+    
 
     
