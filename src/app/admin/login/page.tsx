@@ -33,10 +33,8 @@ export default function AdminLoginPage() {
 
   useEffect(() => {
     if (state.success) {
-      // Logic to store session client-side (example)
-      sessionStorage.setItem('admin_session', JSON.stringify({ isLoggedIn: true, name: 'Admin via PIN', role: 'STAFF' })); // Simplified session
       toast({ title: "Login Berhasil", description: "Mengalihkan ke dashboard...", className: "bg-green-600 text-white" });
-      router.push('/admin/dashboard'); // Change this line
+      router.push('/admin/dashboard'); 
       router.refresh();
     }
     if (state.message && !state.success) {
@@ -48,14 +46,12 @@ export default function AdminLoginPage() {
     setIsGoogleLoading(true);
     const res = await loginAdminGoogle();
     if(res.success){
-        // Logic to store session client-side
-        sessionStorage.setItem('admin_session', JSON.stringify({ isLoggedIn: true, name: 'Irsyad Jamal', role: 'DIRECTOR' })); // Simplified
-        toast({ title: "Google Login Berhasil", description: "Selamat datang, Director.", className: "bg-green-600 text-white" });
-        router.push('/admin/dashboard'); // Change this line
+        toast({ title: "Google Login Berhasil", description: "Selamat datang!", className: "bg-green-600 text-white" });
+        router.push(res.redirectUrl || '/admin/dashboard');
         router.refresh();
     } else {
         setIsGoogleLoading(false);
-        toast({ title: "Gagal", description: "Gagal login dengan Google.", variant: "destructive" });
+        toast({ title: "Gagal", description: (res as any).message || "Gagal login dengan Google.", variant: "destructive" });
     }
   };
 
@@ -110,32 +106,14 @@ export default function AdminLoginPage() {
                 <p className="text-zinc-400">Masuk untuk mengelola turnamen.</p>
             </div>
 
-            <Tabs defaultValue="pin" className="w-full">
+            <Tabs defaultValue="google" className="w-full">
               <TabsList className="grid w-full grid-cols-2 bg-zinc-800">
-                  <TabsTrigger value="pin">Kode PIN</TabsTrigger>
                   <TabsTrigger value="google">Akun Google</TabsTrigger>
+                  <TabsTrigger value="pin">Kode PIN</TabsTrigger>
               </TabsList>
 
-              {/* --- METODE 1: PIN (UNTUK LAPANGAN) --- */}
-              <TabsContent value="pin">
-                  <form action={formAction} className="space-y-6">
-                      <div className="space-y-2 text-center">
-                          <Label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Masukkan Kode Akses Panitia</Label>
-                          <Input 
-                            name="code" 
-                            type="password"
-                            maxLength={6}
-                            placeholder="••••••"
-                            className="text-center text-4xl tracking-[0.5em] bg-zinc-900 border-zinc-800 text-white h-20 rounded-lg focus:ring-primary focus:border-primary font-mono"
-                            required 
-                          />
-                      </div>
-                      <SubmitButton />
-                  </form>
-              </TabsContent>
-
-              {/* --- METODE 2: GOOGLE (UNTUK ADMIN PUSAT) --- */}
-              <TabsContent value="google" className="space-y-4">
+              {/* --- METODE 1: GOOGLE (UTAMA) --- */}
+               <TabsContent value="google" className="space-y-4">
                   <div className="text-center py-6 px-4 border border-zinc-800 rounded-lg bg-black/50">
                       <p className="text-sm text-zinc-400 mb-6">
                           Gunakan akun Google resmi yang terdaftar untuk akses penuh sebagai administrator.
@@ -160,6 +138,24 @@ export default function AdminLoginPage() {
                           )}
                       </button>
                   </div>
+              </TabsContent>
+
+              {/* --- METODE 2: PIN (UNTUK LAPANGAN) --- */}
+              <TabsContent value="pin">
+                  <form action={formAction} className="space-y-6">
+                      <div className="space-y-2 text-center">
+                          <Label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Masukkan Kode Akses Panitia</Label>
+                          <Input 
+                            name="code" 
+                            type="password"
+                            maxLength={6}
+                            placeholder="••••••"
+                            className="text-center text-4xl tracking-[0.5em] bg-zinc-900 border-zinc-800 text-white h-20 rounded-lg focus:ring-primary focus:border-primary font-mono"
+                            required 
+                          />
+                      </div>
+                      <SubmitButton />
+                  </form>
               </TabsContent>
             </Tabs>
          </div>

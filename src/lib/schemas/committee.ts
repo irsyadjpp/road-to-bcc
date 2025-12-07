@@ -4,8 +4,8 @@ import { z } from "zod";
 export const committeeMemberSchema = z.object({
   id: z.string().optional(), // ID akan digenerate
   name: z.string().min(2, "Nama wajib diisi."),
-  phone: z.string().min(10, "Nomor telepon tidak valid.").optional().or(z.literal('')),
   email: z.string().email("Email tidak valid.").optional().or(z.literal('')),
+  phone: z.string().min(10, "Nomor telepon tidak valid.").optional().or(z.literal('')),
   expertise: z.string().optional(), // Keahlian utama (jabatan)
   photoUrl: z.string().url("URL tidak valid").optional().or(z.literal('')), // URL foto profil
   
@@ -15,6 +15,8 @@ export const committeeMemberSchema = z.object({
   division1: z.string().optional(),
   division2: z.string().optional(),
   reason: z.string().optional(), // Alasan bergabung / Motivasi
+  role: z.string().optional(),
+  isProfileCompleted: z.boolean().optional(),
 });
 
 export type CommitteeMember = z.infer<typeof committeeMemberSchema>;

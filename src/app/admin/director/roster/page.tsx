@@ -8,14 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
-import { MoreHorizontal, PlusCircle, Trash2, Edit, GraduationCap, Briefcase, UserRound, Phone } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
+import { MoreHorizontal, PlusCircle, Trash2, Edit, GraduationCap, Briefcase, UserRound, Phone, UserPlus, Check, ChevronsUpDown } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -26,6 +21,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { VOLUNTEER_DIVISIONS } from '@/lib/schemas/volunteer';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
+import { Command, CommandInput, CommandList, CommandItem, CommandEmpty, CommandGroup } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { assignUserRole } from "./actions"; // Assuming this action exists
+
+// Data dummy user yang sudah daftar tapi UNASSIGNED (Didapat dari Server Action)
+const unassignedUsers = [
+  { id: "1", name: "Budi Calon Panitia", email: "new.staff@gmail.com" },
+  { id: "2", name: "Siti Volunteer", email: "siti@gmail.com" },
+];
 
 export default function RosterPage() {
   const { toast } = useToast();
@@ -34,19 +38,14 @@ export default function RosterPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<CommitteeMember | null>(null);
 
+  const [openCombobox, setOpenCombobox] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+
   const form = useForm<CommitteeMember>({
     resolver: zodResolver(committeeMemberSchema),
     defaultValues: {
-        name: "",
-        phone: "",
-        email: "",
-        expertise: "",
-        photoUrl: "",
-        education: undefined,
-        status: undefined,
-        division1: undefined,
-        division2: undefined,
-        reason: ""
+        name: "", phone: "", email: "", expertise: "", photoUrl: "",
+        education: undefined, status: undefined, division1: undefined, division2: undefined, reason: ""
     },
   });
 
@@ -83,47 +82,21 @@ export default function RosterPage() {
 
     if (result.success) {
         setIsModalOpen(false);
-        loadRoster(); // Refresh data
+        loadRoster();
     }
   };
   
   const handleDelete = async (id: string) => {
       if(confirm("Yakin ingin menghapus anggota ini dari roster? Tindakan ini tidak bisa dibatalkan.")){
           const result = await deleteCommitteeMember(id);
-          toast({
-            title: result.success ? "Terhapus" : "Gagal",
-            description: result.message,
-          });
+          toast({ title: result.success ? "Terhapus" : "Gagal", description: result.message });
           if(result.success) loadRoster();
       }
   }
 
   const getDivisionFromExpertise = (expertise: string | undefined) => {
     if (!expertise) return 'N/A';
-    
-    const mapping: Record<string, string> = {
-      'Penasihat Senior': 'Pimpinan',
-      'IT & Project Management': 'IT & Digital',
-      'Sekretariat & Acara': 'Sekretariat',
-      'Administrasi': 'Sekretariat',
-      'Keuangan': 'Keuangan',
-      'Match Control': 'Pertandingan',
-      'MLO': 'Pertandingan',
-      'TPF': 'Pertandingan',
-      'Business': 'Komersial',
-      'Sponsorship': 'Komersial',
-      'Tenant Relations': 'Komersial',
-      'Media & Sosmed': 'Media',
-      'Content Creator': 'Media',
-      'Dokumentasi': 'Media',
-      'Operasional': 'Operasional',
-      'Keamanan': 'Operasional',
-      'Medis': 'Operasional',
-      'Registrasi': 'Operasional',
-      'Logistik': 'Operasional',
-      'Legal': 'Legal',
-    };
-
+    const mapping: Record<string, string> = { 'Penasihat Senior': 'Pimpinan', 'IT & Project Management': 'IT & Digital', 'Sekretariat & Acara': 'Sekretariat', 'Administrasi': 'Sekretariat', 'Keuangan': 'Keuangan', 'Match Control': 'Pertandingan', 'MLO': 'Pertandingan', 'TPF': 'Pertandingan', 'Business': 'Komersial', 'Sponsorship': 'Komersial', 'Tenant Relations': 'Komersial', 'Media & Sosmed': 'Media', 'Content Creator': 'Media', 'Dokumentasi': 'Media', 'Operasional': 'Operasional', 'Keamanan': 'Operasional', 'Medis': 'Operasional', 'Registrasi': 'Operasional', 'Logistik': 'Operasional', 'Legal': 'Legal' };
     return mapping[expertise] || 'Lainnya';
   };
 
@@ -134,9 +107,54 @@ export default function RosterPage() {
             <h2 className="text-3xl font-bold font-headline">Master Roster Panitia</h2>
             <p className="text-muted-foreground">Database pusat untuk semua anggota tim inti dan pelaksana.</p>
         </div>
-        <Button onClick={() => handleOpenModal(null)}>
-            <PlusCircle className="w-4 h-4 mr-2" /> Tambah Anggota
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button><UserPlus className="mr-2 h-4 w-4"/> Assign Panitia Baru</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+                <DialogTitle>Pilih Personil</DialogTitle>
+            </DialogHeader>
+            <form action={async (formData) => { await assignUserRole(formData); }} className="space-y-4">
+              <div className="flex flex-col space-y-2">
+                <Label className="text-sm font-medium">Cari Akun Google Terdaftar</Label>
+                <Popover open={openCombobox} onOpenChange={setOpenCombobox}>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" role="combobox" aria-expanded={openCombobox} className="w-full justify-between">
+                      {selectedUser ? unassignedUsers.find((u) => u.id === selectedUser)?.name : "Pilih user..."}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[400px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Cari nama atau email..." />
+                      <CommandList>
+                        <CommandEmpty>User tidak ditemukan. Minta mereka login dulu.</CommandEmpty>
+                        <CommandGroup>
+                          {unassignedUsers.map((user) => (
+                            <CommandItem
+                              key={user.id}
+                              value={user.name}
+                              onSelect={() => { setSelectedUser(user.id); setOpenCombobox(false); }}
+                            >
+                              <Check className={`mr-2 h-4 w-4 ${selectedUser === user.id ? "opacity-100" : "opacity-0"}`} />
+                              <div className="flex flex-col">
+                                <span>{user.name}</span>
+                                <span className="text-xs text-gray-500">{user.email}</span>
+                              </div>
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <input type="hidden" name="userId" value={selectedUser || ""} />
+              </div>
+              <Button type="submit" disabled={!selectedUser}>Simpan Assignment</Button>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <Card>
@@ -167,20 +185,12 @@ export default function RosterPage() {
                                         <AvatarImage src={member.photoUrl} alt={member.name} />
                                         <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                                     </Avatar>
-                                    <div>
-                                      <p>{member.name}</p>
-                                    </div>
+                                    <div><p>{member.name}</p></div>
                                 </div>
                             </TableCell>
-                            <TableCell>
-                                <p className="text-xs font-semibold">{member.expertise}</p>
-                            </TableCell>
-                            <TableCell>
-                                <Badge variant="outline">{getDivisionFromExpertise(member.expertise)}</Badge>
-                            </TableCell>
-                            <TableCell className="text-xs text-muted-foreground">
-                                {member.phone || "N/A"}
-                            </TableCell>
+                            <TableCell><p className="text-xs font-semibold">{member.expertise}</p></TableCell>
+                            <TableCell><Badge variant="outline">{getDivisionFromExpertise(member.expertise)}</Badge></TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{member.phone || "N/A"}</TableCell>
                             <TableCell className="text-right">
                                <DropdownMenu>
                                     <DropdownMenuTrigger asChild>

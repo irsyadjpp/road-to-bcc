@@ -3,66 +3,61 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-// --- MOCK DATABASE ADAPTER (Nanti ganti dengan prisma.user.findUnique) ---
-// Ceritanya ini data yang sudah di-input oleh PD ke database
-const MOCK_DB_USERS = [
-  { email: "director@bcc.com", name: "Ketua Panitia", role: "DIRECTOR", pin: "123456" },
-  { email: "it.head@bcc.com", name: "Koordinator IT", role: "HEAD_OF_DIVISION", division: "IT", pin: "000000" }
+// SIMULASI DATABASE USER
+// Di production, ini diganti database query (Prisma/Supabase)
+let MOCK_USERS_DB = [
+  { 
+    email: process.env.DIRECTOR_EMAIL || "director@bcc.com", 
+    name: "Project Director", 
+    role: "DIRECTOR", 
+    isProfileCompleted: true 
+  }
 ];
 
-
-// 1. Logic Login Google (Utama)
 export async function loginAdminGoogle() {
-  // Simulasi data yang didapat dari Google OAuth Provider
+  // 1. Simulasi data dari Google Auth
   const googleUser = {
-    email: "irsyad@gmail.com", // Ceritanya ini email Anda
-    name: "Irsyad Jamal",
-    avatar: "..."
+    email: "new.staff@gmail.com", // Ceritanya user baru login
+    name: "Budi Calon Panitia",
+    avatar: "https://github.com/shadcn.png"
   };
 
-  let systemRole = "GUEST";
-  let isAuthorized = false;
+  // 2. Cek apakah user ada di DB
+  let user = MOCK_USERS_DB.find(u => u.email === googleUser.email);
 
-  // A. CEK SUPERADMIN (Hardcoded di ENV untuk keamanan level tertinggi)
-  // Pastikan Anda set SUPERADMIN_EMAIL=irsyad@gmail.com di .env.local
-  if (googleUser.email === process.env.SUPERADMIN_EMAIL) {
-    systemRole = "SUPERADMIN";
-    isAuthorized = true;
-  } 
-  
-  // B. CEK USER DATABASE (Jika bukan Superadmin)
-  else {
-    // Cari user di database berdasarkan email Google
-    const dbUser = MOCK_DB_USERS.find(u => u.email === googleUser.email);
-    
-    if (dbUser) {
-      systemRole = dbUser.role;
-      isAuthorized = true;
-    }
+  // 3. Jika TIDAK ADA, buat user baru dengan status UNASSIGNED
+  if (!user) {
+    const newUser = {
+      ...googleUser,
+      role: "UNASSIGNED",
+      isProfileCompleted: false, // Belum isi biodata
+    };
+    // MOCK: Simpan ke DB
+    // MOCK_USERS_DB.push(newUser); 
+    user = newUser;
   }
 
-  if (!isAuthorized) {
-    return { success: false, message: "Email Anda belum terdaftar di sistem BCC 2026. Hubungi Project Director." };
-  }
-
-  // C. Set Session
+  // 4. Buat Session
   const sessionData = JSON.stringify({
-    name: googleUser.name,
-    email: googleUser.email,
-    role: systemRole,
+    ...user,
     isLoggedIn: true,
-    method: 'GOOGLE',
-    isOnboarded: false, // NEW: Force onboarding check
   });
 
-  cookies().set('bcc_admin_session', sessionData, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 60 * 60 * 24 * 7, 
-    path: '/',
-  });
+  cookies().set('bcc_admin_session', sessionData, { httpOnly: true, path: '/' });
 
-  return { success: true };
+  // 5. Redirect Logic
+  // Jika profil belum lengkap -> Halaman Onboarding
+  if (!user.isProfileCompleted) {
+    // Return flag khusus supaya UI client melakukan redirect
+    return { success: true, redirectUrl: '/admin/onboarding' };
+  }
+  
+  // Jika sudah lengkap tapi belum di-assign Director -> Halaman Waiting
+  if (user.role === 'UNASSIGNED') {
+    return { success: true, redirectUrl: '/admin/waiting-room' };
+  }
+
+  return { success: true, redirectUrl: '/admin/dashboard' };
 }
 
 // 2. Logic Login PIN (Alternatif untuk di Lapangan)
@@ -70,7 +65,7 @@ export async function loginAdminByCode(prevState: any, formData: FormData) {
   const code = formData.get('code') as string;
 
   // Cari user di DB yang punya PIN ini
-  const dbUser = MOCK_DB_USERS.find(u => u.pin === code);
+  const dbUser = MOCK_DB_USERS.find(u => (u as any).pin === code);
 
   if (!dbUser) {
     return { success: false, message: "Kode PIN tidak valid atau belum di-assign." };
