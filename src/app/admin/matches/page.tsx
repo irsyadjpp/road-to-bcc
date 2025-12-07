@@ -1,7 +1,5 @@
-
 'use client';
 
-import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,7 +28,6 @@ const queue = [
 ];
 
 export default function MatchControlDashboard() {
-  const [courts, setCourts] = useState(initialCourts);
 
   const handlePushToCourt = (courtId: number, matchId: number) => {
       // Logika memindahkan match dari antrean ke lapangan kosong
@@ -56,7 +53,7 @@ export default function MatchControlDashboard() {
 
       {/* MONITOR 5 LAPANGAN */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        {courts.map((court) => (
+        {initialCourts.map((court) => (
           <Card key={court.id} className={`border-t-4 ${
               court.status === 'LIVE' ? 'border-t-green-500 shadow-md' : 
               court.status === 'WARMUP' ? 'border-t-yellow-500' :
@@ -147,5 +144,3 @@ export default function MatchControlDashboard() {
     </div>
   );
 }
-
-    

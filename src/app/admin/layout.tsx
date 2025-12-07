@@ -19,6 +19,7 @@ import { logoutAdmin } from './actions';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { IntegrityPactModal } from '@/components/admin/integrity-pact-modal';
+import { EmergencyButton } from '@/components/admin/emergency-button';
 
 // --- DEFINISI MENU ---
 const getMenusByRole = (role: string) => {
@@ -326,6 +327,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <main className="flex-1 p-6 lg:p-8 overflow-auto">
           {children}
         </main>
+        <EmergencyButton />
       </div>
     </div>
     </>
