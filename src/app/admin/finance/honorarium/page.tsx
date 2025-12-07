@@ -15,6 +15,8 @@ import { getStaffEvaluations, saveEvaluation, type StaffEvaluation } from "./act
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
+
 
 const parameterDetails = [
     { id: "P1", title: "P1 — Kehadiran & Kedisiplinan", description: "Mengukur seberapa konsisten hadir, tepat waktu, dan mengikuti agenda kerja.", scores: [ "1: Sering absen / sering terlambat.", "2: Hadir tapi cukup sering terlambat.", "3: Kehadiran cukup baik, kadang terlambat.", "4: Jarang absen, disiplin.", "5: Sangat disiplin, selalu hadir dan tepat waktu." ] },
@@ -135,18 +137,54 @@ export default function HonorariumPage() {
     </div>
   );
   
-  const AllocationCard = ({ title, amount, color, description, subDescription }: { title:string, amount:number, color:string, description?:string, subDescription?:string}) => (
-    <Card className={`bg-${color}-50 border-${color}-200 dark:bg-${color}-900/20 dark:border-${color}-500/30`}>
-        <CardHeader className="pb-2">
-            <CardTitle className={`text-xs uppercase text-${color}-700 dark:text-${color}-400 font-bold`}>{title}</CardTitle>
-            {description && <CardDescription className="text-xs">{description}</CardDescription>}
-        </CardHeader>
-        <CardContent>
-            <div className={`text-xl font-bold text-${color}-900 dark:text-${color}-300`}>Rp {amount.toLocaleString('id-ID')}</div>
-            {subDescription && <div className={`text-xs text-${color}-700 dark:text-${color}-500 mt-1`}>{subDescription}</div>}
-        </CardContent>
-    </Card>
-  );
+  const colorVariants = {
+    blue: {
+      card: "bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-500/30",
+      title: "text-blue-700 dark:text-blue-400",
+      amount: "text-blue-900 dark:text-blue-300",
+      sub: "text-blue-700 dark:text-blue-500"
+    },
+    cyan: {
+      card: "bg-cyan-50 border-cyan-200 dark:bg-cyan-900/20 dark:border-cyan-500/30",
+      title: "text-cyan-700 dark:text-cyan-400",
+      amount: "text-cyan-900 dark:text-cyan-300",
+      sub: "text-cyan-700 dark:text-cyan-500"
+    },
+    green: {
+      card: "bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-500/30",
+      title: "text-green-700 dark:text-green-400",
+      amount: "text-green-900 dark:text-green-300",
+      sub: "text-green-700 dark:text-green-500"
+    },
+    purple: {
+      card: "bg-purple-50 border-purple-200 dark:bg-purple-900/20 dark:border-purple-500/30",
+      title: "text-purple-700 dark:text-purple-400",
+      amount: "text-purple-900 dark:text-purple-300",
+      sub: "text-purple-700 dark:text-purple-500"
+    },
+    orange: {
+      card: "bg-orange-50 border-orange-200 dark:bg-orange-900/20 dark:border-orange-500/30",
+      title: "text-orange-700 dark:text-orange-400",
+      amount: "text-orange-900 dark:text-orange-300",
+      sub: "text-orange-700 dark:text-orange-500"
+    }
+  };
+
+  const AllocationCard = ({ title, amount, color, description, subDescription }: { title:string, amount:number, color:keyof typeof colorVariants, description?:string, subDescription?:string}) => {
+    const variants = colorVariants[color];
+    return (
+      <Card className={variants.card}>
+          <CardHeader className="pb-2">
+              <CardTitle className={cn("text-xs uppercase font-bold", variants.title)}>{title}</CardTitle>
+              {description && <CardDescription className="text-xs">{description}</CardDescription>}
+          </CardHeader>
+          <CardContent>
+              <div className={cn("text-xl font-bold", variants.amount)}>Rp {amount.toLocaleString('id-ID')}</div>
+              {subDescription && <div className={cn("text-xs mt-1", variants.sub)}>{subDescription}</div>}
+          </CardContent>
+      </Card>
+    );
+  };
 
 
   return (
