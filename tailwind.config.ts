@@ -71,6 +71,14 @@ export default {
         md: '1rem', // 16px
         sm: '0.75rem', // 12px
         full: '9999px',
+        '4xl': '2.5rem',
+      },
+      transitionTimingFunction: {
+        spring: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+        'spring-stiff': 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+      },
+      backgroundImage: {
+        noise: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E\")",
       },
       keyframes: {
         'accordion-down': {
@@ -117,13 +125,20 @@ export default {
           '0%': { transform: 'scale(1)' },
           '100%': { transform: 'scale(1.1)' },
         },
-        'float': {
+        float: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-20px)' },
         },
         'shuttle-fly': {
           '0%': { transform: 'translate(-100%, 100%) rotate(45deg)', opacity: '0' },
           '100%': { transform: 'translate(0, 0) rotate(0deg)', opacity: '1' },
+        },
+        'hover-tada': {
+            '0%': { transform: 'scale(1)' },
+            '10%, 20%': { transform: 'scale(0.9) rotate(-3deg)' },
+            '30%, 50%, 70%, 90%': { transform: 'scale(1.1) rotate(3deg)' },
+            '40%, 60%, 80%': { transform: 'scale(1.1) rotate(-3deg)' },
+            '100%': { transform: 'scale(1) rotate(0)' },
         }
       },
       animation: {
@@ -132,10 +147,11 @@ export default {
         'fade-in-down': 'fade-in-down 0.6s ease-out forwards',
         'fade-in-up': 'fade-in-up 0.6s ease-out forwards',
         'zoom-slow': 'zoom-slow 20s infinite alternate',
-        'float': 'float 6s ease-in-out infinite',
+        float: 'float 6s ease-in-out infinite',
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'shuttle-fly': 'shuttle-fly 1.5s ease-out forwards',
         'fade-in': 'fade-in 0.3s ease-in-out',
+        'hover-tada': 'hover-tada 1s ease-in-out',
       },
     },
   },

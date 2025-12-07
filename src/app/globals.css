@@ -10,7 +10,7 @@
     --card-foreground: 224 71.4% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
-    --primary: 357 71% 36%; /* #9e1d24 */
+    --primary: 357 71% 36%;
     --primary-foreground: 0 0% 98%;
     --secondary: 220 13% 91%;
     --secondary-foreground: 224 71.4% 4.1%;
@@ -31,15 +31,15 @@
   }
 
   .dark {
-    --background: 0 0% 5%; /* #0D0D0D - Lebih gelap */
+    --background: 0 0% 5%;
     --foreground: 210 20% 98%;
-    --card: 0 0% 9%;      /* #171717 - Tonal Surface 1 */
+    --card: 357 10% 8%;
     --card-foreground: 210 20% 98%;
-    --popover: 0 0% 9%;
+    --popover: 357 10% 8%;
     --popover-foreground: 210 20% 98%;
-    --primary: 357 71% 40%; /* #b02027 - Merah lebih cerah */
-    --primary-foreground: 210 20% 98%;
-    --secondary: 0 0% 12%; /* #1F1F1F - Tonal Surface 2 */
+    --primary: 357 85% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 15%;
     --secondary-foreground: 210 20% 98%;
     --muted: 0 0% 12%;
     --muted-foreground: 218 11% 65%;
@@ -47,9 +47,9 @@
     --accent-foreground: 210 20% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
-    --border: 0 0% 20%;     /* #333333 - Border lebih tegas */
+    --border: 0 0% 20%;
     --input: 0 0% 20%;
-    --ring: 357 71% 40%;
+    --ring: 357 85% 55%;
     --chart-1: 210 90% 50%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -63,7 +63,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground bg-noise;
   }
 }
 
@@ -80,7 +80,7 @@
 .hover-spotlight > .card-item:hover {
   opacity: 1;
   transform: scale(1.02);
-  box-shadow: 0 20px 40px -15px hsla(var(--primary), 0.3);
+  box-shadow: 0 0 80px -20px hsla(var(--primary), 0.5);
   border-color: hsl(var(--primary));
   z-index: 10;
 }
