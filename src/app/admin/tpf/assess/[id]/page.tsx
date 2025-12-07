@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -17,7 +16,10 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getPlayerById, submitVerificationResult, type PlayerVerification } from "../../actions";
+import { RUBRIC_GUIDELINES, ASSESSMENT_METHODS, COMPARISON_TABLE, RED_FLAGS } from "@/lib/tpf-data";
 
+
+// Konstanta Bonus
 const BONUS_POINTS = {
   jumpingSmash: 3, stickSmash: 3, backhandSmash: 4, netKill: 2, flickServe: 2,
   spinningNet: 3, crossNet: 3, backhandDrop: 3, backhandClear: 3, crossDefense: 3,
@@ -27,10 +29,10 @@ const BONUS_POINTS = {
 export default function AssessmentPage() {
   const router = useRouter();
   const params = useParams();
-  const id = params.id as string;
   const { toast } = useToast();
   const [player, setPlayer] = useState<PlayerVerification | null>(null);
   const [loading, setLoading] = useState(true);
+  const id = params.id as string;
 
   // UI State
   const [activeTab, setActiveTab] = useState("visual");
@@ -45,6 +47,7 @@ export default function AssessmentPage() {
   const [notes, setNotes] = useState("");
   const [finalCalc, setFinalCalc] = useState({ scoreA: 0, scoreB: 0, total: 0, level: "", tier: "", color: "" });
 
+  // Fetch Data
   useEffect(() => {
     if (id) {
         getPlayerById(id).then((data) => {
@@ -54,6 +57,7 @@ export default function AssessmentPage() {
     }
   }, [id]);
 
+  // Real-time Calculation
   useEffect(() => {
     const totalA = Object.values(scores).reduce((a, b) => a + b, 0);
     let totalB = 0;
@@ -100,7 +104,7 @@ export default function AssessmentPage() {
   const handleSubmit = async () => {
       if (!player) return;
       if (manualStatus === 'INVALID' && !notes) {
-          return toast({ title: "Isi Catatan", description: "Jelaskan kenapa video dinyatakan invalid.", variant: "destructive" });
+          return toast({ title: "Isi Catatan", description: "Jelaskan alasan video invalid.", variant: "destructive" });
       }
       await submitVerificationResult(player.id, { 
           ...finalCalc, 
@@ -112,12 +116,13 @@ export default function AssessmentPage() {
   };
 
   const isFormDisabled = finalCalc.level === 'REJECTED';
-
+  
   if (loading) return <div className="flex h-full items-center justify-center bg-background"><Loader2 className="w-8 h-8 animate-spin"/></div>;
   if (!player) return <div className="flex h-full items-center justify-center text-red-500">Player Not Found</div>;
-  
+
   return (
     <div className="space-y-4">
+        {/* --- HEADER --- */}
         <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
                 <Button variant="outline" size="icon" onClick={() => router.back()} className="h-8 w-8">
@@ -143,46 +148,40 @@ export default function AssessmentPage() {
             </div>
         </div>
 
+        {/* --- MAIN LAYOUT --- */}
         <div className="flex flex-col space-y-4">
-            <div className="sticky top-[76px] z-10">
-                <div className="shrink-0 bg-black w-full relative group rounded-lg overflow-hidden border shadow-lg" style={{ height: '45vh' }}>
-                    <iframe src={player.videoUrl} className="w-full h-full" allowFullScreen />
-                    <div className="absolute top-2 right-2 flex gap-2">
-                        <Button size="sm" variant="secondary" className="bg-black/50 text-white hover:bg-black/80 backdrop-blur-md border border-white/10" onClick={() => setShowCheatSheet(!showCheatSheet)}>
-                            <BookOpen className="w-4 h-4 mr-2" />
-                            {showCheatSheet ? "Tutup Panduan" : "Panduan Rubrik"}
-                        </Button>
-                    </div>
-                    {showCheatSheet && (
-                        <div className="absolute inset-0 bg-black/90 z-20 p-6 overflow-y-auto animate-in fade-in slide-in-from-top-2">
-                            <div className="flex justify-between items-center mb-4">
-                                <h4 className="font-bold text-blue-400 flex items-center gap-2"><Info className="w-4 h-4"/> PANDUAN VISUAL</h4>
-                                <Button size="sm" variant="ghost" className="text-white hover:bg-white/20" onClick={() => setShowCheatSheet(false)}><ChevronUp className="w-4 h-4"/></Button>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-                                <CheatItem title="1. Grip" bad="Panci, kaku, bunyi bletak" good="Salaman, luwes, bunyi tring" />
-                                <CheatItem title="2. Footwork" bad="Lari jogging, berat, diam" good="Geser (chasse), jinjit, ringan" />
-                                <CheatItem title="3. Backhand" bad="Lari mutar badan, panik" good="Clear sampai belakang, santai" />
-                                <CheatItem title="4. Attack" bad="Melambung keluar, nyangkut" good="Menukik tajam, bunyi ledakan" />
-                                <CheatItem title="5. Defense" bad="Buang muka, raket ditaruh" good="Tembok, drive balik, tenang" />
-                            </div>
-                        </div>
-                    )}
+            {/* 1. VIDEO PLAYER (STICKY TOP) */}
+            <div className="shrink-0 bg-black w-full relative group sticky top-[76px] z-10 rounded-lg overflow-hidden border shadow-lg" style={{ height: '45vh' }}>
+                <iframe src={player.videoUrl} className="w-full h-full" allowFullScreen />
+                <div className="absolute top-2 right-2 flex gap-2">
+                    <Button 
+                        size="sm" 
+                        variant="secondary"
+                        className="bg-black/50 text-white hover:bg-black/80 backdrop-blur-md border border-white/10"
+                        onClick={() => setShowCheatSheet(!showCheatSheet)}
+                    >
+                        <BookOpen className="w-4 h-4 mr-2" />
+                        {showCheatSheet ? "Tutup Panduan" : "Panduan Rubrik"}
+                    </Button>
                 </div>
+                {showCheatSheet && (
+                    <div className="absolute inset-0 bg-black/90 z-20 p-6 overflow-y-auto animate-in fade-in slide-in-from-top-2">
+                        <div className="flex justify-between items-center mb-4">
+                            <h4 className="font-bold text-blue-400 flex items-center gap-2"><Info className="w-4 h-4"/> PANDUAN LENGKAP TPF</h4>
+                            <Button size="sm" variant="ghost" className="text-white hover:bg-white/20" onClick={() => setShowCheatSheet(false)}><ChevronUp className="w-4 h-4"/></Button>
+                        </div>
+                        <div className="space-y-6">
+                           <RubricItem title="PANDUAN VISUAL RUBRIK" data={RUBRIC_GUIDELINES} />
+                           <MethodItem title="PETUNJUK TEKNIS PENILAIAN" data={ASSESSMENT_METHODS} />
+                           <ComparisonTable title="TABEL PEMBANDING (CHEAT SHEET)" data={COMPARISON_TABLE} />
+                           <RedFlagItem title="RED FLAG: TANDA SANDBAGGING" data={RED_FLAGS} />
+                        </div>
+                    </div>
+                )}
             </div>
 
+            {/* 2. FORM AREA */}
             <div className="flex-1 overflow-auto bg-card border rounded-lg p-6 space-y-8">
-                 <div className="flex justify-center mb-6">
-                    <div className="inline-flex bg-background p-1 rounded-lg border shadow-sm">
-                        <button onClick={() => setManualStatus('VALID')} className={`px-4 py-1.5 rounded-md text-sm font-bold transition-all ${manualStatus === 'VALID' ? 'bg-green-600 text-white' : 'text-slate-500 hover:text-slate-900'}`}>
-                            Video VALID
-                        </button>
-                        <button onClick={() => setManualStatus('INVALID')} className={`px-4 py-1.5 rounded-md text-sm font-bold transition-all ${manualStatus === 'INVALID' ? 'bg-red-600 text-white' : 'text-slate-500 hover:text-red-600'}`}>
-                            Set INVALID
-                        </button>
-                    </div>
-                </div>
-                
                 <div className={`transition-opacity ${isFormDisabled ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
                     <Tabs value={activeTab} onValueChange={setActiveTab}>
                         <div className="flex justify-between items-center">
@@ -190,6 +189,21 @@ export default function AssessmentPage() {
                                 <TabsTrigger value="visual">I. Audit Visual (1-5)</TabsTrigger>
                                 <TabsTrigger value="bonus">II. Skill Bonus</TabsTrigger>
                             </TabsList>
+                            {/* Tombol Validasi Manual */}
+                            <div className="flex bg-white p-1 rounded-lg border shadow-sm">
+                                <button 
+                                    onClick={() => setManualStatus('VALID')}
+                                    className={`px-4 py-1.5 rounded-md text-sm font-bold transition-all ${manualStatus === 'VALID' ? 'bg-green-600 text-white' : 'text-slate-500 hover:text-green-600'}`}
+                                >
+                                    VALID
+                                </button>
+                                <button 
+                                    onClick={() => setManualStatus('INVALID')}
+                                    className={`px-4 py-1.5 rounded-md text-sm font-bold transition-all ${manualStatus === 'INVALID' ? 'bg-red-600 text-white' : 'text-slate-500 hover:text-red-600'}`}
+                                >
+                                    INVALID
+                                </button>
+                            </div>
                         </div>
 
                         <TabsContent value="visual" className="mt-6 space-y-6">
@@ -257,7 +271,7 @@ function SkillGroup({ title, icon, items, state, setState, disabled }: any) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {items.map((i: any) => (
                     <div key={i.id} 
-                        className={`flex items-start space-x-3 p-3 rounded-lg border transition-all ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'} ${state[i.id] ? 'bg-primary/5 border-primary/30' : `bg-background border-transparent ${!disabled && 'hover:bg-secondary'}`}`}
+                        className={`flex items-start space-x-3 p-3 rounded-lg border transition-all ${disabled ? 'cursor-not-allowed' : ''} ${state[i.id] ? 'bg-primary/5 border-primary/30' : `bg-background border-transparent ${!disabled && 'hover:bg-secondary'}`}`}
                         onClick={() => !disabled && setState({...state, [i.id]: !state[i.id]})}
                     >
                         <Checkbox 
@@ -277,16 +291,80 @@ function SkillGroup({ title, icon, items, state, setState, disabled }: any) {
     )
 }
 
-function CheatItem({ title, bad, good }: any) {
-    return (
-        <div className="bg-zinc-800/80 p-3 rounded-lg border border-zinc-700 hover:bg-zinc-800 transition-colors">
-            <div className="font-bold text-blue-400 mb-1.5 text-xs uppercase tracking-wide">{title}</div >
-            <div className="grid grid-cols-1 gap-1.5 text-[11px] text-zinc-300">
-                <div className="flex gap-2 items-start"><span className="text-red-500 font-bold shrink-0">❌</span> <span>{bad}</span></div>
-                <div className="flex gap-2 items-start"><span className="text-green-500 font-bold shrink-0">✅</span> <span>{good}</span></div>
-            </div>
-        </div>
-    )
-}
 
-    
+const SectionWrapper = ({ title, children }: { title: string, children: React.ReactNode }) => (
+  <div className="mb-6">
+    <h3 className="font-bold text-lg text-yellow-400 mb-3 border-l-4 border-yellow-400 pl-3">{title}</h3>
+    {children}
+  </div>
+);
+
+const RubricItem = ({ title, data }: { title: string, data: any[] }) => (
+  <SectionWrapper title={title}>
+    <div className="space-y-4">
+      {data.map((item, index) => (
+        <div key={index} className="p-4 bg-zinc-800 rounded-lg border border-zinc-700">
+          <p className="font-semibold text-white mb-2">{item.title}</p>
+          <ul className="space-y-1 text-xs text-zinc-400">
+            {item.scores.map((score: any, i: number) => (
+              <li key={i}><strong>{score.score}:</strong> {score.desc}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </SectionWrapper>
+);
+
+const MethodItem = ({ title, data }: { title: string, data: any[] }) => (
+  <SectionWrapper title={title}>
+    {data.map((section, index) => (
+      <div key={index} className="mb-4">
+        <h4 className="font-semibold text-base text-cyan-400 mb-2">{section.title}</h4>
+        <div className="space-y-3">
+          {section.points.map((point: any, i: number) => (
+            <div key={i} className="p-3 bg-zinc-800 rounded-lg text-sm">
+              <p className="font-bold text-white">{point.subtitle}</p>
+              <p className="text-xs text-zinc-300">{point.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </SectionWrapper>
+);
+
+const ComparisonTable = ({ title, data }: { title: string, data: any[] }) => (
+  <SectionWrapper title={title}>
+    <div className="overflow-x-auto">
+      <table className="w-full text-xs border-collapse">
+        <thead>
+          <tr className="bg-zinc-800">
+            <th className="border border-zinc-600 p-2">Indikator</th>
+            <th className="border border-zinc-600 p-2">Saat Audit Video (Layar)</th>
+            <th className="border border-zinc-600 p-2">Saat di Lapangan (Mata)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, index) => (
+            <tr key={index}>
+              <td className="border border-zinc-700 p-2 font-bold text-white">{row.indicator}</td>
+              <td className="border border-zinc-700 p-2 text-zinc-300">{row.video_assessment}</td>
+              <td className="border border-zinc-700 p-2 text-zinc-300">{row.field_assessment}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </SectionWrapper>
+);
+
+const RedFlagItem = ({ title, data }: { title: string, data: string[] }) => (
+  <SectionWrapper title={title}>
+    <ul className="space-y-2 list-disc pl-5 text-sm text-red-300">
+      {data.map((item, index) => (
+        <li key={index}>{item}</li>
+      ))}
+    </ul>
+  </SectionWrapper>
+);

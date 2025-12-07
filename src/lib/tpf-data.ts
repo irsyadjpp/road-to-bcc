@@ -1,81 +1,101 @@
 // src/lib/tpf-data.ts
 
+// I. PANDUAN VISUAL RUBRIK
 export const RUBRIC_GUIDELINES = [
   {
-    id: 'biomechanics',
-    title: '1. BIOMEKANIK & GRIP',
+    title: '1. GRIP & BIOMEKANIK',
     scores: [
-      { score: 1, desc: "Buruk: Grip Panci (Panhandle). Menggenggam raket kaku seperti palu. Pukulan hanya dari ayunan bahu. Tidak ada rotasi lengan." },
-      { score: 2, desc: "Kurang: Grip V (Salaman) tapi kaku/keras. Gerakan memukul seperti 'mendorong'." },
-      { score: 3, desc: "Standar: Grip benar. Ada lecutan wrist. Transisi grip Forehand-Backhand terlihat lambat/jeda." },
-      { score: 4, desc: "Baik: Transisi grip cepat. Menggunakan rotasi lengan bawah (pronation)." },
-      { score: 5, desc: "Elite: Finger Power. Memukul dengan jari & kedutan (snap). Ayunan pendek tapi kencang." }
+      { score: 1-2, desc: 'Memegang raket seperti "Grip Panci". Pukulan "bletak" (kena frame).' },
+      { score: 3-4, desc: 'Grip Salaman (V-Grip). Bunyi pukulan bersih. Ayunan raket lancar.' },
+      { score: 5, desc: 'Pukulan bertenaga tapi terlihat santai (effortless). Transisi grip sangat cepat.' }
     ]
   },
   {
-    id: 'footwork',
-    title: '2. FOOTWORK (KAKI)',
+    title: '2. FOOTWORK',
     scores: [
-      { score: 1, desc: "Buruk: Lari/Jogging. Langkah menyilang tidak beraturan. Mendarat dengan tumit (berat)." },
-      { score: 2, desc: "Kurang: Mengejar bola tapi tidak bisa kembali (No Recovery). Keseimbangan goyah." },
-      { score: 3, desc: "Standar: Langkah Chassé (geser) benar. Menutup lapangan standar." },
-      { score: 4, desc: "Baik: Gerakan ringan (jinjit). Recovery ke tengah cepat. Jarang mati langkah." },
-      { score: 5, desc: "Elite: Split Step. Melakukan lompatan kecil refleks setiap lawan memukul. Scissor Jump." }
+      { score: 1-2, desc: 'Diam menunggu bola atau lari biasa. Sering hampir jatuh.' },
+      { score: 3-4, desc: 'Langkah chasse (geser). Bisa mengejar bola standar.' },
+      { score: 5, desc: 'Langkah ringan (jinjit). Selalu siap di tengah. Cover lapangan luas.' }
     ]
   },
   {
-    id: 'backhand',
-    title: '3. BACKHAND OVERHEAD',
+    title: '3. BACKHAND',
     scores: [
-      { score: 1, desc: "Buruk: Nihil. Selalu lari memutar badan (Round-the-head). Jika terpaksa, cuma sentuh pelan." },
-      { score: 2, desc: "Kurang: Bisa kena bola, tapi hasil Drop tanggung atau Lob setengah lapangan." },
-      { score: 3, desc: "Standar: Bisa Clear lurus tapi tenaga pas-pasan (sering tidak sampai garis belakang)." },
-      { score: 4, desc: "Baik: Clear konsisten sampai garis belakang (baseline). Posisi badan benar." },
-      { score: 5, desc: "Elite: Mastery. Bisa Clear silang (Cross) atau lurus dari ujung ke ujung. Bisa Smash/Drop backhand." }
+        { score: 1-2, desc: 'Panik/Lari memutar badan. Bola tanggung/net.' },
+        { score: 3-4, desc: 'Bisa Drop atau Lob ke tengah lapangan. Aman.' },
+        { score: 5, desc: 'Bisa Clear (Lob) sampai garis belakang secara konsisten.' }
     ]
   },
-  {
-    id: 'attack',
+    {
     title: '4. ATTACK (SMASH)',
     scores: [
-      { score: 1, desc: "Buruk: Smash pelan, nyangkut net, atau melambung keluar." },
-      { score: 2, desc: "Kurang: Ada tenaga, tapi bola datar/tanggung. Mudah dikembalikan." },
-      { score: 3, desc: "Standar: Keras dan kencang, tapi arah monoton (lurus terus). Mengandalkan otot bahu." },
-      { score: 4, desc: "Baik: Tajam dan menukik (Steep). Bisa mengarahkan ke sisi kiri/kanan." },
-      { score: 5, desc: "Elite: Variatif. Punya Full Smash meledak, Half Smash, dan Slice. Akurasi ke garis pinggir." }
+        { score: 1-2, desc: 'Melambung keluar atau nyangkut net.' },
+        { score: 3-4, desc: 'Menukik dan kencang.' },
+        { score: 5, desc: 'Tajam, Keras, dan Akurat ke pinggir garis. Variasi Check Smash.' }
     ]
   },
   {
-    id: 'defense',
     title: '5. DEFENSE (BERTAHAN)',
     scores: [
-      { score: 1, desc: "Buruk: Panik. Takut bola. Membuang raket atau angkat bola tanggung di depan net." },
-      { score: 2, desc: "Kurang: Bisa kena bola, tapi pengembalian tidak terarah/tanggung. Raket di bawah lutut." },
-      { score: 3, desc: "Standar: Bisa Block atau Lift tinggi ke belakang secara konsisten." },
-      { score: 4, desc: "Baik: Pertahanan rapat (Wall). Mengarahkan bola ke ruang kosong." },
-      { score: 5, desc: "Elite: Counter Attack. Mengubah bertahan jadi menyerang dengan Drive balik datar/silang." }
+        { score: 1-2, desc: 'Takut bola (membuang muka/badan). Reaksi lambat, raket cuma ditaruh asal kena.' },
+        { score: 3-4, desc: '"Tembok". Tenang saat dismash. Bisa mengembalikan bola tinggi ke belakang (Lift).' },
+        { score: 5, desc: 'Counter-Attack. Mengubah bertahan jadi menyerang dengan Drive datar/silang.' }
     ]
   },
   {
-    id: 'gameiq',
-    title: '6. GAME IQ (TAKTIK GANDA)',
+    title: '6. GAME IQ (ROTASI & POSISI)',
     scores: [
-      { score: 1, desc: "Buruk: Sering tabrakan raket. Saling diam saat bola tengah. Servis sering tanggung." },
-      { score: 2, desc: "Kurang: Posisi statis (depan-belakang terus). Sering memberi bola enak ke lawan." },
-      { score: 3, desc: "Standar: Paham rotasi dasar (Serang=Depan Belakang, Tahan=Kiri Kanan)." },
-      { score: 4, desc: "Baik: Pandai cari celah kosong. Komunikasi partner baik. Jarang buang bola." },
-      { score: 5, desc: "Elite: Antisipasi. Membaca pukulan lawan sebelum dipukul. Rotasi cair (fluid). Intercept cepat." }
+        { score: 1-2, desc: 'Sering tabrakan raket atau saling diam. Posisi statis.' },
+        { score: 3-4, desc: 'Paham formasi dasar (Serang=Depan-Belakang, Tahan=Kiri-Kanan).' },
+        { score: 5, desc: 'Antisipasi tinggi. Membaca pukulan lawan dan memotong bola (Intercept).' }
     ]
   },
   {
-    id: 'physique',
-    title: '7. PHYSIQUE (FISIK & MENTAL)',
+    title: '7. PHYSIQUE (FISIK & INTENSITAS)',
     scores: [
-      { score: 1, desc: "Buruk: Habis Bensin. Napas memburu (gasping) atau tangan bertumpu di lutut. Sering blank." },
-      { score: 2, desc: "Kurang: Speed Drop. Kecepatan kaki menurun drastis. Emosional/frustrasi." },
-      { score: 3, desc: "Standar: Stabil. Mampu menyelesaikan game dengan tempo sedang. Sedikit tegang di poin kritis." },
-      { score: 4, desc: "Baik: Terlatih. Pengaturan nafas teratur. Masih mampu sprint/smash di akhir game." },
-      { score: 5, desc: "Elite: High Endurance & Ice Cold. Intensitas tinggi konsisten. Mental baja di poin kritis." }
+        { score: 1-2, desc: 'Terlihat "ngos-ngosan" setelah reli pendek.' },
+        { score: 3-4, desc: 'Stabil. Mampu menjaga tempo sedang dari awal sampai akhir.' },
+        { score: 5, desc: 'Eksplosif. Masih mampu sprint/jumping smash dengan kecepatan penuh di akhir.' }
     ]
   }
+];
+
+// II. PETUNJUK TEKNIS PENILAIAN
+export const ASSESSMENT_METHODS = [
+    {
+        title: "I. METODE PENILAIAN VIA VIDEO (PRA-TURNAMEN)",
+        points: [
+            { subtitle: '1. TEKNIK "PAUSE & ZOOM" (Cek Biomekanik)', desc: "Lakukan Pause saat pemain mengangkat raket. Lihat genggaman tangan. Grip panci = Beginner. Grip miring/siku naik = Intermediate/Advance." },
+            { subtitle: '2. CEK KUALITAS LAWAN (Validasi Konteks)', desc: "Jika lawan hanya memberi bola enak (Feeding), kurangi nilai skill. Wajib video uncut minimal 2 menit." },
+            { subtitle: '3. AUDIO CHECK (Bunyi Pukulan)', desc: 'Besarkan volume. "Bletak/Prak" = Akurasi Buruk. "Bug/Dug" = Power Menengah. "Tring/Wush" = Advance (Sweet Spot).' },
+            { subtitle: '4. FOOTWORK "TANPA BOLA"', desc: "Perhatikan subjek saat partnernya memukul. Diam menonton = Level Bawah. Ikut geser jaga ruang = Level Atas." }
+        ]
+    },
+    {
+        title: "II. METODE PENILAIAN LANGSUNG DI LAPANGAN (SAAT PERTANDINGAN)",
+        points: [
+            { subtitle: '1. PANTAU SAAT WARM-UP', desc: 'Pemain sering lupa "sandiwara" saat pemanasan. Lihat saat mereka lob/clear. Seringkali teknik asli keluar di sini.' },
+            { subtitle: '2. TEKNIK "POIN KRITIS" (Mental Check)', desc: 'Lihat saat skor 19-19. Beginner akan panik. Sandbagger mendadak jago. Jika skill naik drastis, tandai sebagai Advance.' },
+            { subtitle: '3. POSISI BERDIRI (STANCE) SAAT DEFENSE', desc: 'Kaki rapat & raket di bawah = Beginner. Kaki kuda-kuda & raket di perut = Intermediate. Kuda-kuda & badan condong agresif = Advance.' },
+            { subtitle: '4. REAKSI "BOLA KAGET" (Refleks Alamiah)', desc: 'Refleks tidak bisa bohong. Jika tangan menyentak cepat ke arah bola sulit, itu tanda Muscle Memory level tinggi.' }
+        ]
+    }
+];
+
+// III. TABEL PEMBANDING
+export const COMPARISON_TABLE = [
+    { indicator: "POWER", video_assessment: "Dilihat dari laju bola (cepat/lambat) di video.", field_assessment: "Dilihat dari suara ledakan senar & seberapa jauh lawan terdorong mundur." },
+    { indicator: "STAMINA", video_assessment: "Sulit dinilai (karena potongan klip).", field_assessment: "Sangat jelas. Lihat napas & apakah tangan memegang lutut saat jeda." },
+    { indicator: "MENTAL", video_assessment: "Tidak terlihat.", field_assessment: "Terlihat jelas saat poin kritis atau saat tertinggal jauh." },
+    { indicator: "GAME IQ", video_assessment: "Lihat posisi rotasi.", field_assessment: "Lihat komunikasi dengan partner & cara mematikan lawan." },
+    { indicator: "BACKHAND", video_assessment: "Lihat teknik ayunan (siku).", field_assessment: "Lihat keberanian. Apakah dia lari menghindari backhand atau menunggu backhand?" }
+];
+
+
+// IV. RED FLAGS
+export const RED_FLAGS = [
+    '"Miss" yang Tidak Wajar: Sengaja membuang bola out jauh sekali atau servis nyangkut berkali-kali secara teatrikal.',
+    'Footwork Malas tapi Sampai: Kakinya terlihat jalan santai, tapi anehnya selalu tepat posisi bola jatuh (Pembacaan bola terlalu bagus).',
+    'Mata Elang: Pemain yang dengan yakin melepas bola (Watch the line) dan terbukti benar out tipis.',
+    'Gear Pro: (Indikator pendukung) Menggunakan sepatu/raket grade turnamen mahal dan cara membalut grip yang rapi khas atlet.'
 ];
