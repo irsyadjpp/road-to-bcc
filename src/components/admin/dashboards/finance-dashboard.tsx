@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpRight, ArrowDownRight, DollarSign, Wallet, FileText, Download } from "lucide-react";
 import Link from 'next/link';
 
-export default function FinanceDashboard() {
+export function FinanceDashboard() {
   const financialSummary = {
     totalBudget: 150000000,
     income: {

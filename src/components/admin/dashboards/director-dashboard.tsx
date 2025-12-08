@@ -9,7 +9,7 @@ import {
   Wallet, Trophy, Timer, ArrowUpRight 
 } from "lucide-react";
 
-export default function DirectorDashboard() {
+export function DirectorDashboard() {
   // Mock Data (Nanti diganti data real dari API)
   const stats = {
     budgetUsed: 65, // %
