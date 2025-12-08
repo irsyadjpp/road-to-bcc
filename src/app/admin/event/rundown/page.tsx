@@ -1,62 +1,92 @@
+
 'use client';
 
-import { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Clock, Plus, GripVertical, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Play, CheckCircle, Clock, AlertTriangle } from "lucide-react";
+import { getRundown, updateAgendaStatus, type Agenda } from "./actions";
 
-// Mock Data (Backend: table 'rundown')
-const MOCK_RUNDOWN = [
-  { id: 1, time: "08:00 - 08:30", activity: "Opening Ceremony", pic: "Show Director" },
-  { id: 2, time: "08:30 - 12:00", activity: "Babak Penyisihan Grup A", pic: "Match Control" },
-  { id: 3, time: "12:00 - 13:00", activity: "ISHOMA & Doorprize Sesi 1", pic: "MC & Logistik" },
-];
+export default function LiveRundownPage() {
+  const [items, setItems] = useState<Agenda[]>([]);
+  const [currentTime, setCurrentTime] = useState("");
 
-export default function RundownManagementPage() {
-  const [rundown, setRundown] = useState(MOCK_RUNDOWN);
-  const [newItem, setNewItem] = useState({ time: "", activity: "", pic: "" });
+  useEffect(() => {
+    load();
+    // Jam Digital Realtime
+    const interval = setInterval(() => {
+        setCurrentTime(new Date().toLocaleTimeString('id-ID'));
+        load(); // Auto refresh status
+    }, 10000); // Poll tiap 10 detik
+    return () => clearInterval(interval);
+  }, []);
 
-  const handleAdd = () => {
-      if(!newItem.time) return;
-      setRundown([...rundown, { id: Date.now(), ...newItem }]);
-      setNewItem({ time: "", activity: "", pic: "" });
-  };
+  const load = () => getRundown().then(setItems);
 
-  const handleDelete = (id: number) => {
-      setRundown(rundown.filter(r => r.id !== id));
+  const handleAction = async (id: string, action: 'START' | 'FINISH') => {
+    await updateAgendaStatus(id, action === 'START' ? 'LIVE' : 'DONE');
+    load();
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-        <h2 className="text-3xl font-bold font-headline">Master Rundown Acara</h2>
-        
-        {/* INPUT BARIS BARU */}
-        <Card className="bg-secondary/20 border-dashed border-2">
-            <CardContent className="p-4 flex gap-2 items-end">
-                <div className="w-1/4 space-y-1"><p className="text-xs font-bold">Waktu</p><Input placeholder="00:00 - 00:00" value={newItem.time} onChange={e => setNewItem({...newItem, time: e.target.value})} /></div>
-                <div className="flex-1 space-y-1"><p className="text-xs font-bold">Aktivitas</p><Input placeholder="Nama Kegiatan" value={newItem.activity} onChange={e => setNewItem({...newItem, activity: e.target.value})} /></div>
-                <div className="w-1/4 space-y-1"><p className="text-xs font-bold">PIC</p><Input placeholder="Divisi" value={newItem.pic} onChange={e => setNewItem({...newItem, pic: e.target.value})} /></div>
-                <Button onClick={handleAdd}><Plus className="w-4 h-4"/></Button>
-            </CardContent>
-        </Card>
+    <div className="p-6 space-y-6 max-w-3xl mx-auto">
+       <div className="flex justify-between items-center bg-black text-white p-6 rounded-xl shadow-2xl">
+          <div>
+             <h1 className="text-2xl font-black font-headline uppercase text-yellow-500">Master Control Room</h1>
+             <p className="text-zinc-400">Timekeeper Dashboard</p>
+          </div>
+          <div className="text-right">
+             <div className="text-4xl font-mono font-bold">{currentTime}</div>
+             <Badge variant="outline" className="text-green-500 border-green-500 animate-pulse">ON AIR</Badge>
+          </div>
+       </div>
 
-        {/* LIST RUNDOWN */}
-        <div className="space-y-2">
-            {rundown.map((item) => (
-                <div key={item.id} className="flex items-center gap-4 p-4 bg-background border rounded-lg shadow-sm group">
-                    <GripVertical className="w-5 h-5 text-muted-foreground cursor-move" />
-                    <div className="w-32 font-mono text-sm font-bold flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-primary" /> {item.time}
-                    </div>
-                    <div className="flex-1 font-medium">{item.activity}</div>
-                    <div className="text-sm text-muted-foreground w-32">{item.pic}</div>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(item.id)} className="opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Trash2 className="w-4 h-4 text-red-500" />
-                    </Button>
+       <div className="space-y-4">
+          {items.map((item, index) => {
+             // Hitung Delay (Simulasi sederhana)
+             const isLate = item.status === 'LIVE' && item.actualStartTime && item.actualStartTime > item.time;
+
+             return (
+                <div key={item.id} className={`flex items-center gap-4 p-4 rounded-xl border-l-4 shadow-sm transition-all 
+                    ${item.status === 'LIVE' ? 'bg-white border-l-green-600 ring-2 ring-green-500 scale-105 z-10' : 
+                      item.status === 'DONE' ? 'bg-muted opacity-60 border-l-gray-400' : 'bg-white border-l-blue-500'}`}>
+                   
+                   {/* JAM */}
+                   <div className="text-center min-w-[80px]">
+                      <div className="font-bold text-lg">{item.time}</div>
+                      <div className="text-xs text-muted-foreground">{item.duration} min</div>
+                   </div>
+
+                   {/* KONTEN */}
+                   <div className="flex-grow">
+                      <h3 className="font-bold text-lg">{item.activity}</h3>
+                      <div className="text-sm text-muted-foreground flex items-center gap-2">
+                         <span className="font-bold bg-muted px-2 py-0.5 rounded text-xs">PIC: {item.pic}</span>
+                         {isLate && <span className="text-red-500 font-bold text-xs flex items-center gap-1"><AlertTriangle className="w-3 h-3"/> DELAYED</span>}
+                      </div>
+                   </div>
+
+                   {/* ACTION BUTTON */}
+                   <div className="min-w-[120px] text-right">
+                      {item.status === 'DONE' && <Badge className="bg-gray-500">COMPLETED</Badge>}
+                      
+                      {item.status === 'LIVE' && (
+                         <Button onClick={() => handleAction(item.id, 'FINISH')} className="bg-red-600 hover:bg-red-700 w-full animate-pulse">
+                            STOP / NEXT
+                         </Button>
+                      )}
+                      
+                      {item.status === 'UPCOMING' && (
+                         <Button onClick={() => handleAction(item.id, 'START')} variant="outline" className="border-blue-500 text-blue-600 w-full hover:bg-blue-50">
+                            <Play className="w-4 h-4 mr-2"/> START
+                         </Button>
+                      )}
+                   </div>
                 </div>
-            ))}
-        </div>
+             );
+          })}
+       </div>
     </div>
   );
 }

@@ -23,8 +23,6 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { IntegrityPactModal } from '@/components/admin/integrity-pact-modal';
 import { EmergencyButton } from '@/components/admin/emergency-button';
 import { Toaster } from "@/components/ui/toaster";
-import { Separator } from "@/components/ui/separator";
-import { NotificationBell } from "@/components/admin/notification-bell";
 import { DialogTitle } from '@/components/ui/dialog';
 
 // --- DEFINISI MENU ---
@@ -64,6 +62,7 @@ const getMenusByRole = (role: string) => {
         { name: "Tagihan Sponsor", href: "/admin/finance/invoices", icon: Receipt, roles: ['FINANCE', 'DIRECTOR', 'BUSINESS_LEAD'] },
         { name: "Manajemen Tenant", href: "/admin/tenants", icon: Store, roles: ['FINANCE', 'TENANT_RELATIONS', 'BUSINESS_LEAD', 'BUSINESS'] },
         { name: "Skema Honorarium", href: "/admin/finance/honorarium", icon: Calculator, roles: ['DIRECTOR'] },
+        { name: "Kas Kecil (Petty Cash)", href: "/admin/finance/petty-cash", icon: Wallet, roles: ['FINANCE', 'DIRECTOR', 'OPS_LEAD'] },
       ]
     },
 
@@ -128,6 +127,7 @@ const getMenusByRole = (role: string) => {
       roles: ['SECRETARY', 'DIRECTOR', 'SHOW_DIR'],
       items: [
         { name: "E-Office / Surat", href: "/admin/secretary/correspondence", icon: FileText, roles: ['SECRETARY', 'DIRECTOR'] },
+        { name: "Notulensi Rapat", href: "/admin/secretary/minutes", icon: FileText, roles: ['SECRETARY', 'DIRECTOR'] },
         { name: "Generator Sertifikat", href: "/admin/secretary/cert-gen", icon: Award, roles: ['SECRETARY', 'DIRECTOR', 'SHOW_DIR'] },
       ]
     },
@@ -300,8 +300,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       </Button>
                   </SheetTrigger>
                   <SheetContent side="left" className="p-0 w-72 bg-card overflow-y-auto no-scrollbar">
-                      <div className="p-6">
+                      <div className="p-6 flex items-center gap-3">
                         <DialogTitle className="sr-only">BCC Admin Menu</DialogTitle>
+                        <Image src="/images/logo.png" alt="BCC Logo" width={24} height={24} />
                         <h1 className="font-headline font-black text-xl text-primary">BCC ADMIN</h1>
                       </div>
                       <nav className="p-4 space-y-2">
