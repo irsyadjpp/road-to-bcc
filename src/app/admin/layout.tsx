@@ -25,6 +25,8 @@ import { DialogTitle } from '@/components/ui/dialog';
 import { NotificationBell } from '@/components/admin/notification-bell';
 import { AdminBackground } from "@/components/admin/admin-background"; // Import Background Baru
 import { Separator } from '@/components/ui/separator';
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
+
 
 // --- DEFINISI MENU ---
 const getMenusByRole = (role: string) => {
@@ -232,102 +234,96 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return null;
   }
   
-  const currentMenus = getMenusByRole(session.role);
+  const AppSidebar = () => {
+    const currentMenus = getMenusByRole(session.role);
 
-  const renderNavLinks = (isSheet: boolean = false) => currentMenus.map((group: any, groupIndex: number) => (
-    <div key={groupIndex} className="space-y-1">
-        <p className="px-4 pt-4 pb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-2">
-            {group.title}
-        </p>
-        {group.items.map((menu: any) => {
-            const isActive = menu.exact ? pathname === menu.href : pathname.startsWith(menu.href);
-            const NavLinkComponent = (
-                 <Link 
-                    key={menu.href} 
-                    href={menu.href}
-                    className={cn(
-                      'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors group',
-                      isActive 
-                        ? 'bg-primary/10 text-primary font-bold' 
-                        : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground font-medium'
-                    )}
-                  >
-                    <menu.icon className="w-5 h-5" />
-                    <span>{menu.name}</span>
-                </Link>
-            );
-            return isSheet ? <SheetClose asChild>{NavLinkComponent}</SheetClose> : NavLinkComponent;
-        })}
-    </div>
-  ));
+    const renderNavLinks = (isSheet: boolean = false) => currentMenus.map((group: any, groupIndex: number) => (
+      <div key={groupIndex} className="space-y-1">
+          <p className="px-4 pt-4 pb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+              {group.title}
+          </p>
+          {group.items.map((menu: any) => {
+              const isActive = menu.exact ? pathname === menu.href : pathname.startsWith(menu.href);
+              const NavLinkComponent = (
+                   <Link 
+                      key={menu.href} 
+                      href={menu.href}
+                      className={cn(
+                        'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors group',
+                        isActive 
+                          ? 'bg-primary/10 text-primary font-bold' 
+                          : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground font-medium'
+                      )}
+                    >
+                      <menu.icon className="w-5 h-5" />
+                      <span>{menu.name}</span>
+                  </Link>
+              );
+              return isSheet ? <SheetClose asChild>{NavLinkComponent}</SheetClose> : NavLinkComponent;
+          })}
+      </div>
+    ));
 
-
-  return (
-    <>
-    <IntegrityPactModal 
-        isOpen={session.isLoggedIn && !session.isOnboarded}
-        onComplete={handlePactComplete}
-        userName={session.name}
-    />
-    <main className="w-full min-h-screen flex flex-col relative overflow-hidden">
-        
-        {/* --- GLOBAL BACKGROUND (Fixed) --- */}
-        <AdminBackground />
-
-        {/* --- HEADER --- */}
-        <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b border-white/5 px-4 bg-black/20 backdrop-blur-md sticky top-0 z-40">
-            <div className="flex items-center gap-2 md:hidden">
-              <Sheet>
-                  <SheetTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                          <Menu className="w-5 h-5"/>
-                      </Button>
-                  </SheetTrigger>
-                  <SheetContent side="left" className="p-0 w-72 bg-card overflow-y-auto no-scrollbar">
-                      <div className="p-6 flex items-center gap-3">
-                        <DialogTitle className="sr-only">BCC Admin Menu</DialogTitle>
-                        <Image src="/images/logo.png" alt="BCC Logo" width={24} height={24} />
-                        <h1 className="font-headline font-black text-xl text-primary">BCC ADMIN</h1>
-                      </div>
-                      <nav className="p-4 space-y-2">
-                        {renderNavLinks(true)}
-                      </nav>
-                      <div className="p-4 absolute bottom-0 w-full">
-                        <form action={handleLogout}>
-                            <Button variant="outline" className="w-full">
-                                <LogOut className="w-4 h-4 mr-2" /> Logout
-                            </Button>
-                        </form>
-                      </div>
-                  </SheetContent>
-              </Sheet>
+    return (
+        <aside className="w-72 bg-card hidden md:flex flex-col fixed h-full">
+             <div className="p-6 flex items-center gap-3 border-b">
+                <Image src="/images/logo.png" alt="BCC Logo" width={28} height={28} />
+                <h1 className="font-headline font-black text-xl text-primary">BCC ADMIN</h1>
             </div>
-             
-             <div className="flex items-center gap-4 ml-auto">
-                <NotificationBell />
-                <ThemeToggle />
-                <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+            
+            <nav className="flex-1 space-y-2 py-4 overflow-y-auto no-scrollbar">
+                {renderNavLinks()}
+            </nav>
+
+            <div className="p-4 mt-auto border-t">
+                <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
                         <span className="font-bold text-primary">{session.name.charAt(0)}</span>
                     </div>
-                    <div className="text-sm hidden sm:block">
+                    <div className="text-sm">
                         <p className="font-bold">{session.name.split('(')[0].trim()}</p>
                         <p className="text-xs text-muted-foreground">{session.role.replace('_', ' ')}</p>
                     </div>
                 </div>
-             </div>
-        </header>
-        
-        {/* --- CONTENT AREA --- */}
-        {/* z-10 agar konten muncul di atas background */}
-        <div className="flex-1 overflow-auto relative z-10">
-            {children}
-        </div>
-        
-        {/* Fitur Global */}
-        <EmergencyButton /> 
-        <Toaster />
-      </main>
-    </>
+                 <form action={handleLogout}>
+                    <Button variant="outline" className="w-full">
+                        <LogOut className="w-4 h-4 mr-2" /> Logout
+                    </Button>
+                </form>
+            </div>
+        </aside>
+    );
+  }
+
+
+  return (
+    <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset className="bg-transparent">
+            <div className="fixed inset-0 -z-50 pointer-events-none">
+                <AdminBackground />
+            </div>
+
+            <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b border-white/5 px-4 bg-black/20 backdrop-blur-md sticky top-0 z-40">
+                <div className="flex items-center gap-2">
+                    <SidebarTrigger className="-ml-1 text-zinc-400 hover:text-white transition-colors" />
+                    <Separator orientation="vertical" className="mr-2 h-4 bg-zinc-700" />
+                    <span className="text-sm font-bold text-zinc-300 hidden md:block tracking-wide uppercase">
+                      BCC Command Center
+                    </span>
+                </div>
+                <div className="flex items-center gap-4">
+                    <NotificationBell />
+                </div>
+            </header>
+
+            <div className="flex-1 overflow-auto relative z-10 p-4 md:p-8">
+                {children}
+            </div>
+            
+            <EmergencyButton /> 
+            <Toaster />
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

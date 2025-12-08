@@ -1,9 +1,8 @@
-
 'use client';
 
 export function AdminBackground() {
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-zinc-950">
+    <div className="fixed inset-0 pointer-events-none overflow-hidden bg-zinc-950">
       
       {/* 1. Base Gradient (Deep Depth) */}
       <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-zinc-900 to-black opacity-90" />
