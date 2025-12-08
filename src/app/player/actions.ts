@@ -81,9 +81,31 @@ export async function getPlayerSession() {
   }
 }
 
-export async function updatePlayerProfile(data: any) {
+export async function updatePlayerProfile(data: FormData) {
   await new Promise(r => setTimeout(r, 1000));
   // In a real app, you would find the user by session ID and update their data in the database.
-  console.log("Updating player profile with:", data);
+  
+  const updates = {
+    nickname: data.get('nickname'),
+    phone: data.get('phone'),
+    address: data.get('address'),
+    // jerseySize is removed
+  };
+
+  console.log("Updating player profile with:", updates);
+  
+  const cookieStore = cookies();
+  const sessionStr = cookieStore.get('bcc_player_session')?.value;
+  
+  if (sessionStr) {
+    const session = JSON.parse(sessionStr);
+    const updatedSession = { ...session, ...updates };
+    cookieStore.set('bcc_player_session', JSON.stringify(updatedSession), {
+      httpOnly: true, 
+      path: '/' 
+    });
+  }
+
+  revalidatePath('/player/dashboard');
   return { success: true, message: "Profil berhasil diperbarui." };
 }
