@@ -10,9 +10,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { FileCheck, Plus, Search, ShieldCheck, Eye, Trash2 } from "lucide-react";
+import { FileCheck, Plus, Search, ShieldCheck, Eye, Trash2, QrCode } from "lucide-react";
 import { ROLE_DEFINITIONS } from "@/lib/data/role-definitions"; 
 import { useToast } from "@/hooks/use-toast";
+import { MandateQRDialog } from "@/components/admin/mandate-qr-dialog";
 
 // Mock Data Personil (Unassigned)
 const STAFF_LIST = [
@@ -36,6 +37,9 @@ export default function DigitalMandatePage() {
   const [selectedCategory, setSelectedCategory] = useState<keyof typeof ROLE_DEFINITIONS>("TPF");
   const [selectedStaff, setSelectedStaff] = useState<string[]>([]);
   const [letterNumber, setLetterNumber] = useState("002/SPT-TPF/BCC/XII/2025");
+  
+  // State untuk modal QR
+  const [selectedMandate, setSelectedMandate] = useState<any>(null);
 
   const template = ROLE_DEFINITIONS[selectedCategory];
 
@@ -98,7 +102,7 @@ export default function DigitalMandatePage() {
                             <TableHead className="text-white font-bold">DIVISI / BIDANG</TableHead>
                             <TableHead className="text-center text-white font-bold">PERSONIL</TableHead>
                             <TableHead className="text-white font-bold">TGL TERBIT</TableHead>
-                            <TableHead className="text-right pr-8 text-white font-bold">STATUS</TableHead>
+                            <TableHead className="text-right pr-8 text-white font-bold">Aksi</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -110,10 +114,16 @@ export default function DigitalMandatePage() {
                                     <Badge variant="secondary" className="bg-zinc-800 text-white">{m.issuedTo} Orang</Badge>
                                 </TableCell>
                                 <TableCell className="text-zinc-400">{m.date}</TableCell>
-                                <TableCell className="text-right pr-8">
-                                    <Badge className="bg-green-500/20 text-green-500 hover:bg-green-500/30 border-none uppercase">
-                                        {m.status}
-                                    </Badge>
+                                <TableCell className="text-right pr-8 flex items-center justify-end gap-2">
+                                    <Badge className="bg-green-500/20 text-green-500 mr-2">{m.status}</Badge>
+                                    <Button 
+                                        size="sm" 
+                                        variant="outline" 
+                                        className="rounded-full border-zinc-700 hover:bg-white hover:text-black"
+                                        onClick={() => setSelectedMandate(m)}
+                                    >
+                                        <QrCode className="w-4 h-4 mr-2"/> QR AKSES
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -232,6 +242,15 @@ export default function DigitalMandatePage() {
 
         </div>
       )}
+
+        {/* MODAL QR COMPONENT */}
+        {selectedMandate && (
+            <MandateQRDialog 
+                isOpen={!!selectedMandate} 
+                onClose={() => setSelectedMandate(null)} 
+                mandateData={selectedMandate}
+            />
+        )}
 
     </div>
   );
