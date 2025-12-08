@@ -20,11 +20,11 @@ import { cn } from "@/lib/utils";
 const DIVISIONS = ["ALL", "MATCH CONTROL", "MEDIA", "LOGISTICS", "SECURITY", "MEDICAL", "FINANCE"];
 
 const MOCK_ROSTER = [
-  { id: "1", name: "Kevin Sanjaya", role: "HEAD OF DIVISION", division: "MATCH CONTROL", email: "kevin@bcc.com", status: "ACTIVE", avatar: "https://github.com/shadcn.png" },
-  { id: "2", name: "Marcus Gideon", role: "STAFF", division: "MATCH CONTROL", email: "marcus@bcc.com", status: "ACTIVE", avatar: "" },
-  { id: "3", name: "Fajar Alfian", role: "HEAD OF DIVISION", division: "MEDIA", email: "fajar@bcc.com", status: "ON LEAVE", avatar: "" },
-  { id: "4", name: "Rian Ardianto", role: "STAFF", division: "LOGISTICS", email: "rian@bcc.com", status: "ACTIVE", avatar: "" },
-  { id: "5", name: "Hendra Setiawan", role: "DIRECTOR", division: "INTI", email: "hendra@bcc.com", status: "ACTIVE", avatar: "" },
+  { id: "1", name: "Kevin Sanjaya Sukamuljo", role: "HEAD OF DIVISION", division: "MATCH CONTROL", email: "kevin.s@bcc.com", status: "ACTIVE", avatar: "https://github.com/shadcn.png" },
+  { id: "2", name: "Marcus Fernaldi Gideon", role: "STAFF", division: "MATCH CONTROL", email: "marcus.g@bcc.com", status: "ACTIVE", avatar: "" },
+  { id: "3", name: "Fajar Alfian", role: "HEAD OF DIVISION", division: "MEDIA", email: "fajar.a@bcc.com", status: "ON LEAVE", avatar: "" },
+  { id: "4", name: "Muhammad Rian Ardianto", role: "STAFF", division: "LOGISTICS", email: "rian.a@bcc.com", status: "ACTIVE", avatar: "" },
+  { id: "5", name: "Hendra Setiawan", role: "DIRECTOR", division: "INTI", email: "hendra.s@bcc.com", status: "ACTIVE", avatar: "" },
 ];
 
 const UNASSIGNED_USERS = [
@@ -134,65 +134,76 @@ export default function RosterPage() {
             {/* ADD NEW CARD (Dashed) */}
             <button 
                 onClick={() => setIsAssignOpen(true)}
-                className="group h-[200px] border-2 border-dashed border-zinc-800 rounded-[32px] flex flex-col items-center justify-center gap-4 hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer"
+                className="group h-full min-h-[220px] border-2 border-dashed border-zinc-800 rounded-[32px] flex flex-col items-center justify-center gap-4 hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer"
             >
                 <div className="w-16 h-16 rounded-full bg-zinc-900 group-hover:bg-primary group-hover:text-white flex items-center justify-center text-zinc-500 transition-colors">
                     <UserPlus className="w-8 h-8" />
                 </div>
-                <div className="text-zinc-500 font-bold group-hover:text-primary">ASSIGN NEW STAFF</div>
+                <div className="text-zinc-500 font-bold group-hover:text-primary tracking-widest text-sm">ASSIGN NEW STAFF</div>
             </button>
 
-            {/* STAFF CARDS */}
+            {/* STAFF CARDS (REVISI LAYOUT) */}
             {filteredRoster.map((staff) => (
-                <div key={staff.id} className="group relative bg-zinc-900 rounded-[32px] p-6 border border-zinc-800 hover:border-zinc-700 transition-all hover:-translate-y-1 hover:shadow-2xl">
+                <div key={staff.id} className="group relative bg-zinc-900 rounded-[32px] p-6 border border-zinc-800 hover:border-zinc-700 transition-all hover:-translate-y-1 hover:shadow-2xl flex flex-col justify-between">
                     
-                    {/* Role Badge */}
-                    <div className="absolute top-6 right-6">
+                    {/* Role Badge (Posisi Absolute di Pojok Kanan Atas) */}
+                    <div className="absolute top-5 right-5 z-10">
                         <Badge className={cn(
-                            "rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider border-none",
+                            "rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider border-none shadow-lg",
                             staff.role.includes("HEAD") || staff.role.includes("DIRECTOR") 
-                                ? "bg-primary text-white" 
+                                ? "bg-white text-black" 
                                 : "bg-zinc-800 text-zinc-400"
                         )}>
                             {staff.role}
                         </Badge>
                     </div>
 
+                    {/* Content Body */}
                     <div className="flex items-start gap-5">
-                        <Avatar className="w-16 h-16 rounded-[20px] border-2 border-zinc-800 group-hover:border-white/20 transition-colors">
-                            <AvatarImage src={staff.avatar} />
-                            <AvatarFallback className="bg-zinc-800 text-zinc-400 font-bold rounded-[20px]">
+                        <Avatar className="w-16 h-16 rounded-[24px] border-2 border-zinc-800 group-hover:border-primary/50 transition-colors shadow-xl shrink-0">
+                            <AvatarImage src={staff.avatar} className="object-cover" />
+                            <AvatarFallback className="bg-zinc-800 text-zinc-500 font-black text-xl rounded-[24px]">
                                 {staff.name.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
                         
-                        <div className="space-y-1">
-                            <h3 className="text-lg font-bold text-white leading-tight group-hover:text-primary transition-colors">
+                        {/* PERBAIKAN DISINI: 
+                           1. pr-20: Memberi ruang di kanan agar teks tidak nabrak Badge Role.
+                           2. space-y-2: Memberi jarak antara Nama dan Divisi.
+                        */}
+                        <div className="space-y-2 pr-20 w-full">
+                            <h3 className="text-xl font-black text-white leading-tight group-hover:text-primary transition-colors line-clamp-2">
                                 {staff.name}
                             </h3>
-                            <div className="text-sm font-medium text-zinc-400 flex items-center gap-2">
-                                <Briefcase className="w-3 h-3" /> {staff.division}
-                            </div>
-                            <div className="text-xs text-zinc-600 font-mono pt-1">
-                                {staff.email}
+                            
+                            <div className="flex flex-col gap-1">
+                                <div className="inline-flex items-center gap-2 text-xs font-bold text-zinc-400 bg-zinc-950/50 px-2 py-1 rounded-md w-fit border border-zinc-800/50">
+                                    <Briefcase className="w-3 h-3 text-primary" /> 
+                                    <span className="truncate max-w-[120px]">{staff.division}</span>
+                                </div>
+                                <div className="text-[10px] text-zinc-600 font-mono truncate">
+                                    {staff.email}
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Footer Actions */}
                     <div className="mt-6 pt-4 border-t border-zinc-800 flex justify-between items-center">
-                        <div className="flex items-center gap-2">
-                            <div className={cn("w-2 h-2 rounded-full", staff.status === 'ACTIVE' ? "bg-green-500" : "bg-yellow-500")}></div>
-                            <span className="text-xs font-bold text-zinc-500">{staff.status}</span>
+                        <div className="flex items-center gap-2 bg-zinc-950/30 px-3 py-1.5 rounded-full">
+                            <div className={cn("w-2 h-2 rounded-full shadow-[0_0_8px]", staff.status === 'ACTIVE' ? "bg-green-500 shadow-green-500/50" : "bg-yellow-500 shadow-yellow-500/50")}></div>
+                            <span className={cn("text-[10px] font-bold uppercase tracking-wide", staff.status === 'ACTIVE' ? "text-green-500" : "text-yellow-500")}>
+                                {staff.status}
+                            </span>
                         </div>
-                        <Button variant="ghost" size="icon" className="rounded-full hover:bg-zinc-800">
-                            <MoreVertical className="w-4 h-4 text-zinc-400" />
+                        
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-white hover:text-black transition-all">
+                            <MoreVertical className="w-4 h-4" />
                         </Button>
                     </div>
                 </div>
             ))}
         </div>
-
       </div>
 
       {/* --- FLOATING ACTION BUTTON (MOBILE) --- */}
