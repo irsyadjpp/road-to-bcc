@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, type ReactNode } from 'react';
@@ -10,7 +11,7 @@ import {
   ClipboardCheck, ArrowRight, Menu, Home, Settings, AlertOctagon,
   FileText, ShieldCheck, Mic, Ticket, Award, Wallet,
   ClipboardList, Activity, Gavel, Gift, Stethoscope, Receipt, CheckCircle,
-  Store, Video, QrCode, Archive, FileBadge, DollarSign, ArrowRightCircle, Megaphone, Calculator, ChevronDown, Loader2, UserCog, UserPlus, UserRound, Kanban, Package, Utensils, Clock, CalendarClock, Settings2
+  Store, Video, QrCode, Archive, FileBadge, DollarSign, ArrowRightCircle, Megaphone, Calculator, ChevronDown, Loader2, UserCog, UserPlus, UserRound, Kanban, Package, Utensils, Clock, CalendarClock, Settings2, MessagesSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
@@ -75,8 +76,9 @@ const getMenusByRole = (role: string) => {
         { name: "Editor Jadwal", href: "/admin/match-control/schedule-editor", icon: CalendarClock, roles: ['MATCH_COORD'] },
         { name: "Berita Acara Hasil", href: "/admin/matches/result-sheet", icon: FileText, roles: ['REFEREE', 'MATCH_COORD'] },
         { name: "Verifikasi TPF", href: "/admin/tpf", icon: ShieldCheck, roles: ['TPF', 'MATCH_COORD', 'DIRECTOR'] },
-        { name: "Call Room (Antrean)", href: "/admin/mlo/dashboard", icon: Megaphone, roles: ['MLO', 'MATCH_COORD'] },
-        { name: "Verifikasi Line-Up", href: "/admin/mlo/lineups", icon: ClipboardCheck, roles: ['MLO', 'MATCH_COORD'] },
+        { name: "MLO: Call Room", href: "/admin/mlo/dashboard", icon: Megaphone, roles: ['MLO', 'MATCH_COORD'] },
+        { name: "MLO: Helpdesk", href: "/admin/mlo/helpdesk", icon: MessagesSquare, roles: ['MLO', 'MATCH_COORD', 'DIRECTOR'] },
+        { name: "MLO: Verifikasi Line-Up", href: "/admin/mlo/lineups", icon: ClipboardCheck, roles: ['MLO', 'MATCH_COORD'] },
         { name: "Keputusan Protes", href: "/admin/protests", icon: Gavel, roles: ['REFEREE', 'MATCH_COORD', 'DIRECTOR'] },
         { name: "Papan Skor Wasit", href: "/admin/referee", icon: Trophy, roles: ['REFEREE', 'MATCH_COORD', 'IT_ADMIN'] },
         { name: "Checklist Venue", href: "/admin/referee/checklist", icon: ShieldCheck, roles: ['REFEREE', 'DIRECTOR'] },
@@ -96,6 +98,7 @@ const getMenusByRole = (role: string) => {
         { name: "Absensi & Konsumsi", href: "/admin/hr/meals", icon: Utensils, roles: ['LOGISTICS', 'SECRETARY', 'OPS_LEAD', 'DIRECTOR'] },
         { name: "Undian Doorprize", href: "/admin/raffle", icon: Gift, roles: ['OPS_LEAD', 'DIRECTOR', 'SHOW_DIR', 'MEDIA'] },
         { name: "Pengajuan Reimbursement", href: "/admin/reimbursement/submit", icon: ArrowRightCircle, roles: ['ALL'] },
+        { name: "Logistik Habis Pakai", href: "/admin/logistics/consumables", icon: Package, roles: ['LOGISTICS', 'OPS_LEAD'] },
       ]
     },
     
@@ -124,6 +127,7 @@ const getMenusByRole = (role: string) => {
       title: "SEKRETARIAT", 
       roles: ['SECRETARY', 'DIRECTOR', 'SHOW_DIR'],
       items: [
+        { name: "E-Office / Surat", href: "/admin/secretary/correspondence", icon: FileText, roles: ['SECRETARY', 'DIRECTOR'] },
         { name: "Generator Sertifikat", href: "/admin/secretary/cert-gen", icon: Award, roles: ['SECRETARY', 'DIRECTOR', 'SHOW_DIR'] },
       ]
     },
