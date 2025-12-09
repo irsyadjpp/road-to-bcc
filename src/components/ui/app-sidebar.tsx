@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from "react"
@@ -11,7 +10,7 @@ import {
   PieChart, FileCheck, Stamp, Receipt, Store, Wallet, Coins, 
   Trophy, CalendarDays, FileText, ShieldAlert, Mic2, LifeBuoy, ClipboardList, Gavel, MonitorPlay, ClipboardCheck, 
   QrCode, Stethoscope, Package, Box, Database, Utensils, Gift, Upload, Layers, 
-  Timer, 
+  Timer, Navigation,
   BarChart3, Megaphone, Image as ImageIcon, 
   Mail, FileSignature, Award, 
   Tags, UserCog, Handshake, Newspaper, Settings, ChevronRight, LogOut 
@@ -66,7 +65,7 @@ const data = {
     { title: "Arena Manager", url: "/admin/match-control", icon: Trophy },
     { title: "Editor Jadwal", url: "/admin/match-control/schedule", icon: CalendarDays },
     { title: "Generate Bagan", url: "/admin/match-control/bracket", icon: Network },
-    { title: "Berita Acara Hasil", url: "/admin/match-control/results", icon: FileText },
+    { title: "Verifikasi Hasil", url: "/admin/match-control/results", icon: FileText },
     { title: "Verifikasi TPF", url: "/admin/tpf", icon: ShieldAlert },
     { title: "MLO: Call Room", url: "/admin/mlo/call-room", icon: Mic2 },
     { title: "MLO: Helpdesk", url: "/admin/mlo/helpdesk", icon: LifeBuoy },
@@ -74,7 +73,6 @@ const data = {
     { title: "Keputusan Protes", url: "/admin/protests", icon: Gavel },
     { title: "Papan Skor Wasit", url: "/admin/referee/match/1", icon: MonitorPlay },
     { title: "Checklist Venue", url: "/admin/match-control/venue-check", icon: ClipboardCheck },
-    { title: "Dispatch Service", url: "/admin/match-control/service", icon: Megaphone },
   ],
   // 5. OPERASIONAL
   navOps: [
@@ -82,6 +80,7 @@ const data = {
     { title: "Log Medis", url: "/admin/medical", icon: Stethoscope },
     { title: "Kontrol Shuttlecock", url: "/admin/logistics/shuttlecock", icon: Package },
     { title: "Inventaris Umum", url: "/admin/logistics/inventory", icon: Box },
+    { title: "Dispatch Command", url: "/admin/logistics/dispatch", icon: Navigation },
     { title: "Database Volunteer", url: "/admin/hr/volunteers", icon: Database },
     { title: "Absensi & Konsumsi", url: "/admin/hr/meals", icon: Utensils },
     { title: "Undian Doorprize", url: "/admin/raffle", icon: Gift },
