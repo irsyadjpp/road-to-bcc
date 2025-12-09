@@ -282,6 +282,10 @@ export default function AttendanceMealsPage() {
       {/* --- SCANNER MODAL --- */}
       <Dialog open={isScanOpen} onOpenChange={(val) => {setIsScanOpen(val); setScanResult(null);}}>
         <DialogContent className="bg-zinc-950 border-zinc-800 text-white rounded-[40px] max-w-sm p-0 overflow-hidden shadow-2xl">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Scan QR Crew</DialogTitle>
+            <DialogDescription>Arahkan kamera ke ID Card panitia untuk check-in atau klaim konsumsi.</DialogDescription>
+          </DialogHeader>
             {scanResult ? (
                 // SUCCESS STATE
                 <div className="flex flex-col items-center justify-center p-8 bg-green-600 text-center animate-in zoom-in-95">
