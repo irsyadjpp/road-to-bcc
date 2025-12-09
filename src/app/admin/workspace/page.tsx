@@ -299,11 +299,3 @@ export default function WorkspacePage() {
     </div>
   );
 }
-```
-
-### Alasan Desain:
-
-*   **Hierarchy yang Jelas:** *Bento grid* memungkinkan informasi paling penting (statistik kinerja) menempati area visual yang lebih besar, sedangkan informasi sekunder (seperti kalender) ditempatkan di kartu yang lebih kecil.
-*   **Fokus Individu:** Berbeda dari halaman Workspace sebelumnya yang bersifat umum, halaman ini dirancang untuk setiap anggota panitia, memberikan mereka *sense of ownership* dan gambaran jelas tentang kontribusi mereka.
-*   **Aesthetic & Modern:** Penggunaan sudut yang sangat membulat (`rounded-[32px]`), *glow effects*, dan layout asimetris mengikuti tren desain UI/UX terkini yang sering ditemukan pada aplikasi modern.
-*   **Task Management yang Memuaskan:** Interaksi klik pada tugas memberikan umpan balik visual instan (centang, coret, dan redup), yang secara psikologis memberikan rasa puas saat menyelesaikan pekerjaan.
