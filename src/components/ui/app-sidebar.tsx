@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from "react"
@@ -93,7 +94,7 @@ const data = {
   ],
   // 7. BISNIS & MEDIA
   navBiz: [
-    { title: "Data Pengunjung", url: "/admin/visitors", icon: BarChart3 },
+    { title: "Analisis Pengunjung", url: "/admin/business/visitors", icon: BarChart3 },
     { title: "Sponsorship CRM", url: "/admin/business/partners", icon: Handshake },
     { title: "Laporan Sponsor", url: "/admin/analytics", icon: BarChart3 },
     { title: "Manajemen Media", url: "/admin/media", icon: ImageIcon },
