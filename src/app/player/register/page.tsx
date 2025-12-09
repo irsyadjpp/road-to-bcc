@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { ArrowRight, LogIn, Shield, User, Mail, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 export default function RegisterPage() {

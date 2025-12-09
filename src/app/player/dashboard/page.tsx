@@ -6,7 +6,8 @@ import {
   Trophy, Users, Shield, QrCode, 
   Activity, Calendar, MapPin, Hash, 
   ArrowRight, CheckCircle2, LogOut,
-  User, Mail, Phone, Home, Crown, RefreshCcw, FileText
+  User, Mail, Phone, Upload, Award, FileText,
+  Clock, RefreshCcw, Home
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,6 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 
 // --- MOCK DATA ---
@@ -87,7 +87,6 @@ export default function AthleteDashboard() {
   const handleSubmitProfile = (e: React.FormEvent) => {
     e.preventDefault();
     setIsProfileComplete(true); // Pindah ke Step 3 (Full Dashboard)
-    // Di sini juga akan mengirim data ke verifikasi Sekretariat
   }
 
   // --- RENDER FUNCTIONS (SAMA SEPERTI SEBELUMNYA) ---
@@ -220,7 +219,6 @@ export default function AthleteDashboard() {
                     <h2 className="text-2xl font-black text-white uppercase leading-tight mb-1">{athlete.name}</h2>
                     <p className="text-zinc-500 text-sm font-bold mb-6">Mens Singles Specialist</p>
 
-                    {/* Stats Row */}
                     <div className="grid grid-cols-2 gap-4 border-t border-zinc-800 pt-6">
                         <div>
                             <p className="text-[10px] text-zinc-500 font-bold uppercase">Points</p>
@@ -234,19 +232,23 @@ export default function AthleteDashboard() {
                 </CardContent>
             </Card>
 
-            {/* UPCOMING MATCH WIDGET */}
-            <Card className="bg-zinc-900 border-zinc-800 rounded-[32px] p-6 relative overflow-hidden">
-                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-red-500"></div>
+            <Card className={cn(
+                "bg-zinc-900 border rounded-[32px] p-6",
+                athlete.verificationStatus === 'VERIFIED' ? "border-green-500/50" : "border-yellow-500/50"
+            )}>
                 <h3 className="text-xs font-black text-zinc-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-red-500"/> Next Match
+                    <Shield className="w-4 h-4 text-cyan-500"/> Verification Status
                 </h3>
-                <div className="space-y-1">
-                    <p className="text-lg font-bold text-white">{UPCOMING_MATCH.opponent}</p>
-                    <p className="text-xs text-zinc-400">{UPCOMING_MATCH.event}</p>
-                    <div className="flex items-center gap-3 mt-3 pt-3 border-t border-zinc-800/50">
-                        <Badge variant="outline" className="text-[10px] border-zinc-700 text-zinc-300">{UPCOMING_MATCH.court}</Badge>
-                        <span className="text-[10px] text-red-400 font-bold animate-pulse">{UPCOMING_MATCH.time}</span>
+                <div className="flex justify-between items-center">
+                    <div className="space-y-1">
+                        <p className={cn("text-xl font-black", athlete.verificationStatus === 'VERIFIED' ? "text-green-500" : "text-yellow-500 animate-pulse")}>
+                            {athlete.verificationStatus === 'VERIFIED' ? "VERIFIED" : "PENDING"}
+                        </p>
+                        <p className="text-zinc-400 text-sm">Status dokumen oleh Sekretariat.</p>
                     </div>
+                    <Button size="icon" className="bg-zinc-800 hover:bg-zinc-700 text-zinc-400">
+                        <FileText className="w-5 h-5"/>
+                    </Button>
                 </div>
             </Card>
         </div>
@@ -274,28 +276,21 @@ export default function AthleteDashboard() {
                 </CardContent>
             </Card>
             
-            {/* VERIFICATION STATUS CARD */}
-            <Card className={cn(
-                "bg-zinc-900 border rounded-[32px] p-6",
-                athlete.verificationStatus === 'VERIFIED' ? "border-green-500/50" : "border-yellow-500/50"
-            )}>
+            <Card className="bg-zinc-900 border-zinc-800 rounded-[32px] p-6 relative overflow-hidden">
+                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-red-500"></div>
                 <h3 className="text-xs font-black text-zinc-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-cyan-500"/> Verification Status
+                    <Calendar className="w-4 h-4 text-red-500"/> Next Match
                 </h3>
-                <div className="flex justify-between items-center">
-                    <div className="space-y-1">
-                        <p className={cn("text-xl font-black", athlete.verificationStatus === 'VERIFIED' ? "text-green-500" : "text-yellow-500 animate-pulse")}>
-                            {athlete.verificationStatus === 'VERIFIED' ? "VERIFIED" : "PENDING"}
-                        </p>
-                        <p className="text-zinc-400 text-sm">Status dokumen oleh Sekretariat.</p>
+                <div className="space-y-1">
+                    <p className="text-lg font-bold text-white">{UPCOMING_MATCH.opponent}</p>
+                    <p className="text-xs text-zinc-400">{UPCOMING_MATCH.event}</p>
+                    <div className="flex items-center gap-3 mt-3 pt-3 border-t border-zinc-800/50">
+                        <Badge variant="outline" className="text-[10px] border-zinc-700 text-zinc-300">{UPCOMING_MATCH.court}</Badge>
+                        <span className="text-[10px] text-red-400 font-bold animate-pulse">{UPCOMING_MATCH.time}</span>
                     </div>
-                    <Button size="icon" className="bg-zinc-800 hover:bg-zinc-700 text-zinc-400">
-                        <FileText className="w-5 h-5"/>
-                    </Button>
                 </div>
             </Card>
 
-            {/* RECENT HISTORY */}
             <Card className="bg-zinc-900/50 border border-zinc-800/50 rounded-[32px] flex-1">
                 <div className="p-6 border-b border-zinc-800">
                     <h3 className="text-sm font-black text-zinc-500 uppercase tracking-widest">Performance History</h3>
@@ -317,7 +312,6 @@ export default function AthleteDashboard() {
                     </div>
                 </ScrollArea>
             </Card>
-
          </div>
     </div>
   );
@@ -364,7 +358,7 @@ export default function AthleteDashboard() {
                 </div>
                 <h2 className="text-2xl font-black uppercase mb-2">Squad Sync Successful!</h2>
                 <p className="text-zinc-400 text-sm mb-6">
-                    Anda berhasil bergabung dengan skuad:
+                    Anda berhasil bergabung dengan:
                     <br/><strong className="text-white text-lg">{athlete.team?.name}</strong>
                 </p>
                 <Button 
