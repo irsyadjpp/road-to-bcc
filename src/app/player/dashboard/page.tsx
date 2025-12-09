@@ -9,7 +9,7 @@ import {
   AlertTriangle, Instagram, History, Info, ChevronRight, 
   Camera, MessageCircle, Download, Gavel, Clock, 
   Share2, RotateCw, AlertOctagon, Send, Paperclip, 
-  MoreVertical, CheckCheck, Smile
+  MoreVertical, CheckCheck, Smile, Plus
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -406,5 +406,6 @@ export default function PlayerDashboardFull() {
 
     </div>
   );
+}
 
     
