@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from "react";
@@ -5,7 +6,8 @@ import {
   Trophy, Users, Shield, QrCode, 
   Activity, Calendar, MapPin, Hash, 
   ArrowRight, CheckCircle2, LogOut,
-  User, Mail, Phone, Home, Crown, RefreshCcw, Upload
+  User, Mail, Phone, Upload, Award, FileText,
+  Clock, RefreshCcw, Home
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,14 +27,20 @@ const ATHLETE_INITIAL_DATA = {
   points: 8500,
   winRate: 78,
   avatar: "https://github.com/shadcn.png",
+  verificationStatus: "PENDING" as "PENDING" | "VERIFIED" | "ISSUE",
   team: null as { name: string; logo: string; role: string } | null 
 };
 
-// State untuk simulasi Onboarding
-// FALSE = User baru, belum join tim
-const HAS_JOINED_TEAM_SIMULATION = false; 
-// FALSE = Data diri (KTP, dll) belum diisi
-const IS_PROFILE_COMPLETE_SIMULATION = false; 
+const UPCOMING_MATCH = {
+  event: "Babak Penyisihan - MS Open",
+  opponent: "Anthony Ginting",
+  court: "Court 1 (TV)",
+  time: "Besok, 10:00 WIB"
+};
+
+// SIMULASI INITIAL STATE FLOW
+const INITIAL_JOIN_STATE = false; // Ganti ke true untuk melewati langkah 1
+const INITIAL_PROFILE_STATE = false; // Ganti ke true untuk melewati langkah 2
 
 
 export default function AthleteDashboard() {
@@ -42,8 +50,8 @@ export default function AthleteDashboard() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   // SIMULASI STATE ONBOARDING
-  const [hasJoinedTeam, setHasJoinedTeam] = useState(HAS_JOINED_TEAM_SIMULATION);
-  const [isProfileComplete, setIsProfileComplete] = useState(IS_PROFILE_COMPLETE_SIMULATION);
+  const [hasJoinedTeam, setHasJoinedTeam] = useState(INITIAL_JOIN_STATE);
+  const [isProfileComplete, setIsProfileComplete] = useState(INITIAL_PROFILE_STATE);
 
 
   // Simulasi Join Team
@@ -59,7 +67,7 @@ export default function AthleteDashboard() {
           team: {
             name: "PB Djarum Official",
             logo: "/logos/djarum.png",
-            role: "Member"
+            role: "Athlete"
           }
         }));
         setHasJoinedTeam(true); // Pindah ke Step 2
@@ -71,9 +79,11 @@ export default function AthleteDashboard() {
   };
   
   // Simulasi Submit Data Diri
-  const handleSubmitProfile = () => {
+  const handleSubmitProfile = (e: React.FormEvent) => {
+    e.preventDefault();
     // Logic validasi form...
     setIsProfileComplete(true); // Pindah ke Step 3 (Full Dashboard)
+    // Di sini juga akan mengirim data ke verifikasi Sekretariat
   }
 
   // --- RENDERING ONBOARDING STEPS ---
@@ -83,10 +93,10 @@ export default function AthleteDashboard() {
     <Card className="bg-zinc-900 border-zinc-800 rounded-[32px] overflow-hidden relative border-dashed border-2 p-12 max-w-xl mx-auto">
       <CardContent className="space-y-6">
         <div className="flex items-center gap-4 text-center mx-auto max-w-md">
-            <h3 className="text-2xl font-black text-white">Squad Synchronization</h3>
+            <h3 className="text-3xl font-black text-white">Squad Synchronization</h3>
         </div>
         <p className="text-zinc-400 text-sm text-center">
-            Minta <strong>Kode Unik Komunitas</strong> dari manajer/kapten tim Anda untuk mendaftar ke kompetisi.
+            Minta <strong>Kode Unik Komunitas</strong> dari manajer Anda. Ini adalah langkah pertama untuk terdaftar di turnamen.
         </p>
         <div className="w-full bg-black p-6 rounded-3xl border border-zinc-800 flex flex-col gap-4">
             <div className="space-y-1">
@@ -116,15 +126,18 @@ export default function AthleteDashboard() {
 
   // STEP 2: COMPLETE PROFILE
   const renderCompleteProfile = () => (
-    <Card className="bg-zinc-900 border-zinc-800 rounded-[32px] p-8 max-w-3xl mx-auto space-y-6">
+    <Card className="bg-zinc-900 border-zinc-800 rounded-[32px] p-8 max-w-4xl mx-auto space-y-8">
         <header className="text-center space-y-2">
-            <RefreshCcw className="w-10 h-10 text-indigo-500 mx-auto animate-spin-slow"/>
             <h3 className="text-3xl font-black text-white">Final Step: Complete Profile</h3>
             <p className="text-zinc-400">Data ini dibutuhkan untuk verifikasi dokumen dan pengelompokan kategori.</p>
+            <div className="flex items-center justify-center gap-2 pt-2">
+                <Badge className="bg-indigo-600 text-white border-none">Squad: {athlete.team?.name}</Badge>
+            </div>
         </header>
 
-        <div className="space-y-6 pt-4">
-            <div className="grid grid-cols-2 gap-4">
+        <form onSubmit={handleSubmitProfile} className="space-y-6 pt-4">
+            {/* Row 1: Core Identity */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                     <label className="text-xs font-bold uppercase text-zinc-500 ml-1">Nama Lengkap (Sesuai KTP)</label>
                     <Input placeholder="Nama Anda" className="bg-black border-zinc-800 h-12 rounded-xl text-white" />
@@ -133,9 +146,14 @@ export default function AthleteDashboard() {
                     <label className="text-xs font-bold uppercase text-zinc-500 ml-1">Tanggal Lahir</label>
                     <Input type="date" className="bg-black border-zinc-800 h-12 rounded-xl text-white" />
                 </div>
+                <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-zinc-500 ml-1">No. HP / WhatsApp</label>
+                    <Input placeholder="08xx-xxxx-xxxx" className="bg-black border-zinc-800 h-12 rounded-xl text-white" />
+                </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            {/* Row 2: Category & Documents */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <label className="text-xs font-bold uppercase text-zinc-500 ml-1">Kategori Diikuti</label>
                     <Select>
@@ -147,32 +165,44 @@ export default function AthleteDashboard() {
                     </Select>
                 </div>
                 <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase text-zinc-500 ml-1">No. HP / WhatsApp</label>
-                    <Input placeholder="08xx-xxxx-xxxx" className="bg-black border-zinc-800 h-12 rounded-xl text-white" />
+                    <label className="text-xs font-bold uppercase text-zinc-500 ml-1">Alamat Domisili</label>
+                    <Input placeholder="Kota/Kabupaten" className="bg-black border-zinc-800 h-12 rounded-xl text-white" />
                 </div>
             </div>
 
-            <div className="space-y-2">
-                <label className="text-xs font-bold uppercase text-zinc-500 ml-1">Upload Foto Profil Terbaru</label>
-                <div className="h-24 bg-black border-2 border-dashed border-zinc-800 rounded-xl flex items-center justify-center text-zinc-600 hover:text-cyan-500 cursor-pointer">
-                    <Upload className="w-6 h-6 mr-2"/> Tap to Upload
+            {/* Row 3: Document Upload */}
+            <div className="space-y-4 pt-4 border-t border-zinc-800">
+                <div className="space-y-2">
+                    <h4 className="text-xs font-bold uppercase text-zinc-500 flex items-center gap-2">
+                        <FileText className="w-4 h-4 text-cyan-500"/> Document Upload (Max 2MB)
+                    </h4>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="aspect-video bg-black border-2 border-dashed border-zinc-800 rounded-xl flex flex-col items-center justify-center text-zinc-600 hover:text-cyan-500 cursor-pointer">
+                        <Upload className="w-6 h-6"/> <span className="text-xs">KTP / ID Card</span>
+                    </div>
+                    <div className="aspect-video bg-black border-2 border-dashed border-zinc-800 rounded-xl flex flex-col items-center justify-center text-zinc-600 hover:text-cyan-500 cursor-pointer">
+                        <Upload className="w-6 h-6"/> <span className="text-xs">Akte Kelahiran</span>
+                    </div>
+                    <div className="aspect-video bg-black border-2 border-dashed border-zinc-800 rounded-xl flex flex-col items-center justify-center text-zinc-600 hover:text-cyan-500 cursor-pointer">
+                        <Upload className="w-6 h-6"/> <span className="text-xs">Foto Profil (Close-up)</span>
+                    </div>
                 </div>
             </div>
 
-            <Button onClick={handleSubmitProfile} className="w-full h-14 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-lg">
+            <Button type="submit" className="w-full h-14 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-lg shadow-lg shadow-indigo-900/20 mt-6">
                 SUBMIT & START VERIFICATION
             </Button>
-        </div>
+        </form>
     </Card>
   );
 
-  // STEP 3: FULL DASHBOARD (If profile complete)
+  // STEP 3: FULL DASHBOARD
   const renderFullDashboard = () => (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
          
         {/* LEFT: PLAYER CARD (1/3) */}
         <div className="lg:col-span-1 space-y-6">
-            {/* Player Card Content */}
             <Card className="bg-gradient-to-b from-zinc-900 to-black border-zinc-800 rounded-[32px] overflow-hidden relative shadow-2xl">
                 <CardContent className="p-8 text-center relative z-10">
                     <div className="relative inline-block">
@@ -184,6 +214,7 @@ export default function AthleteDashboard() {
                             {athlete.rank}
                         </Badge>
                     </div>
+                    
                     <h2 className="text-2xl font-black text-white uppercase leading-tight mb-1">{athlete.name}</h2>
                     <p className="text-zinc-500 text-sm font-bold mb-6">Mens Singles Specialist</p>
 
@@ -200,10 +231,28 @@ export default function AthleteDashboard() {
                     </div>
                 </CardContent>
             </Card>
+
+            {/* UPCOMING MATCH WIDGET */}
+            <Card className="bg-zinc-900 border-zinc-800 rounded-[32px] p-6 relative overflow-hidden">
+                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-red-500"></div>
+                <h3 className="text-xs font-black text-zinc-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-red-500"/> Next Match
+                </h3>
+                <div className="space-y-1">
+                    <p className="text-lg font-bold text-white">{UPCOMING_MATCH.opponent}</p>
+                    <p className="text-xs text-zinc-400">{UPCOMING_MATCH.event}</p>
+                    <div className="flex items-center gap-3 mt-3 pt-3 border-t border-zinc-800/50">
+                        <Badge variant="outline" className="text-[10px] border-zinc-700 text-zinc-300">{UPCOMING_MATCH.court}</Badge>
+                        <span className="text-[10px] text-red-400 font-bold animate-pulse">{UPCOMING_MATCH.time}</span>
+                    </div>
+                </div>
+            </Card>
         </div>
 
         {/* RIGHT: TEAM & HISTORY (2/3) */}
         <div className="lg:col-span-2 space-y-6">
+            
+            {/* TEAM STATUS CARD */}
             <Card className="bg-indigo-950/20 border-indigo-500/30 rounded-[32px] overflow-hidden relative">
                 <CardContent className="p-8 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
                     <div className="flex items-center gap-6">
@@ -223,14 +272,36 @@ export default function AthleteDashboard() {
                     </Button>
                 </CardContent>
             </Card>
+            
+            {/* VERIFICATION STATUS CARD */}
+            <Card className={cn(
+                "bg-zinc-900 border rounded-[32px] p-6",
+                athlete.verificationStatus === 'VERIFIED' ? "border-green-500/50" : 
+                athlete.verificationStatus === 'ISSUE' ? "border-red-500/50" : "border-yellow-500/50"
+            )}>
+                <h3 className="text-xs font-black text-zinc-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-cyan-500"/> Verification Status
+                </h3>
+                <div className="flex justify-between items-center">
+                    <div className="space-y-1">
+                        <p className={cn("text-xl font-black", athlete.verificationStatus === 'VERIFIED' ? "text-green-500" : "text-yellow-500 animate-pulse")}>
+                            {athlete.verificationStatus === 'VERIFIED' ? "VERIFIED" : "AWAITING CHECKPOINT"}
+                        </p>
+                        <p className="text-zinc-400 text-sm">Status dokumen oleh Sekretariat.</p>
+                    </div>
+                    <Button size="icon" className="bg-zinc-800 hover:bg-zinc-700 text-zinc-400">
+                        <FileText className="w-5 h-5"/>
+                    </Button>
+                </div>
+            </Card>
 
+            {/* RECENT HISTORY */}
             <Card className="bg-zinc-900/50 border border-zinc-800/50 rounded-[32px] flex-1">
                 <div className="p-6 border-b border-zinc-800">
                     <h3 className="text-sm font-black text-zinc-500 uppercase tracking-widest">Performance History</h3>
                 </div>
                 <ScrollArea className="h-64">
                     <div className="p-4 space-y-3">
-                        {/* Mock History Items */}
                         <div className="flex items-center justify-between p-4 bg-zinc-900 border border-zinc-800 rounded-[20px] hover:bg-zinc-800 transition-colors">
                             <div className="flex items-center gap-4">
                                 <div className="w-2 h-12 rounded-full bg-green-500"></div>
@@ -243,22 +314,11 @@ export default function AthleteDashboard() {
                                 <p className="text-lg font-black font-mono text-green-500">W 21-19</p>
                             </div>
                         </div>
-                        <div className="flex items-center justify-between p-4 bg-zinc-900 border border-zinc-800 rounded-[20px] hover:bg-zinc-800 transition-colors">
-                            <div className="flex items-center gap-4">
-                                <div className="w-2 h-12 rounded-full bg-red-500"></div>
-                                <div>
-                                    <p className="text-sm font-bold text-white">vs. Lee Chong Wei</p>
-                                    <p className="text-xs text-zinc-500">MS Open • Quarter Final</p>
-                                </div>
-                            </div>
-                            <div className="text-right">
-                                <p className="text-lg font-black font-mono text-red-500">L 15-21</p>
-                            </div>
-                        </div>
                     </div>
                 </ScrollArea>
             </Card>
-        </div>
+
+         </div>
     </div>
   );
 
@@ -303,7 +363,7 @@ export default function AthleteDashboard() {
                 </div>
                 <h2 className="text-2xl font-black uppercase mb-2">Squad Sync Successful!</h2>
                 <p className="text-zinc-400 text-sm mb-6">
-                    Anda berhasil bergabung dengan:
+                    Kamu berhasil bergabung dengan skuad:
                     <br/><strong className="text-white text-lg">{athlete.team?.name}</strong>
                 </p>
                 <Button 
@@ -318,3 +378,5 @@ export default function AthleteDashboard() {
     </div>
   );
 }
+
+```

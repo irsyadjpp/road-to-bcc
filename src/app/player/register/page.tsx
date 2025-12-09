@@ -1,9 +1,9 @@
 'use client';
 
 import Link from "next/link";
-import { Mail, Shield, User } from "lucide-react";
+import { ArrowRight, Mail, Shield, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 export default function RegisterPage() {
