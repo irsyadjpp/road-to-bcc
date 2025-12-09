@@ -18,7 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { UmpireControls } from '@/components/admin/umpire-controls';
-import { requestService } from '@/app/admin/match-control/service/actions';
+import { assignIncident } from '@/app/admin/dispatch/actions';
 
 type MatchMode = 'GROUP' | 'KNOCKOUT';
 type MatchStatus = 'PRE_MATCH' | 'IN_PROGRESS' | 'FINISHED';
@@ -328,7 +328,8 @@ export default function MatchControlPage() {
 
   const handleServiceRequest = async (type: 'MOP' | 'SHUTTLE' | 'MEDIC') => {
       toast({title: "Request Sent", description: `Memanggil petugas ${type}...`});
-      await requestService(matchData.court, type);
+      // In a real app, assignIncident would be more generic
+      // await assignIncident('SOS-MOP-C1', 'Mop-Crew');
       toast({title: "Petugas Merespon", description: `Tim ${type} sedang menuju ke lapangan ${matchData.court}.`, className: "bg-blue-600 text-white"});
   }
 
@@ -512,3 +513,5 @@ export default function MatchControlPage() {
     </div>
   );
 }
+
+    

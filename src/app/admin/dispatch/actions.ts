@@ -14,6 +14,8 @@ const availableUnits = [
   { id: 'STF-01', name: 'Sarah Security', status: 'BUSY', role: 'SECURITY' },
   { id: 'STF-02', name: 'Budi Medis', status: 'IDLE', role: 'MEDIS' },
   { id: 'STF-03', name: 'Joko Teknis', status: 'IDLE', role: 'TEKNIS' },
+  { id: 'STF-04', name: 'Tim Mop', status: 'IDLE', role: 'LOGISTICS' },
+  { id: 'STF-05', name: 'Petugas Shuttlecock', status: 'IDLE', role: 'LOGISTICS' },
 ];
 
 export async function getDispatchData() {
@@ -45,3 +47,24 @@ export async function resolveIncident(incidentId: string, notes: string) {
   revalidatePath('/admin/dispatch');
   return { success: true, message: "Insiden diselesaikan. Good job!" };
 }
+
+// Function to handle service requests from referees
+export async function requestService(court: string, serviceType: 'MOP' | 'SHUTTLE' | 'MEDIC') {
+    await new Promise(r => setTimeout(r, 800));
+
+    const newIncident = {
+        id: `REQ-${Date.now()}`,
+        type: serviceType,
+        location: `Court ${court}`,
+        status: 'OPEN' as 'OPEN' | 'ASSIGNED',
+        time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+        reportedBy: `Umpire C${court}`,
+    };
+
+    activeIncidents.unshift(newIncident);
+    revalidatePath('/admin/dispatch');
+
+    return { success: true, message: `Request for ${serviceType} on Court ${court} logged.` };
+}
+
+    
