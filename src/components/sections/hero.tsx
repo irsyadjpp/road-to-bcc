@@ -75,7 +75,7 @@ export function HeroSection() {
 
                {/* Tombol Sekunder: Atlet */}
                <Button asChild size="lg" variant="outline" className="h-14 px-8 text-lg font-bold border-white/30 text-white hover:bg-white/10 backdrop-blur-sm">
-                  <Link href="/player/register">
+                  <Link href="/player/login">
                      <UserPlus className="mr-2 h-5 w-5"/> SAYA ATLET (GABUNG)
                   </Link>
                </Button>
