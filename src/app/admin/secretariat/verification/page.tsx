@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from "react";
@@ -5,7 +6,7 @@ import {
   ShieldCheck, UserCheck, FileX, Eye, 
   CheckCircle2, XCircle, Search, Filter, 
   ZoomIn, ChevronRight, AlertTriangle, FileText, 
-  Download, RefreshCw
+  Download, RefreshCcw
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -379,3 +380,4 @@ export default function VerificationPage() {
     </div>
   );
 }
+```
