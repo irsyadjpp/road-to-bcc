@@ -26,9 +26,14 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-// --- MOCK DATA ---
+// --- CONSTANTS & MOCK DATA ---
+const PRICES = {
+  BEGINNER: 200000,
+  INTERMEDIATE: 250000,
+  ADVANCE: 300000
+};
 
-const ATHLETE = {
+const ATHLETE_MOCK = {
   id: "ATL-8821",
   name: "Jonathan Christie",
   team: "PB Djarum Official",
@@ -41,12 +46,11 @@ const ATHLETE = {
 const TEAM_CHATS = [
   { id: 1, user: "Coach Herry", msg: "Kumpul di Court 4 sekarang ya, warming up.", time: "10:00", self: false },
   { id: 2, user: "Ginting", msg: "Siap coach, otw.", time: "10:02", self: false },
-  { id: 3, user: "Kevin S.", msg: "Raket gue ketinggalan di tas lo Jo?", time: "10:05", self: false },
-  { id: 4, user: "You", msg: "Aman vin, udah gue bawa.", time: "10:06", self: true },
+  { id: 3, user: "You", msg: "Aman coach, saya bawa kok.", time: "10:06", self: true },
 ];
 
 const SCHEDULE = {
-  status: "CALLING", // WAITING, WARM_UP, LIVE, CALLING
+  status: "CALLING", 
   court: "Court 1 (TV)",
   match: "MS Round of 16",
   opponent: "Lee Zii Jia",
@@ -58,143 +62,147 @@ const HISTORY = [
   { event: "Round of 16", opponent: "Viktor Axelsen", score: "19-21, 15-21", result: "LOSE", date: "2 days ago" },
 ];
 
-const GALLERY = [1, 2, 3, 4, 5, 6]; // Placeholder IDs
+const GALLERY = [1, 2, 3, 4];
 
+// =================================================================================================
+// SUB-COMPONENT: FULL DASHBOARD (VIEW 3)
+// =================================================================================================
 export default function PlayerDashboardFull() {
-  // State for Features
-  const [isIdCardFlipped, setIsIdCardFlipped] = useState(false); // Feature 1: Digital ID
-  const [isProtestOpen, setIsProtestOpen] = useState(false);     // Feature 7: Protest
-  const [chatMessage, setChatMessage] = useState("");            // Feature 2: Squad Chat
+  const [isIdCardFlipped, setIsIdCardFlipped] = useState(false);
+  const [isProtestOpen, setIsProtestOpen] = useState(false);
+  const [chatMessage, setChatMessage] = useState("");
 
-  // --- COMPONENT: 1. DIGITAL ID CARD (FLIP) ---
   const renderDigitalID = () => (
-    <div className="perspective-1000 group cursor-pointer h-[420px] w-full" onClick={() => setIsIdCardFlipped(!isIdCardFlipped)}>
+    <div className="perspective-1000 group cursor-pointer h-[450px] w-full" onClick={() => setIsIdCardFlipped(!isIdCardFlipped)}>
         <div className={cn(
             "relative w-full h-full transition-all duration-700 transform-style-3d",
             isIdCardFlipped ? "rotate-y-180" : ""
         )}>
-            {/* FRONT SIDE */}
-            <Card className="absolute inset-0 bg-gradient-to-b from-zinc-800 to-black border-2 border-zinc-700 rounded-[32px] overflow-hidden backface-hidden shadow-2xl flex flex-col">
-                <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-20 mix-blend-overlay z-10"></div>
-                <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/30 rounded-full blur-[60px]"></div>
-                
-                <CardContent className="p-6 flex flex-col items-center h-full relative z-10">
-                    <div className="flex justify-between w-full mb-6">
-                        <Trophy className="w-6 h-6 text-yellow-500"/>
-                        <span className="font-black text-white tracking-widest text-xs">BCC 2026 OFFICIAL</span>
-                    </div>
-                    <Avatar className="w-32 h-32 border-4 border-zinc-900 shadow-xl mb-4">
-                        <AvatarImage src={ATHLETE.avatar} className="object-cover"/>
-                        <AvatarFallback>AT</AvatarFallback>
-                    </Avatar>
-                    <h2 className="text-2xl font-black text-white text-center uppercase leading-none mb-2">{ATHLETE.name}</h2>
-                    <Badge className="bg-indigo-600 hover:bg-indigo-700 mb-2">{ATHLETE.team}</Badge>
-                    <div className="flex gap-2">
-                        <Badge variant="outline" className="text-zinc-400 text-[10px] border-zinc-700">{ATHLETE.rank}</Badge>
-                        <Badge variant="outline" className="text-zinc-400 text-[10px] border-zinc-700">MS</Badge>
+            {/* FRONT */}
+            <Card className="absolute inset-0 bg-gradient-to-b from-zinc-800 to-zinc-950 border-2 border-zinc-700/50 rounded-[32px] overflow-hidden backface-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+                <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-10 mix-blend-overlay z-10"></div>
+                <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-500/20 rounded-full blur-[80px]"></div>
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/20 rounded-full blur-[60px]"></div>
+
+                <CardContent className="p-8 flex flex-col items-center h-full relative z-10">
+                    <div className="flex justify-between w-full mb-6 items-center">
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            <span className="text-[10px] font-bold text-zinc-400 tracking-widest uppercase">Verified Athlete</span>
+                        </div>
+                        <Trophy className="w-5 h-5 text-yellow-500"/>
                     </div>
                     
-                    <div className="mt-auto w-full pt-4 border-t border-zinc-800 flex justify-between items-center text-xs text-zinc-400">
-                        <span className="font-mono">{ATHLETE.id}</span>
-                        <span className="flex items-center gap-1 text-cyan-400 font-bold animate-pulse"><RotateCw className="w-3 h-3"/> Flip to QR</span>
+                    <div className="relative mb-6">
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 blur-md opacity-50"></div>
+                        <Avatar className="w-32 h-32 border-4 border-zinc-950 relative">
+                            <AvatarImage src={ATHLETE_MOCK.avatar} className="object-cover"/>
+                            <AvatarFallback>AT</AvatarFallback>
+                        </Avatar>
+                    </div>
+
+                    <h2 className="text-3xl font-black text-white text-center uppercase leading-none mb-2">{ATHLETE_MOCK.name}</h2>
+                    <p className="text-sm font-bold text-zinc-400 mb-6">{ATHLETE_MOCK.team}</p>
+                    
+                    <div className="grid grid-cols-2 gap-2 w-full mb-auto">
+                        <Badge variant="secondary" className="bg-zinc-900/50 border-zinc-700 justify-center py-1.5">Mens Singles</Badge>
+                        <Badge variant="secondary" className="bg-zinc-900/50 border-zinc-700 justify-center py-1.5">ID: {ATHLETE_MOCK.id}</Badge>
+                    </div>
+                    
+                    <div className="w-full pt-4 border-t border-white/10 flex justify-center">
+                        <span className="flex items-center gap-2 text-cyan-400 font-bold text-xs animate-pulse">
+                            <RotateCw className="w-4 h-4"/> TAP TO REVEAL QR
+                        </span>
                     </div>
                 </CardContent>
             </Card>
 
-            {/* BACK SIDE */}
-            <Card className="absolute inset-0 bg-white border-2 border-zinc-200 rounded-[32px] overflow-hidden backface-hidden rotate-y-180 shadow-2xl">
+            {/* BACK */}
+            <Card className="absolute inset-0 bg-white border-4 border-zinc-200 rounded-[32px] overflow-hidden backface-hidden rotate-y-180 shadow-2xl">
                 <CardContent className="p-8 flex flex-col items-center justify-center h-full text-center space-y-6">
                     <div>
                         <h3 className="text-black font-black text-2xl uppercase tracking-tighter">Access Pass</h3>
-                        <p className="text-zinc-500 text-xs">Show this to Gate / Umpire</p>
+                        <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest">Gate • Medical • Umpire</p>
                     </div>
-                    <div className="p-2 border-4 border-black rounded-xl">
-                        <QrCode className="w-40 h-40 text-black"/>
+                    <div className="p-2 border-4 border-black rounded-2xl">
+                        <QrCode className="w-48 h-48 text-black"/>
                     </div>
-                    <div className="space-y-1">
-                        <p className="text-xs text-zinc-400">Security Hash</p>
-                        <p className="font-mono text-xs font-bold text-black bg-zinc-100 px-2 py-1 rounded">8821-AFX-2026-VLD</p>
-                    </div>
-                    <span className="flex items-center gap-1 text-cyan-600 font-bold text-xs mt-4"><RotateCw className="w-3 h-3"/> Flip Back</span>
+                    <span className="flex items-center gap-2 text-zinc-400 font-bold text-xs mt-4">
+                        <RotateCw className="w-4 h-4"/> Tap to Front
+                    </span>
                 </CardContent>
             </Card>
         </div>
     </div>
   );
 
-  // --- COMPONENT: 2. SQUAD CHAT (SHEET) ---
   const renderSquadChat = () => (
     <Sheet>
         <SheetTrigger asChild>
-            <Button className="w-full bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-white justify-between h-14 rounded-2xl px-4 group">
-                <div className="flex items-center gap-3">
-                    <div className="flex -space-x-2">
-                        <Avatar className="w-8 h-8 border-2 border-zinc-900"><AvatarFallback>CH</AvatarFallback></Avatar>
-                        <Avatar className="w-8 h-8 border-2 border-zinc-900"><AvatarFallback>GT</AvatarFallback></Avatar>
-                        <Avatar className="w-8 h-8 border-2 border-zinc-900"><AvatarFallback>KS</AvatarFallback></Avatar>
+            <Button className="w-full bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-white justify-between h-20 rounded-[24px] px-6 group transition-all">
+                <div className="flex items-center gap-4">
+                    <div className="flex -space-x-3">
+                        <Avatar className="w-10 h-10 border-2 border-zinc-900"><AvatarFallback>CH</AvatarFallback></Avatar>
+                        <Avatar className="w-10 h-10 border-2 border-zinc-900"><AvatarFallback>GT</AvatarFallback></Avatar>
+                        <Avatar className="w-10 h-10 border-2 border-zinc-900"><AvatarFallback>KS</AvatarFallback></Avatar>
                     </div>
                     <div className="text-left">
-                        <p className="text-xs font-bold text-white">Squad Chat</p>
-                        <p className="text-[10px] text-green-500 flex items-center gap-1"><span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> 4 Online</p>
+                        <p className="text-sm font-black text-white uppercase">Team Lounge</p>
+                        <p className="text-xs text-green-500 font-bold flex items-center gap-1">
+                            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> 4 Online
+                        </p>
                     </div>
                 </div>
-                <MessageCircle className="w-5 h-5 text-zinc-500 group-hover:text-white transition-colors"/>
+                <div className="w-10 h-10 rounded-full bg-zinc-950 flex items-center justify-center border border-zinc-800 group-hover:bg-indigo-600 group-hover:border-indigo-600 group-hover:text-white transition-colors text-zinc-500">
+                    <MessageCircle className="w-5 h-5"/>
+                </div>
             </Button>
         </SheetTrigger>
-        <SheetContent side="right" className="w-full sm:max-w-md bg-zinc-950 border-l border-zinc-800 p-0 flex flex-col">
-            <SheetHeader className="p-4 border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm">
+        <SheetContent side="right" className="bg-zinc-950 border-l border-zinc-800 w-full sm:max-w-md p-0 flex flex-col">
+            <SheetHeader className="p-4 border-b border-zinc-800 bg-zinc-900/80 backdrop-blur-md">
                 <div className="flex items-center gap-3">
                     <Avatar><AvatarImage src="/logos/djarum.png"/><AvatarFallback>TM</AvatarFallback></Avatar>
-                    <div>
-                        <SheetTitle className="text-white text-sm">PB Djarum Official</SheetTitle>
-                        <p className="text-xs text-zinc-400">24 Members • Team Strategy</p>
+                    <div className="text-left">
+                        <SheetTitle className="text-white text-sm font-bold">PB Djarum Official</SheetTitle>
+                        <p className="text-xs text-zinc-400">Team Strategy Channel</p>
                     </div>
                 </div>
             </SheetHeader>
-            <ScrollArea className="flex-1 p-4 bg-zinc-950/50">
-                <div className="space-y-4">
-                    {TEAM_CHATS.map((chat) => (
-                        <div key={chat.id} className={cn("flex flex-col max-w-[80%]", chat.self ? "ml-auto items-end" : "mr-auto items-start")}>
-                            {!chat.self && <span className="text-[10px] text-zinc-500 mb-1 ml-1">{chat.user}</span>}
-                            <div className={cn("p-3 rounded-2xl text-sm", chat.self ? "bg-cyan-600 text-white rounded-tr-sm" : "bg-zinc-800 text-zinc-200 rounded-tl-sm")}>
-                                {chat.msg}
+            <ScrollArea className="flex-1 p-4">
+                <div className="space-y-6">
+                    {TEAM_CHATS.map(c => (
+                        <div key={c.id} className={cn("flex flex-col max-w-[85%]", c.self ? "ml-auto items-end" : "mr-auto items-start")}>
+                            {!c.self && <span className="text-[10px] text-zinc-500 mb-1 ml-2 font-bold">{c.user}</span>}
+                            <div className={cn("p-4 rounded-3xl text-sm font-medium shadow-sm", c.self ? "bg-indigo-600 text-white rounded-tr-sm" : "bg-zinc-800 text-zinc-200 rounded-tl-sm")}>
+                                {c.msg}
                             </div>
-                            <span className="text-[10px] text-zinc-600 mt-1 mx-1">{chat.time}</span>
+                            <span className="text-[10px] text-zinc-600 mt-1 mx-2">{c.time}</span>
                         </div>
                     ))}
                 </div>
             </ScrollArea>
             <div className="p-4 border-t border-zinc-800 bg-zinc-900">
-                <div className="flex items-center gap-2">
-                    <Button size="icon" variant="ghost" className="text-zinc-400"><Plus className="w-5 h-5"/></Button>
-                    <Input 
-                        placeholder="Type a message..." 
-                        className="bg-black border-zinc-800 rounded-full h-10 focus-visible:ring-cyan-600"
-                        value={chatMessage}
-                        onChange={(e) => setChatMessage(e.target.value)}
-                    />
-                    <Button size="icon" className="bg-cyan-600 hover:bg-cyan-700 rounded-full"><Send className="w-4 h-4"/></Button>
+                <div className="flex items-center gap-2 bg-zinc-950 p-1.5 rounded-full border border-zinc-800 focus-within:border-indigo-500 transition-colors">
+                    <Button size="icon" className="rounded-full bg-zinc-800 hover:bg-zinc-700 w-8 h-8 shrink-0"><Paperclip className="w-4 h-4 text-zinc-400"/></Button>
+                    <Input className="bg-transparent border-none h-9 text-sm focus-visible:ring-0 placeholder:text-zinc-600" placeholder="Message team..." value={chatMessage} onChange={(e) => setChatMessage(e.target.value)} />
+                    <Button size="icon" className="rounded-full bg-indigo-600 hover:bg-indigo-700 w-9 h-9 shrink-0"><Send className="w-4 h-4 text-white"/></Button>
                 </div>
             </div>
         </SheetContent>
     </Sheet>
   );
 
-  // --- COMPONENT: 3. COURT CALL (WIDGET) ---
   const renderCourtCall = () => (
     <Card className="bg-zinc-900 border-zinc-800 rounded-[32px] p-6 relative overflow-hidden group">
         <div className={cn("absolute left-0 top-0 bottom-0 w-2 transition-all", 
-            SCHEDULE.status === 'CALLING' ? "bg-red-600 w-full opacity-10 animate-pulse" : "bg-green-500"
-        )}></div>
-        <div className={cn("absolute left-0 top-0 bottom-0 w-2", 
-            SCHEDULE.status === 'CALLING' ? "bg-red-600" : "bg-green-500"
+            SCHEDULE.status === 'CALLING' ? "bg-red-600 animate-pulse" : "bg-green-500"
         )}></div>
         
         <div className="flex justify-between items-start mb-4 relative z-10">
             <h3 className="text-xs font-black text-zinc-500 uppercase tracking-widest flex items-center gap-2">
                 <Clock className="w-4 h-4"/> Court Status
             </h3>
-            <Badge className={cn("font-bold border-none", 
+            <Badge className={cn("font-bold border-none px-3 py-1 text-[10px]", 
                 SCHEDULE.status === 'CALLING' ? "bg-red-600 text-white animate-bounce" : "bg-green-600"
             )}>
                 {SCHEDULE.status}
@@ -214,31 +222,31 @@ export default function PlayerDashboardFull() {
     </Card>
   );
 
-  // --- COMPONENT: 4. LIVE SCORE / BRACKET ---
   const renderLiveScore = () => (
     <Card className="bg-zinc-900/50 border border-zinc-800/50 rounded-[32px] p-6">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-6">
             <h3 className="text-sm font-black text-white uppercase flex items-center gap-2">
                 <Activity className="w-4 h-4 text-green-500"/> Live Scoring
             </h3>
-            <Badge variant="outline" className="border-red-500 text-red-500 text-[10px] animate-pulse">● LIVE</Badge>
+            <Badge variant="outline" className="border-red-500 text-red-500 text-[10px] animate-pulse bg-red-500/10">● LIVE</Badge>
         </div>
         
-        {/* Score Board Visual */}
         <div className="bg-black rounded-2xl border border-zinc-800 p-4 flex items-center justify-between">
             <div className="text-center w-1/3">
-                <p className="text-xs font-bold text-zinc-500 mb-1">J. Christie</p>
-                <div className="text-3xl font-black text-white">21</div>
-                <div className="text-xs font-bold text-green-500 mt-1">Set 1</div>
+                <p className="text-xs font-bold text-zinc-500 mb-2">You</p>
+                <p className="text-4xl font-black text-white">21</p>
+                <div className="mt-2 w-full h-1 bg-zinc-800 rounded-full overflow-hidden">
+                    <div className="h-full bg-green-500 w-3/4"></div>
+                </div>
             </div>
             <div className="text-center w-1/3 border-x border-zinc-800 h-12 flex flex-col justify-center">
                 <p className="text-xs text-zinc-600 font-mono">VS</p>
                 <p className="text-[10px] text-zinc-700">00:45</p>
             </div>
             <div className="text-center w-1/3">
-                <p className="text-xs font-bold text-zinc-500 mb-1">L. Zii Jia</p>
-                <div className="text-3xl font-black text-zinc-600">18</div>
-                <div className="text-xs font-bold text-zinc-700 mt-1">Set 1</div>
+                <p className="text-xs font-bold text-zinc-500 mb-2">Opponent</p>
+                <p className="text-4xl font-black text-zinc-600">18</p>
+                <div className="mt-2 w-full h-1 bg-zinc-800 rounded-full"></div>
             </div>
         </div>
         <Button variant="ghost" className="w-full mt-2 text-xs text-zinc-500 hover:text-white">View Full Bracket</Button>
@@ -246,164 +254,317 @@ export default function PlayerDashboardFull() {
   );
 
   return (
-    <div className="min-h-screen bg-zinc-950 font-body pb-24">
-        
-        {/* --- HEADER --- */}
-        <div className="sticky top-0 z-50 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800 px-4 md:px-8 py-4 flex justify-between items-center">
-            <div className="flex items-center gap-2">
-                <Trophy className="w-6 h-6 text-cyan-500"/>
-                <span className="font-black text-white tracking-tighter hidden md:inline">PLAYER DASHBOARD</span>
+    <div className="space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-1 space-y-6">
+                {renderDigitalID()}
             </div>
-            <div className="flex items-center gap-4">
-                <div className="hidden md:block text-right">
-                    <p className="text-xs font-bold text-white">{ATHLETE.name}</p>
-                    <p className="text-[10px] text-zinc-500">{ATHLETE.team}</p>
+            <div className="lg:col-span-2 space-y-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {/* Stats */}
                 </div>
-                <Avatar className="h-9 w-9 border-2 border-zinc-800">
-                    <AvatarImage src={ATHLETE.avatar} />
-                    <AvatarFallback>PL</AvatarFallback>
-                </Avatar>
-                <Link href="/" passHref>
-                    <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-white"><LogOut className="w-5 h-5"/></Button>
-                </Link>
+                {renderCourtCall()}
+                {renderLiveScore()}
+                {renderSquadChat()}
             </div>
         </div>
-
-        <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-8">
-            
-            {/* --- TOP ROW: DIGITAL ID & COURT CALL --- */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                <div className="md:col-span-4 lg:col-span-3">
-                    {renderDigitalID()}
-                </div>
-                <div className="md:col-span-8 lg:col-span-9 flex flex-col gap-6">
-                    {/* Stats Bar */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <Card className="bg-zinc-900 border-zinc-800 p-4 flex flex-col justify-center">
-                            <p className="text-[10px] text-zinc-500 font-bold uppercase">Ranking</p>
-                            <p className="text-2xl font-black text-white">PRO</p>
-                        </Card>
-                        <Card className="bg-zinc-900 border-zinc-800 p-4 flex flex-col justify-center">
-                            <p className="text-[10px] text-zinc-500 font-bold uppercase">Points</p>
-                            <p className="text-2xl font-black text-white">{ATHLETE.points}</p>
-                        </Card>
-                        <Card className="bg-zinc-900 border-zinc-800 p-4 flex flex-col justify-center">
-                            <p className="text-[10px] text-zinc-500 font-bold uppercase">Matches</p>
-                            <p className="text-2xl font-black text-white">12</p>
-                        </Card>
-                        {/* FEATURE 7: PROTEST BUTTON */}
-                        <Card 
-                            onClick={() => setIsProtestOpen(true)}
-                            className="bg-red-950/30 border-red-900/50 p-4 flex flex-col justify-center cursor-pointer hover:bg-red-900/50 transition-colors group"
-                        >
-                            <p className="text-[10px] text-red-400 font-bold uppercase flex items-center gap-1">
-                                <AlertTriangle className="w-3 h-3"/> Integrity
-                            </p>
-                            <p className="text-lg font-black text-white group-hover:text-red-200">Lapor/Sanggah</p>
-                        </Card>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
-                        {renderCourtCall()}
-                        <div className="flex flex-col gap-6">
-                            {renderLiveScore()}
-                            {renderSquadChat()}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* --- BOTTOM ROW: TABS FOR HISTORY & GALLERY --- */}
-            <Tabs defaultValue="history" className="w-full">
-                <TabsList className="bg-zinc-900 p-1 rounded-2xl mb-6">
-                    <TabsTrigger value="history" className="rounded-xl px-6 font-bold data-[state=active]:bg-zinc-800">Match History</TabsTrigger>
-                    <TabsTrigger value="gallery" className="rounded-xl px-6 font-bold data-[state=active]:bg-zinc-800">Media Gallery</TabsTrigger>
-                </TabsList>
-
-                {/* FEATURE 5: HISTORY */}
-                <TabsContent value="history" className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {HISTORY.map((match, i) => (
-                            <Card key={i} className="bg-zinc-900 border-zinc-800 rounded-[24px] p-6 hover:border-zinc-700 transition-colors">
-                                <div className="flex justify-between items-start mb-4">
-                                    <Badge variant="outline" className="border-zinc-700 text-zinc-400 text-[10px]">{match.date}</Badge>
-                                    <Badge className={cn("text-[10px] font-bold", match.result === 'WIN' ? "bg-green-600" : "bg-red-600")}>
-                                        {match.result}
-                                    </Badge>
-                                </div>
-                                <p className="text-xs text-zinc-500 font-bold uppercase mb-1">{match.event}</p>
-                                <h4 className="text-lg font-black text-white mb-2">vs. {match.opponent}</h4>
-                                <p className="font-mono text-zinc-300 text-sm bg-black p-2 rounded-lg text-center border border-zinc-800">
-                                    {match.score}
-                                </p>
-                            </Card>
-                        ))}
-                    </div>
-                </TabsContent>
-
-                {/* FEATURE 6: GALLERY */}
-                <TabsContent value="gallery">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {GALLERY.map((img, i) => (
-                            <div key={i} className="group relative aspect-square bg-zinc-800 rounded-2xl overflow-hidden cursor-pointer border border-zinc-800">
-                                <div className="absolute inset-0 flex items-center justify-center text-zinc-600">
-                                    <Camera className="w-8 h-8 opacity-20"/> {/* Placeholder */}
-                                </div>
-                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex flex-col items-center justify-center gap-2 p-4">
-                                    <p className="text-white text-xs font-bold mb-2">Action Shot #{i+1}</p>
-                                    <div className="flex gap-2">
-                                        <Button size="icon" className="rounded-full bg-white text-black hover:bg-zinc-200 w-10 h-10"><Download className="w-4 h-4"/></Button>
-                                        <Button size="icon" className="rounded-full bg-pink-600 text-white hover:bg-pink-700 w-10 h-10"><Share2 className="w-4 h-4"/></Button>
+        {/* Tabs */}
+        <Tabs defaultValue="history" className="w-full">
+            <TabsList className="bg-zinc-900 p-1 rounded-2xl mb-6">
+                <TabsTrigger value="history" className="rounded-xl px-6 font-bold data-[state=active]:bg-zinc-800">Match History</TabsTrigger>
+                <TabsTrigger value="gallery" className="rounded-xl px-6 font-bold data-[state=active]:bg-zinc-800">Media Gallery</TabsTrigger>
+            </TabsList>
+            <TabsContent value="history" className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {HISTORY.map((match, i) => (
+                        <Card key={i} className="bg-zinc-900 border-zinc-800 rounded-[24px] p-0 overflow-hidden hover:bg-zinc-800/80 transition-colors cursor-pointer group">
+                            <div className="p-5 flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <div className={cn("w-1.5 h-12 rounded-full", match.result === 'WIN' ? "bg-green-500" : "bg-red-500")}></div>
+                                    <div>
+                                        <p className="text-xs text-zinc-500 font-bold uppercase mb-0.5">{match.event}</p>
+                                        <h4 className="text-base font-black text-white">vs. {match.opponent}</h4>
                                     </div>
                                 </div>
+                                <div className="text-right">
+                                    <Badge variant="secondary" className={cn("mb-1 font-bold text-[10px]", match.result === 'WIN' ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-500")}>
+                                        {match.result}
+                                    </Badge>
+                                    <p className="text-xs font-mono text-zinc-400">{match.score}</p>
+                                </div>
                             </div>
-                        ))}
-                    </div>
-                </TabsContent>
-            </Tabs>
+                        </Card>
+                    ))}
+                </div>
+            </TabsContent>
+            <TabsContent value="gallery">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {GALLERY.map((i) => (
+                        <div key={i} className="group relative aspect-square bg-zinc-800 rounded-3xl overflow-hidden cursor-pointer border border-zinc-800 hover:border-zinc-600 transition-all">
+                            <div className="absolute inset-0 flex items-center justify-center text-zinc-700 bg-zinc-900">
+                                <Camera className="w-8 h-8 opacity-20"/>
+                            </div>
+                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex flex-col items-center justify-center gap-3 p-4 backdrop-blur-sm">
+                                <p className="text-white text-[10px] font-bold tracking-widest uppercase">Match Day {i}</p>
+                                <div className="flex gap-2">
+                                    <Button size="icon" className="rounded-full bg-white text-black hover:bg-zinc-200 w-10 h-10 shadow-lg"><Download className="w-4 h-4"/></Button>
+                                    <Button size="icon" className="rounded-full bg-pink-600 text-white hover:bg-pink-700 w-10 h-10 shadow-lg"><Share2 className="w-4 h-4"/></Button>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </TabsContent>
+        </Tabs>
 
-        </div>
-
-        {/* --- MODAL: PROTEST SYSTEM --- */}
+        {/* Protest Modal */}
         <Dialog open={isProtestOpen} onOpenChange={setIsProtestOpen}>
-            <DialogContent className="bg-zinc-950 border-red-900/50 text-white rounded-[32px] max-w-md">
-                <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2 text-red-500 uppercase font-black tracking-tight">
-                        <Gavel className="w-6 h-6"/> Ajukan Protes
-                    </DialogTitle>
-                    <DialogDescription className="text-zinc-400">
-                        Laporan masuk ke <strong>Tim Pencari Fakta (TPF)</strong>. Identitas pelapor dijamin kerahasiaannya.
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4 py-4">
+            <DialogContent className="bg-zinc-950 border-red-900/50 text-white rounded-[32px] max-w-md p-0 overflow-hidden shadow-2xl shadow-red-900/20">
+                <div className="p-6 border-b border-red-900/30 bg-red-950/10">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-3 text-red-500 uppercase font-black tracking-tight text-xl">
+                            <div className="p-2 bg-red-500/20 rounded-lg"><Gavel className="w-6 h-6"/></div>
+                            Ajukan Protes
+                        </DialogTitle>
+                        <DialogDescription className="text-zinc-400 text-xs mt-2">
+                            Laporan ini bersifat <strong>RAHASIA</strong> dan akan langsung ditangani oleh Tim Pencari Fakta (TPF).
+                        </DialogDescription>
+                    </DialogHeader>
+                </div>
+                <div className="p-6 space-y-5">
                     <div className="space-y-2">
-                        <Label className="text-xs font-bold text-zinc-500 uppercase">Jenis Pelanggaran</Label>
+                        <Label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Jenis Pelanggaran</Label>
                         <Select>
-                            <SelectTrigger className="bg-black border-zinc-800"><SelectValue placeholder="Pilih..." /></SelectTrigger>
+                            <SelectTrigger className="bg-black border-zinc-800 h-12 rounded-xl text-white"><SelectValue placeholder="Pilih..." /></SelectTrigger>
                             <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
                                 <SelectItem value="JOKI">Pencurian Umur / Joki</SelectItem>
                                 <SelectItem value="LEVEL">Manipulasi Level (Sandbagging)</SelectItem>
-                                <SelectItem value="ETHIC">Pelanggaran Etika</SelectItem>
+                                <SelectItem value="ETHIC">Pelanggaran Etika / Sportivitas</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
                     <div className="space-y-2">
-                        <Label className="text-xs font-bold text-zinc-500 uppercase">Bukti (Foto/Video)</Label>
-                        <div className="h-24 bg-black border-2 border-dashed border-zinc-800 rounded-xl flex items-center justify-center text-zinc-600 hover:text-red-500 cursor-pointer">
-                            <Upload className="w-6 h-6 mr-2"/> Upload Evidence
+                        <Label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Bukti (Wajib)</Label>
+                        <div className="h-28 bg-black border-2 border-dashed border-zinc-800 rounded-2xl flex flex-col items-center justify-center text-zinc-600 hover:text-red-500 hover:border-red-500/50 cursor-pointer transition-colors">
+                            <Upload className="w-6 h-6 mb-2"/>
+                            <span className="text-xs font-bold">Upload Foto / Video</span>
                         </div>
                     </div>
                     <div className="space-y-2">
-                        <Label className="text-xs font-bold text-zinc-500 uppercase">Keterangan Detail</Label>
-                        <Textarea placeholder="Jelaskan kronologi..." className="bg-black border-zinc-800 min-h-[80px]"/>
+                        <Label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Kronologi</Label>
+                        <Textarea placeholder="Jelaskan detail kejadian..." className="bg-black border-zinc-800 min-h-[100px] rounded-xl p-3 text-sm text-white resize-none"/>
                     </div>
-                    <Button className="w-full bg-red-600 hover:bg-red-700 text-white font-bold h-12 rounded-xl">
-                        KIRIM LAPORAN KE TPF
+                    <Button className="w-full bg-red-600 hover:bg-red-700 text-white font-bold h-14 rounded-2xl shadow-lg shadow-red-900/20 text-lg mt-2">
+                        KIRIM LAPORAN
                     </Button>
                 </div>
             </DialogContent>
         </Dialog>
-
     </div>
   );
 }
+
+// =================================================================================================
+// MAIN PAGE COMPONENT (CONTROLLER)
+// =================================================================================================
+export default function PlayerPage() {
+  // === STATE DEVELOPMENT ===
+  // Logic: Default false agar selalu mulai dari Input Code saat refresh
+  const [hasJoinedTeam, setHasJoinedTeam] = useState(false); 
+  const [isRegistrationComplete, setIsRegistrationComplete] = useState(false); 
+  
+  // -- Simulasi Alur Cepat untuk Development --
+  useEffect(() => {
+    // Set ke `false` untuk melihat halaman "Input Kode"
+    setHasJoinedTeam(false); 
+    // Set `hasJoinedTeam` true & `isRegistrationComplete` false untuk melihat "Wizard"
+    // setHasJoinedTeam(true); 
+    // setIsRegistrationComplete(false);
+    // Set keduanya `true` untuk melihat "Dashboard Full"
+    // setHasJoinedTeam(true); 
+    // setIsRegistrationComplete(true);
+  }, []);
+  // ============================================
+
+  // Wizard States
+  const [joinCode, setJoinCode] = useState("");
+  const [isJoining, setIsJoining] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({ agreements: { valid: false, health: false, rules: false, media: false }, skillLevel: "BEGINNER" });
+
+  // HANDLERS
+  const handleVerifyCode = () => {
+    if (!joinCode) return;
+    setIsJoining(true);
+    setTimeout(() => {
+      setIsJoining(false);
+      if (joinCode === "TWIN-2026") {
+        setHasJoinedTeam(true);
+      } else {
+        alert("Kode Salah! Coba: TWIN-2026");
+      }
+    }, 1000);
+  };
+
+  const handleNextStep = () => setCurrentStep(prev => Math.min(prev + 1, 5));
+  const handlePrevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
+
+  // --- RENDER VIEW 1: GATE (INPUT CODE) ---
+  if (!hasJoinedTeam) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4 font-body relative overflow-hidden">
+        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <Card className="w-full max-w-lg bg-zinc-900/80 backdrop-blur-xl border-zinc-800 rounded-[40px] p-8 md:p-12 border-dashed border-2 relative overflow-hidden shadow-2xl">
+          <div className="text-center space-y-8 relative z-10">
+            <div className="w-20 h-20 bg-gradient-to-br from-zinc-800 to-black rounded-3xl mx-auto flex items-center justify-center border border-zinc-700 shadow-inner">
+                <Hash className="w-10 h-10 text-white"/>
+            </div>
+            
+            <div>
+                <h2 className="text-4xl font-black text-white uppercase tracking-tighter">Team Access</h2>
+                <p className="text-zinc-400 text-sm mt-3 leading-relaxed px-4">
+                  Masukkan <strong>Kode Unik</strong> yang diberikan oleh Manajer Tim/Komunitas untuk membuka formulir pendaftaran.
+                </p>
+            </div>
+
+            <div className="space-y-4">
+                <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition-opacity"></div>
+                    <Input 
+                        placeholder="CONTOH: TWIN-2026" 
+                        className="relative bg-black border-zinc-700 h-16 text-center text-2xl font-mono uppercase tracking-[0.2em] text-white rounded-2xl focus:border-cyan-500 focus:ring-0 placeholder:text-zinc-800 transition-all"
+                        value={joinCode}
+                        onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+                        maxLength={9}
+                    />
+                </div>
+                <Button 
+                    onClick={handleVerifyCode} 
+                    disabled={isJoining || joinCode.length < 5} 
+                    className="w-full h-14 rounded-2xl bg-white hover:bg-zinc-200 text-black font-black text-lg shadow-xl transition-transform active:scale-95"
+                >
+                    {isJoining ? "VERIFYING..." : "ENTER TEAM SQUAD"} <ArrowRight className="ml-2 w-5 h-5"/>
+                </Button>
+            </div>
+          </div>
+        </Card>
+        
+        <p className="text-zinc-600 text-xs mt-8 font-mono">BCC 2026 • OFFICIAL REGISTRATION PORTAL</p>
+      </div>
+    );
+  }
+
+  // --- RENDER VIEW 2: WIZARD FORM ---
+  if (!isRegistrationComplete) {
+    return (
+      <div className="min-h-screen bg-zinc-950 font-body py-8 px-4 md:py-12">
+        <div className="max-w-3xl mx-auto">
+            <div className="mb-10 text-center space-y-4">
+                <Badge variant="outline" className="border-indigo-500 text-indigo-400 px-4 py-1 tracking-widest uppercase">Joining: PB TWINTON</Badge>
+                <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">Athlete Data</h1>
+                
+                <div className="w-full bg-zinc-900 rounded-full h-2 overflow-hidden mt-6">
+                    <div className="h-full bg-gradient-to-r from-cyan-500 to-indigo-600 transition-all duration-500 ease-out" style={{ width: `${(currentStep/5)*100}%` }}></div>
+                </div>
+                <div className="flex justify-between text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-2 px-1">
+                    <span>Agreement</span>
+                    <span>Skill</span>
+                    <span>Bio</span>
+                    <span>Contact</span>
+                    <span>Pay</span>
+                </div>
+            </div>
+
+            <Card className="bg-zinc-900 border-zinc-800 rounded-[40px] p-8 md:p-10 min-h-[400px] shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-[100px] pointer-events-none"></div>
+                <div className="relative z-10">
+                    {currentStep === 1 && (
+                        <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-300">
+                            <div className="bg-red-950/30 border border-red-500/30 p-5 rounded-2xl flex gap-4 text-red-200 text-sm">
+                                <AlertTriangle className="w-6 h-6 shrink-0 text-red-500 mt-1"/>
+                                <div>
+                                    <p className="font-bold text-red-400 mb-1">DISCLAIMER PENTING</p>
+                                    <p>Pemalsuan data (umur/skill) akan menyebabkan <strong>Tim Diskualifikasi</strong> dan <strong>Uang Pendaftaran Hangus</strong>.</p>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                {['Saya menyatakan data yang diisi adalah BENAR.', 'Saya dalam kondisi SEHAT jasmani & rohani.', 'Saya menyetujui REGULASI pertandingan.', 'Saya mengizinkan PUBLIKASI foto/video.'].map((text, i) => (
+                                    <div key={i} className="flex gap-4 items-start p-4 bg-black/40 rounded-2xl border border-zinc-800/50 hover:border-zinc-700 cursor-pointer transition-colors" onClick={() => setFormData(p => ({...p, agreements: {...p.agreements, valid: true}}))}>
+                                        <Checkbox id={`chk-${i}`} checked={formData.agreements.valid} className="mt-1 border-zinc-600 data-[state=checked]:bg-cyan-500 data-[state=checked]:border-cyan-500"/>
+                                        <Label htmlFor={`chk-${i}`} className="text-zinc-300 cursor-pointer leading-relaxed">{text}</Label>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    {currentStep > 1 && (
+                        <div className="text-center py-16 animate-in fade-in zoom-in duration-300">
+                            <div className="w-20 h-20 bg-zinc-800 rounded-3xl mx-auto flex items-center justify-center mb-6 animate-pulse">
+                                <FileText className="w-10 h-10 text-zinc-600"/>
+                            </div>
+                            <h3 className="text-white text-2xl font-black mb-2 uppercase">Step {currentStep}: Form Placeholder</h3>
+                            <p className="text-zinc-500 text-sm max-w-sm mx-auto mb-8">
+                                Di tahap ini, form lengkap (Skill, Biodata, TPF, Pembayaran) akan muncul sesuai desain sebelumnya.
+                            </p>
+                            {currentStep === 5 && (
+                                <Button 
+                                    onClick={() => setIsRegistrationComplete(true)} 
+                                    className="h-16 px-10 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-black text-xl shadow-[0_0_30px_rgba(22,163,74,0.4)] transition-transform hover:scale-105"
+                                >
+                                    SUBMIT & FINISH <CheckCircle2 className="ml-3 w-6 h-6"/>
+                                </Button>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </Card>
+
+            <div className="flex justify-between mt-8 px-2">
+                <Button variant="ghost" onClick={handlePrevStep} disabled={currentStep===1} className="h-14 px-8 rounded-xl text-zinc-500 hover:text-white hover:bg-zinc-900">
+                    <ChevronLeft className="w-5 h-5 mr-2"/> BACK
+                </Button>
+                
+                {currentStep < 5 && (
+                    <Button onClick={handleNextStep} className="h-14 px-8 rounded-xl bg-white text-black hover:bg-zinc-200 font-bold text-lg shadow-lg">
+                        NEXT STEP <ChevronRight className="w-5 h-5 ml-2"/>
+                    </Button>
+                )}
+            </div>
+        </div>
+      </div>
+    );
+  }
+
+  // --- RENDER VIEW 3: FULL DASHBOARD ---
+  return (
+    <div className="min-h-screen bg-zinc-950 font-body pb-24">
+        <div className="sticky top-0 z-50 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800 px-4 md:px-8 py-4 flex justify-between items-center">
+            <div className="flex items-center gap-2">
+                <div className="bg-cyan-500/20 p-2 rounded-lg"><Trophy className="w-5 h-5 text-cyan-500"/></div>
+                <span className="font-black text-white tracking-tighter hidden md:inline text-lg">PLAYER DASHBOARD</span>
+            </div>
+            <div className="flex items-center gap-4">
+                <div className="text-right hidden md:block">
+                    <p className="text-xs font-bold text-white">{ATHLETE_MOCK.name}</p>
+                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">{ATHLETE_MOCK.team}</p>
+                </div>
+                <Avatar className="h-10 w-10 border-2 border-zinc-800 ring-2 ring-black">
+                    <AvatarImage src={ATHLETE_MOCK.avatar} />
+                    <AvatarFallback>PL</AvatarFallback>
+                </Avatar>
+                <div className="h-8 w-[1px] bg-zinc-800 mx-2"></div>
+                <Link href="/" passHref>
+                    <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-red-500 hover:bg-red-500/10 rounded-xl"><LogOut className="w-5 h-5"/></Button>
+                </Link>
+            </div>
+        </div>
+        <div className="max-w-6xl mx-auto p-4 md:p-8">
+            <PlayerDashboardFull />
+        </div>
+    </div>
+  );
+}
+
+```
