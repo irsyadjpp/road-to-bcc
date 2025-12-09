@@ -4,13 +4,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { 
-  Shield, QrCode, Hash, ArrowRight, 
+  Trophy, Users, Shield, QrCode, 
+  Activity, Calendar, Hash, ArrowRight, 
   CheckCircle2, LogOut, User, Upload, 
-  FileText, Activity, Instagram, 
-  Info, ChevronRight, ChevronLeft,
-  Users, MapPin, Trophy, AlertCircle,
-  Calendar,
-  Wallet
+  FileText, Wallet, AlertTriangle, Instagram, 
+  History, Info, ChevronRight, ChevronLeft,
+  Medal, MapPin
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,20 +25,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
-// --- MOCK DATA: TEAM TWINTON ---
-const MOCK_TEAM_DATA = {
-  id: "TM-8821",
-  name: "PB Twinton",
-  category: "Beregu Putra (Team Event)",
-  logo: "/logos/twinton.png",
-  manager: "Budi Santoso",
-  slots: {
-    BEGINNER: { total: 4, filled: 2 },
-    INTERMEDIATE: { total: 4, filled: 3 },
-    ADVANCE: { total: 2, filled: 0 }
-  }
-};
-
+// --- MOCK DATA ---
 const ATHLETE_INITIAL_DATA = {
   id: "ATL-2026-007",
   name: "Guest Athlete",
@@ -47,120 +33,139 @@ const ATHLETE_INITIAL_DATA = {
   avatar: ""
 };
 
+// --- CONSTANTS ---
+const PRICES = {
+    BEGINNER: 200000,
+    INTERMEDIATE: 250000,
+    ADVANCE: 300000
+};
+
 export default function PlayerDashboard() {
-    // --- CONSTANTS ---
-    const PRICES = {
-        BEGINNER: 200000,
-        INTERMEDIATE: 250000,
-        ADVANCE: 300000
-    };
+  const [isClient, setIsClient] = useState(false);
+  
+  // Onboarding/Dev State
+  // Set these to true to bypass steps during development
+  const INITIAL_JOIN_STATE = process.env.NODE_ENV === 'development' ? true : false;
+  const INITIAL_PROFILE_STATE = process.env.NODE_ENV === 'development' ? true : false;
+  
+  // --- STATE MANAGEMENT ---
+  const [viewState, setViewState] = useState<"LOADING" | "JOIN" | "FORM" | "DASHBOARD">("LOADING");
+  const [athlete, setAthlete] = useState(ATHLETE_INITIAL_DATA);
+  const [joinCode, setJoinCode] = useState("");
+  const [isJoining, setIsJoining] = useState(false);
+  
+  const [teamData, setTeamData] = useState<any>(null);
 
-    const [isClient, setIsClient] = useState(false);
+  // FORM WIZARD STATE
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({
+      agreements: { valid: false, health: false, rules: false, media: false },
+      selectedSkill: "", 
+      personal: { name: "", nik: "", dob: "", gender: "M", wa: "", size: "M", address: "" },
+      tpf: { ig: "", pbsi: "", history: "" }
+  });
 
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
-
-    // --- STATE MANAGEMENT ---
-    const [viewState, setViewState] = useState<"JOIN" | "FORM" | "DASHBOARD">("JOIN");
-    const [athlete, setAthlete] = useState(ATHLETE_INITIAL_DATA);
-    const [joinCode, setJoinCode] = useState("");
-    const [isJoining, setIsJoining] = useState(false);
-    
-    // State Simulasi
-    const [hasJoinedTeam, setHasJoinedTeam] = useState(false); 
-    const [isRegistrationComplete, setIsRegistrationComplete] = useState(false); 
-
-    // FORM WIZARD STATE
-    const [currentStep, setCurrentStep] = useState(1);
-    const [formData, setFormData] = useState({
-        agreements: { valid: false, health: false, rules: false, media: false },
-        selectedSkill: "", 
-        personal: { name: "", nik: "", dob: "", gender: "M", wa: "", size: "M", address: "" },
-        tpf: { ig: "", pbsi: "", history: "" }
-    });
-
-    const [teamData, setTeamData] = useState<typeof MOCK_TEAM_DATA | null>(null);
-
-    // --- DEVELOPMENT ONLY: Bypass Onboarding ---
-    useEffect(() => {
-        if (process.env.NODE_ENV === 'development' && isClient) {
-            setViewState("FORM"); 
-            setTeamData(MOCK_TEAM_DATA);
-        }
-    }, [isClient]);
-
-    // --- HANDLERS ---
-    const handleVerifyCode = () => {
-        if (!joinCode) return;
-        setIsJoining(true);
-        setTimeout(() => {
-            setIsJoining(false);
-            if (joinCode.toUpperCase() === "TWIN-2026") {
-                setTeamData(MOCK_TEAM_DATA);
-                setViewState("FORM");
-            } else {
-                alert("Kode Tim Tidak Ditemukan! Coba: TWIN-2026");
-            }
-        }, 1000);
-    };
-
-    const handleNextStep = () => setCurrentStep(prev => Math.min(prev + 1, 3));
-    const handlePrevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
-
-    const handleSubmit = () => {
-        setAthlete(prev => ({
-            ...prev,
-            name: formData.personal.name || "Atlet Baru",
-        }));
+  useEffect(() => {
+    setIsClient(true);
+    // Logic to determine initial view state on the client
+    if (INITIAL_PROFILE_STATE) {
         setViewState("DASHBOARD");
-    };
+        setTeamData({ name: "PB Twinton (Dev Mode)", logo: "/logos/twinton.png" });
+        setAthlete(prev => ({...prev, name: "Jonathan Christie"}));
 
-    const updateAgreement = (key: keyof typeof formData.agreements) => {
-        setFormData(prev => ({ ...prev, agreements: { ...prev.agreements, [key]: !prev.agreements[key] } }));
-    };
-
-    const totalPrice = PRICES[formData.selectedSkill as keyof typeof PRICES] || 0;
-
-    // --- RENDER COMPONENTS ---
-    if (!isClient) {
-        return null; 
+    } else if (INITIAL_JOIN_STATE) {
+        setViewState("FORM");
+        setTeamData({ name: "PB Twinton (Dev Mode)", logo: "/logos/twinton.png" });
+    } else {
+        setViewState("JOIN");
     }
+  }, [INITIAL_JOIN_STATE, INITIAL_PROFILE_STATE]);
 
-    const renderJoinGate = () => (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] p-4">
-          <Card className="w-full max-w-lg bg-zinc-900 border-zinc-800 rounded-[32px] p-8 md:p-12 border-dashed border-2 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-[50px] pointer-events-none"></div>
-            <div className="text-center space-y-6 relative z-10">
-              <div className="w-16 h-16 bg-zinc-800 rounded-2xl mx-auto flex items-center justify-center border border-zinc-700">
-                <Hash className="w-8 h-8 text-white"/>
-              </div>
-              <div>
-                <h2 className="text-3xl font-black text-white uppercase tracking-tight">Team Access</h2>
-                <p className="text-zinc-400 text-sm mt-2">
-                  Masukkan <strong>Kode Unik</strong> yang diberikan oleh Manajer Tim/Komunitas Anda untuk mengisi biodata.
-                </p>
-              </div>
-              <div className="space-y-4">
-                <Input 
-                  placeholder="CONTOH: TWIN-2026" 
-                  className="bg-black border-zinc-700 h-16 text-center text-2xl font-mono uppercase tracking-[0.2em] text-white focus:ring-cyan-500 focus:border-cyan-500 rounded-2xl"
-                  value={joinCode}
-                  onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-                  maxLength={9}
-                />
-                <Button 
-                  onClick={handleVerifyCode} 
-                  disabled={isJoining || joinCode.length < 5} 
-                  className="w-full h-14 rounded-2xl bg-cyan-600 hover:bg-cyan-700 text-white font-black text-lg shadow-[0_0_20px_rgba(8,145,178,0.4)]"
-                >
-                  {isJoining ? <Loader2 className="w-5 h-5 animate-spin"/> : "ENTER TEAM SQUAD"}
-                </Button>
-              </div>
-            </div>
-          </Card>
+
+  // --- HANDLERS ---
+
+  const handleVerifyCode = () => {
+      if (!joinCode) return;
+      setIsJoining(true);
+      setTimeout(() => {
+          setIsJoining(false);
+          // For dev, any code works
+          setTeamData({
+              id: "TM-8821",
+              name: "PB Twinton",
+              category: "Beregu Putra (Team Event)",
+              logo: "/logos/twinton.png",
+              manager: "Budi Santoso",
+              slots: {
+                  BEGINNER: { total: 4, filled: 2 },
+                  INTERMEDIATE: { total: 4, filled: 3 },
+                  ADVANCE: { total: 2, filled: 0 }
+              }
+          });
+          setViewState("FORM");
+      }, 1000);
+  };
+
+  const handleNextStep = () => setCurrentStep(prev => Math.min(prev + 1, 3));
+  const handlePrevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
+
+  const handleSubmit = () => {
+      setAthlete(prev => ({
+          ...prev,
+          name: formData.personal.name || "Atlet Baru",
+      }));
+      setViewState("DASHBOARD");
+  };
+
+  const updateAgreement = (key: keyof typeof formData.agreements) => {
+      setFormData(prev => ({ ...prev, agreements: { ...prev.agreements, [key]: !prev.agreements[key] } }));
+  };
+
+  const updatePlayer = (index: number, field: string, value: string) => {
+      const newPlayers = [...formData.players];
+      // @ts-ignore
+      newPlayers[index][field] = value;
+      // setFormData(prev => ({ ...prev, players: newPlayers }));
+  };
+
+  const totalPrice = PRICES[formData.selectedSkill as keyof typeof PRICES] || 0;
+
+  // --- RENDER COMPONENTS ---
+
+  const renderJoinGate = () => (
+    <div className="flex flex-col items-center justify-center min-h-[60vh] p-4">
+      <Card className="w-full max-w-lg bg-zinc-900 border-zinc-800 rounded-[32px] p-8 md:p-12 border-dashed border-2 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-[50px] pointer-events-none"></div>
+        <div className="text-center space-y-6 relative z-10">
+          <div className="w-16 h-16 bg-zinc-800 rounded-2xl mx-auto flex items-center justify-center border border-zinc-700">
+            <Hash className="w-8 h-8 text-white"/>
+          </div>
+          <div>
+            <h2 className="text-3xl font-black text-white uppercase tracking-tight">Team Access</h2>
+            <p className="text-zinc-400 text-sm mt-2">
+              Masukkan <strong>Kode Unik</strong> yang diberikan oleh Manajer Tim/Komunitas Anda untuk mengisi biodata.
+            </p>
+          </div>
+          <div className="space-y-4">
+            <Input 
+              placeholder="XXX-0000" 
+              className="bg-black border-zinc-700 h-16 text-center text-2xl font-mono uppercase tracking-[0.2em] text-white focus:ring-cyan-500 focus:border-cyan-500 rounded-2xl"
+              value={joinCode}
+              onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+              maxLength={9}
+            />
+            <Button 
+              onClick={handleVerifyCode} 
+              disabled={isJoining || joinCode.length < 5} 
+              className="w-full h-14 rounded-2xl bg-cyan-600 hover:bg-cyan-700 text-white font-black text-lg shadow-[0_0_20px_rgba(8,145,178,0.4)]"
+            >
+              {isJoining ? <Loader2 className="w-5 h-5 animate-spin"/> : "ENTER TEAM SQUAD"}
+            </Button>
+          </div>
         </div>
-    );
+      </Card>
+    </div>
+  );
 
     const renderFormWizard = () => (
         <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-500">
@@ -199,14 +204,17 @@ export default function PlayerDashboard() {
           {currentStep === 1 && (
             <Card className="bg-zinc-900 border-zinc-800 rounded-[32px] p-8">
                 <div className="space-y-6">
-                    <div className="bg-red-900/20 border border-red-500/30 p-4 rounded-xl flex gap-3 text-red-200 text-sm">
-                        <AlertTriangle className="w-5 h-5 shrink-0 text-red-500"/>
-                        <p>Harap baca dengan teliti. Pelanggaran data (pencurian umur/manipulasi level) akan menyebabkan <strong>Tim Diskualifikasi</strong>.</p>
+                    <div className="bg-red-900/20 border border-red-500/30 p-6 rounded-2xl flex gap-4 items-start">
+                        <AlertTriangle className="w-8 h-8 text-red-500 shrink-0 mt-1"/>
+                        <div className="space-y-2">
+                          <h3 className="font-bold text-red-100 text-lg">KETENTUAN UMUM (Disclaimer)</h3>
+                          <p className="text-red-200/80 text-sm">Harap baca dengan teliti. Pelanggaran data (pencurian umur/manipulasi level) akan menyebabkan <strong>Tim Diskualifikasi</strong>.</p>
+                        </div>
                     </div>
                     <div className="space-y-4">
                         {['valid', 'health', 'rules', 'media'].map((key) => (
                             <div key={key} className="flex items-start space-x-3 p-3 hover:bg-zinc-800/50 rounded-xl transition-colors cursor-pointer" onClick={() => updateAgreement(key as keyof typeof formData.agreements)}>
-                                <Checkbox checked={formData.agreements[key as keyof typeof formData.agreements]} className="mt-1 data-[state=checked]:bg-cyan-600 border-zinc-600"/>
+                                <Checkbox checked={formData.agreements[key as keyof typeof formData.agreements]} className="mt-1 border-zinc-600 data-[state=checked]:bg-cyan-600"/>
                                 <div>
                                     <Label className="font-bold text-white cursor-pointer">
                                         {key === 'valid' && "Validitas Data (Anti Joki/Sandbagging)"}
@@ -218,7 +226,7 @@ export default function PlayerDashboard() {
                                         {key === 'valid' && "Saya menyatakan data benar. Siap didiskualifikasi jika palsu."}
                                         {key === 'health' && "Sehat jasmani rohani. Panitia tidak bertanggung jawab atas cedera bawaan atau serangan jantung (Medis hanya P3K)."}
                                         {key === 'rules' && "Mematuhi segala peraturan pertandingan BCC 2026."}
-                                        {key === 'media' && "Mengizinkan foto/video saya digunakan untuk keperluan event."}
+                                        {key === 'media' && "Mengizinkan foto/video saya digunakan untuk dokumentasi dan sponsor."}
                                     </p>
                                 </div>
                             </div>
@@ -356,7 +364,14 @@ export default function PlayerDashboard() {
         </div>
     );
 
+    if (viewState === "LOADING") {
+        return <div className="flex h-full min-h-[60vh] items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-cyan-500"/></div>
+    }
+
   return viewState === "JOIN" ? renderJoinGate() 
        : viewState === "FORM" ? renderFormWizard() 
        : renderDashboard();
 }
+
+
+    
