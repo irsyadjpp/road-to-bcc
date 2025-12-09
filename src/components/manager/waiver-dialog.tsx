@@ -71,10 +71,10 @@ export function WaiverDialog({ open, onOpenChange, onAccept }: WaiverDialogProps
                                 <strong>PELEPASAN TUNTUTAN (RELEASE):</strong> Saya melepaskan dan membebaskan Panitia Pelaksana BCC 2026, Sponsor (Ayo Indonesia, Bank BJB, dll), Pemilik Venue (GOR KONI), dan pihak terkait lainnya dari segala bentuk tanggung jawab hukum, tuntutan ganti rugi, atau klaim apapun apabila terjadi kecelakaan, cedera, atau kematian yang menimpa saya selama rangkaian acara berlangsung.
                             </li>
                             <li>
-                                <strong>TINDAKAN MEDIS:</strong> Saya mengizinkan Tim Medis Panitia untuk memberikan pertolongan pertama (First Aid) jika terjadi keadaan darurat. Saya memahami bahwa biaya pengobatan lanjutan (Rumah Sakit/Operasi) adalah <strong class="font-bold">tanggung jawab saya pribadi</strong> atau asuransi/BPJS pribadi saya.
+                                <strong>TINDAKAN MEDIS:</strong> Saya mengizinkan Tim Medis Panitia untuk memberikan pertolongan pertama (First Aid) jika terjadi keadaan darurat. Saya memahami bahwa biaya pengobatan lanjutan (Rumah Sakit/Operasi) adalah <strong className="font-bold">tanggung jawab saya pribadi</strong> atau asuransi/BPJS pribadi saya.
                             </li>
                             <li>
-                                <strong>KEPATUHAN REGULASI (INTEGRITAS):</strong> Saya bersedia mematuhi seluruh peraturan pertandingan dan menerima keputusan TPF terkait verifikasi level. Saya menerima sanksi <strong class="font-bold">DISKUALIFIKASI</strong> tanpa pengembalian uang pendaftaran jika terbukti manipulasi data (Sandbagging).
+                                <strong>KEPATUHAN REGULASI (INTEGRITAS):</strong> Saya bersedia mematuhi seluruh peraturan pertandingan dan menerima keputusan TPF terkait verifikasi level. Saya menerima sanksi <strong className="font-bold">DISKUALIFIKASI</strong> tanpa pengembalian uang pendaftaran jika terbukti manipulasi data (Sandbagging).
                             </li>
                             <li>
                                 <strong>HAK PUBLIKASI:</strong> Saya memberikan izin kepada Panitia dan Sponsor untuk mendokumentasikan dan menggunakan foto/video aktivitas saya selama turnamen untuk keperluan promosi tanpa menuntut royalti.
@@ -84,7 +84,7 @@ export function WaiverDialog({ open, onOpenChange, onAccept }: WaiverDialogProps
                         <Separator className='my-4'/>
 
                         <p className='text-sm text-right'>
-                            Bandung, <strong class='font-bold'>{dateString}</strong>
+                            Bandung, <strong className='font-bold'>{dateString}</strong>
                         </p>
                     </div>
                 </ScrollArea>
