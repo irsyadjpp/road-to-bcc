@@ -14,7 +14,7 @@ import {
   Timer, Navigation,
   BarChart3, Megaphone,
   Mail, FileSignature, Award, 
-  Tags, UserCog, Handshake, Newspaper, Settings, ChevronRight, LogOut, UserCheck
+  Tags, UserCog, Handshake, Newspaper, Settings, ChevronRight, LogOut, ShieldCheck as UserCheck
 } from "lucide-react"
 
 import {
@@ -107,7 +107,7 @@ const data = {
     { title: "Notulensi Rapat", url: "/admin/secretary/minutes", icon: FileSignature },
     { title: "Generator Sertifikat", url: "/admin/event/certificates", icon: Award },
   ],
-  // 9. MASTER DATA
+  // 9. MASTER DATA & PARTISIPAN
   navMaster: [
     { title: "Database Klub", url: "/admin/participants/teams", icon: Users },
     { title: "Master Kategori", url: "/admin/master/categories", icon: Tags },
@@ -155,7 +155,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavGroup label="ACARA" items={data.navEvent} currentPath={pathname} />
         <NavGroup label="BISNIS & MEDIA" items={data.navBiz} currentPath={pathname} />
         <NavGroup label="SEKRETARIAT" items={data.navSecretariat} currentPath={pathname} />
-        <NavGroup label="MASTER DATA" items={data.navMaster} currentPath={pathname} />
+        <NavGroup label="PESERTA & MASTER" items={data.navMaster} currentPath={pathname} />
 
       </SidebarContent>
 
