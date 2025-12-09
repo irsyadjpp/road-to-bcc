@@ -1,177 +1,271 @@
+
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from "react";
+import { 
+  Trophy, Search, ZoomIn, ZoomOut, 
+  Download, Share2, Crown, Users, 
+  Maximize, MoreHorizontal, ChevronRight 
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Dices, Trophy, Calendar, Shield } from "lucide-react";
-import { getBracketData, generateDraw } from "./actions";
-import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from 'lucide-react';
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
 
-export default function BracketGeneratorPage() {
-  const { toast } = useToast();
-  const [data, setData] = useState<any>({ groups: [], matches: [] });
-  const [isGenerating, setIsGenerating] = useState(false);
+// --- MOCK DATA ---
+const CATEGORIES = ["MD OPEN", "MS PRO", "WD OPEN", "XD OPEN"];
 
-  useEffect(() => {
-    load();
-  }, []);
+const BRACKET_DATA = {
+  quarterFinals: [
+    { id: "Q1", pA: "Kevin / Marcus", pB: "Chia / Soh", sA: 2, sB: 0, status: "DONE", winner: "A" },
+    { id: "Q2", pA: "Fajar / Rian", pB: "Rankireddy / Shetty", sA: 1, sB: 2, status: "DONE", winner: "B" },
+    { id: "Q3", pA: "Ahsan / Hendra", pB: "Liu / Ou", sA: 2, sB: 1, status: "DONE", winner: "A" },
+    { id: "Q4", pA: "Leo / Daniel", pB: "Alfian / Ardianto", sA: 0, sB: 0, status: "LIVE", winner: null },
+  ],
+  semiFinals: [
+    { id: "S1", pA: "Kevin / Marcus", pB: "Rankireddy / Shetty", sA: 0, sB: 0, status: "SCHEDULED", winner: null },
+    { id: "S2", pA: "Ahsan / Hendra", pB: "TBD", sA: 0, sB: 0, status: "SCHEDULED", winner: null },
+  ],
+  final: [
+    { id: "F1", pA: "TBD", pB: "TBD", sA: 0, sB: 0, status: "SCHEDULED", winner: null },
+  ],
+  champion: null
+};
 
-  const load = async () => {
-    const res = await getBracketData();
-    setData(res);
-  };
-
-  const handleDraw = async () => {
-    setIsGenerating(true);
-    const res = await generateDraw();
-    setIsGenerating(false);
-    if(res.success) {
-        toast({ title: "DRAWING SELESAI", description: res.message, className: "bg-green-600 text-white" });
-        load();
-    }
-  };
+export default function BracketPage() {
+  const [activeTab, setActiveTab] = useState("MD OPEN");
+  const [zoom, setZoom] = useState(100);
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6 p-4 md:p-8 font-body pb-24 h-[calc(100vh-64px)] flex flex-col">
+      
+      {/* --- HEADER --- */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 shrink-0">
         <div>
-            <h2 className="text-3xl font-bold font-headline text-primary uppercase">Tournament Bracket</h2>
-            <p className="text-muted-foreground">Manager Undian & Bagan Pertandingan (32 Tim).</p>
+            <div className="flex items-center gap-2 mb-2">
+                <Badge variant="outline" className="rounded-full px-3 py-1 border-yellow-500 text-yellow-500 bg-yellow-500/10 backdrop-blur-md">
+                    <Crown className="w-3 h-3 mr-2 fill-yellow-500" /> CHAMPIONSHIP ROAD
+                </Badge>
+            </div>
+            <h1 className="text-3xl md:text-4xl font-black font-headline uppercase tracking-tighter text-white">
+                Tournament <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-600">Bracket</span>
+            </h1>
+            <p className="text-zinc-400 mt-2 max-w-xl text-lg">
+                Visualisasi bagan pertandingan menuju juara.
+            </p>
         </div>
-        <Button size="lg" onClick={handleDraw} disabled={isGenerating} className="bg-primary hover:bg-red-700 font-bold shadow-lg">
-            {isGenerating ? <Loader2 className="animate-spin mr-2"/> : <Dices className="mr-2 h-5 w-5" />}
-            {data.groups.length > 0 ? "ULANG DRAWING" : "LAKUKAN DRAWING (UNDIAN)"}
-        </Button>
+
+        <div className="flex gap-3">
+            <Button variant="outline" className="h-12 rounded-full border-zinc-700 text-zinc-300 hover:text-white hover:bg-zinc-800">
+                <Share2 className="mr-2 w-4 h-4"/> Share Link
+            </Button>
+            <Button className="h-12 rounded-full px-6 bg-yellow-500 hover:bg-yellow-600 text-black font-bold shadow-[0_0_20px_rgba(234,179,8,0.4)]">
+                <Download className="mr-2 w-4 h-4"/> EXPORT PDF
+            </Button>
+        </div>
       </div>
 
-      {data.groups.length === 0 ? (
-          <div className="text-center py-20 bg-muted/20 rounded-xl border-2 border-dashed">
-              <Shield className="w-16 h-16 mx-auto text-muted-foreground mb-4 opacity-50" />
-              <h3 className="text-xl font-bold text-muted-foreground">Belum ada data undian</h3>
-              <p className="text-sm text-muted-foreground">Silakan klik tombol "Lakukan Drawing" untuk membagi 32 tim ke 8 group.</p>
-          </div>
-      ) : (
-          <Tabs defaultValue="groups" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-8">
-                <TabsTrigger value="groups">Babak Penyisihan (Group Stage)</TabsTrigger>
-                <TabsTrigger value="knockout">Babak Gugur (Knockout 16 Besar)</TabsTrigger>
-            </TabsList>
+      {/* --- CONTROLS BAR --- */}
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-zinc-900/50 p-2 rounded-[24px] border border-zinc-800/50 backdrop-blur-sm shrink-0">
+         
+         {/* Category Tabs */}
+         <ScrollArea className="w-full md:w-auto max-w-full">
+             <div className="flex gap-2 p-1">
+                {CATEGORIES.map((cat) => (
+                    <button
+                        key={cat}
+                        onClick={() => setActiveTab(cat)}
+                        className={cn(
+                            "px-6 h-10 rounded-full text-sm font-bold transition-all whitespace-nowrap border border-transparent",
+                            activeTab === cat 
+                                ? "bg-zinc-800 text-white border-zinc-700 shadow-md" 
+                                : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900"
+                        )}
+                    >
+                        {cat}
+                    </button>
+                ))}
+             </div>
+             <ScrollBar orientation="horizontal" className="invisible"/>
+         </ScrollArea>
 
-            {/* TAB 1: GROUP STAGE */}
-            <TabsContent value="groups" className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {data.groups.map((group: any) => (
-                        <Card key={group.name} className="border-t-4 border-t-primary shadow-md">
-                            <CardHeader className="pb-2 bg-muted/20">
-                                <CardTitle className="text-center text-xl font-black">GROUP {group.name}</CardTitle>
-                            </CardHeader>
-                            <CardContent className="p-0">
-                                <ul className="divide-y divide-border">
-                                    {group.teams.map((team: any, idx: number) => (
-                                        <li key={team.id} className="p-3 flex items-center justify-between text-sm hover:bg-muted/50">
-                                            <span className="flex items-center gap-2">
-                                                <span className="font-mono text-muted-foreground w-4">{idx+1}.</span>
-                                                <span className="font-bold">{team.name}</span>
-                                            </span>
-                                            {/* Seed Indicator */}
-                                            {team.rank <= 8 && <Badge variant="outline" className="text-[10px] h-5">Seed {team.rank}</Badge>}
-                                        </li>
-                                    ))}
-                                </ul>
-                                <div className="p-3 bg-muted/10 border-t text-center">
-                                    <Button variant="link" size="sm" className="text-xs text-primary">Lihat Jadwal Group {group.name}</Button>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
-            </TabsContent>
+         {/* Zoom Controls */}
+         <div className="flex items-center gap-2 bg-zinc-950 p-1.5 rounded-full border border-zinc-800">
+            <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full hover:bg-zinc-800" onClick={() => setZoom(Math.max(50, zoom - 10))}>
+                <ZoomOut className="w-4 h-4"/>
+            </Button>
+            <span className="text-xs font-mono font-bold w-12 text-center text-zinc-400">{zoom}%</span>
+            <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full hover:bg-zinc-800" onClick={() => setZoom(Math.min(150, zoom + 10))}>
+                <ZoomIn className="w-4 h-4"/>
+            </Button>
+            <div className="w-[1px] h-4 bg-zinc-800 mx-1"></div>
+            <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full hover:bg-zinc-800">
+                <Maximize className="w-4 h-4"/>
+            </Button>
+         </div>
+      </div>
 
-            {/* TAB 2: KNOCKOUT (Visual Bracket) */}
-            <TabsContent value="knockout" className="overflow-x-auto pb-10">
-                <div className="min-w-[1000px] flex justify-between items-center relative px-10">
+      {/* --- BRACKET CANVAS --- */}
+      <div className="flex-1 bg-zinc-950 rounded-[32px] border border-zinc-800 relative overflow-hidden shadow-inner">
+         
+         {/* Background Grid Texture */}
+         <div className="absolute inset-0 bg-[url('/images/grid-pattern.png')] opacity-5 pointer-events-none" style={{ backgroundSize: '40px 40px' }}></div>
+         
+         <ScrollArea className="w-full h-full">
+            <div 
+                className="min-w-max min-h-full flex items-center justify-center p-20 transition-transform duration-300 ease-out origin-top-left"
+                style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'center top' }}
+            >
+                
+                <div className="flex gap-16 items-center">
                     
-                    {/* BAGAN KIRI (16 Besar -> 8 Besar -> Semi) */}
-                    <div className="space-y-8">
-                        {/* 16 BESAR */}
-                        {['A1 vs B2', 'C1 vs D2', 'E1 vs F2', 'G1 vs H2'].map((match, i) => (
-                            <BracketMatch key={i} title={`R16 - Match ${i+1}`} p1={match.split(' vs ')[0]} p2={match.split(' vs ')[1]} />
-                        ))}
+                    {/* COLUMN 1: QUARTER FINALS */}
+                    <div className="flex flex-col gap-12 justify-center">
+                        <BracketHeader title="Quarter Final" />
+                        <div className="flex flex-col gap-16"> {/* Gap antar grup match */}
+                            {/* Group 1 */}
+                            <div className="flex flex-col gap-6">
+                                <BracketMatch data={BRACKET_DATA.quarterFinals[0]} />
+                                <BracketMatch data={BRACKET_DATA.quarterFinals[1]} />
+                            </div>
+                            {/* Group 2 */}
+                            <div className="flex flex-col gap-6">
+                                <BracketMatch data={BRACKET_DATA.quarterFinals[2]} />
+                                <BracketMatch data={BRACKET_DATA.quarterFinals[3]} />
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="space-y-24 mt-8">
-                        {/* QUARTER FINAL */}
-                        {['QF 1', 'QF 2'].map((match, i) => (
-                            <BracketMatch key={i} title={match} p1="Winner R16" p2="Winner R16" isConnector />
-                        ))}
+                    {/* CONNECTORS 1 */}
+                    <BracketConnector type="quarter" />
+
+                    {/* COLUMN 2: SEMI FINALS */}
+                    <div className="flex flex-col gap-12 justify-center mt-8"> {/* mt untuk align center */}
+                        <BracketHeader title="Semi Final" />
+                        <div className="flex flex-col gap-[280px]"> {/* Gap besar antar match semi */}
+                            <BracketMatch data={BRACKET_DATA.semiFinals[0]} isSemi />
+                            <BracketMatch data={BRACKET_DATA.semiFinals[1]} isSemi />
+                        </div>
                     </div>
 
-                    <div className="space-y-48 mt-12">
-                        {/* SEMI FINAL */}
-                        <BracketMatch title="SEMI FINAL 1" p1="Winner QF1" p2="Winner QF2" isConnector />
-                    </div>
+                    {/* CONNECTORS 2 */}
+                    <BracketConnector type="semi" />
 
-                    {/* FINAL (TENGAH) */}
-                    <div className="mx-8 transform scale-125">
-                        <Card className="border-4 border-yellow-500 bg-gradient-to-b from-yellow-500/10 to-transparent shadow-[0_0_30px_rgba(234,179,8,0.3)]">
-                            <CardHeader className="py-2 text-center border-b border-yellow-500/30">
-                                <CardTitle className="text-yellow-600 flex items-center justify-center gap-2 text-sm uppercase tracking-widest">
-                                    <Trophy className="w-4 h-4" /> GRAND FINAL
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="p-4 space-y-2 w-48 text-center">
-                                <div className="font-bold text-lg">Winner SF1</div>
-                                <div className="text-xs text-muted-foreground">VS</div>
-                                <div className="font-bold text-lg">Winner SF2</div>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    {/* BAGAN KANAN (MIRROR) */}
-                    <div className="space-y-48 mt-12">
-                        <BracketMatch title="SEMI FINAL 2" p1="Winner QF3" p2="Winner QF4" isConnector reverse />
-                    </div>
-                    <div className="space-y-24 mt-8">
-                        {['QF 3', 'QF 4'].map((match, i) => (
-                            <BracketMatch key={i} title={match} p1="Winner R16" p2="Winner R16" isConnector reverse />
-                        ))}
-                    </div>
-                    <div className="space-y-8">
-                        {['B1 vs A2', 'D1 vs C2', 'F1 vs E2', 'H1 vs G2'].map((match, i) => (
-                            <BracketMatch key={i} title={`R16 - Match ${i+5}`} p1={match.split(' vs ')[0]} p2={match.split(' vs ')[1]} reverse />
-                        ))}
+                    {/* COLUMN 3: FINAL */}
+                    <div className="flex flex-col gap-12 justify-center mt-8">
+                        <div className="flex flex-col items-center gap-6">
+                            <Trophy className="w-16 h-16 text-yellow-500 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] animate-pulse-slow" />
+                            <BracketHeader title="Grand Final" isFinal />
+                            <BracketMatch data={BRACKET_DATA.final[0]} isFinal />
+                        </div>
                     </div>
 
                 </div>
-            </TabsContent>
-          </Tabs>
-      )}
+
+            </div>
+            <ScrollBar orientation="horizontal" />
+            <ScrollBar orientation="vertical" />
+         </ScrollArea>
+      </div>
+
     </div>
   );
 }
 
-// Komponen Kecil Visual Bagan
-function BracketMatch({ title, p1, p2, isConnector, reverse }: any) {
+// --- SUB COMPONENTS ---
+
+function BracketHeader({ title, isFinal }: { title: string, isFinal?: boolean }) {
     return (
-        <div className={`relative flex items-center ${reverse ? 'flex-row-reverse' : ''}`}>
-            <Card className="w-48 border shadow-sm relative z-10">
-                <div className="bg-muted/30 px-3 py-1 text-[10px] font-bold text-muted-foreground uppercase border-b">{title}</div>
-                <div className="p-2 space-y-2">
-                    <div className="flex justify-between items-center text-sm font-medium border-b border-dashed pb-1">
-                        <span>{p1}</span> <span className="text-muted-foreground">-</span>
-                    </div>
-                    <div className="flex justify-between items-center text-sm font-medium">
-                        <span>{p2}</span> <span className="text-muted-foreground">-</span>
-                    </div>
-                </div>
-            </Card>
-            {/* Garis Konektor (Simulasi CSS) */}
-            {isConnector && (
-                <div className={`absolute ${reverse ? 'right-full' : 'left-full'} top-1/2 w-8 h-[1px] bg-border -z-0`}></div>
-            )}
+        <div className={cn(
+            "text-center mb-4 uppercase tracking-widest font-black text-sm",
+            isFinal ? "text-yellow-500" : "text-zinc-500"
+        )}>
+            {title}
         </div>
     )
 }
+
+function BracketMatch({ data, isSemi, isFinal }: { data: any, isSemi?: boolean, isFinal?: boolean }) {
+    return (
+        <div className={cn(
+            "relative w-[280px] bg-zinc-900 rounded-[20px] border transition-all duration-300 group cursor-pointer hover:scale-105 hover:z-10",
+            data.status === 'LIVE' ? "border-green-500/50 shadow-[0_0_20px_rgba(34,197,94,0.2)]" : 
+            isFinal ? "border-yellow-500/50 bg-gradient-to-b from-zinc-900 to-black" :
+            "border-zinc-800 hover:border-zinc-600"
+        )}>
+            {/* Match Info Header */}
+            <div className="flex justify-between items-center px-4 py-2 border-b border-zinc-800/50 bg-black/20 rounded-t-[20px]">
+                <span className="text-[10px] font-bold text-zinc-500">{data.id}</span>
+                {data.status === 'LIVE' ? (
+                    <span className="text-[9px] font-black text-green-500 uppercase tracking-wider animate-pulse">● LIVE</span>
+                ) : (
+                    <span className="text-[9px] font-bold text-zinc-600 uppercase">{data.status}</span>
+                )}
+            </div>
+
+            <div className="p-4 space-y-3">
+                {/* Player A */}
+                <div className={cn("flex justify-between items-center p-2 rounded-lg transition-colors", data.winner === 'A' ? "bg-green-500/10" : "")}>
+                    <div className="flex items-center gap-3 overflow-hidden">
+                        {data.winner === 'A' && <Crown className="w-3 h-3 text-yellow-500 shrink-0" />}
+                        <span className={cn("text-sm font-bold truncate", data.winner === 'A' ? "text-white" : "text-zinc-400")}>
+                            {data.pA}
+                        </span>
+                    </div>
+                    <span className={cn("font-mono font-black text-lg", data.winner === 'A' ? "text-green-400" : "text-zinc-600")}>
+                        {data.sA}
+                    </span>
+                </div>
+
+                {/* VS Divider */}
+                {/* <div className="h-[1px] w-full bg-zinc-800/50"></div> */}
+
+                {/* Player B */}
+                <div className={cn("flex justify-between items-center p-2 rounded-lg transition-colors", data.winner === 'B' ? "bg-green-500/10" : "")}>
+                    <div className="flex items-center gap-3 overflow-hidden">
+                        {data.winner === 'B' && <Crown className="w-3 h-3 text-yellow-500 shrink-0" />}
+                        <span className={cn("text-sm font-bold truncate", data.winner === 'B' ? "text-white" : "text-zinc-400")}>
+                            {data.pB}
+                        </span>
+                    </div>
+                    <span className="font-mono font-black text-lg text-zinc-600">
+                        {data.sB}
+                    </span>
+                </div>
+            </div>
+
+            {/* Final Glow */}
+            {isFinal && <div className="absolute inset-0 border-2 border-yellow-500/20 rounded-[20px] pointer-events-none"></div>}
+        </div>
+    )
+}
+
+function BracketConnector({ type }: { type: 'quarter' | 'semi' }) {
+    if (type === 'quarter') {
+        return (
+            <div className="flex flex-col gap-16 py-12"> {/* Adjust height to match cards */}
+               <div className="flex flex-col justify-center h-[280px]"> {/* Height of 2 matches + gap */}
+                   <div className="w-8 border-y-2 border-r-2 border-zinc-700 h-[50%] rounded-r-2xl translate-y-[25%] opacity-30"></div>
+                   <div className="w-8 h-[2px] bg-zinc-700 self-end opacity-30"></div>
+               </div>
+               <div className="flex flex-col justify-center h-[280px]">
+                   <div className="w-8 border-y-2 border-r-2 border-zinc-700 h-[50%] rounded-r-2xl translate-y-[25%] opacity-30"></div>
+                   <div className="w-8 h-[2px] bg-zinc-700 self-end opacity-30"></div>
+               </div>
+            </div>
+        )
+    }
+    
+    // Semi Final Connector
+    return (
+        <div className="flex flex-col justify-center h-[500px]">
+             <div className="w-8 border-y-2 border-r-2 border-zinc-700 h-[50%] rounded-r-2xl translate-y-[25%] opacity-30"></div>
+             <div className="w-8 h-[2px] bg-zinc-700 self-end opacity-30"></div>
+        </div>
+    )
+}
+
+    
