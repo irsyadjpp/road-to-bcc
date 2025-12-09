@@ -66,7 +66,7 @@ const data = {
     { title: "Arena Manager", url: "/admin/match-control", icon: Trophy },
     { title: "Editor Jadwal", url: "/admin/match-control/schedule", icon: CalendarDays },
     { title: "Generate Bagan", url: "/admin/match-control/bracket", icon: Network },
-    { title: "Berita Acara Hasil", url: "/admin/matches/result-sheet", icon: FileText },
+    { title: "Berita Acara Hasil", url: "/admin/match-control/results", icon: FileText },
     { title: "Verifikasi TPF", url: "/admin/tpf", icon: ShieldAlert },
     { title: "MLO: Dashboard", url: "/admin/mlo/dashboard", icon: Mic2 },
     { title: "MLO: Helpdesk", url: "/admin/mlo/helpdesk", icon: LifeBuoy },
