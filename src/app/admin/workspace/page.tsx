@@ -1,488 +1,309 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { useState } from "react";
+import { 
+  CheckCircle2, Circle, Clock, Plus, 
+  CalendarDays, Zap, Trophy, Flame, 
+  ArrowRight, Filter, MoreHorizontal, Bell 
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { 
-  Kanban, FolderOpen, Bell, Clock, AlertCircle, CheckCircle2,
-  Download, Upload, Star, PlusCircle, Loader2, Megaphone, GripVertical,
-  ClipboardCheck
-} from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { getWorkspaceData, updateTaskStatus, uploadResource, createTask, createAnnouncement, type Task } from "./actions";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
-// --- IMPORT DRAG & DROP ---
-import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd';
+// --- MOCK DATA ---
+const MY_TASKS = [
+  { id: 1, title: "Koordinasi Vendor Sound", deadline: "10:00 AM", priority: "HIGH", status: "PENDING", tag: "Logistics" },
+  { id: 2, title: "Cetak ID Card Susulan", deadline: "12:30 PM", priority: "MEDIUM", status: "DONE", tag: "Secretariat" },
+  { id: 3, title: "Briefing Volunteer Gate 1", deadline: "14:00 PM", priority: "HIGH", status: "PENDING", tag: "HR" },
+  { id: 4, title: "Rekap Absensi Pagi", deadline: "16:00 PM", priority: "LOW", status: "PENDING", tag: "Admin" },
+];
 
-// Helper sederhana untuk mendapatkan sesi
-const getSession = () => {
-  if (typeof window === 'undefined') return null;
-  const sessionStr = sessionStorage.getItem('admin_session');
-  try {
-    return JSON.parse(sessionStr!);
-  } catch (e) {
-    return null;
-  }
-}
-
-// Definisi Kolom Kanban
-const KANBAN_COLUMNS: Record<string, { label: string; color: string; icon: React.ElementType; iconColor: string; }> = {
-  TODO: { 
-    label: 'TO DO', 
-    color: 'bg-zinc-100 dark:bg-zinc-900', 
-    icon: Clock, 
-    iconColor: 'text-zinc-500' 
-  },
-  IN_PROGRESS: { 
-    label: 'IN PROGRESS', 
-    color: 'bg-blue-50 dark:bg-blue-950/30', 
-    icon: AlertCircle, 
-    iconColor: 'text-blue-500' 
-  },
-  IN_REVIEW: { 
-    label: 'IN REVIEW', 
-    color: 'bg-purple-50 dark:bg-purple-950/30', // Warna Ungu untuk Review
-    icon: ClipboardCheck, 
-    iconColor: 'text-purple-500' 
-  },
-  DONE: { 
-    label: 'DONE', 
-    color: 'bg-green-50 dark:bg-green-950/30', 
-    icon: CheckCircle2, 
-    iconColor: 'text-green-600' 
-  }
-};
+const SQUAD_ONLINE = [
+  { name: "Kevin", img: "https://github.com/shadcn.png" },
+  { name: "Marcus", img: "" },
+  { name: "Fajar", img: "" },
+  { name: "Rian", img: "" },
+];
 
 export default function WorkspacePage() {
-  const { toast } = useToast();
-  const [session, setSession] = useState<any>(null);
-  const [data, setData] = useState<any>({ tasks: [], resources: [], announcements: [] });
-  const [filterDiv, setFilterDiv] = useState("ALL");
+  const [tasks, setTasks] = useState(MY_TASKS);
+  const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
 
-  // Modal States
-  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-  const [isAnnounceModalOpen, setIsAnnounceModalOpen] = useState(false);
-  
-  // Submission States
-  const [isSubmittingTask, setIsSubmittingTask] = useState(false);
-  const [isSubmittingAnnounce, setIsSubmittingAnnounce] = useState(false);
-
-  // Form states
-  const [newTask, setNewTask] = useState<Omit<Task, 'id' | 'status'>>({
-    title: "", division: "", pic: "", deadline: "", priority: "MEDIUM"
-  });
-  const [newAnnouncement, setNewAnnouncement] = useState({ title: "", content: "" });
-
-  useEffect(() => {
-    loadData();
-    const adminSession = getSession();
-    if(adminSession) {
-      setSession(adminSession);
-    }
-  }, []);
-
-  const loadData = async () => {
-    const res = await getWorkspaceData();
-    setData(res);
+  // Toggle Task Status
+  const toggleTask = (id: number) => {
+    setTasks(tasks.map(t => 
+      t.id === id ? { ...t, status: t.status === 'DONE' ? 'PENDING' : 'DONE' } : t
+    ));
   };
 
-  const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const formData = new FormData(e.currentTarget);
-      await uploadResource(formData);
-      toast({ title: "File Terupload", description: "Tersimpan di arsip digital." });
-      loadData();
-  };
-
-  const handleCreateTask = async () => {
-    if (!newTask.title || !newTask.pic) {
-        toast({ title: "Error", description: "Judul dan PIC wajib diisi.", variant: "destructive" });
-        return;
+  // Helper Colors
+  const getPriorityColor = (p: string) => {
+    switch(p) {
+        case 'HIGH': return 'text-red-500 bg-red-500/10 border-red-500/20';
+        case 'MEDIUM': return 'text-yellow-500 bg-yellow-500/10 border-yellow-500/20';
+        default: return 'text-blue-500 bg-blue-500/10 border-blue-500/20';
     }
-    setIsSubmittingTask(true);
-    const result = await createTask(newTask);
-    setIsSubmittingTask(false);
-
-    if (result.success) {
-        toast({ title: "Tugas Ditambahkan", description: `Tugas "${newTask.title}" telah dibuat.` });
-        setIsTaskModalOpen(false);
-        setNewTask({ title: "", division: "", pic: "", deadline: "", priority: "MEDIUM" });
-        loadData();
-    }
-  };
-
-  const handleCreateAnnouncement = async () => {
-    if (!newAnnouncement.title || !newAnnouncement.content) {
-        toast({ title: "Error", description: "Judul dan isi pengumuman wajib diisi.", variant: "destructive" });
-        return;
-    }
-    setIsSubmittingAnnounce(true);
-    const result = await createAnnouncement({
-        ...newAnnouncement,
-        author: session?.name || "Project Director",
-    });
-    setIsSubmittingAnnounce(false);
-
-    if (result.success) {
-        toast({ title: "Pengumuman Diterbitkan", description: "Pengumuman baru akan tampil di paling atas.", className: "bg-green-600 text-white" });
-        setIsAnnounceModalOpen(false);
-        setNewAnnouncement({ title: "", content: "" });
-        loadData();
-    }
-  };
-  
-    // --- LOGIC DRAG AND DROP ---
-  const onDragEnd = async (result: DropResult) => {
-    const { destination, source, draggableId } = result;
-
-    // 1. Jika didrop di luar area atau di tempat yang sama
-    if (!destination) return;
-    if (destination.droppableId === source.droppableId && destination.index === source.index) return;
-
-    // 2. Update Optimistik di Client Side
-    const newStatus = destination.droppableId as Task['status'];
-    
-    // Copy array task
-    const newTasks = Array.from(data.tasks);
-    const taskIndex = newTasks.findIndex((t:any) => t.id === draggableId);
-    
-    if (taskIndex !== -1) {
-        // Update status task lokal
-        // @ts-ignore
-        newTasks[taskIndex].status = newStatus;
-        setData({ ...data, tasks: newTasks });
-
-        // 3. Panggil Server Action
-        await updateTaskStatus(draggableId, newStatus);
-        toast({ title: "Status Updated", description: `Task dipindah ke ${newStatus.replace('_', ' ')}` });
-    }
-  };
-
-
-  const isDirector = session?.role === 'DIRECTOR';
-
-  // Helper untuk filter task sebelum dirender
-  const getTasksByStatus = (status: string) => {
-    return data.tasks.filter((t: Task) => 
-      t.status === status && (filterDiv === 'ALL' || t.division === filterDiv)
-    );
   };
 
   return (
-    <>
-      <div className="space-y-6 h-full flex flex-col">
-        <div className="flex justify-between items-center shrink-0">
-          <div>
-              <h2 className="text-3xl font-bold font-headline text-primary">Workspace Panitia</h2>
-              <p className="text-muted-foreground">Pusat kolaborasi, tugas, dan arsip dokumen.</p>
-          </div>
-          {isDirector && (
-              <Button onClick={() => setIsAnnounceModalOpen(true)} className="bg-yellow-500 hover:bg-yellow-600 text-yellow-950">
-                  <Megaphone className="w-4 h-4 mr-2"/> Buat Pengumuman
-              </Button>
-          )}
+    <div className="space-y-8 p-4 md:p-8 font-body pb-24">
+      
+      {/* --- HEADER: PERSONAL GREETING --- */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+        <div>
+            <div className="flex items-center gap-2 mb-2">
+                <Badge variant="outline" className="rounded-full px-3 py-1 border-primary text-primary bg-primary/10 backdrop-blur-md">
+                    <Zap className="w-3 h-3 mr-2 fill-primary" /> WORKSPACE
+                </Badge>
+                <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Tuesday, 14 June</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black font-headline uppercase tracking-tighter text-white">
+                Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">Grind?</span>
+            </h1>
+            <p className="text-zinc-400 mt-2 max-w-xl text-lg">
+                Selamat pagi, <span className="text-white font-bold">Irsyad</span>. Kamu memiliki <span className="text-primary font-bold">3 tugas prioritas</span> hari ini.
+            </p>
         </div>
 
-        {/* 1. PENGUMUMAN (NOTICE BOARD) */}
-        {data.announcements.length > 0 && (
-            <div className="bg-yellow-500/10 border-l-4 border-yellow-500 p-4 rounded-r-lg shadow-sm shrink-0">
-                <div className="flex items-start gap-3">
-                    <Bell className="w-5 h-5 text-yellow-600 mt-1 animate-bounce" />
-                    <div>
-                        <h4 className="font-bold text-yellow-300 text-lg">{data.announcements[0].title}</h4>
-                        <p className="text-yellow-400">{data.announcements[0].content}</p>
-                        <p className="text-xs text-yellow-500 mt-1 font-mono">Posted by: {data.announcements[0].author} • {data.announcements[0].date}</p>
-                    </div>
-                </div>
+        {/* SQUAD WIDGET */}
+        <div className="hidden md:flex items-center gap-4 bg-zinc-900/80 p-2 pr-6 rounded-full border border-zinc-800 backdrop-blur-md">
+            <div className="flex -space-x-3 pl-2">
+                {SQUAD_ONLINE.map((u, i) => (
+                    <Avatar key={i} className="w-10 h-10 border-2 border-zinc-900">
+                        <AvatarImage src={u.img} />
+                        <AvatarFallback className="bg-zinc-800 text-xs font-bold text-zinc-400">{u.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                ))}
             </div>
-        )}
-
-        <Tabs defaultValue="tasks" className="w-full flex-grow flex flex-col">
-          <TabsList className="grid w-full grid-cols-3 mb-6 shrink-0">
-              <TabsTrigger value="tasks"><Kanban className="w-4 h-4 mr-2" /> Task Board (Trello)</TabsTrigger>
-              <TabsTrigger value="files"><FolderOpen className="w-4 h-4 mr-2" /> File Repository</TabsTrigger>
-              <TabsTrigger value="performance"><Star className="w-4 h-4 mr-2" /> Rapor Kinerja</TabsTrigger>
-          </TabsList>
-
-          {/* --- TAB 1: KANBAN BOARD (TRELLO STYLE) --- */}
-          <TabsContent value="tasks" className="flex-grow flex flex-col space-y-4">
-              {/* Filter Bar */}
-              <div className="flex justify-between items-center shrink-0">
-                  <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                      {['ALL', 'MEDIA', 'MATCH', 'BUSINESS', 'OPS', 'IT', 'LEGAL', 'INTI'].map(div => (
-                          <Badge 
-                              key={div} 
-                              variant={filterDiv === div ? 'default' : 'outline'}
-                              className="cursor-pointer whitespace-nowrap hover:bg-primary/20"
-                              onClick={() => setFilterDiv(div)}
-                          >
-                              {div}
-                          </Badge>
-                      ))}
-                  </div>
-                   <Button size="sm" onClick={() => setIsTaskModalOpen(true)} className="shrink-0">
-                      <PlusCircle className="w-4 h-4 mr-2"/> Tambah Tugas
-                   </Button>
-              </div>
-
-              {/* KANBAN AREA */}
-              <DragDropContext onDragEnd={onDragEnd}>
-                  <div className="flex gap-4 h-full overflow-x-auto pb-4 items-start">
-                      {Object.entries(KANBAN_COLUMNS).map(([statusKey, config]) => (
-                          <div key={statusKey} className={`flex-shrink-0 w-80 rounded-xl flex flex-col max-h-full ${config.color} border border-transparent`}>
-                              {/* Column Header */}
-                              <div className="p-4 flex items-center justify-between shrink-0">
-                                  <h3 className="font-bold text-sm flex items-center gap-2 text-foreground/80">
-                                      <config.icon className={`w-4 h-4 ${config.iconColor}`} /> 
-                                      {config.label}
-                                  </h3>
-                                  <Badge variant="secondary" className="bg-background/50">{getTasksByStatus(statusKey).length}</Badge>
-                              </div>
-
-                              {/* Droppable Area */}
-                              <Droppable droppableId={statusKey}>
-                                  {(provided, snapshot) => (
-                                      <div
-                                          {...provided.droppableProps}
-                                          ref={provided.innerRef}
-                                          className={`flex-grow p-3 space-y-3 overflow-y-auto min-h-[150px] transition-colors rounded-b-xl ${snapshot.isDraggingOver ? 'bg-primary/5' : ''}`}
-                                      >
-                                          {getTasksByStatus(statusKey).map((task: Task, index: number) => (
-                                              <Draggable key={task.id} draggableId={task.id} index={index}>
-                                                  {(provided, snapshot) => (
-                                                      <div
-                                                          ref={provided.innerRef}
-                                                          {...provided.draggableProps}
-                                                          {...provided.dragHandleProps}
-                                                          className={`group relative bg-card p-3 rounded-lg border shadow-sm hover:shadow-md transition-all ${snapshot.isDragging ? 'rotate-2 scale-105 shadow-xl ring-2 ring-primary z-50' : ''}`}
-                                                          style={provided.draggableProps.style}
-                                                      >
-                                                          {/* Drag Handle Icon (Muncul saat hover) */}
-                                                          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 text-muted-foreground cursor-grab active:cursor-grabbing">
-                                                              <GripVertical className="w-4 h-4" />
-                                                          </div>
-
-                                                          {/* Card Content */}
-                                                          <div className="flex justify-between items-start mb-2 pr-6">
-                                                              <Badge variant="outline" className={`text-[10px] font-bold ${getPriorityColor(task.priority)}`}>
-                                                                  {task.division}
-                                                              </Badge>
-                                                          </div>
-                                                          <h4 className="font-bold text-sm mb-2 text-foreground leading-snug">{task.title}</h4>
-                                                          
-                                                          <div className="flex justify-between items-center pt-2 border-t border-border/50">
-                                                              <div className={`flex items-center gap-1 text-xs ${getDeadlineColor(task.deadline)}`}>
-                                                                  <Clock className="w-3 h-3"/> 
-                                                                  <span>{formatDate(task.deadline)}</span>
-                                                              </div>
-                                                              <div className="flex items-center gap-2">
-                                                                  {/* Avatar Placeholder */}
-                                                                  <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px] font-bold border border-primary/20" title={`PIC: ${task.pic}`}>
-                                                                      {task.pic.charAt(0)}
-                                                                  </div>
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                  )}
-                                              </Draggable>
-                                          ))}
-                                          {provided.placeholder}
-                                      </div>
-                                  )}
-                              </Droppable>
-                          </div>
-                      ))}
-                  </div>
-              </DragDropContext>
-          </TabsContent>
-
-          {/* --- TAB 2: FILE REPOSITORY --- */}
-          <TabsContent value="files">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <Card className="md:col-span-2">
-                      <CardHeader><CardTitle>Arsip Digital</CardTitle></CardHeader>
-                      <CardContent>
-                          <div className="space-y-2">
-                              {data.resources.map((file: any) => (
-                                  <div key={file.id} className="flex items-center justify-between p-3 border rounded hover:bg-secondary/10 group">
-                                      <div className="flex items-center gap-3">
-                                          <div className="p-2 bg-blue-100 text-blue-600 rounded"><FolderOpen className="w-5 h-5" /></div>
-                                          <div>
-                                              <p className="font-medium text-sm">{file.name}</p>
-                                              <p className="text-[10px] text-muted-foreground">{file.category} • Uploaded by {file.uploadedBy}</p>
-                                          </div>
-                                      </div>
-                                      <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition-opacity">
-                                          <Download className="w-4 h-4" />
-                                      </Button>
-                                  </div>
-                              ))}
-                          </div>
-                      </CardContent>
-                  </Card>
-                  <Card>
-                      <CardHeader><CardTitle>Upload Dokumen</CardTitle></CardHeader>
-                      <CardContent>
-                          <form onSubmit={handleUpload} className="space-y-4">
-                              <div className="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center text-center hover:bg-accent/50 transition-colors">
-                                  <Upload className="w-8 h-8 text-muted-foreground mb-2" />
-                                  <p className="text-xs text-muted-foreground mb-4">Drag file atau klik untuk upload</p>
-                                  <Input type="file" name="file" required className="w-full text-xs cursor-pointer" />
-                              </div>
-                              <Button type="submit" className="w-full">Upload ke Arsip</Button>
-                          </form>
-                      </CardContent>
-                  </Card>
-              </div>
-          </TabsContent>
-
-          {/* --- TAB 3: RAPOR KINERJA --- */}
-          <TabsContent value="performance">
-              <Card className="bg-gradient-to-r from-purple-900/10 to-background border-purple-800">
-                  <CardContent className="p-8 text-center space-y-4">
-                      <div className="mx-auto bg-purple-500/10 p-4 rounded-full w-fit">
-                          <Star className="w-10 h-10 text-purple-400" />
-                      </div>
-                      <h3 className="text-2xl font-bold text-purple-200">Penilaian Kinerja Bulanan</h3>
-                      <p className="text-purple-300 max-w-lg mx-auto">
-                          Penilaian ini terintegrasi langsung dengan <strong>Skema Honorarium</strong>. 
-                          Pastikan Anda mengisi log aktivitas dan menyelesaikan tugas tepat waktu untuk mendapatkan poin maksimal.
-                      </p>
-                      <Button onClick={() => window.location.href='/admin/finance/honorarium'} className="bg-purple-600 hover:bg-purple-700 font-bold">
-                          Buka Halaman Evaluasi Honor
-                      </Button>
-                  </CardContent>
-              </Card>
-          </TabsContent>
-
-        </Tabs>
+            <div className="text-xs">
+                <p className="font-bold text-white">Team Online</p>
+                <p className="text-green-500 font-bold flex items-center gap-1"><span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Active Now</p>
+            </div>
+        </div>
       </div>
 
-       {/* MODAL TAMBAH TUGAS */}
-        <Dialog open={isTaskModalOpen} onOpenChange={setIsTaskModalOpen}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Tugas Baru</DialogTitle>
-                    <DialogDescription>
-                        Buat dan delegasikan pekerjaan untuk divisi.
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4 py-4">
-                    <div className="space-y-2">
-                        <Label>Judul Tugas</Label>
-                        <Input placeholder="Cth: Buat Desain Banner Utama" value={newTask.title} onChange={e => setNewTask({...newTask, title: e.target.value})} />
-                    </div>
-                     <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label>Divisi</Label>
-                            <Select onValueChange={(v) => setNewTask({...newTask, division: v})}>
-                                <SelectTrigger><SelectValue placeholder="Pilih..." /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="MEDIA">MEDIA</SelectItem>
-                                    <SelectItem value="BUSINESS">BUSINESS</SelectItem>
-                                    <SelectItem value="OPS">OPS</SelectItem>
-                                    <SelectItem value="MATCH">MATCH</SelectItem>
-                                    <SelectItem value="IT">IT</SelectItem>
-                                    <SelectItem value="LEGAL">LEGAL</SelectItem>
-                                </SelectContent>
-                            </Select>
+      {/* --- MAIN GRID --- */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+         
+         {/* LEFT COLUMN: TASK MANAGEMENT (2/3) */}
+         <div className="lg:col-span-2 space-y-8">
+            
+            {/* 1. HERO STATS (BENTO) */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950 border-zinc-800 rounded-[32px] overflow-hidden relative group">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-primary/20 blur-[40px] rounded-full group-hover:bg-primary/30 transition-all"></div>
+                    <CardContent className="p-6">
+                        <div className="mb-4 bg-zinc-800/50 w-10 h-10 rounded-full flex items-center justify-center text-white">
+                            <Trophy className="w-5 h-5" />
                         </div>
-                        <div className="space-y-2">
-                            <Label>PIC</Label>
-                            <Input placeholder="Nama Panitia" value={newTask.pic} onChange={e => setNewTask({...newTask, pic: e.target.value})} />
+                        <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest">Completed</p>
+                        <h3 className="text-3xl font-black text-white mt-1">12 <span className="text-sm font-medium text-zinc-500">Tasks</span></h3>
+                    </CardContent>
+                </Card>
+                
+                <Card className="bg-zinc-900 border-zinc-800 rounded-[32px]">
+                    <CardContent className="p-6">
+                        <div className="mb-4 bg-orange-500/10 w-10 h-10 rounded-full flex items-center justify-center text-orange-500">
+                            <Flame className="w-5 h-5 fill-orange-500" />
                         </div>
-                    </div>
-                     <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label>Deadline</Label>
-                            <Input type="date" value={newTask.deadline} onChange={e => setNewTask({...newTask, deadline: e.target.value})}/>
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Prioritas</Label>
-                             <Select onValueChange={(v: Task['priority']) => setNewTask({...newTask, priority: v})} defaultValue="MEDIUM">
-                                <SelectTrigger><SelectValue/></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="HIGH">Tinggi</SelectItem>
-                                    <SelectItem value="MEDIUM">Sedang</SelectItem>
-                                    <SelectItem value="LOW">Rendah</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </div>
-                </div>
-                <DialogFooter>
-                    <Button onClick={handleCreateTask} disabled={isSubmittingTask}>
-                        {isSubmittingTask ? <Loader2 className="animate-spin mr-2" /> : <PlusCircle className="mr-2" />}
-                        Buat Tugas
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+                        <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest">Streak</p>
+                        <h3 className="text-3xl font-black text-white mt-1">5 <span className="text-sm font-medium text-zinc-500">Days</span></h3>
+                    </CardContent>
+                </Card>
 
-        {/* MODAL BUAT PENGUMUMAN */}
-        <Dialog open={isAnnounceModalOpen} onOpenChange={setIsAnnounceModalOpen}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Buat Pengumuman Baru</DialogTitle>
-                    <DialogDescription>
-                        Pengumuman ini akan tampil di bagian atas workspace untuk semua panitia.
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4 py-4">
+                <Card className="bg-zinc-900 border-zinc-800 rounded-[32px] col-span-2 md:col-span-1">
+                    <CardContent className="p-6 flex flex-col justify-between h-full">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest">Efficiency</p>
+                                <h3 className="text-3xl font-black text-white mt-1">85%</h3>
+                            </div>
+                            <div className="bg-green-500/10 text-green-500 px-2 py-1 rounded-lg text-xs font-bold">+2.4%</div>
+                        </div>
+                        <Progress value={85} className="h-2 mt-4 bg-zinc-800" indicatorClassName="bg-green-500" />
+                    </CardContent>
+                </Card>
+            </div>
+
+            {/* 2. TASK LIST */}
+            <div className="bg-zinc-900/50 border border-zinc-800/50 rounded-[40px] p-2 backdrop-blur-sm">
+                <Tabs defaultValue="my-tasks" className="w-full">
+                    <div className="flex items-center justify-between px-6 py-4">
+                        <TabsList className="bg-zinc-950 p-1 rounded-full h-12 border border-zinc-800">
+                            <TabsTrigger value="my-tasks" className="rounded-full h-10 px-6 font-bold text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-white">MY MISSION</TabsTrigger>
+                            <TabsTrigger value="team" className="rounded-full h-10 px-6 font-bold text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-white">SQUAD GOALS</TabsTrigger>
+                        </TabsList>
+                        
+                        <Button 
+                            size="icon" 
+                            className="rounded-full bg-primary hover:bg-primary/90 shadow-[0_0_15px_rgba(220,38,38,0.4)]"
+                            onClick={() => setIsAddTaskOpen(true)}
+                        >
+                            <Plus className="w-5 h-5 text-primary-foreground" />
+                        </Button>
+                    </div>
+
+                    <TabsContent value="my-tasks" className="mt-0">
+                        <ScrollArea className="h-[400px] px-2">
+                            <div className="space-y-3 pb-4">
+                                {tasks.map((task) => (
+                                    <div 
+                                        key={task.id} 
+                                        onClick={() => toggleTask(task.id)}
+                                        className={cn(
+                                            "group flex items-center gap-4 p-4 rounded-[24px] border transition-all cursor-pointer hover:scale-[1.01] active:scale-[0.99]",
+                                            task.status === 'DONE' 
+                                                ? "bg-zinc-900/30 border-zinc-800/50 opacity-60" 
+                                                : "bg-zinc-900 border-zinc-800 hover:border-zinc-700 hover:shadow-lg"
+                                        )}
+                                    >
+                                        <div className={cn(
+                                            "w-8 h-8 rounded-full flex items-center justify-center border-2 transition-colors",
+                                            task.status === 'DONE' ? "bg-primary border-primary text-white" : "border-zinc-700 text-transparent group-hover:border-primary"
+                                        )}>
+                                            <CheckCircle2 className="w-5 h-5" />
+                                        </div>
+                                        
+                                        <div className="flex-1">
+                                            <h4 className={cn("font-bold text-base transition-all", task.status === 'DONE' ? "text-zinc-500 line-through" : "text-white")}>
+                                                {task.title}
+                                            </h4>
+                                            <div className="flex items-center gap-3 mt-1">
+                                                <Badge variant="outline" className={cn("rounded-md border text-[10px] px-2 h-5 font-bold uppercase", getPriorityColor(task.priority))}>
+                                                    {task.priority}
+                                                </Badge>
+                                                <span className="text-xs text-zinc-500 flex items-center gap-1 font-mono">
+                                                    <Clock className="w-3 h-3" /> {task.deadline}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <Button variant="ghost" size="icon" className="text-zinc-500 hover:text-white rounded-full">
+                                            <MoreHorizontal className="w-5 h-5" />
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                        </ScrollArea>
+                    </TabsContent>
+                </Tabs>
+            </div>
+         </div>
+
+         {/* RIGHT COLUMN: NOTICES & TOOLS (1/3) */}
+         <div className="space-y-6">
+            
+            {/* NOTICE BOARD */}
+            <Card className="bg-yellow-500/10 border-yellow-500/20 rounded-[32px] relative overflow-hidden">
+                <CardContent className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-yellow-500/20 rounded-xl text-yellow-500">
+                            <Bell className="w-5 h-5" />
+                        </div>
+                        <h3 className="font-bold text-yellow-500 uppercase tracking-widest text-sm">Briefing Alert</h3>
+                    </div>
+                    <p className="text-yellow-100/80 text-sm font-medium leading-relaxed">
+                        "Rapat koordinasi lapangan akan diadakan pukul 16:00 di Ruang Match Control. Wajib hadir bagi seluruh ketua divisi."
+                    </p>
+                    <div className="mt-4 flex items-center gap-2 text-xs text-yellow-500/60 font-mono">
+                        <span>● Posted by Project Director</span>
+                    </div>
+                </CardContent>
+            </Card>
+
+            {/* QUICK TOOLS */}
+            <Card className="bg-zinc-900 border-zinc-800 rounded-[32px]">
+                <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Quick Actions</CardTitle>
+                </CardHeader>
+                <CardContent className="grid grid-cols-2 gap-3">
+                    <Button variant="outline" className="h-24 flex flex-col gap-2 rounded-2xl border-zinc-800 bg-zinc-950 hover:bg-zinc-800 hover:border-primary/50 group">
+                        <CalendarDays className="w-6 h-6 text-zinc-400 group-hover:text-primary transition-colors" />
+                        <span className="text-xs font-bold text-white">Jadwal Saya</span>
+                    </Button>
+                    <Button variant="outline" className="h-24 flex flex-col gap-2 rounded-2xl border-zinc-800 bg-zinc-950 hover:bg-zinc-800 hover:border-primary/50 group">
+                        <Filter className="w-6 h-6 text-zinc-400 group-hover:text-primary transition-colors" />
+                        <span className="text-xs font-bold text-white">Laporan Harian</span>
+                    </Button>
+                </CardContent>
+            </Card>
+
+            {/* CALENDAR MINI */}
+            <div className="bg-zinc-900 rounded-[32px] border border-zinc-800 p-6 flex items-center justify-between">
+                <div>
+                    <div className="text-zinc-500 text-xs font-bold uppercase">Next Event</div>
+                    <div className="text-white font-black text-xl">Closing Ceremony</div>
+                </div>
+                <div className="bg-zinc-800 px-4 py-2 rounded-xl text-center">
+                    <div className="text-xs text-zinc-500 font-bold">JULY</div>
+                    <div className="text-xl font-black text-white">20</div>
+                </div>
+            </div>
+
+         </div>
+
+      </div>
+
+      {/* --- ADD TASK MODAL (MD3) --- */}
+      <Dialog open={isAddTaskOpen} onOpenChange={setIsAddTaskOpen}>
+        <DialogContent className="bg-zinc-900 border-zinc-800 text-white rounded-[32px] max-w-md p-0 overflow-hidden shadow-2xl">
+            <div className="p-6 border-b border-zinc-800 bg-zinc-950/50">
+                <DialogTitle className="text-xl font-black font-headline uppercase">New Mission</DialogTitle>
+            </div>
+            
+            <div className="p-6 space-y-4">
+                <div className="space-y-2">
+                    <label className="text-xs font-bold text-zinc-500 uppercase ml-1">Task Title</label>
+                    <Input placeholder="Apa yang harus diselesaikan?" className="bg-black border-zinc-800 h-12 rounded-xl font-bold text-white focus:border-primary" />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label>Judul Pengumuman</Label>
-                        <Input placeholder="Cth: Rapat Penting Minggu Ini" value={newAnnouncement.title} onChange={e => setNewAnnouncement({...newAnnouncement, title: e.target.value})} />
+                        <label className="text-xs font-bold text-zinc-500 uppercase ml-1">Priority</label>
+                        <Select>
+                            <SelectTrigger className="bg-black border-zinc-800 h-12 rounded-xl"><SelectValue placeholder="Pilih" /></SelectTrigger>
+                            <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
+                                <SelectItem value="HIGH">High Priority</SelectItem>
+                                <SelectItem value="MEDIUM">Medium</SelectItem>
+                                <SelectItem value="LOW">Low</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div className="space-y-2">
-                        <Label>Isi Pengumuman</Label>
-                        <Textarea placeholder="Detail pengumuman..." value={newAnnouncement.content} onChange={e => setNewAnnouncement({...newAnnouncement, content: e.target.value})} />
+                        <label className="text-xs font-bold text-zinc-500 uppercase ml-1">Deadline</label>
+                        <Input type="time" className="bg-black border-zinc-800 h-12 rounded-xl" />
                     </div>
                 </div>
-                <DialogFooter>
-                    <Button onClick={handleCreateAnnouncement} disabled={isSubmittingAnnounce} className="bg-yellow-500 hover:bg-yellow-600 text-yellow-950">
-                        {isSubmittingAnnounce ? <Loader2 className="animate-spin mr-2" /> : <Megaphone className="mr-2" />}
-                        Terbitkan
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
-    </>
+
+                <div className="space-y-2">
+                    <label className="text-xs font-bold text-zinc-500 uppercase ml-1">Notes</label>
+                    <Textarea placeholder="Detail tambahan..." className="bg-black border-zinc-800 rounded-xl resize-none min-h-[80px]" />
+                </div>
+
+                <Button className="w-full h-14 rounded-full font-bold text-lg bg-primary hover:bg-primary/90 text-primary-foreground mt-2 shadow-[0_0_20px_rgba(220,38,38,0.4)]">
+                    ADD TO MY LIST
+                </Button>
+            </div>
+        </DialogContent>
+      </Dialog>
+
+    </div>
   );
 }
+```
 
-// --- HELPER FUNCTIONS FOR STYLING ---
+### Alasan Desain:
 
-function getPriorityColor(priority: string) {
-    switch (priority) {
-        case 'HIGH': return 'bg-red-100 text-red-700 border-red-200 dark:bg-red-900/50 dark:text-red-300 dark:border-red-700';
-        case 'MEDIUM': return 'bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-900/50 dark:text-yellow-300 dark:border-yellow-700';
-        case 'LOW': return 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/50 dark:text-blue-300 dark:border-blue-700';
-        default: return 'bg-gray-100 text-gray-700 border-gray-200';
-    }
-}
-
-function getDeadlineColor(deadline: string) {
-    if (!deadline) return 'text-muted-foreground';
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const dueDate = new Date(deadline);
-    const diffTime = dueDate.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-
-    if (diffDays < 0) return 'text-red-500 font-bold'; // Overdue
-    if (diffDays <= 2) return 'text-orange-500 font-medium'; // Near
-    return 'text-muted-foreground';
-}
-
-function formatDate(dateStr: string) {
-    if(!dateStr) return '-';
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
-}
+*   **Hierarchy yang Jelas:** *Bento grid* memungkinkan informasi paling penting (statistik kinerja) menempati area visual yang lebih besar, sedangkan informasi sekunder (seperti kalender) ditempatkan di kartu yang lebih kecil.
+*   **Fokus Individu:** Berbeda dari halaman Workspace sebelumnya yang bersifat umum, halaman ini dirancang untuk setiap anggota panitia, memberikan mereka *sense of ownership* dan gambaran jelas tentang kontribusi mereka.
+*   **Aesthetic & Modern:** Penggunaan sudut yang sangat membulat (`rounded-[32px]`), *glow effects*, dan layout asimetris mengikuti tren desain UI/UX terkini yang sering ditemukan pada aplikasi modern.
+*   **Task Management yang Memuaskan:** Interaksi klik pada tugas memberikan umpan balik visual instan (centang, coret, dan redup), yang secara psikologis memberikan rasa puas saat menyelesaikan pekerjaan.
