@@ -3,17 +3,16 @@
 import { useState } from "react";
 import { 
   Users, Shield, Trophy, Search, 
-  Plus, Filter, MoreHorizontal, MapPin, 
-  UserPlus, Mail, Phone, Edit3, Trash2, 
-  Crown, Medal, ChevronRight, Star,
-  Briefcase
+  Plus, MapPin, Mail, Phone, Edit3, 
+  Crown, Star, UserPlus, Briefcase, 
+  MoreHorizontal
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -31,16 +30,11 @@ const TEAMS = [
     manager: "Fung Permadi",
     status: "VERIFIED", 
     tier: "PRO",
-    performance: 95, // Replacement for XP
+    performance: 95, // Progress Bar
     athletes: 24,
     officials: 5,
-    contact: "0811-xxxx-xxxx",
     rank: 1,
-    athleteDetails: [
-      { name: "Kevin Sanjaya", rank: 1, img: "https://github.com/shadcn.png" },
-      { name: "Siti Fadia", rank: 5, img: "" },
-      { name: "Praveen Jordan", rank: 8, img: "" },
-    ]
+    contact: "0811-xxxx-xxxx"
   },
   { 
     id: "TM-002", 
@@ -53,12 +47,8 @@ const TEAMS = [
     performance: 92,
     athletes: 18,
     officials: 4,
-    contact: "0812-xxxx-xxxx",
     rank: 2,
-     athleteDetails: [
-      { name: "Hendra Setiawan", rank: 2, img: "" },
-      { name: "Marcus Gideon", rank: 3, img: "" },
-    ]
+    contact: "0812-xxxx-xxxx"
   },
   { 
     id: "TM-003", 
@@ -67,15 +57,12 @@ const TEAMS = [
     logo: "/logos/sgs.png",
     manager: "Taufik Hidayat",
     status: "PENDING", 
-    tier: "AMATEUR",
+    tier: "AMATEUR", 
     performance: 75,
     athletes: 12,
     officials: 3,
-    contact: "0857-xxxx-xxxx",
     rank: 5,
-    athleteDetails: [
-      { name: "Anthony Ginting", rank: 4, img: "" },
-    ]
+    contact: "0857-xxxx-xxxx"
   },
   { 
     id: "TM-004", 
@@ -84,20 +71,19 @@ const TEAMS = [
     logo: "/logos/exist.png",
     manager: "Alvent Yulianto",
     status: "VERIFIED", 
-    tier: "PRO",
+    tier: "PRO", 
     performance: 88,
     athletes: 15,
     officials: 4,
-    contact: "0813-xxxx-xxxx",
     rank: 3,
-    athleteDetails: []
+    contact: "0813-xxxx-xxxx"
   },
 ];
 
 const STATS = {
   totalTeams: 24,
   totalAthletes: 156,
-  pendingVerif: 3
+  avgPerformance: "88%"
 };
 
 export default function TeamManagementPage() {
@@ -105,7 +91,7 @@ export default function TeamManagementPage() {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Helper Styles (Sama seperti Volunteer tapi tema Indigo)
+  // Helper Styles (Indigo Theme)
   const getStatusColor = (s: string) => {
     switch(s) {
         case 'VERIFIED': return "text-green-500 bg-green-500/10 border-green-500/20";
@@ -145,7 +131,7 @@ export default function TeamManagementPage() {
             onClick={() => setIsAddOpen(true)}
             className="h-14 rounded-full px-8 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-lg shadow-[0_0_20px_rgba(79,70,229,0.4)] transition-transform active:scale-95"
         >
-            <Plus className="mr-2 w-5 h-5"/> REGISTER TEAM
+            <UserPlus className="mr-2 w-5 h-5"/> REGISTER TEAM
         </Button>
       </div>
 
@@ -158,7 +144,7 @@ export default function TeamManagementPage() {
                     <Shield className="w-6 h-6"/>
                 </div>
                 <div>
-                    <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Registered Clubs</p>
+                    <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Total Clubs</p>
                     <p className="text-3xl font-black text-white">{STATS.totalTeams}</p>
                 </div>
             </CardContent>
@@ -179,17 +165,17 @@ export default function TeamManagementPage() {
             <div className="absolute top-0 right-0 w-24 h-24 bg-yellow-500/10 rounded-full blur-[40px] group-hover:bg-yellow-500/20 transition-all"></div>
             <CardContent className="p-5 flex items-center gap-4 relative z-10">
                 <div className="h-12 w-12 rounded-2xl bg-yellow-900/20 flex items-center justify-center text-yellow-500">
-                    <Crown className="w-6 h-6 fill-yellow-500"/>
+                    <Star className="w-6 h-6 fill-yellow-500"/>
                 </div>
                 <div>
-                    <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Pending Verif</p>
-                    <p className="text-3xl font-black text-white">{STATS.pendingVerif}</p>
+                    <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Avg Performance</p>
+                    <p className="text-3xl font-black text-white">{STATS.avgPerformance}</p>
                 </div>
             </CardContent>
          </Card>
       </div>
 
-      {/* --- ROSTER GRID --- */}
+      {/* --- ROSTER GRID (IDENTICAL LAYOUT TO VOLUNTEER) --- */}
       <div className="flex-1 bg-zinc-900/50 border border-zinc-800/50 rounded-[40px] p-2 backdrop-blur-sm flex flex-col min-h-0">
         <Tabs defaultValue="all" className="w-full h-full flex flex-col">
             
@@ -198,15 +184,15 @@ export default function TeamManagementPage() {
                     <TabsTrigger value="all" className="rounded-full h-12 px-8 font-bold text-sm data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
                         ALL CLUBS
                     </TabsTrigger>
-                    <TabsTrigger value="pending" className="rounded-full h-12 px-8 font-bold text-sm data-[state=active]:bg-zinc-800 data-[state=active]:text-white">
-                        PENDING
+                    <TabsTrigger value="pro" className="rounded-full h-12 px-8 font-bold text-sm data-[state=active]:bg-zinc-800 data-[state=active]:text-white">
+                        PRO TIER
                     </TabsTrigger>
                 </TabsList>
 
                 <div className="relative w-full md:w-72">
                     <Search className="absolute left-4 top-3.5 w-4 h-4 text-zinc-500" />
                     <Input 
-                        placeholder="Cari klub..." 
+                        placeholder="Search club..." 
                         className="h-12 bg-zinc-950 border-zinc-800 rounded-full pl-10 text-white focus:ring-indigo-500"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -223,20 +209,22 @@ export default function TeamManagementPage() {
                                 onClick={() => setSelectedTeam(team)}
                                 className="group bg-zinc-900 border border-zinc-800 rounded-[32px] p-6 hover:border-indigo-500/50 transition-all cursor-pointer relative overflow-hidden"
                             >
-                                {/* Performance Bar */}
+                                {/* Performance Bar (Pengganti XP Bar) */}
                                 <div className="absolute top-0 left-0 right-0 h-1 bg-zinc-800">
                                     <div className="h-full bg-gradient-to-r from-indigo-500 to-cyan-500" style={{ width: `${team.performance}%` }}></div>
                                 </div>
 
+                                {/* Status & Rank */}
                                 <div className="flex justify-between items-start mb-4 mt-2">
                                     <Badge variant="outline" className={cn("text-[9px] font-black uppercase border", getStatusColor(team.status))}>
                                         {team.status}
                                     </Badge>
                                     <div className="flex items-center gap-1 text-yellow-500 text-xs font-bold">
-                                        <Crown className="w-3 h-3 fill-yellow-500"/> Rank #{team.rank}
+                                        <Crown className="w-3 h-3 fill-yellow-500"/> #{team.rank}
                                     </div>
                                 </div>
 
+                                {/* Main Avatar (Center Portrait) */}
                                 <div className="text-center mb-6">
                                     <Avatar className="w-20 h-20 mx-auto border-4 border-zinc-800 group-hover:border-indigo-500 transition-colors shadow-xl bg-white p-1">
                                         <AvatarImage src={team.logo} className="object-contain"/>
@@ -248,6 +236,7 @@ export default function TeamManagementPage() {
                                     </p>
                                 </div>
 
+                                {/* Footer Badges */}
                                 <div className="flex justify-center gap-2">
                                     <Badge variant="outline" className={cn("text-[10px] font-bold border", getTierBadge(team.tier))}>
                                         {team.tier} CLUB
@@ -264,13 +253,13 @@ export default function TeamManagementPage() {
         </Tabs>
       </div>
 
-      {/* --- DETAIL SHEET (THE LOCKER ROOM) --- */}
+      {/* --- DETAIL SHEET (LOCKER ROOM STYLE) --- */}
       <Sheet open={!!selectedTeam} onOpenChange={() => setSelectedTeam(null)}>
         <SheetContent className="w-full sm:max-w-md bg-zinc-950 border-l border-zinc-800 p-0 overflow-y-auto">
             {selectedTeam && (
                 <div className="flex flex-col h-full">
                     
-                    {/* Header: Cover Image Style */}
+                    {/* Header: Cover Image */}
                     <div className="h-48 bg-gradient-to-b from-indigo-900/50 to-zinc-900 relative">
                         <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-20 mix-blend-overlay"></div>
                         <div className="absolute -bottom-12 left-8">
@@ -304,7 +293,7 @@ export default function TeamManagementPage() {
                                 <p className="text-xl font-black text-white">{selectedTeam.athletes}</p>
                             </div>
                             <div className="bg-zinc-900 p-3 rounded-2xl border border-zinc-800 text-center">
-                                <p className="text-[10px] text-zinc-500 uppercase font-bold">Official</p>
+                                <p className="text-[10px] text-zinc-500 uppercase font-bold">Officials</p>
                                 <p className="text-xl font-black text-white">{selectedTeam.officials}</p>
                             </div>
                         </div>
@@ -334,30 +323,11 @@ export default function TeamManagementPage() {
                             </div>
                             <Progress value={selectedTeam.performance} className="h-3 bg-zinc-900" indicatorClassName="bg-gradient-to-r from-indigo-500 to-cyan-600" />
                         </div>
-
-                        {/* Quick Athletes Preview */}
-                        <div>
-                            <h3 className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-3">Key Players</h3>
-                            <div className="flex -space-x-3">
-                                {selectedTeam.athleteDetails.slice(0, 5).map((player, i) => (
-                                    <Avatar key={i} className="w-10 h-10 border-2 border-zinc-900 bg-zinc-800">
-                                        <AvatarImage src={player.img} />
-                                        <AvatarFallback className="text-xs font-bold text-zinc-500">{player.name.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                ))}
-                                {selectedTeam.athletes > 5 && (
-                                <div className="w-10 h-10 rounded-full bg-zinc-800 border-2 border-zinc-900 flex items-center justify-center text-xs font-bold text-zinc-400">
-                                    +{selectedTeam.athletes - 5}
-                                </div>
-                                )}
-                            </div>
-                        </div>
-
                     </div>
 
                     {/* Footer Actions */}
                     <div className="p-6 border-t border-zinc-800 bg-zinc-900/80 backdrop-blur-md grid grid-cols-2 gap-4">
-                        <Button variant="outline" className="h-14 rounded-2xl border-zinc-700 text-zinc-300 hover:text-white hover:bg-zinc-800 font-bold">
+                        <Button variant="outline" className="h-14 rounded-2xl border-zinc-700 text-zinc-300 hover:text-white font-bold hover:bg-zinc-800">
                             <Edit3 className="w-4 h-4 mr-2"/> EDIT PROFILE
                         </Button>
                         <Button className="h-14 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-lg shadow-indigo-900/20">
@@ -375,17 +345,16 @@ export default function TeamManagementPage() {
             <div className="p-8 border-b border-zinc-800 bg-indigo-950/20">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-black font-headline uppercase flex items-center gap-2 text-indigo-500">
-                        <Shield className="w-6 h-6"/> Register Club
+                        <Crown className="w-6 h-6"/> Register Club
                     </DialogTitle>
                     <DialogDescription>Daftarkan kontingen atau klub baru.</DialogDescription>
                 </DialogHeader>
             </div>
             
             <div className="p-8 space-y-6">
-                
                 <div className="space-y-2">
                     <label className="text-xs font-bold uppercase text-zinc-500 ml-1">Nama Klub / Kontingen</label>
-                    <Input placeholder="Contoh: PB Jaya Raya" className="bg-zinc-900 border-zinc-800 h-14 rounded-2xl text-lg font-bold" />
+                    <Input placeholder="Contoh: PB Jaya Raya" className="bg-zinc-900 border-zinc-800 h-14 rounded-2xl text-lg font-bold text-white focus:border-indigo-500" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -417,7 +386,6 @@ export default function TeamManagementPage() {
             </div>
         </DialogContent>
       </Dialog>
-
     </div>
   );
 }
