@@ -1,44 +1,75 @@
 
 'use client';
 
-import { useState } from "react";
+import { useActionState, useEffect } from "react";
+import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { loginManager, loginPlayerGoogle } from "../actions";
 import { Loader2, Mail } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
-import { loginPlayerGoogle } from "../actions";
 import { useRouter } from "next/navigation";
+
+function GoogleLoginButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button
+      type="submit"
+      className="w-full h-14 rounded-xl bg-white text-black hover:bg-zinc-200 shadow-lg font-bold text-lg flex items-center justify-center transition-transform hover:scale-[1.01]"
+      disabled={pending}
+    >
+      {pending ? (
+        <Loader2 className="w-5 h-5 animate-spin" />
+      ) : (
+        <>
+          <img src="/logos/google-logo.svg" alt="Google" className="w-6 h-6 mr-3" />
+          Lanjutkan dengan Google
+        </>
+      )}
+    </Button>
+  );
+}
+
+function ManualLoginButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button
+      type="submit"
+      className="w-full h-12 bg-transparent border border-zinc-700 hover:bg-zinc-800 text-white font-bold rounded-lg transition-all"
+      disabled={pending}
+    >
+      {pending ? <Loader2 className="animate-spin" /> : "Masuk dengan Email"}
+    </Button>
+  );
+}
 
 export default function PlayerLoginPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleGoogleLogin = async () => {
-    setIsLoading(true);
-    const res = await loginPlayerGoogle();
-    if (res.success) {
+  const [googleState, googleAction] = useActionState(loginPlayerGoogle, { success: false });
+  const [manualState, manualAction] = useActionState(loginManager, { success: false, message: '' });
+
+  useEffect(() => {
+    if (googleState.success) {
       toast({ title: "Login Berhasil!", description: "Selamat datang kembali, Juara!", className: "bg-green-600 text-white" });
       router.push('/player/dashboard');
       router.refresh();
-    } else {
-      setIsLoading(false);
-      toast({ title: "Gagal", description: "Gagal login dengan Google.", variant: "destructive" });
     }
-  };
+  }, [googleState, router, toast]);
 
-  const handleManualLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    // Dummy login logic for manual form
-    setTimeout(() => {
-        toast({ title: "Login Manual (Development)", description: "Mengalihkan ke dashboard..." });
-        router.push('/player/dashboard');
-    }, 1000);
-  };
+  useEffect(() => {
+    if (manualState.success) {
+      toast({ title: "Login Berhasil!", description: "Selamat datang kembali!", className: "bg-green-600 text-white" });
+      router.push('/player/dashboard');
+    } else if (manualState.message) {
+      toast({ title: "Login Gagal", description: manualState.message, variant: "destructive" });
+    }
+  }, [manualState, router, toast]);
+
 
   return (
     <div className="min-h-screen w-full flex bg-black text-white overflow-hidden">
@@ -92,25 +123,9 @@ export default function PlayerLoginPage() {
             </div>
 
             <div className="space-y-4">
-                 <button
-                    onClick={handleGoogleLogin}
-                    disabled={isLoading}
-                    className="w-full h-12 bg-white text-black font-bold rounded-lg flex items-center justify-center gap-3 transition-transform active:scale-95 hover:bg-gray-100 disabled:opacity-70"
-                 >
-                    {isLoading ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                        <>
-                            <svg className="w-5 h-5" viewBox="0 0 24 24">
-                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
-                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-                            </svg>
-                            <span>Lanjutkan dengan Google</span>
-                        </>
-                    )}
-                 </button>
+                <form action={googleAction}>
+                    <GoogleLoginButton />
+                </form>
 
                 <div className="relative flex py-2 items-center">
                     <div className="flex-grow border-t border-zinc-800"></div>
@@ -118,7 +133,7 @@ export default function PlayerLoginPage() {
                     <div className="flex-grow border-t border-zinc-800"></div>
                 </div>
 
-                <form onSubmit={handleManualLogin} className="space-y-4">
+                <form action={manualAction} className="space-y-4">
                     <div className="space-y-2">
                         <Label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Email</Label>
                         <div className="relative">
@@ -146,14 +161,7 @@ export default function PlayerLoginPage() {
                             required
                         />
                     </div>
-
-                    <Button 
-                        type="submit" 
-                        className="w-full h-12 bg-transparent border border-zinc-700 hover:bg-zinc-800 text-white font-bold rounded-lg transition-all"
-                        disabled={isLoading}
-                    >
-                        {isLoading ? <Loader2 className="animate-spin" /> : "Masuk dengan Email"}
-                    </Button>
+                    <ManualLoginButton />
                 </form>
             </div>
 
