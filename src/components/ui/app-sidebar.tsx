@@ -101,15 +101,15 @@ const data = {
   ],
   // 8. SEKRETARIAT
   navSecretariat: [
+    { title: "Verifikasi Pendaftaran", url: "/admin/secretariat/verification", icon: UserCheck },
     { title: "E-Office / Surat", url: "/admin/secretary/correspondence", icon: Mail },
     { title: "E-Mandate (Surat Tugas)", url: "/admin/secretary/assignments", icon: FileCheck },
     { title: "Notulensi Rapat", url: "/admin/secretary/minutes", icon: FileSignature },
-    { title: "Generator Sertifikat", url: "/admin/secretary/cert-gen", icon: Award },
+    { title: "Generator Sertifikat", url: "/admin/event/certificates", icon: Award },
   ],
   // 9. MASTER DATA
   navMaster: [
-    { title: "Verifikasi Pendaftaran Tim", url: "/admin/teams", icon: FileCheck },
-    { title: "Master Tim/Pemain", url: "/admin/master/teams", icon: Users },
+    { title: "Database Klub", url: "/admin/participants/teams", icon: Users },
     { title: "Master Kategori", url: "/admin/master/categories", icon: Tags },
     { title: "Manajemen Berita", url: "/admin/master/news", icon: Newspaper },
     { title: "Manajemen User", url: "/admin/settings/users", icon: UserCog },
