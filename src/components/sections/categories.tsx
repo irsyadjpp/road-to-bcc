@@ -2,7 +2,10 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Users, Swords, UserPlus, Trophy, Plus, ArrowRight, XCircle, Info } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Plus, ArrowRight, XCircle, Info } from "lucide-react";
+import { cn } from "@/lib/utils";
+
 
 // Matriks Logika Pasangan
 const pairings = [
@@ -37,22 +40,24 @@ export function CategoriesSection() {
         </div>
         
         {/* Pairing Matrix */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {pairings.map((pair, index) => (
             <Card key={index} className={`bg-card border shadow-sm hover:shadow-lg transition-shadow hover:-translate-y-1 ${!pair.valid ? 'border-destructive/30 bg-destructive/5' : ''}`}>
-              <CardContent className="pt-6 flex items-center justify-between text-center gap-1">
-                <div className="px-3 py-1 bg-secondary rounded-full text-xs font-semibold truncate">{pair.level1}</div>
+              <CardContent className="pt-6 flex flex-col sm:flex-row items-center justify-between text-center gap-2">
+                <Badge variant="outline" className="px-3 py-1 text-xs font-semibold truncate">{pair.level1}</Badge>
                 <Plus className="w-4 h-4 text-muted-foreground flex-shrink-0"/>
-                <div className="px-3 py-1 bg-secondary rounded-full text-xs font-semibold truncate">{pair.level2}</div>
-                <ArrowRight className="w-4 h-4 text-muted-foreground flex-shrink-0"/>
-                 <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
+                <Badge variant="outline" className="px-3 py-1 text-xs font-semibold truncate">{pair.level2}</Badge>
+                <ArrowRight className="w-4 h-4 text-muted-foreground flex-shrink-0 hidden sm:block"/>
+                <div className="flex flex-col items-center gap-1 flex-1 min-w-0 mt-2 sm:mt-0">
                    {pair.valid ? (
-                       <div className={`px-4 py-2 rounded-full text-sm font-bold border-2 truncate ${pair.color.replace('text-', 'border-')} ${pair.color.replace('text-', 'bg-')}/10`}>{pair.result}</div>
+                       <Badge variant="outline" className={cn("px-4 py-2 text-sm font-bold border-2 truncate", pair.color, pair.color.replace('text-', 'border-'))}>
+                         {pair.result}
+                       </Badge>
                    ) : (
-                       <div className={`px-3 py-2 rounded-full text-sm font-bold border-2 flex items-center gap-2 truncate ${pair.color.replace('text-', 'border-')} ${pair.color.replace('text-', 'bg-')}/10`}>
+                       <Badge variant="destructive" className="px-3 py-2 text-sm font-bold flex items-center gap-2 truncate">
                            <XCircle className="w-4 h-4 shrink-0"/>
                            {pair.result}
-                        </div>
+                        </Badge>
                    )}
                 </div>
               </CardContent>
