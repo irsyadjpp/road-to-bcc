@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useActionState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { 
@@ -35,11 +35,16 @@ import { CheckCircle2, Copy, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { registerTeamEntity } from "./actions";
 
+const initialState = {
+  success: false,
+  teamCode: null,
+};
 
 const CATEGORIES = ["Beginner", "Intermediate", "Advance"] as const;
 
 export default function RegisterTeamPage() {
   const { toast } = useToast();
+  const [state, formAction] = useActionState(registerTeamEntity, initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successData, setSuccessData] = useState<{ code: string; name: string } | null>(null);
 
@@ -54,6 +59,28 @@ export default function RegisterTeamPage() {
     },
   });
 
+  useEffect(() => {
+    if (state.success && state.teamCode) {
+      setSuccessData({
+        code: state.teamCode,
+        name: form.getValues("entityName"),
+      });
+
+      toast({
+        title: "Registrasi Berhasil!",
+        description: "Tim telah dibuat. Silakan bagikan kode akses ke pemain.",
+      });
+      setIsSubmitting(false);
+    } else if (state.success === false && state.teamCode === null) {
+      toast({
+            title: "Gagal Mendaftar",
+            description: "Terjadi kesalahan pada server. Coba lagi nanti.",
+            variant: "destructive",
+        });
+      setIsSubmitting(false);
+    }
+  }, [state, form, toast]);
+
   async function onSubmit(data: TeamRegistrationFormValues) {
     setIsSubmitting(true);
     const formData = new FormData();
@@ -62,27 +89,7 @@ export default function RegisterTeamPage() {
             formData.append(key, value as string);
         }
     });
-
-    const result = await registerTeamEntity(formData);
-    
-    if (result.success && result.teamCode) {
-      setSuccessData({
-        code: result.teamCode,
-        name: data.entityName,
-      });
-
-      toast({
-        title: "Registrasi Berhasil!",
-        description: "Tim telah dibuat. Silakan bagikan kode akses ke pemain.",
-      });
-    } else {
-        toast({
-            title: "Gagal Mendaftar",
-            description: "Terjadi kesalahan pada server. Coba lagi nanti.",
-            variant: "destructive",
-        });
-    }
-    setIsSubmitting(false);
+    formAction(formData);
   }
 
   const copyToClipboard = () => {
