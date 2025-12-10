@@ -21,7 +21,7 @@ export function FaqSection() {
         },
     ]
   return (
-    <section className="bg-secondary py-16 md:py-24">
+    <section className="bg-background py-16 md:py-24">
       <div className="container mx-auto px-4 max-w-3xl">
         <div className="text-center mb-10">
             <div className="inline-block p-3 bg-primary/10 rounded-full mb-4">

@@ -16,7 +16,7 @@ const pairings = [
 
 export function CategoriesSection() {
   return (
-    <section className="bg-secondary py-16 md:py-24 relative overflow-hidden">
+    <section className="bg-background py-16 md:py-24 relative overflow-hidden">
        {/* Elemen Dekoratif Background */}
        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-10 right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
@@ -120,7 +120,7 @@ export function CategoriesSection() {
                 <div>
                     <h4 className="font-bold text-foreground">Saran Untuk Peserta Ganda Putri (WD)</h4>
                     <p className="text-sm text-muted-foreground mt-1">
-                        Untuk Road to BCC tanpa voor, sebaiknya Ganda Putri (WD) tidak disarankan mendaftar di kategori open gender, kecuali mereka sangat percaya diri ("Tomboy"/Atlet Pelatda) yang terbiasa bermain melawan pria.
+                        Untuk Road to BCC tanpa voor, sebaiknya Ganda Putri (WD) tidak disarankan mendaftar di kategori open gender, kecuali mereka sangat percaya diri ("Tomboy"/Atlet Pelatda) yang biasa main lawan cowok.
                     </p>
                 </div>
             </div>

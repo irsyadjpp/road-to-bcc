@@ -6,7 +6,7 @@ import { CourtLines } from "../ui/court-lines";
 
 export function LocationSection() {
   return (
-    <section id="venue" className="py-16 bg-background md:py-24 relative overflow-hidden">
+    <section id="venue" className="py-16 bg-secondary md:py-24 relative overflow-hidden">
       <div className="absolute inset-0 opacity-10">
         <CourtLines />
       </div>

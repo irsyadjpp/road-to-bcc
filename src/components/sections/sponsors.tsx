@@ -10,7 +10,7 @@ import { CourtLines } from "../ui/court-lines";
 export function SponsorsSection() {
 
     return (
-        <section id="calling-for-sponsors" className="py-16 md:py-24 bg-secondary relative overflow-hidden">
+        <section id="calling-for-sponsors" className="py-16 md:py-24 bg-background relative overflow-hidden">
              <div className="absolute inset-0 opacity-10">
                 <CourtLines />
             </div>
