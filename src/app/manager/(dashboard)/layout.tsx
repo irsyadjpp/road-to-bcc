@@ -16,20 +16,27 @@ import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import { ThemeToggle } from '@/components/theme-toggle';
 
+// Mock session data - in a real app, this would come from a secure context or server call
+const MOCK_SESSION = {
+    email: 'demo@bcc.com',
+    name: 'Manager',
+    role: 'manager',
+    isLoggedIn: true
+};
+
 export default function ManagerLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isMounted, setIsMounted] = useState(false);
+  
+  // For this simulation, we'll use a mock session.
+  const session = MOCK_SESSION; 
 
   useEffect(() => {
     setIsMounted(true);
+    // In a real app with server-side sessions, you might redirect here if !session.
+    // For now, we assume the user is logged in if they reach this layout.
   }, []);
 
-  // Nonaktifkan proteksi route sementara
-  // const session = await getManagerSession();
-  // if (!session || !session.isLoggedIn) {
-  //   redirect('/manager/login');
-  // }
-  
   const menuGroups = [
     {
         title: "MENU UTAMA",
@@ -62,7 +69,7 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
   
   const handleLogout = async () => {
       await logoutManager();
-      // Redirect di server action akan menangani pengalihan
+      // Redirect is handled by server action
   };
 
   const renderNavLinks = (isSheet: boolean = false) => menuGroups.map((group, groupIndex) => (
@@ -148,8 +155,8 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
                         <span className="font-bold text-primary">M</span>
                     </div>
                     <div className="text-sm hidden sm:block">
-                        <p className="font-bold">Manager</p>
-                        <p className="text-xs text-muted-foreground">{'demo@bcc.com'}</p>
+                        <p className="font-bold">{session?.name || 'Manager'}</p>
+                        <p className="text-xs text-muted-foreground">{session?.email || 'demo@bcc.com'}</p>
                     </div>
                 </div>
              </div>

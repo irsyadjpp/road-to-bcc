@@ -9,8 +9,8 @@ import {
   AlertTriangle, Instagram, History, Info, ChevronRight, 
   Camera, MessageCircle, Download, Gavel, Clock, 
   Share2, RotateCw, AlertOctagon, Send, Paperclip, 
-  MoreHorizontal, CheckCheck, Smile, Plus, Hash, ChevronLeft, CheckCircle2,
-  Heart, Wallet, Banknote, CreditCard, Sparkles, UserRound, Footprints, Save, Youtube
+  MoreHorizontal, CheckCheck, Smile, Plus, Heart, 
+  Wallet, Banknote, CreditCard, Sparkles, UserRound, Footprints, Save, CheckCircle2, RotateCw as RotateCwIcon, Label as LabelIcon
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
