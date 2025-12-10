@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -46,7 +47,6 @@ export function Header() {
               <NavLink href="/">Beranda</NavLink>
               <NavLink href="/about">Tentang</NavLink>
               <NavLink href="/live-score">Jadwal</NavLink>
-              <NavLink href="/news">Berita</NavLink>
           </nav>
 
           {/* ACTION BUTTONS */}
@@ -103,7 +103,6 @@ export function Header() {
                     <div className="flex flex-col space-y-4 mb-8">
                         <NavLink href="/" onClick={closeSheet}>Beranda</NavLink>
                         <NavLink href="/live-score" onClick={closeSheet}>Jadwal & Skor</NavLink>
-                        <NavLink href="/news" onClick={closeSheet}>Berita</NavLink>
                     </div>
                     
                     <div className="mt-auto space-y-3">
