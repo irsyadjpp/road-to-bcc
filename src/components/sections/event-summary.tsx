@@ -21,7 +21,7 @@ const summaryData = [
   {
     icon: Banknote,
     title: "Biaya Pendaftaran",
-    description: "Rp 100.000 / Pasang (Incl. Air & Doorprize)",
+    description: "Mulai dari Rp 120.000 / Tim",
     color: "text-green-500",
   },
   {

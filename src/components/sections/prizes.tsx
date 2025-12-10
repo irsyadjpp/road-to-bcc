@@ -3,28 +3,29 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Trophy, Ticket, Gift, Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-const prizes = [
+const prizeCategories = [
   {
-    rank: 1,
-    title: "Juara 1",
-    rewards: ["Rp 500.000", "Golden Ticket BCC 2026", "E-Certificate"],
-    color: "border-yellow-500 bg-yellow-500/5",
-    iconColor: "text-yellow-500",
+    category: "Advance",
+    totalPrize: "Rp 7.500.000",
+    note: "Untuk Juara 1, 2, & 3 Bersama",
+    color: "border-purple-500 bg-purple-500/5",
+    iconColor: "text-purple-400",
   },
   {
-    rank: 2,
-    title: "Juara 2",
-    rewards: ["Rp 300.000", "E-Certificate"],
-    color: "border-slate-400 bg-slate-500/5",
-    iconColor: "text-slate-400",
+    category: "Intermediate",
+    totalPrize: "Rp 7.500.000",
+    note: "Untuk Juara 1, 2, & 3 Bersama",
+    color: "border-blue-500 bg-blue-500/5",
+    iconColor: "text-blue-400",
   },
   {
-    rank: 3,
-    title: "Juara 3 Bersama",
-    rewards: ["@ Rp 100.000", "E-Certificate"],
-    color: "border-orange-700 bg-orange-700/5",
-    iconColor: "text-orange-700",
+    category: "Beginner",
+    totalPrize: "Rp 4.000.000",
+    note: "Untuk Juara 1, 2, & 3 Bersama",
+    color: "border-green-500 bg-green-500/5",
+    iconColor: "text-green-400",
   },
 ];
 
@@ -33,42 +34,41 @@ export function PrizesSection() {
     <section className="bg-secondary py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
+          <div className="inline-block p-3 bg-primary/10 rounded-full mb-4 ring-4 ring-primary/5">
+              <Trophy className="w-8 h-8 text-primary"/>
+          </div>
           <h2 className="text-3xl md:text-4xl font-bold font-headline text-foreground mb-4">
-            Prize Pool & Rewards
+            Total Hadiah Puluhan Juta!
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Bukan hanya tentang gengsi, tapi juga apresiasi untuk para juara sejati.
+            Bukan hanya tentang gengsi, tapi juga apresiasi untuk para juara sejati di setiap level.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          {prizes.map((prize) => (
-            <Card key={prize.rank} className={`text-center shadow-lg ${prize.color} border-2 hover:-translate-y-2 transition-transform`}>
+          {prizeCategories.map((prize) => (
+            <Card key={prize.category} className={cn("text-center shadow-lg border-2 hover:-translate-y-2 transition-transform", prize.color)}>
               <CardHeader>
-                <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 ${prize.color.replace('border-', 'bg-')} `}>
-                  <Trophy className={`w-8 h-8 ${prize.iconColor}`} />
+                <div className={cn("mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4", prize.color.replace('border-', 'bg-'))}>
+                  <Trophy className={cn("w-8 h-8", prize.iconColor)} />
                 </div>
-                <CardTitle className={`text-2xl font-bold ${prize.iconColor}`}>{prize.title}</CardTitle>
+                <CardTitle className={cn("text-2xl font-bold", prize.iconColor)}>{prize.category}</CardTitle>
+                <CardDescription>{prize.note}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                {prize.rewards.map((reward, i) => (
-                  <div key={i} className="flex items-center justify-center gap-2">
-                    {reward.includes("Golden Ticket") ? 
-                        <Ticket className="w-4 h-4 text-primary" /> : 
-                        <Sparkles className="w-4 h-4 text-muted-foreground/50" />
-                    }
-                    <span className="font-medium">{reward}</span>
-                  </div>
-                ))}
+                <div className="bg-background/50 p-4 rounded-lg border">
+                  <p className="text-xs text-muted-foreground">Total Prize Pool</p>
+                  <p className="text-3xl font-black font-mono text-foreground">{prize.totalPrize}</p>
+                </div>
               </CardContent>
             </Card>
           ))}
         </div>
         
         <div className="text-center bg-card p-6 rounded-lg border">
-            <h3 className="font-bold flex items-center justify-center gap-2"><Gift className="w-5 h-5 text-primary"/> Doorprize Tambahan</h3>
-            <p className="text-muted-foreground mt-2 text-sm">
-                Seluruh peserta yang hadir berkesempatan memenangkan doorprize menarik dari sponsor.
+            <h3 className="font-bold flex items-center justify-center gap-2"><Gift className="w-5 h-5 text-primary"/> Doorprize & Golden Ticket</h3>
+            <p className="text-muted-foreground mt-2 text-sm max-w-2xl mx-auto">
+                Seluruh peserta berkesempatan memenangkan doorprize menarik dari sponsor. Juara 1 di setiap kategori juga akan mendapatkan <strong>Golden Ticket</strong> (Diskon & Slot Prioritas) untuk turnamen utama BCC 2026.
             </p>
         </div>
       </div>
