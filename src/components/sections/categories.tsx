@@ -16,7 +16,7 @@ const pairings = [
 
 export function CategoriesSection() {
   return (
-    <section className="bg-background py-16 md:py-24 relative overflow-hidden">
+    <section className="bg-secondary py-16 md:py-24 relative overflow-hidden">
        {/* Elemen Dekoratif Background */}
        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-10 right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
@@ -102,7 +102,7 @@ export function CategoriesSection() {
                          <div>
                             <p className="font-bold">Tim 1:</p>
                             <p className="text-muted-foreground">Cewek (Beginner) + Cewek (Beginner)</p>
-                             <p className="text-xs text-muted-foreground italic mt-1">Catatan: Beresiko jika Beginner murni putri.</p>
+                             <p className="text-xs text-muted-foreground italic mt-1">Catatan: Ini sangat beresiko jadi "bulan-bulanan" jika level Beginner-nya adalah beginner murni putri.</p>
                         </div>
                         <div>
                             <p className="font-bold">Tim 2:</p>
