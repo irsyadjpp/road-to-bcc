@@ -10,7 +10,7 @@ import {
   Camera, MessageCircle, Download, Gavel, Clock, 
   Share2, RotateCw, AlertOctagon, Send, Paperclip, 
   MoreHorizontal, CheckCheck, Smile, Plus, Hash, ChevronLeft, CheckCircle2,
-  Heart, Wallet, Banknote, CreditCard, Sparkles, UserRound, Footprints, Save
+  Heart, Wallet, Banknote, CreditCard, Sparkles, UserRound, Footprints, Save, Youtube
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -36,7 +36,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 const PRICES = {
   BEGINNER: 120000,
   INTERMEDIATE: 145000,
-  ADVANCE: 145000
+  ADVANCE: 145000,
+  '3ON3': 120000,
 };
 
 const ATHLETE_MOCK = {
@@ -175,6 +176,10 @@ function WizardStepProfile({ formData, setFormData }: any) {
         </RadioGroup>
         <Input name="communityName" placeholder="Nama Komunitas/Klub Asal" onChange={handleInputChange} className="h-12 bg-black border-zinc-800"/>
         <Input name="instagram" placeholder="@username Instagram" onChange={handleInputChange} className="h-12 bg-black border-zinc-800"/>
+        <div className="relative">
+            <Youtube className="w-5 h-5 text-zinc-500 absolute left-3 top-3.5"/>
+            <Input name="youtubeUrl" placeholder="Link Video Verifikasi YouTube" onChange={handleInputChange} className="h-12 bg-black border-zinc-800 pl-10"/>
+        </div>
       </div>
     </div>
   );
@@ -223,128 +228,6 @@ function WizardStepDocuments({ formData, setFormData }: any) {
   );
 }
 
-
-function WizardStepPayment({ formData, setSelectedPaymentMethod }: any) {
-  const finalPrice = PRICES[formData.skillLevel as keyof typeof PRICES];
-  const [showTransferInfo, setShowTransferInfo] = useState(false);
-
-  const handleSelectMethod = (method: 'QRIS' | 'TRANSFER') => {
-      setSelectedPaymentMethod(method);
-      if (method === 'TRANSFER') {
-          setShowTransferInfo(true);
-      } else {
-          setShowTransferInfo(false);
-      }
-  };
-
-  return (
-    <div className="text-center py-8 animate-in fade-in zoom-in duration-300">
-      <div className="w-24 h-24 bg-green-950/50 rounded-full mx-auto flex items-center justify-center mb-6 border-4 border-green-500/20">
-        <Wallet className="w-12 h-12 text-green-500" />
-      </div>
-      <h3 className="text-white text-2xl font-black mb-2 uppercase">Step 5: Pembayaran</h3>
-      <p className="text-zinc-500 text-sm max-w-sm mx-auto mb-8">
-        Pilih metode pembayaran untuk biaya registrasi sebesar:
-      </p>
-      <div className="bg-black/40 p-5 rounded-3xl border border-zinc-800 inline-block mb-8 shadow-inner">
-        <p className="font-mono text-5xl font-bold text-green-400">
-          Rp {finalPrice.toLocaleString('id-ID')}
-        </p>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-md mx-auto">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              variant="outline"
-              className="h-16 rounded-2xl text-lg font-bold bg-zinc-900 border-zinc-800 hover:bg-zinc-800"
-              onClick={() => handleSelectMethod('QRIS')}
-            >
-              <QrCode className="w-6 h-6 mr-3" /> Bayar via QRIS
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="bg-white text-black rounded-3xl max-w-xs">
-            <DialogHeader className="text-center">
-              <DialogTitle className="font-headline text-xl">Scan QRIS untuk Pembayaran</DialogTitle>
-              <DialogDescription>Gunakan aplikasi Bank atau E-Wallet Anda.</DialogDescription>
-            </DialogHeader>
-            <div className="p-4 bg-zinc-100 rounded-2xl">
-              <div className="bg-white p-2 rounded-lg aspect-square flex items-center justify-center">
-                <QrCode className="w-full h-full text-black" />
-              </div>
-            </div>
-            <div className="text-center space-y-1">
-              <p className="text-xs text-zinc-500">Total Pembayaran</p>
-              <p className="text-2xl font-bold font-mono">Rp {finalPrice.toLocaleString('id-ID')}</p>
-            </div>
-          </DialogContent>
-        </Dialog>
-        <Button
-          variant="outline"
-          className="h-16 rounded-2xl text-lg font-bold bg-zinc-900 border-zinc-800 hover:bg-zinc-800"
-          onClick={() => handleSelectMethod('TRANSFER')}
-        >
-          <Banknote className="w-6 h-6 mr-3" /> Transfer Bank
-        </Button>
-      </div>
-      {showTransferInfo && (
-        <div className="mt-6 p-4 bg-blue-950/20 border border-blue-500/30 rounded-2xl text-left text-sm animate-in fade-in">
-          <p className="font-bold text-blue-400 mb-2">Silakan transfer ke rekening berikut:</p>
-          <p><strong className="text-white">Bank:</strong> Bank BJB</p>
-          <p><strong className="text-white">No. Rekening:</strong> 0123 4567 8900</p>
-          <p><strong className="text-white">Atas Nama:</strong> Panitia BCC 2026</p>
-          <p className="mt-3 text-xs text-blue-200/70">
-            PENTING: Jangan lupa upload bukti transfer di langkah berikutnya.
-          </p>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function WizardStepUploadProof({ formData, setFormData }: any) {
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, files } = e.target;
-    if (files && files.length > 0) {
-      setFormData((prev: any) => ({
-        ...prev,
-        documents: { ...prev.documents, [name]: files[0] }
-      }));
-    }
-  };
-
-  return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-300">
-      <div className="text-center mb-4">
-        <h3 className="text-white text-xl font-black mb-1 uppercase tracking-widest">Upload Bukti Bayar</h3>
-        <p className="text-zinc-500 text-sm max-w-sm mx-auto">
-          Upload screenshot atau foto bukti transfer Anda.
-        </p>
-      </div>
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label className="font-bold flex items-center gap-2 text-zinc-300">
-            <Upload className="w-5 h-5"/> File Bukti Transfer
-          </Label>
-          <div className="flex items-center gap-3 bg-black/40 border border-zinc-800 p-3 rounded-2xl">
-            <Input 
-              name="paymentProof" 
-              type="file" 
-              accept="image/jpeg,image/png" 
-              onChange={handleFileChange} 
-              className="text-xs file:text-cyan-400 file:font-bold file:mr-4 file:bg-cyan-950/50 file:border-none file:px-3 file:py-1 file:rounded-full file:cursor-pointer"
-            />
-          </div>
-          {formData.documents.paymentProof && (
-             <div className="text-green-500 text-xs flex items-center gap-2 p-2">
-                <CheckCircle2 className="w-4 h-4"/> File {formData.documents.paymentProof.name} siap diupload.
-             </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function PlayerDashboardController() {
   const [isMounted, setIsMounted] = useState(false);
   const [hasJoinedTeam, setHasJoinedTeam] = useState(false);
@@ -364,7 +247,6 @@ export function PlayerDashboardController() {
         ktp: null,
         selfie: null,
         followProof: null,
-        paymentProof: null,
     },
   });
   
@@ -386,7 +268,7 @@ export function PlayerDashboardController() {
     }, 1000);
   };
 
-  const handleNextStep = () => setCurrentStep(prev => Math.min(prev + 1, 7));
+  const handleNextStep = () => setCurrentStep(prev => Math.min(prev + 1, 5));
   const handlePrevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
   
   const allAgreed = Object.values(formData.agreements).every(Boolean);
@@ -452,7 +334,7 @@ export function PlayerDashboardController() {
 
   // --- RENDER VIEW 2: WIZARD FORM ---
   if (!isProfileComplete) {
-    const totalSteps = 7;
+    const totalSteps = 5;
     return (
       <div className="min-h-screen bg-zinc-950 font-body py-8 px-4 md:py-12">
         <div className="max-w-3xl mx-auto">
@@ -468,8 +350,6 @@ export function PlayerDashboardController() {
                     <span>Skill</span>
                     <span>Bio</span>
                     <span>Docs</span>
-                    <span>Pay</span>
-                    <span>Upload</span>
                     <span>Submit</span>
                 </div>
             </div>
@@ -481,9 +361,7 @@ export function PlayerDashboardController() {
                     {currentStep === 2 && <WizardStepSkillLevel formData={formData} setFormData={setFormData} />}
                     {currentStep === 3 && <WizardStepProfile formData={formData} setFormData={setFormData} />}
                     {currentStep === 4 && <WizardStepDocuments formData={formData} setFormData={setFormData} />}
-                    {currentStep === 5 && <WizardStepPayment formData={formData} setSelectedPaymentMethod={setSelectedPaymentMethod} />}
-                    {currentStep === 6 && <WizardStepUploadProof formData={formData} setFormData={setFormData} />}
-                    {currentStep === 7 && (
+                    {currentStep === 5 && (
                         <div className="text-center py-16 animate-in fade-in zoom-in duration-300">
                             <div className="w-20 h-20 bg-zinc-800 rounded-3xl mx-auto flex items-center justify-center mb-6 animate-pulse">
                                 <FileText className="w-10 h-10 text-zinc-600" />
