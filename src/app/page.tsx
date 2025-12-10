@@ -15,6 +15,7 @@ import { LocationSection } from '@/components/sections/location';
 // Section Kompetisi & Bisnis
 import { CategoriesSection } from '@/components/sections/categories';
 import { SponsorsSection } from '@/components/sections/sponsors';
+import { WhyJoinSection } from '@/components/sections/why-join';
 
 export default function Home() {
   return (
@@ -28,18 +29,21 @@ export default function Home() {
         {/* 2. Event Summary: The 4 Ws */}
         <EventSummarySection />
         
-        {/* 3. Kategori: Siapa saja yang bisa ikut? */}
+        {/* 3. Why Join? - NEW SECTION */}
+        <WhyJoinSection />
+        
+        {/* 4. Kategori: Siapa saja yang bisa ikut? */}
         <CategoriesSection />
 
-        {/* 4. Syarat Level: Filter peserta agar tidak salah daftar */}
+        {/* 5. Syarat Level: Filter peserta agar tidak salah daftar */}
         <div id="levels">
           <LevelingGuideSection /> 
         </div>
 
-        {/* 5. Sponsor: Undangan kerjasama */}
+        {/* 6. Sponsor: Undangan kerjasama */}
         <SponsorsSection />
 
-        {/* 6. Lokasi: Peta GOR KONI */}
+        {/* 7. Lokasi: Peta GOR KONI */}
         <div id="venue">
           <LocationSection />
         </div>
