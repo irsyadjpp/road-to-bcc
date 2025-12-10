@@ -9,7 +9,6 @@ import { HeroSection } from '@/components/sections/hero';
 
 // Section Informasi Teknis (Dari Handbook)
 import { LevelingGuideSection } from '@/components/sections/leveling-guide';
-import { RegistrationInfoSection } from '@/components/sections/registration-info';
 import { LocationSection } from '@/components/sections/location';
 
 // Section Kompetisi & Bisnis
@@ -33,15 +32,10 @@ export default function Home() {
           <LevelingGuideSection /> 
         </div>
 
-        {/* 4. Cara Daftar: Langkah-langkah teknis */}
-        <div id="registration">
-          <RegistrationInfoSection />
-        </div>
-
-        {/* 5. Sponsor: Undangan kerjasama */}
+        {/* 4. Sponsor: Undangan kerjasama */}
         <SponsorsSection />
 
-        {/* 6. Lokasi: Peta GOR KONI */}
+        {/* 5. Lokasi: Peta GOR KONI */}
         <div id="venue">
           <LocationSection />
         </div>
