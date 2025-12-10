@@ -10,8 +10,7 @@ import {
   Camera, MessageCircle, Download, Gavel, Clock,
   Share2, RotateCw, AlertOctagon, Send, Paperclip,
   MoreHorizontal, CheckCheck, Smile, Plus, Heart,
-  Wallet, Banknote, CreditCard, Sparkles, UserRound, Footprints, Save,
-  RotateCw as RotateCwIcon, Label as LabelIcon
+  Wallet, Banknote, CreditCard, Sparkles, UserRound, Footprints, Save, CheckCircle2, RotateCw as RotateCwIcon, Label as LabelIcon
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -78,7 +77,7 @@ export default function PlayerDashboardFull() {
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/20 rounded-full blur-[60px]"></div>
 
                 <CardContent className="p-8 flex flex-col items-center h-full relative z-10">
-                    <div className="flex justify-between w-full mb-6 items-center">
+                    <div className="flex justify-between w-full items-center">
                         <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                             <span className="text-[10px] font-bold text-zinc-400 tracking-widest uppercase">Verified Athlete</span>
@@ -86,25 +85,27 @@ export default function PlayerDashboardFull() {
                         <Trophy className="w-5 h-5 text-yellow-500"/>
                     </div>
                     
-                    <div className="relative mb-4">
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 blur-md opacity-50"></div>
-                        <Avatar className="w-32 h-32 border-4 border-zinc-950 relative">
-                            <AvatarImage src={ATHLETE_MOCK.avatar} className="object-cover"/>
-                            <AvatarFallback>AT</AvatarFallback>
-                        </Avatar>
-                    </div>
+                    <div className="flex-grow flex flex-col items-center justify-center">
+                        <div className="relative mb-4">
+                            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 blur-md opacity-50"></div>
+                            <Avatar className="w-32 h-32 border-4 border-zinc-950 relative">
+                                <AvatarImage src={ATHLETE_MOCK.avatar} className="object-cover"/>
+                                <AvatarFallback>AT</AvatarFallback>
+                            </Avatar>
+                        </div>
 
-                    <div className="text-center mb-6">
-                        <h2 className="text-3xl font-black text-white uppercase leading-none mb-2">{ATHLETE_MOCK.name}</h2>
-                        <p className="text-sm font-bold text-zinc-400">{ATHLETE_MOCK.team}</p>
+                        <div className="text-center">
+                            <h2 className="text-3xl font-black text-white uppercase leading-none mb-2">{ATHLETE_MOCK.name}</h2>
+                            <p className="text-sm font-bold text-zinc-400">{ATHLETE_MOCK.team}</p>
+                        </div>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-2 w-full mb-auto">
+                    <div className="grid grid-cols-2 gap-2 w-full">
                         <Badge variant="secondary" className="bg-zinc-900/50 border-zinc-700 justify-center py-1.5">Mens Singles</Badge>
                         <Badge variant="secondary" className="bg-zinc-900/50 border-zinc-700 justify-center py-1.5">ID: {ATHLETE_MOCK.id}</Badge>
                     </div>
                     
-                    <div className="w-full pt-4 border-t border-white/10 flex justify-center">
+                    <div className="w-full pt-4 mt-auto border-t border-white/10 flex justify-center">
                         <span className="flex items-center gap-2 text-cyan-400 font-bold text-xs animate-pulse">
                             <RotateCw className="w-4 h-4"/> TAP TO REVEAL QR
                         </span>
