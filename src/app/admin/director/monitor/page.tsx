@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from "react";
@@ -20,8 +21,6 @@ const COURTS = [
   { id: 2, status: "WARMUP", pA: "Ginting", pB: "Christie", sA: 0, sB: 0, set: 1, time: "01:30", category: "MS PRO" },
   { id: 3, status: "LIVE", pA: "Apri / Fadia", pB: "Matsuyama / Shida", sA: 21, sB: 19, set: 2, time: "22:10", category: "WD OPEN" },
   { id: 4, status: "IDLE", pA: "-", pB: "-", sA: 0, sB: 0, set: 0, time: "00:00", category: "-" },
-  { id: 5, status: "LIVE", pA: "Fajar / Rian", pB: "Leo / Daniel", sA: 11, sB: 4, set: 1, time: "08:45", category: "MD OPEN" },
-  { id: 6, status: "CLEANING", pA: "-", pB: "-", sA: 0, sB: 0, set: 0, time: "00:00", category: "MOP REQUEST" },
 ];
 
 const LIVE_LOGS = [
@@ -72,7 +71,7 @@ export default function LiveMonitorPage() {
         <div className="flex gap-4 mt-4 md:mt-0">
             <div className="text-right">
                 <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">Active Matches</p>
-                <p className="text-2xl font-black text-white font-mono">4<span className="text-zinc-600">/6</span></p>
+                <p className="text-2xl font-black text-white font-mono">3<span className="text-zinc-600">/4</span></p>
             </div>
             <div className="h-10 w-[1px] bg-zinc-800"></div>
             <div className="text-right">
@@ -86,7 +85,7 @@ export default function LiveMonitorPage() {
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-6 min-h-0">
          
          {/* LEFT: COURTS GRID (3/4 Width) */}
-         <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 overflow-y-auto pr-2 scrollbar-none">
+         <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4 overflow-y-auto pr-2 scrollbar-none">
             {COURTS.map((court) => (
                 <Card key={court.id} className={cn(
                     "relative overflow-hidden rounded-[32px] border-2 transition-all group hover:-translate-y-1 hover:shadow-2xl",
@@ -217,4 +216,6 @@ export default function LiveMonitorPage() {
     </div>
   );
 }
+    
+
     

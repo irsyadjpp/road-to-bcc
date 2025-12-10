@@ -23,16 +23,13 @@ const QUEUE = [
   { id: "M-102", category: "MS PRO", round: "QF", pA: "Jojo", pB: "Chico", status: "READY" },
   { id: "M-103", category: "WD OPEN", round: "SF", pA: "Apri / Fadia", pB: "Ribka / Lanny", status: "WARMING_UP" },
   { id: "M-104", category: "XD OPEN", round: "R32", pA: "Rehan / Lisa", pB: "Rinov / Pitha", status: "WAITING" },
-  { id: "M-105", category: "MD U-19", round: "Final", pA: "Ansel / Zidan", pB: "Rayhan / Alwi", status: "WAITING" },
 ];
 
 const COURTS = [
   { id: 1, name: "Court 1 (TV)", status: "LIVE", match: { pA: "Kevin / Marcus", pB: "Ahsan / Hendra", sA: 18, sB: 19, set: 3 } },
   { id: 2, name: "Court 2", status: "IDLE", match: null },
   { id: 3, name: "Court 3", status: "WARMUP", match: { pA: "Ginting", pB: "Antonsen", sA: 0, sB: 0, set: 1 } },
-  { id: 4, name: "Court 4", status: "LIVE", match: { pA: "Axelsen", pB: "Momota", sA: 21, sB: 7, set: 1 } },
-  { id: 5, name: "Court 5", status: "CLEANING", match: null },
-  { id: 6, name: "Court 6", status: "IDLE", match: null },
+  { id: 4, name: "Court 4", status: "IDLE", match: null },
 ];
 
 export default function MatchControlPage() {
@@ -118,7 +115,7 @@ export default function MatchControlPage() {
          </Card>
 
          {/* RIGHT: COURTS GRID (3/4) */}
-         <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 overflow-y-auto pr-2 scrollbar-none pb-20">
+         <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4 overflow-y-auto pr-2 scrollbar-none pb-20">
             {COURTS.map((court) => (
                 <div 
                     key={court.id}
@@ -278,3 +275,5 @@ function PlusCircleIcon({ className }: { className?: string }) {
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
     )
 }
+
+    
