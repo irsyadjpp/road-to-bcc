@@ -10,7 +10,7 @@ import {
   Camera, MessageCircle, Download, Gavel, Clock, 
   Share2, RotateCw, AlertOctagon, Send, Hash,
   ChevronLeft, Wallet, CheckCircle2, Instagram, Phone, Mail,
-  Check, Loader2, Paperclip, Plus
+  Check, Loader2, Paperclip,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -365,77 +365,94 @@ function PlayerDashboardFull() {
   );
 }
 
-// --- MAIN PAGE COMPONENT (CONTROLLER) ---
+// =================================================================================================
+// MAIN PAGE COMPONENT (CONTROLLER)
+// =================================================================================================
 export default function PlayerPage() {
-    const [isClient, setIsClient] = useState(false);
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
-
-    const [hasJoinedTeam, setHasJoinedTeam] = useState(false); 
-    const [isRegistrationComplete, setIsRegistrationComplete] = useState(false); 
+  // === STATE DEVELOPMENT ===
+  const [loading, setLoading] = useState(true);
+  const [hasJoinedTeam, setHasJoinedTeam] = useState(false); 
+  const [isRegistrationComplete, setIsRegistrationComplete] = useState(false); 
   
-    useEffect(() => {
-        setHasJoinedTeam(false);
-    }, []);
-
-    const [joinCode, setJoinCode] = useState("");
-    const [isJoining, setIsJoining] = useState(false);
-    const [currentStep, setCurrentStep] = useState(1);
-    const [teamName, setTeamName] = useState("");
-
-    const [formData, setFormData] = useState({
-        agreements: { valid: false, health: false, rules: false, media: false },
-        category: "GANDA", // GANDA or BEREGU
-        skillLevel: "BEGINNER",
-        player: {
-          fullName: "",
-          nickname: "",
-          jerseyName: "",
-          nik: "",
-          dob: "",
-          gender: "Laki-laki",
-          wa: "",
-          club: "",
-          youtube: "",
-        },
-        manager: { name: "", wa: "", email: "" },
-        paymentFile: null as string | null // Simulasi file
-    });
-
-    const totalPrice = PRICES[formData.skillLevel as keyof typeof PRICES];
-
-    const handleVerifyCode = () => {
-        if (!joinCode) return;
-        setIsJoining(true);
-        setTimeout(() => {
-        setIsJoining(false);
-        if (joinCode === "TWIN-2026") {
-            setTeamName("PB TWINTON");
-            setFormData(p => ({
-                ...p, 
-                player: { ...p.player, club: "PB TWINTON" },
-                manager: { name: "Budi Santoso", wa: "0812345678", email: "manager@twinton.com" }
-            }));
-            setHasJoinedTeam(true);
-        } else {
-            alert("Kode Salah! Coba: TWIN-2026");
-        }
-        }, 1000);
-    };
-
-    const handleNextStep = () => setCurrentStep(prev => Math.min(prev + 1, 5));
-    const handlePrevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
-    const updateAgreement = (key: keyof typeof formData.agreements) => {
-        setFormData(prev => ({ ...prev, agreements: { ...prev.agreements, [key]: !prev.agreements[key as keyof typeof prev.agreements] } }));
-    };
-
-    const updatePlayer = (field: string, value: string) => {
-        if ((field === 'nik' || field === 'wa') && !/^\d*$/.test(value)) return; 
-        setFormData(prev => ({ ...prev, player: { ...prev.player, [field]: value } }));
-    };
+  useEffect(() => {
+    // Set ke `false` untuk melihat halaman "Input Kode"
+    // setHasJoinedTeam(false);
     
-    const renderWizardContent = () => {
+    // Set `hasJoinedTeam` true & `isRegistrationComplete` false untuk melihat "Wizard"
+    // setHasJoinedTeam(true); 
+    // setIsRegistrationComplete(false);
+
+    // Set keduanya `true` untuk melihat "Dashboard Full"
+    setHasJoinedTeam(true); 
+    setIsRegistrationComplete(true);
+
+    setLoading(false);
+  }, []);
+  // ============================================
+
+  // Wizard States
+  const [joinCode, setJoinCode] = useState("");
+  const [isJoining, setIsJoining] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [teamName, setTeamName] = useState("");
+
+  const [formData, setFormData] = useState({
+    agreements: { valid: false, health: false, rules: false, media: false },
+    category: "GANDA", // GANDA or BEREGU
+    skillLevel: "BEGINNER",
+    player: {
+      fullName: "",
+      nickname: "",
+      jerseyName: "",
+      nik: "",
+      dob: "",
+      gender: "Laki-laki",
+      wa: "",
+      club: "",
+      youtube: "",
+    },
+    manager: { name: "", wa: "", email: "" },
+    paymentFile: null as string | null // Simulasi file
+  });
+
+  const totalPrice = PRICES[formData.skillLevel as keyof typeof PRICES];
+
+  // HANDLERS
+  const handleVerifyCode = () => {
+    if (!joinCode) return;
+    setIsJoining(true);
+    setTimeout(() => {
+      setIsJoining(false);
+      if (joinCode === "TWIN-2026") {
+        setTeamName("PB TWINTON");
+        // Auto fill manager & club based on code
+        setFormData(p => ({
+            ...p, 
+            player: { ...p.player, club: "PB TWINTON" },
+            manager: { name: "Budi Santoso", wa: "0812345678", email: "manager@twinton.com" }
+        }));
+        setHasJoinedTeam(true);
+      } else {
+        alert("Kode Salah! Coba: TWIN-2026");
+      }
+    }, 1000);
+  };
+
+  const handleNextStep = () => setCurrentStep(prev => Math.min(prev + 1, 5));
+  const handlePrevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
+
+  const updateAgreement = (key: keyof typeof formData.agreements) => {
+    setFormData(prev => ({ ...prev, agreements: { ...prev.agreements, [key]: !prev.agreements[key as keyof typeof prev.agreements] } }));
+  };
+
+  const updatePlayer = (field: string, value: string) => {
+    // Basic validation
+    if ((field === 'nik' || field === 'wa') && !/^\d*$/.test(value)) return; 
+    setFormData(prev => ({ ...prev, player: { ...prev.player, [field]: value } }));
+  };
+
+  // --- WIZARD RENDERER ---
+  const renderWizardContent = () => {
     switch (currentStep) {
         // STEP 1: DISCLAIMER (MANDATORY CHECKBOXES)
         case 1:
@@ -692,6 +709,14 @@ export default function PlayerPage() {
   };
 
   // --- RENDER VIEW 1: GATE (INPUT CODE) ---
+  if (loading) {
+    return (
+        <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+            <Loader2 className="w-8 h-8 text-white animate-spin" />
+        </div>
+    );
+  }
+
   if (!hasJoinedTeam) {
     return (
       <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4 font-body relative overflow-hidden">
@@ -724,7 +749,7 @@ export default function PlayerPage() {
                     disabled={isJoining || joinCode.length < 5} 
                     className="w-full h-14 rounded-2xl bg-white hover:bg-zinc-200 text-black font-black text-lg shadow-xl"
                 >
-                    {isJoining ? "VERIFYING..." : "ENTER SQUAD"} <ArrowRight className="ml-2 w-5 h-5"/>
+                    {isJoining ? "VERIFYING..." : "ENTER TEAM SQUAD"} <ArrowRight className="ml-2 w-5 h-5"/>
                 </Button>
             </div>
           </div>
@@ -741,7 +766,6 @@ export default function PlayerPage() {
             <div className="mb-10 text-center space-y-4">
                 <Badge variant="outline" className="border-indigo-500 text-indigo-400 px-4 py-1 tracking-widest uppercase">Joining: {teamName}</Badge>
                 <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">Formulir Pendaftaran</h1>
-                
                 <div className="flex items-center justify-center gap-2 mt-4">
                     {[1,2,3,4,5].map(step => (
                         <div key={step} className={cn("h-1.5 rounded-full transition-all duration-300", currentStep >= step ? "bg-cyan-500 w-8" : "bg-zinc-800 w-4")}></div>
@@ -753,7 +777,7 @@ export default function PlayerPage() {
             {renderWizardContent()}
 
             <div className="flex justify-between mt-12 pt-6 border-t border-zinc-800">
-                <Button variant="ghost" onClick={() => setCurrentStep(p => Math.max(1, p-1))} disabled={currentStep===1} className="h-14 px-8 rounded-2xl text-zinc-500 hover:text-white hover:bg-zinc-900 font-bold"><ChevronLeft className="w-5 h-5 mr-2"/> BACK</Button>
+                <Button variant="ghost" onClick={handlePrevStep} disabled={currentStep===1} className="h-14 px-8 rounded-2xl text-zinc-500 hover:text-white hover:bg-zinc-900 font-bold"><ChevronLeft className="w-5 h-5 mr-2"/> BACK</Button>
                 
                 {currentStep === 5 ? (
                     <Button 
@@ -765,7 +789,7 @@ export default function PlayerPage() {
                     </Button>
                 ) : (
                     <Button 
-                        onClick={() => setCurrentStep(p => Math.min(p + 1, 5))} 
+                        onClick={handleNextStep} 
                         disabled={currentStep === 1 && !Object.values(formData.agreements).every(Boolean)} // Step 1 Lock
                         className="h-14 px-10 rounded-2xl bg-white text-black hover:bg-zinc-200 font-bold text-lg"
                     >
