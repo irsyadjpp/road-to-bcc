@@ -201,7 +201,7 @@ function WizardStepDocuments({ formData, setFormData }: any) {
         </div>
         {/* Selfie */}
         <div className="space-y-2">
-          <Label className="font-bold">2. Foto Selfie dengan KTP</Label>
+          <Label className="font-bold">2. Foto Selfie</Label>
           <div className="flex items-center gap-3 bg-black/40 border border-zinc-800 p-3 rounded-2xl">
             <div className="p-3 bg-zinc-800 rounded-lg text-zinc-400"><Camera className="w-5 h-5" /></div>
             <Input name="selfie" type="file" accept="image/jpeg,image/png" onChange={handleFileChange} className="text-xs file:text-cyan-400 file:font-bold file:mr-4"/>
@@ -273,8 +273,7 @@ export function PlayerDashboardController() {
     setIsJoining(true);
     setTimeout(() => {
       setIsJoining(false);
-      // Ganti dengan logic verifikasi kode tim yang sebenarnya
-      if (joinCode === "TWIN-2026") { // Contoh kode valid
+      if (joinCode === "TWIN-2026") {
         setHasJoinedTeam(true);
       } else {
         alert("Kode Salah! Coba: TWIN-2026");
@@ -442,3 +441,4 @@ export function PlayerDashboardController() {
   );
 }
 
+    
