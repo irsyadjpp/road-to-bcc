@@ -1,11 +1,8 @@
 
 'use client';
 
-import { ThemeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
-import { Home } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 // A new, dedicated background component for the player section
 function PlayerBackground() {
@@ -41,16 +38,6 @@ export default function PlayerLayout({ children }: { children: React.ReactNode }
         {/* Use the new PlayerBackground instead of AdminBackground */}
         <PlayerBackground />
       </div>
-      <header className="flex h-16 shrink-0 items-center justify-between gap-2 px-4 sm:px-6 bg-black/40 backdrop-blur-md border-b border-white/5 sticky top-0 z-40">
-        <div>
-            <Button variant="ghost" size="icon" asChild>
-                <Link href="/"><Home className="w-4 h-4" /></Link>
-            </Button>
-        </div>
-        <div className="flex items-center gap-2">
-            {isMounted && <ThemeToggle />}
-        </div>
-      </header>
       <main className="relative z-10 flex-1 overflow-auto scroll-smooth">
         {children}
       </main>
