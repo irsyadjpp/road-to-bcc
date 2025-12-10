@@ -177,14 +177,6 @@ export default function LevelingGuidePage() {
                ))}
             </div>
          </div>
-
-         {/* SYSTEM WARNING */}
-         <div className="mt-16 bg-destructive/5 border-2 border-destructive/20 rounded-[2rem] p-8 text-center">
-            <p className="text-destructive font-bold text-lg">
-               ⚠️ Peringatan Sistem: Panitia memiliki database rekam jejak pemain. 
-               Ketidaksesuaian level (Sandbagging) = <span className="underline decoration-4 underline-offset-4">DISKUALIFIKASI</span> tanpa refund.
-            </p>
-         </div>
       </section>
       <Footer />
     </div>
