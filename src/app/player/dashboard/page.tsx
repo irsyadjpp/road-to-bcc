@@ -19,6 +19,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Youtube,
+  Smile,
+  UserRound,
+  Footprints,
+  FileText,
+  CheckCircle2
+} from "lucide-react";
 
 // --- SUB-COMPONENTS for WIZARD ---
 
@@ -71,9 +79,9 @@ function WizardStepAgreement({ formData, setFormData }: any) {
 
 function WizardStepSkillLevel({ formData, setFormData }: any) {
   const levels = [
-    { id: 'BEGINNER', label: 'Beginner', desc: 'Pemula Komunitas (Grip Panci)', icon: <div className="w-8 h-8"/>, color: "green" },
-    { id: 'INTERMEDIATE', label: 'Intermediate', desc: 'Pemain Rutin (Teknik Dasar OK)', icon: <div className="w-8 h-8"/>, color: "blue" },
-    { id: 'ADVANCE', label: 'Advance', desc: 'Skill di Atas Rata-rata', icon: <div className="w-8 h-8"/>, color: "purple" },
+    { id: 'BEGINNER', label: 'Beginner', desc: 'Pemula Komunitas (Grip Panci)', icon: <Smile className="w-8 h-8"/>, color: "green" },
+    { id: 'INTERMEDIATE', label: 'Intermediate', desc: 'Pemain Rutin (Teknik Dasar OK)', icon: <UserRound className="w-8 h-8"/>, color: "blue" },
+    { id: 'ADVANCE', label: 'Advance', desc: 'Skill di Atas Rata-rata', icon: <Footprints className="w-8 h-8"/>, color: "purple" },
   ];
   
   const PRICES = {
@@ -92,18 +100,18 @@ function WizardStepSkillLevel({ formData, setFormData }: any) {
           Pilih level yang paling sesuai dengan kemampuan Anda saat ini. Jujur ya!
         </p>
       </div>
-      <ToggleGroup 
-        type="single" 
+      <RadioGroup 
         defaultValue={formData.skillLevel} 
         onValueChange={(value) => { if(value) setFormData((prev:any) => ({ ...prev, skillLevel: value }))}}
         className="grid grid-cols-1 md:grid-cols-3 gap-4"
       >
         {levels.map((level) => (
-          <ToggleGroupItem 
-            key={level.id} 
-            value={level.id} 
-            className="h-auto p-6 rounded-3xl border-2 border-zinc-800 bg-zinc-900 data-[state=on]:border-cyan-500 data-[state=on]:bg-cyan-950/20 flex flex-col gap-4 text-left items-start transition-all hover:border-zinc-700"
+          <Label
+            key={level.id}
+            htmlFor={level.id}
+            className="h-auto p-6 rounded-3xl border-2 border-zinc-800 bg-zinc-900 data-[state=on]:border-cyan-500 data-[state=on]:bg-cyan-950/20 flex flex-col gap-4 text-left items-start transition-all hover:border-zinc-700 cursor-pointer has-[:checked]:border-cyan-500 has-[:checked]:bg-cyan-950/20"
           >
+            <RadioGroupItem value={level.id} id={level.id} className="sr-only" />
             <div className={`w-14 h-14 rounded-2xl bg-${level.color}-500/10 text-${level.color}-500 flex items-center justify-center`}>
                 {level.icon}
             </div>
@@ -111,9 +119,9 @@ function WizardStepSkillLevel({ formData, setFormData }: any) {
                 <p className="font-bold text-lg text-white">{level.label}</p>
                 <p className="text-xs text-zinc-400 leading-snug">{level.desc}</p>
             </div>
-          </ToggleGroupItem>
+          </Label>
         ))}
-      </ToggleGroup>
+      </RadioGroup>
       <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-800 text-center">
         <p className="text-xs text-zinc-500 mb-1">Estimasi Biaya Pendaftaran per Kategori:</p>
         <p className="font-mono text-2xl font-bold text-cyan-400">
@@ -143,17 +151,17 @@ function WizardStepProfile({ formData, setFormData }: any) {
           <Input name="phone" placeholder="No. WhatsApp" onChange={handleInputChange} className="h-12 bg-black border-zinc-800"/>
         </div>
         <RadioGroup name="gender" onValueChange={(v) => setFormData((p:any) => ({...p, profile: {...p.profile, gender: v}}))} className="grid grid-cols-2 gap-4">
-            <Label className="flex items-center gap-3 p-3 bg-black border border-zinc-800 rounded-xl cursor-pointer hover:border-zinc-700">
+            <Label className="flex items-center gap-3 p-3 bg-black border border-zinc-800 rounded-xl cursor-pointer hover:border-zinc-700 has-[:checked]:border-cyan-500">
                 <RadioGroupItem value="MALE"/> Putra
             </Label>
-            <Label className="flex items-center gap-3 p-3 bg-black border border-zinc-800 rounded-xl cursor-pointer hover:border-zinc-700">
+            <Label className="flex items-center gap-3 p-3 bg-black border border-zinc-800 rounded-xl cursor-pointer hover:border-zinc-700 has-[:checked]:border-cyan-500">
                 <RadioGroupItem value="FEMALE"/> Putri
             </Label>
         </RadioGroup>
         <Input name="communityName" placeholder="Nama Komunitas/Klub Asal" onChange={handleInputChange} className="h-12 bg-black border-zinc-800"/>
         <Input name="instagram" placeholder="@username Instagram" onChange={handleInputChange} className="h-12 bg-black border-zinc-800"/>
         <div className="relative">
-            <div className="w-5 h-5 text-zinc-500 absolute left-3 top-3.5"/>
+            <Youtube className="w-5 h-5 text-zinc-500 absolute left-3 top-3.5"/>
             <Input name="youtubeUrl" placeholder="Link Video Verifikasi YouTube" onChange={handleInputChange} className="h-12 bg-black border-zinc-800 pl-10"/>
         </div>
       </div>
@@ -289,7 +297,7 @@ export default function PlayerDashboardPage() {
                                    onClick={() => setIsProfileComplete(true)} 
                                    className="h-16 px-10 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-black text-xl shadow-[0_0_30px_rgba(22,163,74,0.4)] transition-transform hover:scale-105"
                                >
-                                   SUBMIT & FINISH <div className="w-6 h-6 ml-3"/>
+                                   SUBMIT & FINISH <CheckCircle2 className="ml-3 w-6 h-6"/>
                                </Button>
                            </div>
                        )}
@@ -302,7 +310,7 @@ export default function PlayerDashboardPage() {
                    </Button>
 
                    <Button variant="outline" className="h-14 rounded-xl font-bold bg-zinc-800 border-zinc-700 hover:bg-zinc-700">
-                       <div className="w-4 h-4 mr-2"/> SAVE DRAFT
+                       <Save className="w-4 h-4 mr-2"/> SAVE DRAFT
                    </Button>
                    
                    {currentStep < totalSteps && (
@@ -320,11 +328,11 @@ export default function PlayerDashboardPage() {
        );
     }
 
+    // --- RENDER VIEW 3: FULL DASHBOARD ---
     return (
         <div className="min-h-screen bg-zinc-950 font-body pb-24">
-             <div className="max-w-6xl mx-auto p-4 md:p-8">
-                <PlayerDashboardFull />
-             </div>
+            <PlayerDashboardFull />
         </div>
     );
 }
+
