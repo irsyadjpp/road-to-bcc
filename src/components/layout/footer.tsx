@@ -27,7 +27,7 @@ export function Footer() {
             <div className="grid grid-cols-2 gap-x-16 gap-y-4 text-right">
                 <Link href="/about" className="font-bold text-lg text-zinc-800 hover:text-primary transition-colors">Tentang</Link>
                 <Link href="/live-score" className="font-bold text-lg text-zinc-800 hover:text-primary transition-colors">Jadwal</Link>
-                <Link href="/#levels" className="font-bold text-lg text-zinc-800 hover:text-primary transition-colors">Panduan Level</Link>
+                <Link href="/leveling-guide" className="font-bold text-lg text-zinc-800 hover:text-primary transition-colors">Panduan Level</Link>
                 <Link href="/manager/login" className="font-bold text-lg text-zinc-800 hover:text-primary transition-colors">Daftar Tim</Link>
             </div>
         </div>

@@ -38,7 +38,7 @@ export function Header() {
 
         {/* DESKTOP NAV - Pills */}
         <nav className="hidden md:flex items-center gap-1 bg-secondary/50 rounded-full p-1 mx-4">
-            {['Beranda', 'Tentang', 'Jadwal'].map((item, idx) => (
+            {['Beranda', 'Tentang', 'Jadwal', 'Panduan Level'].map((item, idx) => (
                <Button key={idx} variant="ghost" className="rounded-full hover:bg-background hover:shadow-sm text-muted-foreground hover:text-foreground font-bold transition-all" asChild>
                   <Link href={item === 'Beranda' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`}>{item}</Link>
                </Button>
@@ -68,6 +68,7 @@ export function Header() {
                    <div className="flex flex-col gap-4 items-center">
                       <Link href="/" className="text-2xl font-black font-headline uppercase">Beranda</Link>
                       <Link href="/live-score" className="text-2xl font-black font-headline uppercase text-muted-foreground">Jadwal</Link>
+                      <Link href="/leveling-guide" className="text-2xl font-black font-headline uppercase text-muted-foreground">Panduan Level</Link>
                       <div className="flex flex-col w-full gap-3 mt-8">
                          <Button asChild size="lg" className="w-full rounded-full text-lg font-bold bg-primary"><Link href="/player/login">Login Atlet</Link></Button>
                          <Button asChild size="lg" variant="secondary" className="w-full rounded-full text-lg font-bold"><Link href="/manager/login">Login Manajer</Link></Button>
