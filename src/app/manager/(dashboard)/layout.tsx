@@ -1,8 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
-import { usePathname, redirect } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { 
   LayoutDashboard, Users, LogOut, Settings, CheckCircle, 
@@ -26,14 +25,9 @@ const MOCK_SESSION = {
 
 export default function ManagerLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [isMounted, setIsMounted] = useState(false);
   
   // For this simulation, we'll use a mock session.
   const session = MOCK_SESSION; 
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const menuGroups = [
     {
@@ -146,7 +140,7 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
                 <Button variant="ghost" size="icon" asChild>
                   <Link href="/"><Home className="w-4 h-4" /></Link>
                 </Button>
-                {isMounted && <ThemeToggle />}
+                <ThemeToggle />
                 <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
                         <span className="font-bold text-primary">M</span>
