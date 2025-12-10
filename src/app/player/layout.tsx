@@ -9,7 +9,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function PlayerLayout({ children }: { children: React.ReactNode }) {
-
   return (
     <div className="relative flex flex-col min-h-screen bg-transparent overflow-hidden">
       <div className="fixed inset-0 -z-50 pointer-events-none">
