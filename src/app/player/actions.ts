@@ -122,7 +122,6 @@ export async function updatePlayerProfile(formData: FormData) {
     gender: formData.get('gender'),
     communityName: formData.get('communityName'),
     instagram: formData.get('instagram'),
-    history: formData.get('history'),
   };
 
   const validated = athleteProfileSchema.safeParse(rawData);

@@ -9,7 +9,7 @@ import {
   AlertTriangle, Instagram, History, Info, ChevronRight, 
   Camera, MessageCircle, Download, Gavel, Clock, 
   Share2, RotateCw, AlertOctagon, Send, Paperclip, 
-  MoreVertical, CheckCheck, Smile, Plus, Hash, ChevronLeft, CheckCircle2,
+  MoreHorizontal, CheckCheck, Smile, Plus, Hash, ChevronLeft, CheckCircle2,
   Heart, Wallet, Banknote, CreditCard, Sparkles, UserRound, Footprints,
   Save
 } from "lucide-react";
@@ -165,7 +165,6 @@ function WizardStepProfile({ formData, setFormData }: any) {
         </RadioGroup>
         <Input name="communityName" placeholder="Nama Komunitas/Klub Asal" onChange={handleInputChange} className="h-12 bg-black border-zinc-800"/>
         <Input name="instagram" placeholder="@username Instagram" onChange={handleInputChange} className="h-12 bg-black border-zinc-800"/>
-        <Textarea name="history" placeholder="Sebutkan prestasi/turnamen terakhir yang diikuti..." onChange={handleInputChange} className="bg-black border-zinc-800 min-h-24"/>
       </div>
     </div>
   );
@@ -316,6 +315,10 @@ export function PlayerDashboardController() {
       <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4 font-body relative overflow-hidden">
         <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none"></div>
         <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="text-center absolute top-8">
+            <Button onClick={() => setHasJoinedTeam(true)} variant="link" className="text-zinc-500">Dev: Skip to Wizard</Button>
+            <Button onClick={() => { setHasJoinedTeam(true); setIsProfileComplete(true); }} variant="link" className="text-zinc-500">Dev: Skip to Dashboard</Button>
+        </div>
 
         <Card className="w-full max-w-lg bg-zinc-900/80 backdrop-blur-xl border-zinc-800 rounded-[40px] p-8 md:p-12 border-dashed border-2 relative overflow-hidden shadow-2xl">
           <div className="text-center space-y-8 relative z-10">
@@ -456,4 +459,3 @@ export function PlayerDashboardController() {
     </div>
   );
 }
-

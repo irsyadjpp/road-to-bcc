@@ -12,9 +12,6 @@ export const athleteProfileSchema = z.object({
   instagram: z.string()
     .min(3, "Username IG wajib (ex: @username)")
     .refine(val => val.startsWith('@'), "Username harus diawali @"),
-  
-  // Riwayat Turnamen (Digunakan TPF untuk asesmen level)
-  history: z.string().optional().describe("Sebutkan turnamen komunitas terakhir yang diikuti"),
 });
 
 export type AthleteProfileValues = z.infer<typeof athleteProfileSchema>;
