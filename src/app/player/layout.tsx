@@ -22,7 +22,6 @@ export default function PlayerLayout({ children }: { children: React.ReactNode }
         <AdminBackground />
       </div>
       <header className="flex h-16 shrink-0 items-center justify-between gap-2 px-4 sm:px-6 bg-black/40 backdrop-blur-md border-b border-white/5 sticky top-0 z-40">
-        {/* Placeholder for potential logo/title on the left */}
         <div>
             <Button variant="ghost" size="icon" asChild>
                 <Link href="/"><Home className="w-4 h-4" /></Link>

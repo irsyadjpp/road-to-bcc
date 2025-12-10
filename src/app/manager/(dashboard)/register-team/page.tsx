@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState } from "react";
@@ -32,7 +33,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { CheckCircle2, Copy, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { redirect, usePathname } from 'next/navigation';
+import { registerTeamEntity } from "./actions";
 
 
 const CATEGORIES = ["Beginner", "Intermediate", "Advance"] as const;
@@ -55,13 +56,18 @@ export default function RegisterTeamPage() {
 
   async function onSubmit(data: TeamRegistrationFormValues) {
     setIsSubmitting(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      const teamCodePrefix = data.entityName.replace(/\s+/g, '').substring(0, 4).toUpperCase();
-      const mockGeneratedCode = `BCC-${teamCodePrefix}-${Math.floor(100 + Math.random() * 900)}`;
-      
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+        if (value) {
+            formData.append(key, value as string);
+        }
+    });
+
+    const result = await registerTeamEntity(formData);
+    
+    if (result.success && result.teamCode) {
       setSuccessData({
-        code: mockGeneratedCode,
+        code: result.teamCode,
         name: data.entityName,
       });
 
@@ -69,16 +75,14 @@ export default function RegisterTeamPage() {
         title: "Registrasi Berhasil!",
         description: "Tim telah dibuat. Silakan bagikan kode akses ke pemain.",
       });
-
-    } catch (error) {
-      toast({
-        title: "Gagal Mendaftar",
-        description: "Terjadi kesalahan pada server. Coba lagi nanti.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
+    } else {
+        toast({
+            title: "Gagal Mendaftar",
+            description: "Terjadi kesalahan pada server. Coba lagi nanti.",
+            variant: "destructive",
+        });
     }
+    setIsSubmitting(false);
   }
 
   const copyToClipboard = () => {

@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { 
   LayoutDashboard, Users, LogOut, Settings, CheckCircle, 
