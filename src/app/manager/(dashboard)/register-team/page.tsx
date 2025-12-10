@@ -1,144 +1,375 @@
-'use client';
+
+"use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { 
+  TeamRegistrationFormValues, 
+  teamRegistrationSchema, 
+  CATEGORIES 
+} from "@/lib/schemas/registration";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
-import { Loader2, Shield, Users, Shirt, Copy, CheckCircle2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
-import { registerTeamEntity } from "./actions"; 
+import { useToast } from "@/hooks/use-toast"; // Sesuaikan path import toast Anda
+import { Checkbox } from "@/components/ui/checkbox";
+import { Users, User, ShieldCheck } from "lucide-react";
 
 export default function RegisterTeamPage() {
-  const { toast } = useToast();
-  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [generatedCode, setGeneratedCode] = useState<string | null>(null);
 
-  const handleSubmit = async (formData: FormData) => {
+  // Inisialisasi Form
+  const form = useForm<TeamRegistrationFormValues>({
+    resolver: zodResolver(teamRegistrationSchema),
+    defaultValues: {
+      entityName: "",
+      officialLocation: "",
+      contactPerson: "",
+      phoneNumber: "",
+      type: "SINGLE_TEAM", // Default ke Tim Tunggal
+      registrations: [],
+    },
+  });
+
+  // Watch tipe pendaftaran untuk conditional rendering
+  const registrationType = form.watch("type");
+
+  async function onSubmit(data: TeamRegistrationFormValues) {
     setIsSubmitting(true);
-    const res = await registerTeamEntity(formData);
-    setIsSubmitting(false);
-
-    if (res.success) {
-      setGeneratedCode(res.teamCode); // Tampilkan kode sukses
-      toast({ title: "Tim Terdaftar!", description: "Bagikan kode ke pemain Anda.", className: "bg-green-600 text-white" });
-    } else {
-      toast({ title: "Gagal", description: res.message, variant: "destructive" });
+    try {
+      // TODO: Panggil Server Action di sini (misal: registerTeamAction(data))
+      console.log("Data Submitted:", data);
+      
+      toast({
+        title: "Pendaftaran Berhasil",
+        description: `Berhasil mendaftar sebagai ${ data.type === 'SINGLE_TEAM' ? 'Tim' : 'Komunitas' } `,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Gagal melakukan pendaftaran.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-  };
-
-  const copyCode = () => {
-    if(generatedCode) {
-        navigator.clipboard.writeText(generatedCode);
-        toast({ title: "Kode Disalin!" });
-    }
-  };
-
-  // JIKA SUDAH SUKSES DAFTAR, TAMPILKAN KODE
-  if (generatedCode) {
-    return (
-        <div className="max-w-xl mx-auto pt-10">
-            <Card className="bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800 text-center p-8">
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600">
-                    <CheckCircle2 className="w-10 h-10" />
-                </div>
-                <h2 className="text-3xl font-black text-green-800 dark:text-green-400 mb-2">Tim Berhasil Dibuat!</h2>
-                <p className="text-muted-foreground mb-8">
-                    Langkah selanjutnya: Bagikan kode ini ke grup WhatsApp atlet Anda agar mereka bisa bergabung (Join) ke dalam tim.
-                </p>
-                
-                <div className="flex items-center gap-2 max-w-sm mx-auto mb-8">
-                    <div className="flex-grow bg-white dark:bg-black border-2 border-green-500 rounded-lg h-14 flex items-center justify-center font-mono text-2xl font-black tracking-widest">
-                        {generatedCode}
-                    </div>
-                    <Button size="icon" className="h-14 w-14 bg-green-600 hover:bg-green-700" onClick={copyCode}>
-                        <Copy className="w-6 h-6" />
-                    </Button>
-                </div>
-
-                <Button onClick={() => router.push('/manager/dashboard')} variant="outline" className="w-full">
-                    Masuk ke Dashboard Tim
-                </Button>
-            </Card>
-        </div>
-    )
   }
 
-  // FORM PENDAFTARAN TIM (METADATA ONLY)
-  return (
-    <div className="space-y-6 max-w-2xl mx-auto">
-      <div>
-        <h2 className="text-3xl font-bold font-headline">Registrasi Tim Baru</h2>
-        <p className="text-muted-foreground">Isi identitas tim. Data pemain akan diisi oleh atlet masing-masing.</p>
-      </div>
+  // Helper untuk mengubah registration pada mode Single Team
+  const handleSingleCategoryChange = (category: "MD" | "WD" | "XD") => {
+    form.setValue("registrations", [{ category, quantity: 1 }]);
+  };
 
-      <Card>
+  // Helper untuk mengubah registration pada mode Community
+  const handleCommunityCategoryChange = (
+    category: "MD" | "WD" | "XD", 
+    checked: boolean
+  ) => {
+    const currentRegs = form.getValues("registrations");
+    if (checked) {
+      // Tambah kategori dengan default qty 1
+      form.setValue("registrations", [...currentRegs, { category, quantity: 1 }]);
+    } else {
+      // Hapus kategori
+      form.setValue(
+        "registrations",
+        currentRegs.filter((r) => r.category !== category)
+      );
+    }
+  };
+
+  const handleCommunityQuantityChange = (
+    category: "MD" | "WD" | "XD", 
+    qty: number
+  ) => {
+    const currentRegs = form.getValues("registrations");
+    const updatedRegs = currentRegs.map((r) => 
+      r.category === category ? { ...r, quantity: qty } : r
+    );
+    form.setValue("registrations", updatedRegs);
+  };
+
+  return (
+    <div className="container mx-auto py-10 max-w-3xl">
+      <Card className="mb-8">
         <CardHeader>
-            <CardTitle>Identitas Klub / Komunitas</CardTitle>
+          <CardTitle className="text-2xl">Formulir Pendaftaran BCC 2026</CardTitle>
+          <CardDescription>
+            Silakan pilih tipe kepesertaan Anda: Tim Tunggal atau Komunitas Besar.
+          </CardDescription>
         </CardHeader>
         <CardContent>
-            <form action={handleSubmit} className="space-y-6">
-                
-                {/* NAMA & ASAL */}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              
+              {/* Bagian 1: Identitas */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">Identitas Pendaftar</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <Label>Nama Tim Official</Label>
-                        <div className="relative">
-                            <Shield className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                            <Input name="name" placeholder="Cth: PB Djarum" className="pl-10" required />
-                        </div>
-                    </div>
-                    <div className="space-y-2">
-                        <Label>Asal Kota / Instansi</Label>
-                        <Input name="origin" placeholder="Cth: Bandung / PT. Telkom" required />
-                    </div>
+                  <FormField
+                    control={form.control}
+                    name="entityName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nama Tim / Komunitas</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Contoh: PB. Badminton Ceria" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="officialLocation"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Domisili / Asal</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Kecamatan/Kota (Bandung Raya)" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="contactPerson"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nama Manajer (PIC)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Nama Lengkap" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="phoneNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nomor WhatsApp</FormLabel>
+                        <FormControl>
+                          <Input placeholder="08xxxxxxxx" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
+              </div>
 
-                {/* KONTAK MANAGER */}
-                <div className="space-y-2">
-                    <Label>Nama Manajer / Official (PIC)</Label>
-                    <div className="relative">
-                        <Users className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                        <Input name="managerName" placeholder="Nama Anda" required />
+              <Separator />
+
+              {/* Bagian 2: Tipe Kepesertaan */}
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormLabel className="text-lg font-medium">Tipe Pendaftaran</FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={(val) => {
+                            field.onChange(val);
+                            form.setValue("registrations", []); // Reset kategori saat ganti tipe
+                          }}
+                          defaultValue={field.value}
+                          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                        >
+                          {/* Opsi SINGLE TEAM */}
+                          <FormItem>
+                            <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
+                              <FormControl>
+                                <RadioGroupItem value="SINGLE_TEAM" className="sr-only" />
+                              </FormControl>
+                              <div className="items-center rounded-md border-2 border-muted p-4 hover:border-accent cursor-pointer transition-all">
+                                <div className="flex justify-between items-center mb-2">
+                                  <User className="h-6 w-6 text-primary" />
+                                  <div className="space-y-1">
+                                    <h4 className="font-semibold text-right">Tim Tunggal</h4>
+                                    <p className="text-xs text-muted-foreground text-right">
+                                      Daftar 1 Skuad Saja
+                                    </p>
+                                  </div>
+                                </div>
+                                <p className="text-sm text-muted-foreground">
+                                  Hanya boleh memilih <strong>satu kategori</strong> (MD/WD/XD). Tidak boleh merangkap kategori lain.
+                                </p>
+                              </div>
+                            </FormLabel>
+                          </FormItem>
+
+                          {/* Opsi COMMUNITY */}
+                          <FormItem>
+                            <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
+                              <FormControl>
+                                <RadioGroupItem value="COMMUNITY" className="sr-only" />
+                              </FormControl>
+                              <div className="items-center rounded-md border-2 border-muted p-4 hover:border-accent cursor-pointer transition-all">
+                                <div className="flex justify-between items-center mb-2">
+                                  <Users className="h-6 w-6 text-primary" />
+                                  <div className="space-y-1">
+                                    <h4 className="font-semibold text-right">Komunitas</h4>
+                                    <p className="text-xs text-muted-foreground text-right">
+                                      Daftar Banyak Tim
+                                    </p>
+                                  </div>
+                                </div>
+                                <p className="text-sm text-muted-foreground">
+                                  Bebas memilih <strong>banyak kategori</strong> dan mendaftarkan <strong>lebih dari 1 tim</strong> per kategori.
+                                </p>
+                              </div>
+                            </FormLabel>
+                          </FormItem>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Bagian 3: Pemilihan Kategori (Kondisional) */}
+              <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-lg border">
+                <h3 className="text-md font-semibold mb-4 flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4" />
+                  Pilih Kategori Pertandingan
+                </h3>
+
+                {registrationType === "SINGLE_TEAM" ? (
+                  /* Logic UI untuk SINGLE TEAM (Radio Selection) */
+                  <div className="space-y-4">
+                     <p className="text-sm text-muted-foreground mb-4">
+                       Karena Anda mendaftar sebagai Tim Tunggal, silakan pilih <strong>salah satu</strong> kategori di bawah ini:
+                     </p>
+                     <RadioGroup 
+                       onValueChange={(val) => handleSingleCategoryChange(val as any)}
+                       className="grid grid-cols-1 md:grid-cols-3 gap-4"
+                     >
+                       {CATEGORIES.map((cat) => (
+                         <div key={cat} className="relative">
+                           <RadioGroupItem 
+                             value={cat} 
+                             id={`single-${cat}`} 
+                             className="peer sr-only" 
+                           />
+                           <LabelCard 
+                             htmlFor={`single-${cat}`} 
+                             title={getCategoryFullName(cat)} 
+                             code={cat}
+                           />
+                         </div>
+                       ))}
+                     </RadioGroup>
+                     {form.formState.errors.registrations && (
+                        <p className="text-sm text-destructive mt-2">
+                          {form.formState.errors.registrations.message || "Wajib memilih satu kategori."}
+                        </p>
+                      )}
+                  </div>
+                ) : (
+                  /* Logic UI untuk COMMUNITY (Checkbox + Quantity Input) */
+                  <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Silakan centang kategori yang diikuti dan tentukan jumlah tim per kategori (Unlimited).
+                    </p>
+                    <div className="space-y-3">
+                      {CATEGORIES.map((cat) => {
+                        const isSelected = form.watch("registrations").some(r => r.category === cat);
+                        const currentQty = form.watch("registrations").find(r => r.category === cat)?.quantity || 1;
+
+                        return (
+                          <div key={cat} className="flex items-center justify-between p-3 border rounded-md bg-background">
+                            <div className="flex items-center space-x-3">
+                              <Checkbox 
+                                id={`com-${cat}`}
+                                checked={isSelected}
+                                onCheckedChange={(checked) => handleCommunityCategoryChange(cat, checked as boolean)}
+                              />
+                              <label htmlFor={`com-${cat}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">
+                                {getCategoryFullName(cat)} ({cat})
+                              </label>
+                            </div>
+                            
+                            {isSelected && (
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs text-muted-foreground">Jml Tim:</span>
+                                <Input 
+                                  type="number" 
+                                  min={1} 
+                                  className="w-20 h-8"
+                                  value={currentQty}
+                                  onChange={(e) => handleCommunityQuantityChange(cat, parseInt(e.target.value))}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        )
+                      })}
                     </div>
-                </div>
+                     {form.formState.errors.registrations && (
+                        <p className="text-sm text-destructive mt-2">
+                          {form.formState.errors.registrations.message}
+                        </p>
+                      )}
+                  </div>
+                )}
+              </div>
 
-                <Separator />
-
-                {/* JERSEY INFO */}
-                <div className="space-y-4">
-                    <h3 className="text-sm font-bold flex items-center gap-2">
-                        <Shirt className="w-4 h-4" /> Warna Jersey Tim
-                    </h3>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label className="text-xs text-muted-foreground">Jersey Home (Utama)</Label>
-                            <Input name="jerseyHome" placeholder="Cth: Merah - Hitam" required />
-                        </div>
-                        <div className="space-y-2">
-                            <Label className="text-xs text-muted-foreground">Jersey Away (Cadangan)</Label>
-                            <Input name="jerseyAway" placeholder="Cth: Putih - Putih" required />
-                        </div>
-                    </div>
-                </div>
-
-                {/* UPLOAD LOGO (Opsional) */}
-                <div className="space-y-2">
-                    <Label>Logo Tim (Opsional)</Label>
-                    <Input type="file" name="logo" accept="image/*" className="text-sm" />
-                    <p className="text-[10px] text-muted-foreground">*Akan ditampilkan di papan skor TV & Website.</p>
-                </div>
-
-                <Button type="submit" size="lg" className="w-full font-bold" disabled={isSubmitting}>
-                    {isSubmitting ? <Loader2 className="animate-spin mr-2"/> : "DAFTARKAN TIM & DAPATKAN KODE"}
+              <div className="flex justify-end pt-4">
+                <Button type="submit" size="lg" disabled={isSubmitting}>
+                  {isSubmitting ? "Memproses..." : "Daftarkan Sekarang"}
                 </Button>
+              </div>
 
             </form>
+          </Form>
         </CardContent>
       </Card>
     </div>
   );
+}
+
+// Komponen Helper Kecil untuk Tampilan Card Radio
+function LabelCard({ htmlFor, title, code }: { htmlFor: string; title: string; code: string }) {
+  return (
+    <label
+      htmlFor={htmlFor}
+      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer h-full text-center transition-all"
+    >
+      <span className="text-2xl font-bold mb-2">{code}</span>
+      <span className="text-sm font-medium">{title}</span>
+    </label>
+  );
+}
+
+function getCategoryFullName(code: string) {
+  switch (code) {
+    case "MD": return "Ganda Putra";
+    case "WD": return "Ganda Putri";
+    case "XD": return "Ganda Campuran";
+    default: return code;
+  }
 }
