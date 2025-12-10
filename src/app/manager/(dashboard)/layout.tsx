@@ -13,22 +13,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/s
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { useState, useEffect } from 'react';
-
-function ClientOnly({ children }: { children: React.ReactNode }) {
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  if (!hasMounted) {
-    return null;
-  }
-
-  return <>{children}</>;
-}
-
+import { ClientOnly } from '@/components/client-only';
 
 export default function ManagerLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

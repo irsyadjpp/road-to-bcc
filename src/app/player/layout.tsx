@@ -6,24 +6,10 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-
-function ClientOnly({ children }: { children: React.ReactNode }) {
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  if (!hasMounted) {
-    return null;
-  }
-
-  return <>{children}</>;
-}
-
+import { ClientOnly } from "@/components/client-only";
 
 export default function PlayerLayout({ children }: { children: React.ReactNode }) {
+
   return (
     <div className="relative flex flex-col min-h-screen bg-transparent overflow-hidden">
       <div className="fixed inset-0 -z-50 pointer-events-none">

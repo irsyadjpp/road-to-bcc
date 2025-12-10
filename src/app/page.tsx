@@ -1,7 +1,6 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 
@@ -19,21 +18,7 @@ import { SponsorsSection } from '@/components/sections/sponsors';
 import { WhyJoinSection } from '@/components/sections/why-join';
 import { PrizesSection } from '@/components/sections/prizes';
 import { FaqSection } from '@/components/sections/faq';
-
-function ClientOnly({ children }: { children: React.ReactNode }) {
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  if (!hasMounted) {
-    return null;
-  }
-
-  return <>{children}</>;
-}
-
+import { ClientOnly } from '@/components/client-only';
 
 export default function Home() {
   return (
