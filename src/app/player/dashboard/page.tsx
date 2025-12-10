@@ -26,7 +26,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PlayerDashboardFull } from "@/components/player/dashboard-full";
+import PlayerDashboardFull from "@/components/player/dashboard-full";
 
 // --- CONSTANTS & MOCK DATA ---
 const PRICES = {
@@ -49,11 +49,11 @@ export default function PlayerPage() {
     // Set ke `false` untuk melihat halaman "Input Kode"
     // setHasJoinedTeam(false); 
     // Set `hasJoinedTeam` true & `isRegistrationComplete` false untuk melihat "Wizard"
-    setHasJoinedTeam(true); 
-    setIsRegistrationComplete(false);
-    // Set keduanya `true` untuk melihat "Dashboard Full"
     // setHasJoinedTeam(true); 
-    // setIsRegistrationComplete(true);
+    // setIsRegistrationComplete(false);
+    // Set keduanya `true` untuk melihat "Dashboard Full"
+    setHasJoinedTeam(true); 
+    setIsRegistrationComplete(true);
   }, []);
   // ============================================
 
@@ -241,3 +241,14 @@ export default function PlayerPage() {
     </div>
   );
 }
+
+// Dummy data for the full dashboard view
+const ATHLETE_MOCK = {
+    id: "ATL-8821",
+    name: "Jonathan Christie",
+    team: "PB Djarum Official",
+    rank: "PRO",
+    points: 8500,
+    winRate: 78,
+    avatar: "https://github.com/shadcn.png",
+};
