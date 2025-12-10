@@ -1,59 +1,60 @@
-
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { TrendingUp, Trophy, ShieldCheck } from "lucide-react";
-
-const sellingPoints = [
-  {
-    icon: TrendingUp,
-    title: "Experience The Future",
-    description: "Jadilah yang pertama mencoba sistem Live Score & Player Statistik berbasis Web App. Hasil pertandinganmu tercatat selamanya.",
-    color: "text-blue-500",
-  },
-  {
-    icon: Trophy,
-    title: "The Golden Ticket",
-    description: "Juara mendapatkan Slot Prioritas & Diskon Khusus untuk Turnamen Utama BCC 2026 (Beregu).",
-    color: "text-yellow-500",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Fair Play System",
-    description: "Aturan Anti-Sandbagging dengan validasi level & matriks pasangan. Kompetitif & Seru.",
-    color: "text-green-500",
-  },
-];
+import { TrendingUp, Trophy, ShieldCheck, Gamepad2 } from "lucide-react";
 
 export function WhyJoinSection() {
+  const points = [
+    {
+      icon: Gamepad2,
+      title: "Digital Experience",
+      desc: "Rasakan sensasi turnamen rasa pro. Live Score, Player Stats, dan Match History tercatat digital selamanya.",
+      bg: "bg-blue-500 text-white",
+    },
+    {
+      icon: Trophy,
+      title: "Golden Ticket",
+      desc: "Jalur VIP untuk Juara. Dapatkan slot prioritas & diskon khusus untuk turnamen utama Beregu BCC 2026.",
+      bg: "bg-yellow-400 text-black",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Fair Play Matrix",
+      desc: "Anti-Sandbagging Club. Sistem validasi level & matriks pasangan memastikan lawanmu seimbang.",
+      bg: "bg-primary text-white",
+    },
+  ];
+
   return (
-    <section className="bg-background py-16 md:py-24">
+    <section className="py-24 bg-secondary/30 rounded-t-[3rem] -mt-10">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold font-headline text-foreground">
-            Why Join The Prologue?
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h2 className="text-4xl md:text-5xl font-black font-headline mb-6 uppercase">
+            Why Join <span className="text-primary">The Prologue?</span>
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground leading-relaxed font-medium">
             Lebih dari sekadar mabar. Ini adalah pemanasan strategis Anda sebelum pertempuran utama.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {sellingPoints.map((point, index) => {
-            const Icon = point.icon;
-            return (
-              <Card key={index} className="text-center border-l-4 border-l-primary/50 bg-card">
-                <CardContent className="pt-8">
-                  <div className={`mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary`}>
-                    <Icon className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-xl font-bold font-headline mb-3">{point.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {point.description}
-                  </p>
-                </CardContent>
-              </Card>
-            );
-          })}
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {points.map((item, idx) => (
+            <Card key={idx} className="group relative border-none overflow-hidden rounded-[2.5rem] bg-background shadow-xl hover:-translate-y-2 transition-all duration-300">
+              <div className={`h-3 ${item.bg.split(' ')[0]} w-full`} />
+              <CardContent className="p-8 pt-12 relative">
+                 <div className={`w-16 h-16 rounded-2xl ${item.bg} flex items-center justify-center mb-6 shadow-lg rotate-3 group-hover:rotate-6 transition-transform`}>
+                    <item.icon className="w-8 h-8" />
+                 </div>
+                 <h3 className="text-2xl font-bold font-headline mb-4">{item.title}</h3>
+                 <p className="text-muted-foreground leading-relaxed text-lg">
+                    {item.desc}
+                 </p>
+                 <div className="absolute bottom-0 right-0 p-8 opacity-5">
+                    <item.icon className="w-32 h-32" />
+                 </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </section>

@@ -1,138 +1,92 @@
-
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, ArrowRight, XCircle, Info, Users } from "lucide-react";
+import { X, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-
-// Matriks Logika Pasangan
-const pairings = [
-  { level1: "Beginner", level2: "Beginner", result: "Beginner", color: "text-green-500", valid: true },
-  { level1: "Beginner", level2: "Intermediate", result: "Intermediate", color: "text-blue-500", valid: true },
-  { level1: "Intermediate", level2: "Intermediate", result: "Intermediate", color: "text-blue-500", valid: true },
-  { level1: "Intermediate", level2: "Advance", result: "Advance", color: "text-purple-500", valid: true },
-  { level1: "Advance", level2: "Advance", result: "Advance", color: "text-purple-500", valid: true },
-  { level1: "Beginner", level2: "Advance", result: "DILARANG", color: "text-destructive", valid: false },
+const matrix = [
+  { p1: "Beginner", p2: "Beginner", res: "Beginner", status: "allowed", color: "bg-green-500" },
+  { p1: "Beginner", p2: "Intermediate", res: "Intermediate", status: "allowed", color: "bg-blue-500" },
+  { p1: "Intermediate", p2: "Intermediate", res: "Intermediate", status: "allowed", color: "bg-blue-500" },
+  { p1: "Intermediate", p2: "Advance", res: "Advance", status: "allowed", color: "bg-purple-500" },
+  { p1: "Advance", p2: "Advance", res: "Advance", status: "allowed", color: "bg-purple-500" },
+  { p1: "Beginner", p2: "Advance", res: "Banned", status: "banned", color: "bg-red-500" },
 ];
 
 export function CategoriesSection() {
   return (
-    <section className="bg-secondary py-16 md:py-24 relative overflow-hidden">
-       {/* Elemen Dekoratif Background */}
-       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute top-10 right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-10 left-10 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl" />
-       </div>
-
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold font-headline text-foreground mb-4">
-            Kategori & Aturan Main
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            <strong className="text-primary">System:</strong> Peringkat tertinggi dalam pasangan menentukan level kategori akhir.
-          </p>
-          <div className="mt-4 bg-card p-4 rounded-lg border max-w-3xl mx-auto text-sm text-muted-foreground">
-             <strong className="text-foreground">Disclaimer:</strong> Kami menggunakan standar Ganda Putra Umum. Peserta wanita harap menyesuaikan dan mengukur kemampuannya untuk bersaing.
-          </div>
+    <section className="py-24 bg-background">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-6">
+            <div className="max-w-xl">
+                <h2 className="text-4xl md:text-5xl font-black font-headline uppercase mb-4">
+                    Aturan <span className="text-primary">Kategori</span>
+                </h2>
+                <p className="text-lg text-muted-foreground">
+                    Sistem "Highest Rank" berlaku. Level tertinggi dalam pasangan menentukan kategori akhir tim.
+                </p>
+            </div>
+             <div className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 px-6 py-4 rounded-3xl font-bold text-sm max-w-md">
+                ⚠️ Standard: Ganda Putra Umum (Wanita boleh join dengan penyesuaian).
+            </div>
         </div>
-        
-        {/* Pairing Matrix */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {pairings.map((pair, index) => (
-            <Card key={index} className={cn("bg-card border shadow-sm hover:shadow-lg transition-shadow hover:-translate-y-1", !pair.valid && 'border-destructive/30 bg-destructive/5')}>
-              <CardContent className="pt-6 flex flex-col items-center text-center gap-3">
-                {/* Line 1: Combination */}
-                <div className="flex items-center gap-2 justify-center">
-                  <Badge variant="outline" className="px-3 py-1 text-xs font-semibold truncate">{pair.level1}</Badge>
-                  <Plus className="w-4 h-4 text-muted-foreground flex-shrink-0"/>
-                  <Badge variant="outline" className="px-3 py-1 text-xs font-semibold truncate">{pair.level2}</Badge>
-                </div>
-                
-                <ArrowRight className="w-4 h-4 text-muted-foreground flex-shrink-0 my-1 rotate-90 sm:rotate-0"/>
-                
-                {/* Line 2: Result */}
-                <div className="flex flex-col items-center gap-2 flex-1 min-w-0">
-                   {pair.valid ? (
-                      <Badge variant="outline" className={cn("px-4 py-2 text-sm font-bold border-2 truncate", pair.color, pair.color.replace('text-', 'border-'))}>
-                        Masuk Kategori {pair.result}
-                      </Badge>
-                   ) : (
-                       <Badge variant="destructive" className="px-3 py-2 text-sm font-bold flex items-center gap-2 truncate">
-                           <XCircle className="w-4 h-4 shrink-0"/>
-                           {pair.result}
-                        </Badge>
-                   )}
-                </div>
-              </CardContent>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* MATRIX LIST */}
+            <div className="space-y-3">
+                {matrix.map((item, idx) => (
+                    <div key={idx} className={cn(
+                        "flex items-center justify-between p-4 rounded-2xl border-2 transition-all hover:scale-[1.02]",
+                        item.status === 'banned' ? "border-red-100 bg-red-50/50 dark:bg-red-900/10 dark:border-red-900" : "bg-card border-transparent shadow-sm hover:border-primary/20"
+                    )}>
+                        <div className="flex items-center gap-3">
+                            <Badge variant="outline" className="h-8 px-3 rounded-lg text-sm bg-background">{item.p1}</Badge>
+                            <span className="text-muted-foreground font-black">+</span>
+                            <Badge variant="outline" className="h-8 px-3 rounded-lg text-sm bg-background">{item.p2}</Badge>
+                        </div>
+                        
+                        <div className="flex items-center gap-3">
+                             <div className="h-px w-8 bg-border hidden sm:block" />
+                             {item.status === 'allowed' ? (
+                                <Badge className={cn("h-8 px-4 rounded-lg text-white border-none", item.color)}>
+                                    Kategori {item.res}
+                                </Badge>
+                             ) : (
+                                <Badge variant="destructive" className="h-8 px-4 rounded-lg">
+                                    <X className="w-3 h-3 mr-1" /> DILARANG
+                                </Badge>
+                             )}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* SIMULATION CARD */}
+            <Card className="bg-secondary rounded-[2.5rem] p-8 border-none flex flex-col justify-center">
+                 <div className="flex items-center gap-3 mb-6">
+                    <div className="bg-primary text-white p-3 rounded-xl">
+                        <Users className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-2xl font-bold font-headline">Simulasi Kasus</h3>
+                 </div>
+                 
+                 <div className="space-y-6">
+                    <div className="bg-background p-6 rounded-3xl shadow-sm">
+                        <h4 className="font-bold text-lg mb-2 text-primary">Case A: XD (Int) vs MD (Int+Beg)</h4>
+                        <p className="text-muted-foreground text-sm leading-relaxed">
+                           "Cewek Intermediate yang biasa main drive cepat & defense kuat akan mengimbangi Cowok Beginner. Pertandingan diprediksi seru & imbang."
+                        </p>
+                    </div>
+                     <div className="bg-background p-6 rounded-3xl shadow-sm">
+                        <h4 className="font-bold text-lg mb-2 text-blue-600">Case B: WD (Beg) vs XD (Beg)</h4>
+                        <p className="text-muted-foreground text-sm leading-relaxed">
+                           "Pasangan WD Beginner murni (jarang main vs cowok) akan kesulitan melawan tenaga (power) cowok beginner. <span className="font-bold text-foreground">Sangat tidak disarankan</span> kecuali WD sudah biasa sparing vs cowok."
+                        </p>
+                    </div>
+                 </div>
             </Card>
-          ))}
         </div>
-
-        {/* SIMULASI PERTANDINGAN */}
-        <div className="mt-16">
-            <h3 className="text-2xl font-bold font-headline text-center mb-8">Simulasi Pertandingan</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-
-                {/* KASUS A */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-primary">Kasus A: XD vs MD (Intermediate)</CardTitle>
-                        <CardDescription>Ganda Campuran vs Ganda Putra</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div>
-                            <p className="font-bold">Tim 1:</p>
-                            <p className="text-muted-foreground">Cowok (Intermediate) + Cewek (Intermediate)</p>
-                            <p className="text-xs text-muted-foreground italic mt-1">Catatan: Cewek Int berani diadu drive/smash.</p>
-                        </div>
-                        <div>
-                            <p className="font-bold">Tim 2:</p>
-                            <p className="text-muted-foreground">Cowok (Intermediate) + Cowok (Beginner)</p>
-                        </div>
-                        <div className="bg-secondary/50 p-3 rounded-md">
-                           <p className="text-xs text-muted-foreground">Analisa:</p>
-                           <p className="text-sm font-semibold">Pertandingan imbang. Cewek (Int) memiliki penempatan bola lebih baik daripada Cowok (Beg).</p>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* KASUS B */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-blue-600">Kasus B: WD vs XD (Beginner)</CardTitle>
-                        <CardDescription>Ganda Putri vs Ganda Campuran</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                         <div>
-                            <p className="font-bold">Tim 1:</p>
-                            <p className="text-muted-foreground">Cewek (Beginner) + Cewek (Beginner)</p>
-                             <p className="text-xs text-muted-foreground italic mt-1">Catatan: Ini sangat beresiko jadi "bulan-bulanan" jika level Beginner-nya adalah beginner murni putri.</p>
-                        </div>
-                        <div>
-                            <p className="font-bold">Tim 2:</p>
-                            <p className="text-muted-foreground">Cowok (Beginner) + Cewek (Beginner)</p>
-                        </div>
-                         <div className="bg-secondary/50 p-3 rounded-md">
-                           <p className="text-xs text-muted-foreground">Analisa:</p>
-                           <p className="text-sm font-semibold">Tim 2 kemungkinan besar menang karena faktor tenaga pria (power).</p>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-             <div className="mt-8 bg-card p-6 rounded-lg border max-w-4xl mx-auto flex items-start gap-4">
-                <Info className="w-8 h-8 text-primary mt-1 shrink-0" />
-                <div>
-                    <h4 className="font-bold text-foreground">Saran Untuk Peserta Ganda Putri (WD)</h4>
-                    <p className="text-sm text-muted-foreground mt-1">
-                        Sangat disarankan bagi Ganda Putri (WD) untuk tidak mendaftar di kategori open gender, kecuali mereka sangat percaya diri dan biasa bermain melawan pria.
-                    </p>
-                </div>
-            </div>
-        </div>
-
       </div>
     </section>
   );

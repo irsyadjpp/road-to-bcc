@@ -1,70 +1,49 @@
+"use client";
 
-'use client';
+import { Trophy, Star } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Trophy, Ticket, Gift, Sparkles } from "lucide-react";
-import { cn } from "@/lib/utils";
-
-const prizeCategories = [
-  {
-    category: "Advance",
-    totalPrize: "Rp 7.500.000",
-    note: "Untuk Juara 1, 2, & 3 Bersama",
-    color: "border-purple-500 bg-purple-500/5",
-    iconColor: "text-purple-400",
-  },
-  {
-    category: "Intermediate",
-    totalPrize: "Rp 7.500.000",
-    note: "Untuk Juara 1, 2, & 3 Bersama",
-    color: "border-blue-500 bg-blue-500/5",
-    iconColor: "text-blue-400",
-  },
-  {
-    category: "Beginner",
-    totalPrize: "Rp 4.000.000",
-    note: "Untuk Juara 1, 2, & 3 Bersama",
-    color: "border-green-500 bg-green-500/5",
-    iconColor: "text-green-400",
-  },
+const prizes = [
+  { cat: "Beginner", pool: "4 JUTA", color: "text-green-500", bg: "bg-green-500/10" },
+  { cat: "Intermediate", pool: "7.5 JUTA", color: "text-blue-500", bg: "bg-blue-500/10" },
+  { cat: "Advance", pool: "7.5 JUTA", color: "text-purple-500", bg: "bg-purple-500/10" },
 ];
 
 export function PrizesSection() {
   return (
-    <section className="bg-secondary py-16 md:py-24">
+    <section className="py-24 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <div className="inline-block p-3 bg-primary/10 rounded-full mb-4 ring-4 ring-primary/5">
-              <Trophy className="w-8 h-8 text-primary"/>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold font-headline text-foreground mb-4">
-            Total Hadiah Puluhan Juta!
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Bukan hanya tentang gengsi, tapi juga apresiasi untuk para juara sejati di setiap level.
-          </p>
+        <div className="flex flex-col items-center text-center mb-16">
+            <div className="bg-yellow-100 dark:bg-yellow-900/20 p-4 rounded-full mb-6">
+                <Trophy className="w-10 h-10 text-yellow-600 dark:text-yellow-400" />
+            </div>
+            <h2 className="text-4xl md:text-6xl font-black font-headline uppercase mb-4">
+                Prize Pool
+            </h2>
+            <p className="text-xl text-muted-foreground font-medium">
+                Total Hadiah Uang Tunai + Throphy + Merchandise
+            </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          {prizeCategories.map((prize) => (
-            <Card key={prize.category} className={cn("text-center shadow-lg border-2 hover:-translate-y-2 transition-transform", prize.color)}>
-              <CardHeader>
-                <div className={cn("mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4", prize.color.replace('border-', 'bg-'))}>
-                  <Trophy className={cn("w-8 h-8", prize.iconColor)} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {prizes.map((p, i) => (
+                <div key={i} className="bg-secondary rounded-[2.5rem] p-8 text-center hover:scale-105 transition-transform duration-300 border-2 border-transparent hover:border-primary/20">
+                    <div className={`inline-flex items-center justify-center px-4 py-1.5 rounded-full ${p.bg} ${p.color} font-bold text-sm uppercase tracking-widest mb-6`}>
+                        {p.cat} Class
+                    </div>
+                    <p className="text-sm text-muted-foreground font-bold uppercase tracking-wider mb-2">Total Pool</p>
+                    <h3 className={`text-4xl lg:text-5xl font-black font-headline ${p.color}`}>
+                        <span className="text-2xl align-top opacity-50 mr-1">Rp</span>
+                        {p.pool}
+                    </h3>
+                    <div className="mt-6 flex justify-center gap-1">
+                        {[1,2,3].map(x => (
+                            <Star key={x} className="w-4 h-4 text-yellow-400 fill-current" />
+                        ))}
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">Juara 1, 2, & 3 Bersama</p>
                 </div>
-                <CardTitle className={cn("text-2xl font-bold", prize.iconColor)}>{prize.category}</CardTitle>
-                <CardDescription>{prize.note}</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="bg-background/50 p-4 rounded-lg border">
-                  <p className="text-xs text-muted-foreground">Total Prize Pool</p>
-                  <p className="text-3xl font-black font-mono text-foreground">{prize.totalPrize}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+            ))}
         </div>
-        
       </div>
     </section>
   );

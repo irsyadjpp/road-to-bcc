@@ -1,73 +1,95 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Banknote, CalendarClock, MapPin, Swords, ArrowUpRight } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Banknote, CalendarClock, MapPin, Swords, Zap, Info } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export function EventSummarySection() {
   return (
-    <section className="py-24 bg-background">
+    <section className="py-20 bg-background relative z-20 -mt-10">
       <div className="container mx-auto px-4">
-        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          
+          {/* TITLE CARD */}
+          <div className="md:col-span-4 bg-primary text-primary-foreground rounded-[2.5rem] p-8 flex flex-col justify-between relative overflow-hidden min-h-[300px]">
+             <div className="absolute -right-10 -top-10 bg-white/10 w-64 h-64 rounded-full blur-3xl pointer-events-none" />
              <div>
-                <h2 className="text-4xl md:text-5xl font-black font-headline text-foreground uppercase">Event Info</h2>
-                <p className="text-muted-foreground mt-2 text-lg">Semua yang perlu kamu tahu sebelum bertanding.</p>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-xs font-bold uppercase tracking-widest mb-4 backdrop-blur-sm">
+                   <Info className="w-3 h-3" /> Road to BCC 2026
+                </div>
+                <h2 className="text-5xl font-black font-headline leading-[0.9]">
+                   THE<br/>GAME<br/>PLAN.
+                </h2>
              </div>
-             <div className="h-2 w-full md:w-32 bg-primary rounded-full" />
-        </div>
+             <p className="font-medium text-primary-foreground/90 mt-4">
+                Persiapkan timmu. Simak detail waktu, biaya, dan aturan main sebelum terjun ke arena.
+             </p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[minmax(180px,auto)]">
-            
-            {/* Waktu - Large Card */}
-            <div className="md:col-span-2 bg-secondary rounded-[2rem] p-8 flex flex-col justify-between hover:bg-secondary/80 transition-colors group relative overflow-hidden">
-                <div className="absolute right-0 top-0 p-8 opacity-10 group-hover:scale-125 transition-transform duration-500">
-                    <CalendarClock className="w-32 h-32" />
-                </div>
-                <div className="relative z-10">
-                    <div className="bg-background rounded-full w-12 h-12 flex items-center justify-center mb-4 shadow-sm">
-                        <CalendarClock className="w-6 h-6 text-primary" />
-                    </div>
-                    <h3 className="text-2xl font-bold font-headline">Sabtu, 31 Januari 2026</h3>
-                    <p className="text-muted-foreground font-medium text-lg mt-1">Kick-off pukul 08:00 WIB - Selesai</p>
-                </div>
-            </div>
+          {/* FEES - UPDATED */}
+          <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Card className="bg-secondary border-none rounded-[2.5rem] p-8 flex flex-col justify-center gap-2 hover:bg-secondary/80 transition-colors">
+                  <div className="flex items-center gap-3 text-muted-foreground mb-2">
+                      <Banknote className="w-6 h-6" />
+                      <span className="font-bold uppercase tracking-wider text-sm">Fee: Beginner</span>
+                  </div>
+                  <p className="text-4xl font-black font-headline text-foreground">
+                    IDR 100K <span className="text-lg text-muted-foreground font-medium">/org</span>
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1 bg-white/50 dark:bg-black/20 w-fit px-3 py-1 rounded-full">
+                     Total: IDR 200rb / Pasang
+                  </p>
+              </Card>
 
-            {/* Lokasi */}
-            <div className="bg-primary text-primary-foreground rounded-[2rem] p-8 flex flex-col justify-between relative overflow-hidden group">
-                 <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-20 mix-blend-multiply" />
-                 <div className="relative z-10">
-                    <MapPin className="w-10 h-10 mb-4" />
-                    <h3 className="text-2xl font-bold font-headline">GOR Sutta</h3>
-                    <p className="text-primary-foreground/80 mt-1">Bandung, Jawa Barat</p>
-                    <Link href="#venue" className="absolute bottom-8 right-8 bg-white/20 p-3 rounded-full hover:bg-white/30 transition-colors">
-                        <ArrowUpRight className="w-6 h-6" />
-                    </Link>
-                 </div>
-            </div>
+              <Card className="bg-zinc-900 dark:bg-zinc-800 text-white border-none rounded-[2.5rem] p-8 flex flex-col justify-center gap-2 relative overflow-hidden group">
+                  <div className="absolute right-0 top-0 p-8 opacity-10 group-hover:scale-125 transition-transform duration-500">
+                      <Zap className="w-32 h-32" />
+                  </div>
+                  <div className="relative z-10">
+                      <div className="flex items-center gap-3 text-zinc-400 mb-2">
+                          <Banknote className="w-6 h-6" />
+                          <span className="font-bold uppercase tracking-wider text-sm">Fee: Int & Adv</span>
+                      </div>
+                      <p className="text-4xl font-black font-headline text-yellow-400">
+                        IDR 150K <span className="text-lg text-zinc-400 font-medium">/org</span>
+                      </p>
+                       <p className="text-sm text-zinc-400 mt-1 bg-white/10 w-fit px-3 py-1 rounded-full">
+                         Total: IDR 300rb / Pasang
+                      </p>
+                  </div>
+              </Card>
+          </div>
 
-            {/* Biaya */}
-            <div className="bg-secondary rounded-[2rem] p-8 group">
-                 <div className="bg-green-100 dark:bg-green-900/30 w-12 h-12 rounded-full flex items-center justify-center mb-4 text-green-600">
-                    <Banknote className="w-6 h-6" />
-                 </div>
-                 <h3 className="text-xl font-bold font-headline">Registration Fee</h3>
-                 <p className="text-3xl font-black mt-2">Rp 120k<span className="text-sm font-medium text-muted-foreground">/tim</span></p>
-            </div>
+          {/* DATE & TIME */}
+          <div className="md:col-span-5 bg-secondary rounded-[2.5rem] p-8 flex flex-col justify-between min-h-[250px] relative overflow-hidden group">
+               <div className="absolute top-0 right-0 w-full h-full bg-grid-black/[0.05] dark:bg-grid-white/[0.05] pointer-events-none" />
+               <div className="bg-background w-12 h-12 rounded-full flex items-center justify-center shadow-sm z-10">
+                  <CalendarClock className="w-6 h-6 text-primary" />
+               </div>
+               <div className="z-10 mt-auto">
+                   <h3 className="text-3xl font-black font-headline">31 JAN 2026</h3>
+                   <p className="text-lg font-medium text-muted-foreground">Sabtu, 08:00 WIB - Selesai</p>
+               </div>
+          </div>
 
-            {/* Format - Wide */}
-            <div className="md:col-span-2 bg-zinc-900 text-white dark:bg-zinc-800 rounded-[2rem] p-8 flex items-center justify-between relative overflow-hidden">
-                 <div className="relative z-10 max-w-md">
-                     <div className="flex items-center gap-3 mb-3 text-yellow-400">
-                        <Swords className="w-6 h-6" />
-                        <span className="font-bold uppercase tracking-wider text-sm">Game Format</span>
-                     </div>
-                     <h3 className="text-2xl md:text-3xl font-black font-headline">Ganda Perorangan (Sistem Pool)</h3>
-                     <p className="text-gray-400 mt-2">Garansi Main 3x! Tidak langsung gugur. Lebih puas, lebih kompetitif.</p>
-                 </div>
-                 <div className="hidden md:block absolute right-0 bottom-0 opacity-20 translate-x-10 translate-y-10">
-                     <Swords className="w-64 h-64" />
-                 </div>
-            </div>
+          {/* LOCATION & FORMAT */}
+          <div className="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-background border rounded-[2.5rem] p-8 flex flex-col justify-between hover:border-primary/50 transition-colors">
+                  <MapPin className="w-8 h-8 text-primary mb-4" />
+                  <div>
+                      <h4 className="text-xl font-bold font-headline">GOR Sutta</h4>
+                      <p className="text-muted-foreground">Bandung, Jawa Barat</p>
+                  </div>
+              </div>
+              <div className="bg-background border rounded-[2.5rem] p-8 flex flex-col justify-between hover:border-primary/50 transition-colors">
+                  <Swords className="w-8 h-8 text-primary mb-4" />
+                  <div>
+                      <h4 className="text-xl font-bold font-headline">Sistem Pool</h4>
+                      <p className="text-muted-foreground">Main 3x (Anti Gugur Awal)</p>
+                  </div>
+              </div>
+          </div>
 
         </div>
       </div>

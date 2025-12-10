@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -7,35 +6,37 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { HelpCircle } from "lucide-react";
 
 export function FaqSection() {
-    const faqItems = [
+    const items = [
         {
-            q: "Bolehkah mengganti pasangan setelah mendaftar?",
-            a: "Boleh, dengan syarat penggantian dilakukan maksimal H-7 sebelum hari pertandingan dan level pemain pengganti tidak mengubah kategori pasangan yang sudah terdaftar."
+            q: "Bolehkah ganti pasangan setelah daftar?",
+            a: "Boleh! Maksimal H-7 sebelum hari H. Syaratnya level pengganti tidak mengubah kategori awal (misal: Beginner tidak boleh diganti Advance)."
         },
         {
-            q: "Bagaimana cara melakukan pembayaran pendaftaran?",
-            a: "Setelah manajer mendaftarkan tim dan kategori, setiap pemain yang diundang akan mendapatkan link personal untuk membuat akun dan melakukan pembayaran biaya pendaftaran secara online (QRIS/Virtual Account)."
+            q: "Pembayaran per tim atau per orang?",
+            a: "Pembayaran dilakukan per orang melalui akun masing-masing (split bill). Namun, manajer tim juga bisa membayarkan sekaligus untuk anggotanya."
+        },
+        {
+            q: "Apakah wanita boleh ikut?",
+            a: "Tentu! Kami menggunakan standar Ganda Putra Umum. Wanita diperbolehkan join (bisa main di GD/XD) asalkan siap bersaing dengan standar tenaga pria di level yang dipilih."
         },
     ]
+
   return (
-    <section className="bg-background py-16 md:py-24">
+    <section className="py-24 bg-background">
       <div className="container mx-auto px-4 max-w-3xl">
-        <div className="text-center mb-10">
-            <div className="inline-block p-3 bg-primary/10 rounded-full mb-4">
-                <HelpCircle className="w-8 h-8 text-primary"/>
-            </div>
-            <h2 className="text-3xl font-bold font-headline">Frequently Asked Questions</h2>
-        </div>
-        <Accordion type="single" collapsible className="w-full space-y-4">
-            {faqItems.map((item, index) => (
-                <AccordionItem key={index} value={`item-${index}`} className="bg-card rounded-lg border shadow-sm">
-                    <AccordionTrigger className="p-6 text-left font-bold text-lg hover:no-underline">
+        <h2 className="text-4xl font-black font-headline text-center mb-12 uppercase">
+            FAQ
+        </h2>
+        
+        <Accordion type="single" collapsible className="space-y-4">
+            {items.map((item, index) => (
+                <AccordionItem key={index} value={`item-${index}`} className="bg-secondary rounded-3xl border-none px-6">
+                    <AccordionTrigger className="text-lg font-bold py-6 hover:no-underline hover:text-primary text-left">
                         {item.q}
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-6 text-muted-foreground leading-relaxed">
+                    <AccordionContent className="text-muted-foreground text-lg pb-6 leading-relaxed">
                         {item.a}
                     </AccordionContent>
                 </AccordionItem>
