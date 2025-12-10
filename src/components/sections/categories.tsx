@@ -1,14 +1,17 @@
+
 "use client";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Users, Swords, UserPlus, Trophy, Plus, ArrowRight } from "lucide-react";
+import { Users, Swords, UserPlus, Trophy, Plus, ArrowRight, XCircle } from "lucide-react";
 
+// Update matriks dengan data baru
 const pairings = [
-  { level1: "Beginner", level2: "Beginner", result: "Beginner", color: "text-green-500" },
-  { level1: "Beginner", level2: "Intermediate", result: "Intermediate", color: "text-blue-500" },
-  { level1: "Intermediate", level2: "Intermediate", result: "Intermediate", color: "text-blue-500" },
-  { level1: "Intermediate", level2: "Advance", result: "Advance", color: "text-purple-500" },
-  { level1: "Advance", level2: "Advance", result: "Advance", color: "text-purple-500" },
+  { level1: "Beginner", level2: "Beginner", result: "Beginner", color: "text-green-500", valid: true },
+  { level1: "Beginner", level2: "Intermediate", result: "Intermediate", color: "text-blue-500", valid: true },
+  { level1: "Intermediate", level2: "Intermediate", result: "Intermediate", color: "text-blue-500", valid: true },
+  { level1: "Intermediate", level2: "Advance", result: "Advance", color: "text-purple-500", valid: true },
+  { level1: "Advance", level2: "Advance", result: "Advance", color: "text-purple-500", valid: true },
+  { level1: "Beginner", level2: "Advance", result: "DILARANG", color: "text-destructive", valid: false },
 ];
 
 export function CategoriesSection() {
@@ -25,14 +28,14 @@ export function CategoriesSection() {
           <h2 className="text-3xl md:text-4xl font-bold font-headline text-foreground mb-4">
             Kategori Pertandingan Ganda
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Level pasangan ditentukan dari kombinasi level individu untuk memastikan pertandingan yang seimbang.
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            Level pasangan ditentukan dari kombinasi level individu untuk memastikan pertandingan yang seimbang. Kombinasi yang terlalu timpang seperti <strong className="text-destructive">Beginner + Advance</strong> dilarang untuk menjaga asas Fair Play.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {pairings.map((pair, index) => (
-            <Card key={index} className="bg-card border shadow-sm hover:shadow-lg transition-shadow hover:-translate-y-1">
+            <Card key={index} className={`bg-card border shadow-sm hover:shadow-lg transition-shadow hover:-translate-y-1 ${!pair.valid ? 'border-destructive/30 bg-destructive/5' : ''}`}>
               <CardContent className="pt-6 flex items-center justify-around text-center">
                 <div className="flex flex-col items-center gap-1">
                   <div className="px-3 py-1 bg-secondary rounded-full text-sm font-semibold">{pair.level1}</div>
@@ -43,17 +46,25 @@ export function CategoriesSection() {
                 </div>
                 <ArrowRight className="w-5 h-5 text-muted-foreground mx-2"/>
                  <div className="flex flex-col items-center gap-1">
-                   <div className={`px-4 py-2 rounded-full text-base font-bold border-2 ${pair.color.replace('text-', 'border-')} ${pair.color.replace('text-', 'bg-')}/10`}>{pair.result}</div>
+                   {pair.valid ? (
+                       <div className={`px-4 py-2 rounded-full text-base font-bold border-2 ${pair.color.replace('text-', 'border-')} ${pair.color.replace('text-', 'bg-')}/10`}>{pair.result}</div>
+                   ) : (
+                       <div className={`px-4 py-2 rounded-full text-base font-bold border-2 flex items-center gap-2 ${pair.color.replace('text-', 'border-')} ${pair.color.replace('text-', 'bg-')}/10`}>
+                           <XCircle className="w-4 h-4"/>
+                           {pair.result}
+                        </div>
+                   )}
                 </div>
               </CardContent>
             </Card>
           ))}
-           <Card className="md:col-span-2 lg:col-span-1 bg-primary/10 border-primary/20 flex flex-col items-center justify-center text-center p-6">
-                <h3 className="font-bold text-lg mb-2">Beregu & 3-on-3</h3>
-                <p className="text-sm text-muted-foreground">
-                    Format tim beregu (putra, putri, campuran) dan partai unik 3-on-3 juga akan dipertandingkan. Informasi detail ada di buku panduan.
-                </p>
-           </Card>
+        </div>
+
+        <div className="mt-12 bg-card p-6 rounded-lg border max-w-3xl mx-auto">
+            <h4 className="font-bold text-center text-foreground mb-3">Catatan Tambahan untuk Ganda Campuran / Putri</h4>
+            <p className="text-sm text-muted-foreground text-center">
+                BCC 2026 tidak menerapkan sistem voor. Manajer tim disarankan untuk sangat strategis saat mendaftarkan Ganda Putri (WD) atau Ganda Campuran (XD), terutama jika akan melawan Ganda Putra (MD) di kategori level yang sama. Kekuatan fisik pemain pria menjadi faktor signifikan.
+            </p>
         </div>
       </div>
     </section>
