@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -38,16 +39,6 @@ export function HeroSection() {
       <div className="relative z-10 flex min-h-[90vh] items-center pt-20 md:min-h-[75vh] md:pt-0">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
-             {/* Badge Kecil */}
-             <div className="flex flex-wrap gap-2 mb-6 animate-fade-in-down" style={{ animationDelay: '0.1s' }}>
-                <span className="inline-flex items-center rounded-full border border-primary/50 bg-primary/20 px-3 py-1 text-sm font-medium text-white backdrop-blur-md shadow-[0_0_15px_rgba(210,35,42,0.5)]">
-                    🏆 Perebutkan Piala Bergilir Juara Umum
-                </span>
-                <span className="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-3 py-1 text-sm font-medium text-white backdrop-blur-md">
-                    💰 Total Hadiah 42 Juta+
-                </span>
-            </div>
-
             <p className="text-lg md:text-xl text-primary font-bold mb-2 font-body tracking-widest uppercase animate-fade-in-up">
               Road to BCC 2026
             </p>
