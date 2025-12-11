@@ -1,7 +1,8 @@
 
 import { redirect } from 'next/navigation';
 import { getPlayerSession } from "../actions";
-import { DashboardClient } from "@/components/player/dashboard-full"; // Kita pindahkan logic client ke komponen terpisah agar rapi
+import { DashboardClient } from "@/components/player/dashboard-full";
+import { ClientOnly } from '@/components/client-only';
 
 export default async function PlayerDashboardPage() {
   // 1. Fetch Session Server-Side
@@ -17,9 +18,10 @@ export default async function PlayerDashboardPage() {
     redirect('/player/register');
   }
 
-  // 4. Render Client Component
-  // Kita pass data session ke client component untuk interaktivitas
+  // 4. Render Client Component, wrapped in ClientOnly to prevent hydration errors
   return (
-    <DashboardClient session={session} />
+    <ClientOnly>
+      <DashboardClient session={session} />
+    </ClientOnly>
   );
 }
