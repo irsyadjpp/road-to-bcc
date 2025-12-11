@@ -290,7 +290,6 @@ const SeedingContent = () => (
             <ol className="list-decimal pl-5 space-y-3 text-sm text-muted-foreground">
                 <li><strong className="text-foreground">Total Skor TPF:</strong> Jumlah skor individu pemain dalam satu tim.</li>
                 <li><strong className="text-foreground">Skor Performa:</strong> Nilai tambahan pada aspek Power, Stamina, dll.</li>
-                <li><strong className="text-foreground">Head-to-head:</strong> Jika ada data pertemuan sebelumnya.</li>
                 <li><strong className="text-foreground">Video Terbaru:</strong> Pengamatan video paling relevan.</li>
                 <li><strong className="text-foreground">Undian Terkontrol:</strong> Langkah terakhir jika masih identik.</li>
             </ol>
