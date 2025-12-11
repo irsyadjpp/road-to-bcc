@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { 
   Trophy, Swords, Dumbbell, ShieldAlert, CheckCircle2, Scale, 
-  BookOpen, Target, Users, AlertTriangle, XCircle 
+  BookOpen, Target, Users, AlertTriangle, XCircle, Video, Activity, BrainCircuit 
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,7 +36,7 @@ export default function LevelingGuidePage() {
               Matrix <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">Level & Tier</span>
            </h1>
            <p className="text-lg text-muted-foreground max-w-3xl mx-auto font-medium leading-relaxed">
-              Regulasi resmi pembagian kategori pertandingan berdasarkan kombinasi <strong>Level (Beginner/Int/Adv)</strong> dan <strong>Tier (Bawah/Menengah/Atas)</strong> untuk kompetisi yang adil dan seimbang.
+              Regulasi resmi pembagian kategori pertandingan berdasarkan kombinasi <strong>Level (Beginner/Int/Adv)</strong> dan <strong>Tier (Bawah/Menengah/Atas)</strong>.
            </p>
         </div>
 
@@ -173,12 +173,12 @@ export default function LevelingGuidePage() {
             </div>
 
             {/* 3. PENERAPAN DI TURNAMEN */}
-            <div className="bg-zinc-900 text-zinc-100 rounded-[3rem] p-8 md:p-12 border border-white/5 shadow-2xl relative overflow-hidden">
+            <div className="bg-surface-variant/30 text-foreground rounded-[3rem] p-8 md:p-12 border border-white/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
                 
                 <div className="text-center mb-10 relative z-10">
                     <h2 className="text-3xl font-black font-headline uppercase mb-4">Penerapan di Lapangan</h2>
-                    <p className="text-zinc-400 max-w-2xl mx-auto">
+                    <p className="text-muted-foreground max-w-2xl mx-auto">
                         Bagaimana Matrix ini mempengaruhi pembagian grup dan penentuan juara?
                     </p>
                 </div>
@@ -190,7 +190,7 @@ export default function LevelingGuidePage() {
                             <div className="bg-primary/20 p-3 rounded-xl text-primary"><Users className="w-6 h-6" /></div>
                             <h3 className="text-xl font-bold">1. Pembagian Grup (Tier-Based)</h3>
                         </div>
-                        <p className="text-sm text-zinc-300 leading-relaxed mb-4">
+                        <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                             Pemain <strong>HANYA</strong> akan ditempatkan di grup yang tier-nya selevel. Tidak ada "Grup Neraka" di mana Low bertemu High di awal.
                         </p>
                         <div className="space-y-2 text-xs font-mono bg-black/40 p-4 rounded-xl border border-white/5">
@@ -215,11 +215,11 @@ export default function LevelingGuidePage() {
                             <div className="bg-yellow-500/20 p-3 rounded-xl text-yellow-500"><Trophy className="w-6 h-6" /></div>
                             <h3 className="text-xl font-bold">2. Penentuan Seeding</h3>
                         </div>
-                        <p className="text-sm text-zinc-300 leading-relaxed mb-4">
+                        <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                             Status <strong>Unggulan (Seed)</strong> hanya diberikan kepada pasangan dalam <strong>Tier Atas</strong> di masing-masing level.
                         </p>
                         <div className="bg-black/40 p-4 rounded-xl border border-white/5">
-                            <p className="text-xs text-zinc-500 font-bold uppercase mb-2">Prioritas Penentuan Seed:</p>
+                            <p className="text-xs text-muted-foreground font-bold uppercase mb-2">Prioritas Penentuan Seed:</p>
                             <ol className="list-decimal pl-4 space-y-1 text-xs text-zinc-300">
                                 <li>Total Skor Utama TPF</li>
                                 <li>Skor Performa Tambahan</li>
@@ -227,6 +227,79 @@ export default function LevelingGuidePage() {
                                 <li>Video Terbaru</li>
                             </ol>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* 4. KRITERIA PENILAIAN TPF (NEW SECTION) */}
+            <div className="bg-zinc-900 text-zinc-100 rounded-[3rem] p-8 md:p-12 border border-white/5 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/noise.png')] opacity-10 mix-blend-overlay pointer-events-none" />
+                <div className="absolute -right-20 -top-20 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] pointer-events-none" />
+
+                <div className="relative z-10 mb-10 text-center md:text-left">
+                    <Badge variant="outline" className="mb-4 border-purple-500 text-purple-400 bg-purple-500/10">Transparansi TPF</Badge>
+                    <h2 className="text-3xl md:text-4xl font-black font-headline uppercase mb-4">Ringkasan Penilaian TPF</h2>
+                    <p className="text-zinc-400 max-w-3xl leading-relaxed">
+                        TPF menggunakan <strong>Formulir Penilaian Terstandarisasi</strong> (Skala 1-5) untuk memastikan penilaian yang objektif. Berikut adalah ringkasan aspek yang dinilai dari video atau pantauan langsung Anda.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                    {/* Card 1: Basic Tech */}
+                    <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-colors">
+                        <CardHeader>
+                            <CardTitle className="text-lg font-bold flex items-center gap-3">
+                                <Swords className="w-5 h-5 text-green-400" /> 1. Penilaian Utama
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-sm text-zinc-400 space-y-3">
+                            <p className="text-xs text-muted-foreground mb-2">Menentukan Tier (Beginner/Int/Adv)</p>
+                            <li className="flex gap-2 items-center"><CheckCircle2 className="w-4 h-4 text-green-500/50" /> Teknik Dasar (Grip, Footwork)</li>
+                            <li className="flex gap-2 items-center"><CheckCircle2 className="w-4 h-4 text-green-500/50" /> Konsistensi Rally & Power</li>
+                            <li className="flex gap-2 items-center"><CheckCircle2 className="w-4 h-4 text-green-500/50" /> Kontrol, Akurasi & Net Play</li>
+                            <li className="flex gap-2 items-center"><CheckCircle2 className="w-4 h-4 text-green-500/50" /> Defense & Transisi</li>
+                        </CardContent>
+                    </Card>
+
+                    {/* Card 2: Penilaian Utama - Fisik & IQ */}
+                    <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-colors">
+                        <CardHeader>
+                            <CardTitle className="text-lg font-bold flex items-center gap-3">
+                                <Activity className="w-5 h-5 text-blue-400" /> 2. Fisik & Mental
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-sm text-zinc-400 space-y-3">
+                            <p className="text-xs text-muted-foreground mb-2">Faktor Penentu Kualitas Permainan</p>
+                            <li className="flex gap-2 items-center"><CheckCircle2 className="w-4 h-4 text-blue-500/50" /> Stamina & Mobilitas</li>
+                            <li className="flex gap-2 items-center"><CheckCircle2 className="w-4 h-4 text-blue-500/50" /> Pengambilan Keputusan (IQ)</li>
+                            <li className="flex gap-2 items-center"><CheckCircle2 className="w-4 h-4 text-blue-500/50" /> Komunikasi & Kerjasama</li>
+                        </CardContent>
+                    </Card>
+
+                    {/* Card 3: Penilaian Khusus (Seeding) */}
+                    <Card className="bg-white/5 border-white/10 hover:bg-white/10 transition-colors">
+                        <CardHeader>
+                            <CardTitle className="text-lg font-bold flex items-center gap-3">
+                                <Trophy className="w-5 h-5 text-yellow-400" /> 3. Performa Khusus
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-sm text-zinc-400 space-y-3">
+                            <p className="text-xs text-muted-foreground mb-2">Kriteria Lanjutan untuk Seeding</p>
+                            <li className="flex gap-2 items-center"><CheckCircle2 className="w-4 h-4 text-yellow-500/50" /> Power Efektif (Smash Poin)</li>
+                            <li className="flex gap-2 items-center"><CheckCircle2 className="w-4 h-4 text-yellow-500/50" /> Kecepatan Reaksi (Drive/Kill)</li>
+                            <li className="flex gap-2 items-center"><CheckCircle2 className="w-4 h-4 text-yellow-500/50" /> Pertahanan Poin Kritis</li>
+                            <li className="flex gap-2 items-center"><CheckCircle2 className="w-4 h-4 text-yellow-500/50" /> Stabilitas di Game Panjang</li>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                <div className="mt-8 p-4 bg-purple-900/20 border border-purple-500/20 rounded-2xl flex items-start gap-4">
+                    <Video className="w-6 h-6 text-purple-400 shrink-0 mt-1" />
+                    <div>
+                        <h4 className="font-bold text-zinc-200 text-sm uppercase mb-1">Fokus Pengamatan Video</h4>
+                        <p className="text-xs text-zinc-400 leading-relaxed">
+                            Berdasarkan standar TPF, video akan diamati untuk melihat: <strong>Momentum Unggul</strong>, <strong>Titik Lemah Dominan</strong>, dan <strong>Konsistensi di Akhir Game</strong>. Pastikan video yang dikirim jelas dan tidak terpotong.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -286,3 +359,5 @@ function MatrixTable({ theme, title, desc, data }: { theme: string, title: strin
         </Card>
     );
 }
+
+    
