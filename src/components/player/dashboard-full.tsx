@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -68,9 +69,11 @@ export function DashboardClient({ session }: { session: any }) {
                {!session.teamId ? (
                    <Card className="border-2 border-dashed border-primary/20 bg-secondary/30 rounded-[2rem] overflow-hidden">
                       <Tabs defaultValue="partner" className="w-full">
-                         <div className="p-2 m-2 bg-background/50 rounded-[1.5rem] flex gap-2">
-                            <TabsTrigger value="partner" className="w-1/2 rounded-3xl font-bold py-3 data-[state=active]:bg-primary data-[state=active]:text-white">Cari Pasangan</TabsTrigger>
-                            <TabsTrigger value="community" className="w-1/2 rounded-3xl font-bold py-3 data-[state=active]:bg-zinc-900 data-[state=active]:text-white">Gabung Klub</TabsTrigger>
+                         <div className="p-2 m-2 bg-background/50 rounded-[1.5rem]">
+                            <TabsList className="w-full bg-transparent p-0 flex gap-2">
+                               <TabsTrigger value="partner" className="w-1/2 rounded-3xl font-bold py-3 data-[state=active]:bg-primary data-[state=active]:text-white">Cari Pasangan</TabsTrigger>
+                               <TabsTrigger value="community" className="w-1/2 rounded-3xl font-bold py-3 data-[state=active]:bg-zinc-900 data-[state=active]:text-white">Gabung Klub</TabsTrigger>
+                            </TabsList>
                          </div>
                          <div className="p-6 pt-2">
                             <TabsContent value="partner" className="space-y-4">
