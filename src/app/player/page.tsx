@@ -7,6 +7,7 @@ import { Footer } from '@/components/layout/footer';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Search, SlidersHorizontal, ShieldCheck, User, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -136,4 +137,3 @@ export default function PlayersPage() {
     </div>
   );
 }
-
