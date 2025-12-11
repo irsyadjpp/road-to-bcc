@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { cn } from '@/lib/utils';
+import { ClientOnly } from '../client-only';
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -54,9 +55,11 @@ export function Header() {
 
         {/* ACTIONS */}
         <div className="flex items-center gap-2 pr-1">
-             <div className="hidden sm:block">
-                <ThemeToggle />
-             </div>
+             <ClientOnly>
+               <div className="hidden sm:block">
+                  <ThemeToggle />
+               </div>
+             </ClientOnly>
              
              <Button asChild className="rounded-full font-bold bg-primary text-primary-foreground hover:brightness-110 shadow-lg shadow-primary/20 px-6 hidden sm:flex">
                 <Link href="/player/login">
