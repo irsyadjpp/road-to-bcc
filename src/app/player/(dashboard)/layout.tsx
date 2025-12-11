@@ -1,14 +1,16 @@
 
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { 
-  Trophy, Users, Shield, QrCode, LogOut, User, Settings
+  Trophy, LogOut, User
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { logoutManager } from '@/app/manager/actions';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+
 
 // MOCK DATA
 const ATHLETE_MOCK = {
@@ -19,10 +21,16 @@ const ATHLETE_MOCK = {
 };
 
 export default function PlayerDashboardLayout({ children }: { children: React.ReactNode }) {
-  
-  const handleLogout = () => {
-    // Implement logout logic here
-    console.log("Logging out...");
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const handleLogout = async () => {
+    await logoutManager();
+    toast({
+        title: "Logout Successful",
+        description: "You have been logged out.",
+    });
+    router.push('/');
   };
 
   return (
