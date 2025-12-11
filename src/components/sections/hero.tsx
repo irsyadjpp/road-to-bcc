@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -44,16 +43,10 @@ export function HeroSection() {
                  </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="h-16 px-8 rounded-full text-lg font-bold border-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 bg-background text-foreground">
-                 <Link href="/live-score">
+                 <Link href="/schedule">
                     Lihat Jadwal
                  </Link>
               </Button>
-           </div>
-           
-           <div className="mt-12 flex items-center justify-center lg:justify-start gap-8 opacity-80">
-                <p className="text-sm font-bold uppercase tracking-widest text-zinc-500">Supported By</p>
-                <span className="font-headline font-black text-xl text-zinc-800 dark:text-zinc-200">VICTOR</span>
-                <span className="font-headline font-black text-xl text-zinc-800 dark:text-zinc-200">YONEX</span>
            </div>
         </div>
 
@@ -74,7 +67,7 @@ export function HeroSection() {
                              <Trophy className="w-5 h-5 fill-current" />
                              <span className="font-bold tracking-wider">PRIZE POOL</span>
                         </div>
-                        <p className="text-4xl font-black font-headline">RP 25 JUTA++</p>
+                        <p className="text-4xl font-black font-headline">RP 19 JUTA</p>
                         
                         <div className="mt-6 bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
                            <ClientOnly>

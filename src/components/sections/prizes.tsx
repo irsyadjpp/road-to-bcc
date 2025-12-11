@@ -17,7 +17,7 @@ export function PrizesSection() {
                 <Trophy className="w-10 h-10 text-yellow-600 dark:text-yellow-400" />
             </div>
             <h2 className="text-4xl md:text-6xl font-black font-headline uppercase mb-4">
-                Prize Pool
+                Total Prize Pool Rp 19 Juta
             </h2>
             <p className="text-xl text-muted-foreground font-medium">
                 Total Hadiah Uang Tunai + Throphy + Merchandise
