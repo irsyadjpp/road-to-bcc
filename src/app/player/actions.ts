@@ -1,7 +1,77 @@
+
 'use server'
 
 import { validatePairingAndGetPrice } from "@/lib/game-logic";
 import { cookies } from "next/headers";
+import { redirect } from 'next/navigation';
+import { athleteProfileSchema } from "@/lib/schemas/player-profile";
+
+
+// Helper simple untuk generate code
+function generateAthleteCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Tanpa I, O, 1, 0 biar ga bingung
+  let result = 'ATH-';
+  for (let i = 0; i < 5; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
+export async function updatePlayerProfile(prevState: any, formData: FormData) {
+  const cookieStore = cookies();
+  const sessionStr = cookieStore.get('bcc_player_session')?.value;
+  if (!sessionStr) return { success: false, message: "Sesi habis, silakan login ulang." };
+  
+  const session = JSON.parse(sessionStr);
+
+  const rawData = {
+    nik: formData.get('nik'),
+    phone: formData.get('phone'),
+    gender: formData.get('gender'),
+    communityName: formData.get('communityName'), // Opsional
+    instagram: formData.get('instagram'),
+  };
+
+  const validated = athleteProfileSchema.safeParse(rawData);
+  
+  if (!validated.success) {
+    const errorMsg = Object.values(validated.error.flatten().fieldErrors)[0]?.[0];
+    return { success: false, message: errorMsg || "Data tidak valid." };
+  }
+
+  // GENERATE ATHLETE CODE JIKA BELUM ADA
+  const athleteCode = session.athleteCode || generateAthleteCode();
+
+  // SIMULASI UPDATE DB DAN SESI
+  const updates = validated.data;
+  const updatedSession = { 
+    ...session, 
+    ...updates, 
+    athleteCode, // Simpan code ke sesi
+    isProfileComplete: true, 
+    tpfStatus: 'PENDING' 
+  };
+  
+  cookieStore.set('bcc_player_session', JSON.stringify(updatedSession), {
+    httpOnly: true, path: '/' 
+  });
+
+  // Redirect ke dashboard setelah sukses agar user melihat kodenya
+  redirect('/player/dashboard'); 
+}
+
+
+export async function getPlayerSession() {
+  const cookieStore = cookies();
+  const session = cookieStore.get('bcc_player_session');
+  if (!session) return null;
+  try {
+    return JSON.parse(session.value);
+  } catch (e) {
+    return null;
+  }
+}
+
 
 export async function pairAthleteAction(currentUserCode: string, partnerCode: string) {
     // 1. Fetch User & Partner dari DB
