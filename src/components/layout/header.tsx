@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -17,6 +18,13 @@ export function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const navItems = [
+    { name: 'Beranda', href: '/' },
+    { name: 'Tentang', href: '/about' },
+    { name: 'Jadwal', href: '/live-score' },
+    { name: 'Panduan Level', href: '/leveling-guide' },
+  ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 px-4 pointer-events-none">
@@ -38,9 +46,9 @@ export function Header() {
 
         {/* DESKTOP NAV - Pills */}
         <nav className="hidden md:flex items-center gap-1 bg-secondary/50 rounded-full p-1 mx-4">
-            {['Beranda', 'Tentang', 'Jadwal', 'Panduan Level'].map((item, idx) => (
-               <Button key={idx} variant="ghost" className="rounded-full hover:bg-background hover:shadow-sm text-muted-foreground hover:text-foreground font-bold transition-all" asChild>
-                  <Link href={item === 'Beranda' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`}>{item}</Link>
+            {navItems.map((item) => (
+               <Button key={item.name} variant="ghost" className="rounded-full hover:bg-background hover:shadow-sm text-muted-foreground hover:text-foreground font-bold transition-all" asChild>
+                  <Link href={item.href}>{item.name}</Link>
                </Button>
             ))}
         </nav>
