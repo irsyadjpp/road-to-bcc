@@ -221,7 +221,7 @@ const RankingContent = () => (
                 <div className="space-y-3">
                     {[
                         { name: "Win Count", desc: "Jumlah kemenangan mutlak" },
-                        { name: "Head-to-Head", desc: "Pemenang pertemuan langsung (hanya jika 2 tim)" },
+                        { name: "Head-to-Head", desc: "Pemenang pertemuan langsung" },
                         { name: "Game Difference", desc: "Selisih set menang - kalah" },
                         { name: "Game Won", desc: "Total set kemenangan" },
                         { name: "Point Difference", desc: "Selisih poin total" },
@@ -287,59 +287,85 @@ const RankingContent = () => (
     </div>
 );
 
-const SeedingContent = () => (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <RuleCard title="Seeding Methodology" icon={Gavel}>
-            <p className="mb-6 text-lg">
-                Penempatan unggulan (Seeding) tidak dilakukan sembarangan, melainkan berbasis data kuantitatif dari <span className="font-bold text-primary">Tim Pencari Fakta (TPF)</span>.
-            </p>
-            <div className="space-y-4">
-                <div className="bg-secondary/30 p-5 rounded-2xl border-l-4 border-primary">
-                    <h4 className="font-bold text-foreground">1. Skor Total Individu</h4>
-                    <p className="text-sm mt-1">Akumulasi nilai skill individu (0-100) dari kedua pemain.</p>
-                </div>
-                <div className="bg-secondary/30 p-5 rounded-2xl border-l-4 border-blue-500">
-                    <h4 className="font-bold text-foreground">2. Rekam Jejak Turnamen</h4>
-                    <p className="text-sm mt-1">Prestasi 1 tahun terakhir di turnamen selevel.</p>
-                </div>
-                <div className="bg-secondary/30 p-5 rounded-2xl border-l-4 border-yellow-500">
-                    <h4 className="font-bold text-foreground">3. Chemistry Score</h4>
-                    <p className="text-sm mt-1">Penilaian subjektif TPF terhadap kekompakan pasangan (rotasi, komunikasi).</p>
-                </div>
-            </div>
-        </RuleCard>
+const SeedingContent = () => {
+    const process = [
+      { title: "Pengumpulan Data", desc: "TPF menerima form penilaian, video, dan data head-to-head (jika ada) maksimal H-14." },
+      { title: "Penilaian Individual", desc: "Setiap TPF memberikan skor mandiri. Skor final adalah rata-rata untuk menentukan kategori dan tier." },
+      { title: "Penyusunan Ranking Internal", desc: "Ranking disusun berdasarkan: 1. Skor Utama, 2. Skor Tambahan, 3. Observasi Video, 4. Head-to-Head." },
+      { title: "Penentuan Jumlah Seed", desc: "Beginner (32 pasang) → 8 seed. Intermediate/Advance (16 pasang) → 4 seed." },
+      { title: "Pemilihan & Penyebaran", desc: "Pasangan tier atas diprioritaskan. Seed disebar ke grup berbeda untuk mencegah pertemuan dini." },
+      { title: "Validasi & Pengesahan", desc: "Draft dari TPF divalidasi Koordinator dan disahkan oleh Technical Delegate (TD). Hasil dirilis H-7." }
+    ];
 
-        <Card className="bg-background border-2 border-dashed border-border/50 rounded-[2.5rem] p-8">
-            <CardHeader>
-                <CardTitle className="flex items-center gap-3 text-xl">
-                    <FileText className="w-6 h-6 text-muted-foreground"/> Protokol Transparansi
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-                <p className="text-muted-foreground font-medium">
-                    Untuk menjaga integritas, proses seeding tunduk pada aturan berikut:
-                </p>
-                <ul className="space-y-3">
-                    {[
-                        "Max 1 pasang unggulan per klub di tiap pool.",
-                        "Data video peserta bersifat RA HASIA (Internal TPF).",
-                        "Keputusan seeding bersifat final H-3 Drawing.",
-                        "Peserta tanpa video otomatis Non-Unggulan."
-                    ].map((rule, i) => (
-                        <li key={i} className="flex items-start gap-3 text-sm">
-                            <CheckCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                            <span className="text-foreground/80">{rule}</span>
-                        </li>
-                    ))}
-                </ul>
-                <div className="mt-8 pt-6 border-t border-border/50 text-center">
-                    <p className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Powered By</p>
-                    <Badge variant="secondary" className="px-4 py-1 font-bold">BCC INTELLIGENCE UNIT</Badge>
-                </div>
-            </CardContent>
-        </Card>
-    </div>
-);
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            {/* Left Column */}
+            <div className="lg:col-span-7 space-y-6">
+                <RuleCard title="S.O.P. Penentuan Seeding" icon={Gavel}>
+                    <p className="mb-6 text-lg">
+                        Menetapkan standar penilaian yang konsisten dan objektif dalam menentukan <span className="font-bold text-primary">pasangan unggulan (seed)</span> pada setiap kategori.
+                    </p>
+                    <div className="space-y-4">
+                        {process.map((item, index) => (
+                             <div key={index} className="flex items-start gap-4 p-4 bg-background/50 rounded-2xl border border-border/50 hover:border-primary/30 transition-colors group">
+                                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-secondary font-black text-xl text-muted-foreground group-hover:bg-primary group-hover:text-white transition-colors shrink-0 mt-1">
+                                    {index + 1}
+                                </div>
+                                <div>
+                                    <p className="font-bold text-foreground text-lg">{item.title}</p>
+                                    <p className="text-xs text-muted-foreground mt-1">{item.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </RuleCard>
+            </div>
+
+            {/* Right Column */}
+            <div className="lg:col-span-5 space-y-6">
+                <Card className="bg-surface-variant border-none rounded-[2.5rem] overflow-hidden shadow-xl">
+                    <CardHeader className="bg-primary/10">
+                        <CardTitle className="flex items-center gap-3">
+                            <FileText className="w-6 h-6 text-primary" /> Dasar Penilaian
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                        <ul className="space-y-3">
+                            {[
+                                "Penilaian Skill Utama (Skor TPF)",
+                                "Penilaian Performa Tambahan (Skor TPF Lanjutan)",
+                                "Pengamatan Video Pertandingan",
+                                "Head-to-Head (jika ada)",
+                                "Tier Kategori (Prioritas Otomatis)"
+                            ].map((item, i) => (
+                                <li key={i} className="flex items-center gap-3 text-sm font-medium text-foreground/80">
+                                    <CheckCircle className="w-5 h-5 text-primary shrink-0" />
+                                    <span>{item}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </CardContent>
+                </Card>
+                
+                <Card className="bg-zinc-900 text-zinc-100 border-none rounded-[2.5rem] p-6 shadow-xl">
+                     <CardHeader className="p-0 mb-4">
+                        <CardTitle className="flex items-center gap-3 text-xl font-bold text-yellow-500">
+                            <Users className="w-6 h-6"/> Aturan Multi-Tim
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-0 space-y-3 text-sm text-zinc-300">
+                        <p>Jika 1 klub mengirim banyak pasangan:</p>
+                        <ul className="list-disc pl-5 space-y-2 text-zinc-400">
+                            <li>Pasangan <span className="font-bold text-white">ber-seed</span> tetap di grupnya.</li>
+                            <li>Pasangan lain dari klub yang sama akan dihindarkan dari grup yang sama <span className="font-bold text-white">(jika memungkinkan)</span>.</li>
+                            <li>Jika slot terbatas, tim dari klub yang sama boleh berada dalam satu grup.</li>
+                        </ul>
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+    );
+};
 
 
 // --- MAIN PAGE ---
