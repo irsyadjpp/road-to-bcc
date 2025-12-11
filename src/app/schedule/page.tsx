@@ -7,35 +7,36 @@ import { Footer } from '@/components/layout/footer';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Calendar, Clock, Search, Trophy, Users, Award } from 'lucide-react';
+import { Calendar, Clock, Search, Trophy, Users, Award, ListOrdered } from 'lucide-react';
 import { CourtLines } from '@/components/ui/court-lines';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from 'next/image';
 
-// --- MOCK DATA ---
+// --- UPDATED MOCK DATA ---
 const SCHEDULE_DATA = [
   // Court 1
-  { id: 'M101', court: 'Court 1', time: '09:00', category: 'MD OPEN', pA: 'Kevin S / Marcus G', pB: 'Ahsan / Hendra', status: 'FINISHED' },
-  { id: 'M102', court: 'Court 1', time: '09:45', category: 'MS PRO', pA: 'Anthony Ginting', pB: 'Jonatan Christie', status: 'LIVE' },
-  { id: 'M103', court: 'Court 1', time: '10:30', category: 'WD OPEN', pA: 'Apriyani R / Siti Fadia', pB: 'Nami M / Chiharu S', status: 'UPCOMING' },
-  { id: 'M104', court: 'Court 1', time: '11:15', category: 'XD BEGINNER', pA: 'Budi / Ani', pB: 'Joko / Wati', status: 'UPCOMING' },
+  { id: 'M101', court: 'Court 1', time: '09:00', round: 'R32', matchOrder: 1, category: 'MD OPEN', pA: 'Kevin S / Marcus G', pB: 'Ahsan / Hendra', status: 'FINISHED', score: {set1: '21-19', set2: '18-21', set3: '21-15'}, duration: '58m' },
+  { id: 'M102', court: 'Court 1', time: '09:45', round: 'QF', matchOrder: 2, category: 'MS PRO', pA: 'Anthony Ginting', pB: 'Jonatan Christie', status: 'LIVE', score: {set1: '19-21', set2: '15-12'}, duration: null },
+  { id: 'M103', court: 'Court 1', time: '10:30', round: 'SF', matchOrder: 3, category: 'WD OPEN', pA: 'Apriyani R / Siti Fadia', pB: 'Nami M / Chiharu S', status: 'UPCOMING', score: null, duration: null },
+  { id: 'M104', court: 'Court 1', time: '11:15', round: 'R16', matchOrder: 4, category: 'XD BEGINNER', pA: 'Budi / Ani', pB: 'Joko / Wati', status: 'UPCOMING', score: null, duration: null },
 
   // Court 2
-  { id: 'M201', court: 'Court 2', time: '09:00', category: 'MD INTERMEDIATE', pA: 'Fajar A / Rian A', pB: 'Leo C / Daniel M', status: 'FINISHED' },
-  { id: 'M202', court: 'Court 2', time: '09:45', category: 'WS BEGINNER', pA: 'Susi Susanti KW', pB: 'Mia Audina KW', status: 'FINISHED' },
-  { id: 'M203', court: 'Court 2', time: '10:30', category: 'MS ADVANCE', pA: 'Taufik Hidayat', pB: 'Lee Chong Wei', status: 'LIVE' },
-  { id: 'M204', court: 'Court 2', time: '11:15', category: 'MD BEGINNER', pA: 'Tim A', pB: 'Tim B', status: 'UPCOMING' },
+  { id: 'M201', court: 'Court 2', time: '09:00', round: 'R32', matchOrder: 1, category: 'MD INTERMEDIATE', pA: 'Fajar A / Rian A', pB: 'Leo C / Daniel M', status: 'FINISHED', score: {set1: '21-18', set2: '22-20'}, duration: '45m' },
+  { id: 'M202', court: 'Court 2', time: '09:45', round: 'R16', matchOrder: 2, category: 'WS BEGINNER', pA: 'Susi Susanti KW', pB: 'Mia Audina KW', status: 'FINISHED', score: {set1: '21-10'}, duration: '25m' },
+  { id: 'M203', court: 'Court 2', time: '10:30', round: 'FINAL', matchOrder: 3, category: 'MS ADVANCE', pA: 'Taufik Hidayat', pB: 'Lee Chong Wei', status: 'LIVE', score: {set1: '20-22', set2: '5-1'}, duration: null },
+  { id: 'M204', court: 'Court 2', time: '11:15', round: 'R32', matchOrder: 4, category: 'MD BEGINNER', pA: 'Tim A', pB: 'Tim B', status: 'UPCOMING', score: null, duration: null },
 
   // Court 3
-  { id: 'M301', court: 'Court 3', time: '09:15', category: 'XD INTERMEDIATE', pA: 'Praveen J / Melati D', pB: 'Rinov R / Pitha H', status: 'FINISHED' },
-  { id: 'M302', court: 'Court 3', time: '10:00', category: 'MD BEGINNER', pA: 'Tim C', pB: 'Tim D', status: 'LIVE' },
-  { id: 'M303', court: 'Court 3', time: '10:45', category: 'WS ADVANCE', pA: 'Gregoria M', pB: 'Putri KW', status: 'UPCOMING' },
+  { id: 'M301', court: 'Court 3', time: '09:15', round: 'SF', matchOrder: 1, category: 'XD INTERMEDIATE', pA: 'Praveen J / Melati D', pB: 'Rinov R / Pitha H', status: 'FINISHED', score: {set1: '15-21', set2: '18-21'}, duration: '48m' },
+  { id: 'M302', court: 'Court 3', time: '10:00', round: 'R16', matchOrder: 2, category: 'MD BEGINNER', pA: 'Tim C', pB: 'Tim D', status: 'LIVE', score: {set1: '10-5'}, duration: null },
+  { id: 'M303', court: 'Court 3', time: '10:45', round: 'QF', matchOrder: 3, category: 'WS ADVANCE', pA: 'Gregoria M', pB: 'Putri KW', status: 'UPCOMING', score: null, duration: null },
 
   // Court 4
-  { id: 'M401', court: 'Court 4', time: '09:15', category: 'MS BEGINNER', pA: 'Udin', pB: 'Asep', status: 'FINISHED' },
-  { id: 'M402', court: 'Court 4', time: '10:00', category: 'WD INTERMEDIATE', pA: 'Pasangan X', pB: 'Pasangan Y', status: 'UPCOMING' },
+  { id: 'M401', court: 'Court 4', time: '09:15', round: 'R64', matchOrder: 1, category: 'MS BEGINNER', pA: 'Udin', pB: 'Asep', status: 'FINISHED', score: {set1: '21-5'}, duration: '18m' },
+  { id: 'M402', court: 'Court 4', time: '10:00', round: 'R32', matchOrder: 2, category: 'WD INTERMEDIATE', pA: 'Pasangan X', pB: 'Pasangan Y', status: 'UPCOMING', score: null, duration: null },
 ];
+
 
 const PODIUM_DATA = {
   "MD OPEN": [
@@ -66,11 +67,25 @@ const ScheduleView = ({ searchTerm }: { searchTerm: string }) => {
 
   const getStatusStyle = (status: string) => {
     switch (status) {
-      case 'LIVE': return 'bg-red-500/10 text-red-500 border-red-500/20';
-      case 'FINISHED': return 'bg-zinc-800 text-zinc-500 border-zinc-700';
-      default: return 'bg-background/50 border-border/20';
+      case 'LIVE': return 'bg-red-900/30 border-red-500/30';
+      case 'FINISHED': return 'bg-zinc-800/50 border-zinc-700/50 opacity-70';
+      default: return 'bg-zinc-900/50 border-border/10';
     }
   };
+
+  const LiveScore = ({ score }: { score: any }) => (
+    <div className="flex items-baseline justify-center gap-3">
+        <span className="text-2xl font-black font-mono text-white">{score.set1?.split('-')[0]}</span>
+        <span className="text-sm font-bold text-zinc-500">vs</span>
+        <span className="text-2xl font-black font-mono text-white">{score.set1?.split('-')[1]}</span>
+        {score.set2 && <>
+            <div className="w-px h-6 bg-zinc-700" />
+            <span className="text-2xl font-black font-mono text-white">{score.set2.split('-')[0]}</span>
+            <span className="text-sm font-bold text-zinc-500">vs</span>
+            <span className="text-2xl font-black font-mono text-white">{score.set2.split('-')[1]}</span>
+        </>}
+    </div>
+  );
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -82,22 +97,31 @@ const ScheduleView = ({ searchTerm }: { searchTerm: string }) => {
           <div className="space-y-4">
             {filteredSchedule.filter(m => m.court === courtName).length > 0 ? (
               filteredSchedule.filter(m => m.court === courtName).map(match => (
-                <Card key={match.id} className={cn("p-4 rounded-2xl transition-all hover:shadow-lg hover:-translate-y-1", getStatusStyle(match.status))}>
-                  <div className="flex justify-between items-center mb-3 text-xs">
-                    <Badge variant="secondary" className="font-mono bg-background text-foreground/70">{match.time}</Badge>
-                    <Badge variant="outline" className="border-border/50 text-muted-foreground">{match.category}</Badge>
-                  </div>
-                  <div className="space-y-1.5 text-sm">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-blue-500" />
-                      <p className="font-bold truncate text-foreground">{match.pA}</p>
+                <Card key={match.id} className={cn("p-4 rounded-2xl transition-all shadow-lg", getStatusStyle(match.status))}>
+                   <div className="flex justify-between items-start text-xs mb-3">
+                        <Badge variant="outline" className="font-mono bg-background/30 text-foreground/70">{match.round} - Match {match.matchOrder}</Badge>
+                        {match.status === 'LIVE' && <div className="flex items-center gap-1.5 text-red-500 font-bold animate-pulse"><div className="w-2 h-2 bg-red-500 rounded-full"/>LIVE</div>}
+                        {match.status === 'FINISHED' && <div className="flex items-center gap-1.5 text-zinc-500 font-bold"><Clock className="w-3 h-3"/>{match.duration}</div>}
+                        {match.status === 'UPCOMING' && <div className="flex items-center gap-1.5 text-zinc-500 font-bold"><Clock className="w-3 h-3"/>{match.time}</div>}
+                   </div>
+                   
+                   <div className="space-y-2 mb-4">
+                        <div className="flex items-center gap-2">
+                            <span className="w-1.5 h-4 rounded-full bg-blue-500" />
+                            <p className="font-bold truncate text-foreground">{match.pA}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="w-1.5 h-4 rounded-full bg-red-500" />
+                            <p className="font-bold truncate text-foreground">{match.pB}</p>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-red-500" />
-                      <p className="font-bold truncate text-foreground">{match.pB}</p>
-                    </div>
-                  </div>
-                   {match.status === 'LIVE' && <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500 animate-ping"/>}
+                    
+                    {match.status === 'LIVE' && match.score && <LiveScore score={match.score} />}
+                    {match.status === 'FINISHED' && match.score && (
+                        <div className="text-center text-sm font-mono font-bold text-zinc-400 bg-black/30 p-2 rounded-lg">
+                           {Object.values(match.score).join(' / ')}
+                        </div>
+                    )}
                 </Card>
               ))
             ) : (
