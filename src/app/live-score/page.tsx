@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Trophy, Shield, Users, Swords } from 'lucide-react';
+import { Trophy, Shield, Users, Swords, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { CourtLines } from '@/components/ui/court-lines';
 
@@ -47,14 +47,20 @@ const generateGroups = (teamCount: number, groupCount: number, prefix: string) =
   return groups;
 };
 
-const BRACKET_DATA = {
+const generateAllBrackets = () => ({
   beginner: { teams: 32, groups: 8, data: generateGroups(32, 8, 'B') },
   intermediate: { teams: 16, groups: 4, data: generateGroups(16, 4, 'I') },
   advance: { teams: 16, groups: 4, data: generateGroups(16, 4, 'A') },
-};
+});
+
 
 export default function LiveScorePage() {
-  const [activeTab, setActiveTab] = useState('beginner');
+  const [bracketData, setBracketData] = useState<any>(null);
+
+  useEffect(() => {
+    // Generate data only on the client side to prevent hydration mismatch
+    setBracketData(generateAllBrackets());
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -78,7 +84,7 @@ export default function LiveScorePage() {
             </p>
           </div>
 
-          <Tabs defaultValue="beginner" className="w-full" onValueChange={setActiveTab}>
+          <Tabs defaultValue="beginner" className="w-full">
             <div className="flex justify-center mb-8">
               <TabsList className="bg-secondary/50 p-2 rounded-full h-auto">
                 <TabsTrigger value="beginner" className="text-base font-bold rounded-full px-8 py-3 data-[state=active]:bg-background data-[state=active]:text-primary">
@@ -92,16 +98,25 @@ export default function LiveScorePage() {
                 </TabsTrigger>
               </TabsList>
             </div>
+            
+            {!bracketData ? (
+                <div className="flex justify-center items-center h-64">
+                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                </div>
+            ) : (
+                <>
+                    <TabsContent value="beginner">
+                      <GroupStageView categoryData={bracketData.beginner} />
+                    </TabsContent>
+                    <TabsContent value="intermediate">
+                      <GroupStageView categoryData={bracketData.intermediate} />
+                    </TabsContent>
+                    <TabsContent value="advance">
+                      <GroupStageView categoryData={bracketData.advance} />
+                    </TabsContent>
+                </>
+            )}
 
-            <TabsContent value="beginner">
-              <GroupStageView categoryData={BRACKET_DATA.beginner} />
-            </TabsContent>
-            <TabsContent value="intermediate">
-              <GroupStageView categoryData={BRACKET_DATA.intermediate} />
-            </TabsContent>
-            <TabsContent value="advance">
-              <GroupStageView categoryData={BRACKET_DATA.advance} />
-            </TabsContent>
           </Tabs>
         </div>
       </main>
