@@ -13,11 +13,11 @@ import { cn } from '@/lib/utils';
 
 // --- MOCK DATA ---
 const SCHEDULE_DATA = [
-  // Court 1 (TV Court)
-  { id: 'M101', court: 'Court 1 (TV)', time: '09:00', category: 'MD OPEN', pA: 'Kevin S / Marcus G', pB: 'Ahsan / Hendra', status: 'FINISHED' },
-  { id: 'M102', court: 'Court 1 (TV)', time: '09:45', category: 'MS PRO', pA: 'Anthony Ginting', pB: 'Jonatan Christie', status: 'LIVE' },
-  { id: 'M103', court: 'Court 1 (TV)', time: '10:30', category: 'WD OPEN', pA: 'Apriyani R / Siti Fadia', pB: 'Nami M / Chiharu S', status: 'UPCOMING' },
-  { id: 'M104', court: 'Court 1 (TV)', time: '11:15', category: 'XD BEGINNER', pA: 'Budi / Ani', pB: 'Joko / Wati', status: 'UPCOMING' },
+  // Court 1
+  { id: 'M101', court: 'Court 1', time: '09:00', category: 'MD OPEN', pA: 'Kevin S / Marcus G', pB: 'Ahsan / Hendra', status: 'FINISHED' },
+  { id: 'M102', court: 'Court 1', time: '09:45', category: 'MS PRO', pA: 'Anthony Ginting', pB: 'Jonatan Christie', status: 'LIVE' },
+  { id: 'M103', court: 'Court 1', time: '10:30', category: 'WD OPEN', pA: 'Apriyani R / Siti Fadia', pB: 'Nami M / Chiharu S', status: 'UPCOMING' },
+  { id: 'M104', court: 'Court 1', time: '11:15', category: 'XD BEGINNER', pA: 'Budi / Ani', pB: 'Joko / Wati', status: 'UPCOMING' },
 
   // Court 2
   { id: 'M201', court: 'Court 2', time: '09:00', category: 'MD INTERMEDIATE', pA: 'Fajar A / Rian A', pB: 'Leo C / Daniel M', status: 'FINISHED' },
@@ -35,7 +35,7 @@ const SCHEDULE_DATA = [
   { id: 'M402', court: 'Court 4', time: '10:00', category: 'WD INTERMEDIATE', pA: 'Pasangan X', pB: 'Pasangan Y', status: 'UPCOMING' },
 ];
 
-const COURTS = ['Court 1 (TV)', 'Court 2', 'Court 3', 'Court 4'];
+const COURTS = ['Court 1', 'Court 2', 'Court 3', 'Court 4'];
 
 export default function SchedulePage() {
   const [searchTerm, setSearchTerm] = useState('');
