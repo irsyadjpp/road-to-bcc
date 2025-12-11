@@ -16,7 +16,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { submitProtest } from '../actions';
+import { submitProtest } from '../../(dashboard)/protest/actions';
 
 // Mock Data - Biasanya dari Session/DB
 const MOCK_SESSION_MANAGER = { name: "Rizki Karami", team: "PB Super", wa: "081119522228" };
@@ -87,7 +87,7 @@ export default function ProtestSubmissionPage() {
                         <CreditCard className="w-5 h-5"/> Wajib Deposit Rp 100.000,- Tunai
                     </h3>
                     <p className="text-sm text-red-800">
-                        Pengajuan baru akan diproses setelah uang jaminan diserahkan ke Panitia di Meja Sekretariat GOR Sutta.
+                        Pengajuan baru akan diproses setelah uang jaminan diserahkan ke Panitia di Meja Sekretariat GOR KONI.
                     </p>
                     
                     <div className="bg-white p-3 rounded-md text-sm border border-red-100">
@@ -311,5 +311,3 @@ export default function ProtestSubmissionPage() {
     </div>
   );
 }
-
-    
