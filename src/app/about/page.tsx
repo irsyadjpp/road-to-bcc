@@ -56,7 +56,7 @@ export default function AboutPage() {
               REVOLUSI <br/>TURNAMEN <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-500">KOMUNITAS.</span>
            </h1>
            <p className="text-lg md:text-xl text-zinc-400 max-w-3xl mx-auto font-medium">
-              Kami bukan sekadar ajang mabar. Kami adalah pionir kompetisi bulutangkis di Bandung yang terintegrasi penuh dengan sistem digital untuk menjamin <span className="text-white font-bold">integritas & fair play</span>.
+              Kami bukan sekadar ajang kumpul. Kami adalah pionir kompetisi bulutangkis di Bandung yang terintegrasi penuh dengan sistem digital untuk menjamin <span className="text-white font-bold">integritas & fair play</span>.
            </p>
         </div>
 
