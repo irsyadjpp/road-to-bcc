@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card } from "@/components/ui/card";
 import { updatePlayerProfile, getPlayerSession } from "../actions";
-import { Loader2, User, Phone, Hash, Instagram, Zap, ArrowRight } from "lucide-react";
+import { Loader2, User, Phone, Hash, Instagram, Zap, ArrowRight, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Image from 'next/image';
 import { CourtLines } from '@/components/ui/court-lines';
@@ -126,7 +126,7 @@ export default function RegistrationWizardPage() {
               </p>
             </div>
 
-            {/* Phone & Instagram */}
+            {/* Phone & Community (Grid) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-3 group">
                   <Label htmlFor="phone" className="flex items-center gap-2 font-bold text-sm uppercase tracking-wider text-muted-foreground group-focus-within:text-primary transition-colors">
@@ -139,16 +139,32 @@ export default function RegistrationWizardPage() {
                     className="font-mono text-lg h-14 rounded-2xl bg-background border-2 border-transparent focus:border-primary/50 focus:ring-0 transition-all"
                   />
                 </div>
+
+                {/* --- FIX: Menambahkan Input Community Name --- */}
                 <div className="space-y-3 group">
-                  <Label htmlFor="instagram" className="flex items-center gap-2 font-bold text-sm uppercase tracking-wider text-muted-foreground group-focus-within:text-primary transition-colors">
-                    <Instagram className="w-4 h-4" /> Instagram <span className="text-xs opacity-50">(Opsional)</span>
+                  <Label htmlFor="communityName" className="flex items-center gap-2 font-bold text-sm uppercase tracking-wider text-muted-foreground group-focus-within:text-primary transition-colors">
+                    <Users className="w-4 h-4" /> Komunitas / PB Asal
                   </Label>
                   <Input 
-                    id="instagram" name="instagram" 
-                    placeholder="@username" 
+                    id="communityName" name="communityName" 
+                    placeholder="Nama Klub / Kota" 
+                    required 
                     className="text-lg h-14 rounded-2xl bg-background border-2 border-transparent focus:border-primary/50 focus:ring-0 transition-all"
                   />
                 </div>
+            </div>
+
+            {/* Instagram */}
+            <div className="space-y-3 group">
+                <Label htmlFor="instagram" className="flex items-center gap-2 font-bold text-sm uppercase tracking-wider text-muted-foreground group-focus-within:text-primary transition-colors">
+                    <Instagram className="w-4 h-4" /> Instagram (Wajib)
+                </Label>
+                <Input 
+                    id="instagram" name="instagram" 
+                    placeholder="@username" 
+                    required
+                    className="text-lg h-14 rounded-2xl bg-background border-2 border-transparent focus:border-primary/50 focus:ring-0 transition-all"
+                />
             </div>
 
             {/* Gender Selection */}
@@ -193,3 +209,5 @@ export default function RegistrationWizardPage() {
     </div>
   );
 }
+
+    
