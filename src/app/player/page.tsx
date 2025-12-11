@@ -69,8 +69,8 @@ export default function PlayersPage() {
           <ClientOnly>
             {/* Filter Controls */}
             <Card className="p-4 mb-8 bg-card/50 backdrop-blur-sm border-border/30 rounded-3xl shadow-lg sticky top-24 z-20">
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                <div className="relative md:col-span-4">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                <div className="relative lg:col-span-4">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     placeholder="Cari nama atau komunitas..."
@@ -79,7 +79,7 @@ export default function PlayersPage() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
-                <div className="md:col-span-8 flex flex-col sm:flex-row gap-4">
+                <div className="lg:col-span-8 flex flex-col sm:flex-row gap-4">
                   <div className="flex-1 space-y-1">
                       <label className="text-xs font-bold text-muted-foreground px-2">Stage</label>
                       <div className="bg-background/50 rounded-2xl p-1 flex gap-1">
