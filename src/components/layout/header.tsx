@@ -21,7 +21,7 @@ export function Header() {
 
   const navItems = [
     { name: 'Beranda', href: '/' },
-    { name: 'Live', href: '/live-score' },
+    { name: 'Bagan', href: '/bagan' },
   ];
 
   return (
