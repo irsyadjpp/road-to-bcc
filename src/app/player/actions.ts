@@ -17,7 +17,7 @@ function generateAthleteCode() {
   return result;
 }
 
-export async function updatePlayerProfile(prevState: any, formData: FormData) {
+export async function updatePlayerProfile(formData: FormData) {
   const cookieStore = cookies();
   const sessionStr = cookieStore.get('bcc_player_session')?.value;
   if (!sessionStr) return { success: false, message: "Sesi habis, silakan login ulang." };

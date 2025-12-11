@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -55,8 +56,8 @@ export default function RegistrationWizardPage() {
   }
 
   async function clientAction(formData: FormData) {
-    const res = await updatePlayerProfile(prevState, formData);
-    if (!res?.success && res?.message) {
+    const res = await updatePlayerProfile(formData);
+    if (res && !res.success && res.message) {
       toast({
         variant: "destructive",
         title: "Gagal Menyimpan",
@@ -192,4 +193,3 @@ export default function RegistrationWizardPage() {
     </div>
   );
 }
-    
