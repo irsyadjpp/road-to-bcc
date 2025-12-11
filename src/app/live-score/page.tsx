@@ -4,14 +4,17 @@
 import { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Trophy, Shield, Users, Swords, Loader2, ChevronRight } from 'lucide-react';
+import { Trophy, Shield, Users, Swords, Loader2, ChevronRight, ListOrdered } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { CourtLines } from '@/components/ui/court-lines';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+
 
 // --- MOCK DATA GENERATOR ---
 const generateTeams = (count: number, prefix: string) => {
@@ -52,7 +55,7 @@ const createBracketRound = (name: string, numMatches: number, teamsPerMatch: num
     name,
     matches: Array.from({ length: numMatches }, (_, i) => ({
       id: `${name.substring(0,3)}-${i+1}`,
-      teams: Array(teamsPerMatch).fill({ name: "TBD" }),
+      teams: Array.from({ length: teamsPerMatch }, (_, j) => ({ name: `${name.substring(0,1)}${i+1}-W${j+1}` })),
     }))
   };
 };
@@ -93,8 +96,11 @@ const generateAllBrackets = () => ({
 
 export default function LiveScorePage() {
   const [bracketData, setBracketData] = useState<any>(null);
+  const [selectedGroup, setSelectedGroup] = useState<any>(null);
+
 
   useEffect(() => {
+    // Generate data on client-side to avoid hydration mismatch
     setBracketData(generateAllBrackets());
   }, []);
 
@@ -142,17 +148,56 @@ export default function LiveScorePage() {
             ) : (
                 <>
                     <TabsContent value="beginner">
-                      <CategoryView categoryData={bracketData.beginner} />
+                      <CategoryView categoryData={bracketData.beginner} onGroupClick={setSelectedGroup} />
                     </TabsContent>
                     <TabsContent value="intermediate">
-                      <CategoryView categoryData={bracketData.intermediate} />
+                      <CategoryView categoryData={bracketData.intermediate} onGroupClick={setSelectedGroup} />
                     </TabsContent>
                     <TabsContent value="advance">
-                      <CategoryView categoryData={bracketData.advance} />
+                      <CategoryView categoryData={bracketData.advance} onGroupClick={setSelectedGroup} />
                     </TabsContent>
                 </>
             )}
           </Tabs>
+
+           <Dialog open={!!selectedGroup} onOpenChange={() => setSelectedGroup(null)}>
+            <DialogContent className="max-w-xl bg-card border-border/50">
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold font-headline flex items-center gap-3">
+                  <ListOrdered className="w-6 h-6 text-primary"/>
+                  Klasemen {selectedGroup?.name}
+                </DialogTitle>
+                <DialogDescription>
+                  Peringkat tim berdasarkan hasil pertandingan di babak penyisihan grup.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="my-4">
+                  <Table>
+                      <TableHeader>
+                          <TableRow>
+                              <TableHead className="w-12">#</TableHead>
+                              <TableHead>Tim</TableHead>
+                              <TableHead className="text-center">W</TableHead>
+                              <TableHead className="text-center">L</TableHead>
+                              <TableHead className="text-right">Poin</TableHead>
+                          </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                          {selectedGroup?.teams.map((team: any, index: number) => (
+                              <TableRow key={team.id} className={cn(index < 2 && "bg-primary/5")}>
+                                  <TableCell className="font-bold text-lg">{index + 1}</TableCell>
+                                  <TableCell className="font-medium text-foreground">{team.name}</TableCell>
+                                  <TableCell className="text-center text-green-500 font-bold">{team.wins}</TableCell>
+                                  <TableCell className="text-center text-red-500 font-bold">{team.loss}</TableCell>
+                                  <TableCell className="text-right font-mono font-semibold">{team.points}</TableCell>
+                              </TableRow>
+                          ))}
+                      </TableBody>
+                  </Table>
+              </div>
+            </DialogContent>
+          </Dialog>
+
         </div>
       </main>
       <Footer />
@@ -162,16 +207,16 @@ export default function LiveScorePage() {
 
 // --- SUB-COMPONENTS ---
 
-function CategoryView({ categoryData }: { categoryData: any }) {
+function CategoryView({ categoryData, onGroupClick }: { categoryData: any, onGroupClick: (group: any) => void }) {
   return (
     <div className="space-y-16">
-      <GroupStageView groupData={categoryData.groupData} />
+      <GroupStageView groupData={categoryData.groupData} onGroupClick={onGroupClick} />
       <KnockoutBracket knockoutData={categoryData.knockout} />
     </div>
   )
 }
 
-function GroupStageView({ groupData }: { groupData: any[] }) {
+function GroupStageView({ groupData, onGroupClick }: { groupData: any[], onGroupClick: (group: any) => void }) {
   return (
     <div className="animate-in fade-in-50 duration-300">
       <h2 className="text-3xl font-black font-headline text-center mb-8 uppercase tracking-wider">
@@ -179,7 +224,7 @@ function GroupStageView({ groupData }: { groupData: any[] }) {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         {groupData.map((group: any) => (
-          <Card key={group.name} className="bg-card/50 backdrop-blur-sm border-border/20 rounded-3xl overflow-hidden shadow-lg">
+          <Card key={group.name} onClick={() => onGroupClick(group)} className="bg-card/50 backdrop-blur-sm border-border/20 rounded-3xl overflow-hidden shadow-lg cursor-pointer hover:border-primary/50 hover:-translate-y-1 transition-all">
             <CardHeader className="bg-secondary/30 border-b border-border/20 p-4">
               <CardTitle className="text-lg font-bold flex items-center justify-between">
                 <span>{group.name}</span>
@@ -189,7 +234,7 @@ function GroupStageView({ groupData }: { groupData: any[] }) {
             <CardContent className="p-0">
               <div className="divide-y divide-border/10">
                 {group.teams.map((team: any, index: number) => (
-                  <div key={team.id} className={cn("p-4 flex items-center justify-between transition-colors hover:bg-secondary/20", index < 2 && "bg-primary/5")}>
+                  <div key={team.id} className={cn("p-4 flex items-center justify-between transition-colors", index < 2 && "bg-primary/5")}>
                     <div className="flex items-center gap-3">
                       <span className={cn("font-bold text-lg w-6 text-center", index < 2 ? "text-primary" : "text-muted-foreground")}>
                         {index + 1}
@@ -201,10 +246,6 @@ function GroupStageView({ groupData }: { groupData: any[] }) {
                         <p className="font-bold text-sm text-foreground line-clamp-1">{team.name}</p>
                         <p className="text-xs text-muted-foreground line-clamp-1">{team.players}</p>
                       </div>
-                    </div>
-                    <div className="text-right">
-                       <p className="font-mono font-bold text-foreground">{team.wins} <span className="text-xs text-muted-foreground">W</span></p>
-                       <p className="text-[10px] text-muted-foreground">{team.points} Pts</p>
                     </div>
                   </div>
                 ))}
@@ -235,7 +276,7 @@ function KnockoutBracket({ knockoutData }: { knockoutData: any[] }) {
                                     <BracketMatch key={match.id} match={match} />
                                 ))}
                             </div>
-                            {roundIndex < knockoutData.length - 1 && <BracketConnector numMatches={round.matches.length} />}
+                            {roundIndex < knockoutData.length - 1 && <BracketConnector numMatches={round.matches.length} isFinal={knockoutData[roundIndex+1]?.name === 'Final'} />}
                         </div>
                     ))}
                     <div className="flex flex-col items-center ml-4">
@@ -254,7 +295,7 @@ function BracketMatch({ match }: { match: any }) {
     <Card className="w-64 bg-card/80 backdrop-blur-sm border-border/30 rounded-2xl p-3 space-y-2 shadow-md">
       {match.teams.map((team: any, index: number) => (
         <div key={index} className="flex items-center justify-between text-sm p-2 rounded-lg bg-secondary/30">
-          <span className="font-bold truncate">{team.name || 'TBD'}</span>
+          <span className="font-bold truncate text-foreground/80">{team.name || 'TBD'}</span>
           <span className="font-mono text-muted-foreground">--</span>
         </div>
       ))}
@@ -263,11 +304,12 @@ function BracketMatch({ match }: { match: any }) {
   );
 }
 
-function BracketConnector({ numMatches }: { numMatches: number }) {
+function BracketConnector({ numMatches, isFinal }: { numMatches: number, isFinal?: boolean }) {
+  const connectorHeight = 136 + 16; // height of match card + gap
   return (
     <div className="flex flex-col items-center justify-around h-full w-8 md:w-12">
       {Array.from({ length: numMatches / 2 }).map((_, i) => (
-        <div key={i} className="relative h-[136px] w-full"> 
+        <div key={i} className="relative w-full" style={{ height: `${connectorHeight * (isFinal ? 2 : 1)}px` }}>
             <div className="absolute top-1/4 left-0 h-1/2 w-1/2 border-y-2 border-l-2 border-border/30 rounded-l-lg"></div>
             <div className="absolute top-1/2 left-1/2 w-1/2 h-[2px] bg-border/30"></div>
         </div>
