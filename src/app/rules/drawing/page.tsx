@@ -6,7 +6,7 @@ import { Footer } from '@/components/layout/footer';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { FileText, Users, Network, ShieldAlert, Clock, ArrowDown, Target, CheckCircle, Info, Calendar } from 'lucide-react';
+import { FileText, Users, Network, ShieldAlert, Clock, ArrowDown, Target, CheckCircle, Info, Calendar, Gavel } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -302,7 +302,7 @@ const SeedingContent = () => (
       <div className="lg:col-span-2 space-y-6">
         <SectionWrapper title="Pengertian & Penentu Seeding" icon={Info}>
           <p className="text-muted-foreground mb-4">
-            Seeding adalah proses penetapan peringkat awal untuk distribusi kekuatan yang merata. Karena ini turnamen komunitas, TPF menentukan seeding berdasarkan observasi video dan parameter teknis, bukan ranking PBSI/BWF.
+            Seeding adalah proses penetapan peringkat awal peserta untuk menentukan posisi mereka dalam pembagian grup atau bagan pertandingan. Karena ini turnamen komunitas, TPF menentukan seeding berdasarkan observasi video dan parameter teknis, bukan ranking PBSI/BWF.
           </p>
           <div className="grid grid-cols-2 gap-4">
             <CaseExample title="A. Observasi Video" desc="Sumber data penilaian.">
@@ -325,7 +325,7 @@ const SeedingContent = () => (
 
         <SectionWrapper title="Mekanisme Penentuan Seeding Jika Banyak Pasangan Tier Atas" icon={Gavel}>
              <p className="text-muted-foreground mb-4">
-                Jika ada beberapa pasangan yang semuanya sama-sama “tier atas”, maka penentuan seeding harus menggunakan kriteria lanjutan untuk menjaga objektivitas.
+                Jika ada beberapa pasangan yang semuanya sama-sama “tier atas”, maka penentuan seeding harus menggunakan kriteria lanjutan, supaya objektif dan dapat dipertanggungjawabkan.
              </p>
              <div className="space-y-4">
                 <h4 className="font-bold">1. Gunakan Skor Penilaian Tier (Total Skor Individu)</h4>
@@ -396,7 +396,7 @@ const SeedingContent = () => (
                  <li><strong>Penilaian Ganda:</strong> Penilaian dilakukan per PASANGAN, bukan per individu.</li>
                  <li><strong>Data Video Tidak Lengkap:</strong> Jika peserta tidak mengirim video yang memadai, penilaian akan menggunakan data visual yang tersedia dan otomatis masuk kelompok non-seed.</li>
                  <li><strong>Kerahasiaan Data:</strong> Semua video bersifat rahasia dan hanya digunakan untuk kebutuhan internal TPF.</li>
-                 <li><strong>Ketentuan Perubahan Aturan:</strong> Panitia berhak memperbarui aturan seeding sesuai kebutuhan teknis, dengan pemberitahuan sebelum pertandingan dimulai.</li>
+                 <li><strong>Ketentuan Perubahan Aturan:</strong> Panitia berhak memperbarui atau menyesuaikan aturan seeding sesuai kebutuhan teknis, dengan pemberitahuan kepada peserta sebelum pertandingan dimulai.</li>
              </ul>
          </SectionWrapper>
       </div>
