@@ -11,8 +11,8 @@ export function LevelingGuideSection() {
       title: "Beginner",
       subtitle: "Pemula",
       price: "Rp 100.000",
-      dos: ["Grip 'Panci' (Panhandle)", "Ayunan lengan besar (bahu)"],
-      donts: ["DILARANG bisa Backhand Overhead Clear", "Tidak ada rotasi lengan bawah"],
+      skills: ["Grip 'Panci' (Panhandle)", "Ayunan lengan besar (bahu)"],
+      bans: ["DILARANG bisa Backhand Overhead Clear", "Tidak ada rotasi lengan bawah"],
       color: "text-green-600 bg-green-50 dark:bg-green-900/20 dark:text-green-400",
       borderColor: "border-green-500",
       priceColor: "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
@@ -21,8 +21,8 @@ export function LevelingGuideSection() {
       title: "Intermediate",
       subtitle: "Menengah",
       price: "Rp 150.000",
-      dos: ["Power Smash baik", "Langkah Chassé & Lob baseline-to-baseline"],
-      donts: ["Backhand Overhead masih tanggung/datar", "Transisi menyerang ke bertahan lambat"],
+      skills: ["Power Smash baik", "Langkah Chassé & Lob baseline-to-baseline"],
+      bans: ["Backhand Overhead masih tanggung/datar", "Transisi menyerang ke bertahan lambat"],
       color: "text-blue-600 bg-blue-50 dark:bg-blue-900/20 dark:text-blue-400",
       borderColor: "border-blue-500",
       priceColor: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
@@ -31,8 +31,8 @@ export function LevelingGuideSection() {
       title: "Advance",
       subtitle: "Mahir",
       price: "Rp 150.000",
-      dos: ["Finger Power & Wrist Snap (Bunyi Nyaring)", "Split Step konsisten", "Backhand Clear silang/lurus"],
-      donts: ["Hanya untuk pemain non-profesional (Komunitas)"],
+      skills: ["Finger Power & Wrist Snap (Bunyi Nyaring)", "Split Step konsisten", "Backhand Clear silang/lurus"],
+      bans: ["Hanya untuk pemain non-profesional (Komunitas)"],
       color: "text-purple-600 bg-purple-50 dark:bg-purple-900/20 dark:text-purple-400",
       borderColor: "border-purple-500",
       priceColor: "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
@@ -75,7 +75,7 @@ export function LevelingGuideSection() {
                       <CheckCircle2 className="w-5 h-5 text-green-500" /> Ciri Khas:
                     </h4>
                     <ul className="text-sm text-muted-foreground space-y-3 pl-2">
-                      {level.dos.map((item, i) => (
+                      {level.skills.map((item, i) => (
                         <li key={i} className="flex items-start gap-2">
                             <span className="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0" />
                             {item}
@@ -91,7 +91,7 @@ export function LevelingGuideSection() {
                       <XCircle className="w-5 h-5" /> Pantangan:
                     </h4>
                     <ul className="text-sm text-muted-foreground space-y-3 pl-2">
-                      {level.donts.map((item, i) => (
+                      {level.bans.map((item, i) => (
                         <li key={i} className="flex items-start gap-2">
                              <span className="w-1.5 h-1.5 rounded-full bg-destructive mt-1.5 shrink-0" />
                             {item}
