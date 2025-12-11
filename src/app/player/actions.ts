@@ -1,15 +1,19 @@
+'use server';
 
-'use server'
-
-import { validatePairingAndGetPrice } from "@/lib/game-logic";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
+import { z } from 'zod';
 import { athleteProfileSchema } from "@/lib/schemas/player-profile";
 
+const authSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6, "Password minimal 6 karakter"),
+});
 
 // Helper simple untuk generate code
 function generateAthleteCode() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Tanpa I, O, 1, 0 biar ga bingung
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let result = 'ATH-';
   for (let i = 0; i < 5; i++) {
     result += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -17,10 +21,44 @@ function generateAthleteCode() {
   return result;
 }
 
+export async function loginPlayerGoogle() {
+  await new Promise(r => setTimeout(r, 800)); // Simulasi network
+
+  // Sesi default tanpa athleteCode (karena belum register profile)
+  const devSession = {
+    id: `P-DEV-${Date.now()}`,
+    email: "atlet.dev@gmail.com",
+    name: "Atlet Development",
+    role: "PLAYER",
+    teamId: null,
+    isLoggedIn: true,
+    provider: "GOOGLE_DEV",
+    isProfileComplete: false // Default false
+  };
+
+  cookies().set('bcc_player_session', JSON.stringify(devSession), {
+    httpOnly: true,
+    path: '/',
+    maxAge: 60 * 60 * 24,
+  });
+
+  return { success: true };
+}
+
+export async function getPlayerSession() {
+  const session = cookies().get('bcc_player_session');
+  if (!session) return null;
+  try {
+      return JSON.parse(session.value);
+  } catch (e) {
+      return null;
+  }
+}
+
 export async function updatePlayerProfile(formData: FormData) {
   const cookieStore = cookies();
   const sessionStr = cookieStore.get('bcc_player_session')?.value;
-  if (!sessionStr) return { success: false, message: "Sesi habis, silakan login ulang." };
+  if (!sessionStr) return { success: false, message: "Sesi habis." };
   
   const session = JSON.parse(sessionStr);
 
@@ -28,7 +66,7 @@ export async function updatePlayerProfile(formData: FormData) {
     nik: formData.get('nik'),
     phone: formData.get('phone'),
     gender: formData.get('gender'),
-    communityName: formData.get('communityName'), // Opsional
+    communityName: formData.get('communityName'),
     instagram: formData.get('instagram'),
   };
 
@@ -39,15 +77,13 @@ export async function updatePlayerProfile(formData: FormData) {
     return { success: false, message: errorMsg || "Data tidak valid." };
   }
 
-  // GENERATE ATHLETE CODE JIKA BELUM ADA
+  // LOGIC PENTING: Generate Code jika belum ada
   const athleteCode = session.athleteCode || generateAthleteCode();
 
-  // SIMULASI UPDATE DB DAN SESI
-  const updates = validated.data;
   const updatedSession = { 
     ...session, 
-    ...updates, 
-    athleteCode, // Simpan code ke sesi
+    ...validated.data, 
+    athleteCode, 
     isProfileComplete: true, 
     tpfStatus: 'PENDING' 
   };
@@ -56,76 +92,8 @@ export async function updatePlayerProfile(formData: FormData) {
     httpOnly: true, path: '/' 
   });
 
-  // Redirect ke dashboard setelah sukses agar user melihat kodenya
-  redirect('/player/dashboard'); 
-}
-
-
-export async function getPlayerSession() {
-  const cookieStore = cookies();
-  const session = cookieStore.get('bcc_player_session');
-  if (!session) return null;
-  try {
-    return JSON.parse(session.value);
-  } catch (e) {
-    return null;
-  }
-}
-
-
-export async function pairAthleteAction(currentUserCode: string, partnerCode: string) {
-    // 1. Fetch User & Partner dari DB
-    // const user = await db.user.find({ code: currentUserCode });
-    // const partner = await db.user.find({ code: partnerCode });
-
-    // MOCK DATA
-    const user = { id: 1, name: "Irsyad", level: "beginner" };
-    const partner = { id: 2, name: "Partner", level: "intermediate" }; // Contoh level beda
-
-    if (!partner) {
-        return { success: false, message: "Kode partner tidak ditemukan." };
-    }
-
-    if (user.id === partner.id) {
-         return { success: false, message: "Tidak bisa pairing dengan diri sendiri." };
-    }
-
-    // 2. VALIDASI MATRIKS & HARGA
-    const validation = validatePairingAndGetPrice(user.level as any, partner.level as any);
-
-    if (!validation.isValid) {
-        return { 
-            success: false, 
-            message: validation.reason || "Kombinasi level tidak diizinkan." 
-        };
-    }
-
-    // 3. CREATE REGISTRATION / INVOICE
-    // Logika: 
-    // - Buat entri 'Team' baru (Temporary)
-    // - Masukkan kedua user ke tim tersebut
-    // - Set kategori tim = validation.category
-    // - Generate Invoice sebesar validation.pricePerTeam (atau split bill)
-
-    // await db.registration.create({
-    //    category: validation.category,
-    //    amount: validation.pricePerTeam,
-    //    players: [user.id, partner.id]
-    // })
-
-    return {
-        success: true,
-        data: {
-            category: validation.category,
-            price: validation.pricePerPerson, // Tampilkan harga per orang
-            partnerName: partner.name
-        }
-    };
-}
-
-export async function loginPlayerGoogle() {
-  await new Promise(r => setTimeout(r, 1000));
-  return { success: true };
+  // Redirect wajib di server action Next.js jika ingin pindah page
+  redirect('/player/dashboard');
 }
 
 export async function loginPlayerManual(prevState: any, formData: FormData) {
