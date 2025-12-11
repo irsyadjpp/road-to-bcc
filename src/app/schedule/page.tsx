@@ -16,25 +16,25 @@ import Image from 'next/image';
 // --- UPDATED MOCK DATA ---
 const SCHEDULE_DATA = [
   // Court 1
-  { id: 'M101', court: 'Court 1', time: '09:00', round: 'R32', matchOrder: 1, category: 'MD OPEN', pA: 'Kevin S / Marcus G', pB: 'Ahsan / Hendra', status: 'FINISHED', score: {set1: '21-19', set2: '18-21', set3: '21-15'}, duration: '58m' },
-  { id: 'M102', court: 'Court 1', time: '09:45', round: 'QF', matchOrder: 2, category: 'MS PRO', pA: 'Anthony Ginting', pB: 'Jonatan Christie', status: 'LIVE', score: {set1: '19-21', set2: '15-12'}, duration: null },
-  { id: 'M103', court: 'Court 1', time: '10:30', round: 'SF', matchOrder: 3, category: 'WD OPEN', pA: 'Apriyani R / Siti Fadia', pB: 'Nami M / Chiharu S', status: 'UPCOMING', score: null, duration: null },
-  { id: 'M104', court: 'Court 1', time: '11:15', round: 'R16', matchOrder: 4, category: 'XD BEGINNER', pA: 'Budi / Ani', pB: 'Joko / Wati', status: 'UPCOMING', score: null, duration: null },
+  { id: 'M101', court: 'Court 1', time: '09:00', round: 'R32', matchOrder: 1, category: 'MD OPEN', pA: 'Kevin S / Marcus G', pB: 'Ahsan / Hendra', status: 'FINISHED', winner: 'A', score: {set1: '21-19', set2: '18-21', set3: '21-15'}, duration: '58m' },
+  { id: 'M102', court: 'Court 1', time: '09:45', round: 'QF', matchOrder: 2, category: 'MS PRO', pA: 'Anthony Ginting', pB: 'Jonatan Christie', status: 'LIVE', winner: null, score: {set1: '19-21', set2: '15-12'}, duration: null },
+  { id: 'M103', court: 'Court 1', time: '10:30', round: 'SF', matchOrder: 3, category: 'WD OPEN', pA: 'Apriyani R / Siti Fadia', pB: 'Nami M / Chiharu S', status: 'UPCOMING', winner: null, score: null, duration: null },
+  { id: 'M104', court: 'Court 1', time: '11:15', round: 'R16', matchOrder: 4, category: 'XD BEGINNER', pA: 'Budi / Ani', pB: 'Joko / Wati', status: 'UPCOMING', winner: null, score: null, duration: null },
 
   // Court 2
-  { id: 'M201', court: 'Court 2', time: '09:00', round: 'R32', matchOrder: 1, category: 'MD INTERMEDIATE', pA: 'Fajar A / Rian A', pB: 'Leo C / Daniel M', status: 'FINISHED', score: {set1: '21-18', set2: '22-20'}, duration: '45m' },
-  { id: 'M202', court: 'Court 2', time: '09:45', round: 'R16', matchOrder: 2, category: 'WS BEGINNER', pA: 'Susi Susanti KW', pB: 'Mia Audina KW', status: 'FINISHED', score: {set1: '21-10'}, duration: '25m' },
-  { id: 'M203', court: 'Court 2', time: '10:30', round: 'FINAL', matchOrder: 3, category: 'MS ADVANCE', pA: 'Taufik Hidayat', pB: 'Lee Chong Wei', status: 'LIVE', score: {set1: '20-22', set2: '5-1'}, duration: null },
-  { id: 'M204', court: 'Court 2', time: '11:15', round: 'R32', matchOrder: 4, category: 'MD BEGINNER', pA: 'Tim A', pB: 'Tim B', status: 'UPCOMING', score: null, duration: null },
+  { id: 'M201', court: 'Court 2', time: '09:00', round: 'R32', matchOrder: 1, category: 'MD INTERMEDIATE', pA: 'Fajar A / Rian A', pB: 'Leo C / Daniel M', status: 'FINISHED', winner: 'A', score: {set1: '21-18', set2: '22-20'}, duration: '45m' },
+  { id: 'M202', court: 'Court 2', time: '09:45', round: 'R16', matchOrder: 2, category: 'WS BEGINNER', pA: 'Susi Susanti KW', pB: 'Mia Audina KW', status: 'FINISHED', winner: 'A', score: {set1: '21-10'}, duration: '25m' },
+  { id: 'M203', court: 'Court 2', time: '10:30', round: 'FINAL', matchOrder: 3, category: 'MS ADVANCE', pA: 'Taufik Hidayat', pB: 'Lee Chong Wei', status: 'LIVE', winner: null, score: {set1: '20-22', set2: '5-1'}, duration: null },
+  { id: 'M204', court: 'Court 2', time: '11:15', round: 'R32', matchOrder: 4, category: 'MD BEGINNER', pA: 'Tim A', pB: 'Tim B', status: 'UPCOMING', winner: null, score: null, duration: null },
 
   // Court 3
-  { id: 'M301', court: 'Court 3', time: '09:15', round: 'SF', matchOrder: 1, category: 'XD INTERMEDIATE', pA: 'Praveen J / Melati D', pB: 'Rinov R / Pitha H', status: 'FINISHED', score: {set1: '15-21', set2: '18-21'}, duration: '48m' },
-  { id: 'M302', court: 'Court 3', time: '10:00', round: 'R16', matchOrder: 2, category: 'MD BEGINNER', pA: 'Tim C', pB: 'Tim D', status: 'LIVE', score: {set1: '10-5'}, duration: null },
-  { id: 'M303', court: 'Court 3', time: '10:45', round: 'QF', matchOrder: 3, category: 'WS ADVANCE', pA: 'Gregoria M', pB: 'Putri KW', status: 'UPCOMING', score: null, duration: null },
+  { id: 'M301', court: 'Court 3', time: '09:15', round: 'SF', matchOrder: 1, category: 'XD INTERMEDIATE', pA: 'Praveen J / Melati D', pB: 'Rinov R / Pitha H', status: 'FINISHED', winner: 'B', score: {set1: '15-21', set2: '18-21'}, duration: '48m' },
+  { id: 'M302', court: 'Court 3', time: '10:00', round: 'R16', matchOrder: 2, category: 'MD BEGINNER', pA: 'Tim C', pB: 'Tim D', status: 'LIVE', winner: null, score: {set1: '10-5'}, duration: null },
+  { id: 'M303', court: 'Court 3', time: '10:45', round: 'QF', matchOrder: 3, category: 'WS ADVANCE', pA: 'Gregoria M', pB: 'Putri KW', status: 'UPCOMING', winner: null, score: null, duration: null },
 
   // Court 4
-  { id: 'M401', court: 'Court 4', time: '09:15', round: 'R64', matchOrder: 1, category: 'MS BEGINNER', pA: 'Udin', pB: 'Asep', status: 'FINISHED', score: {set1: '21-5'}, duration: '18m' },
-  { id: 'M402', court: 'Court 4', time: '10:00', round: 'R32', matchOrder: 2, category: 'WD INTERMEDIATE', pA: 'Pasangan X', pB: 'Pasangan Y', status: 'UPCOMING', score: null, duration: null },
+  { id: 'M401', court: 'Court 4', time: '09:15', round: 'R64', matchOrder: 1, category: 'MS BEGINNER', pA: 'Udin', pB: 'Asep', status: 'FINISHED', winner: 'A', score: {set1: '21-5'}, duration: '18m' },
+  { id: 'M402', court: 'Court 4', time: '10:00', round: 'R32', matchOrder: 2, category: 'WD INTERMEDIATE', pA: 'Pasangan X', pB: 'Pasangan Y', status: 'UPCOMING', winner: null, score: null, duration: null },
 ];
 
 
@@ -73,19 +73,39 @@ const ScheduleView = ({ searchTerm }: { searchTerm: string }) => {
     }
   };
 
-  const LiveScore = ({ score }: { score: any }) => (
-    <div className="flex items-baseline justify-center gap-3">
-        <span className="text-2xl font-black font-mono text-white">{score.set1?.split('-')[0]}</span>
-        <span className="text-sm font-bold text-zinc-500">vs</span>
-        <span className="text-2xl font-black font-mono text-white">{score.set1?.split('-')[1]}</span>
-        {score.set2 && <>
-            <div className="w-px h-6 bg-zinc-700" />
-            <span className="text-2xl font-black font-mono text-white">{score.set2.split('-')[0]}</span>
-            <span className="text-sm font-bold text-zinc-500">vs</span>
-            <span className="text-2xl font-black font-mono text-white">{score.set2.split('-')[1]}</span>
-        </>}
-    </div>
-  );
+  const ScoreDisplay = ({ score, status, winner }: { score: any, status: string, winner: string | null }) => {
+    const sets = Object.values(score || {}) as string[];
+    const isFinished = status === 'FINISHED';
+
+    const renderSetScores = (setScore: string, setIndex: number) => {
+      const [sA, sB] = setScore.split('-').map(Number);
+      const isLiveSet = !isFinished && setIndex === sets.length - 1;
+
+      let classA = "text-white";
+      let classB = "text-white";
+
+      if (isLiveSet) {
+        if (sA > sB) classB = "text-zinc-500";
+        if (sB > sA) classA = "text-zinc-500";
+      } else {
+        if (sA > sB) classB = "text-zinc-500";
+        else classA = "text-zinc-500";
+      }
+
+      return (
+        <div key={setIndex} className="flex flex-col items-center">
+            <span className={cn("text-2xl font-black font-mono", classA)}>{sA}</span>
+            <span className={cn("text-2xl font-black font-mono", classB)}>{sB}</span>
+        </div>
+      );
+    }
+    
+    return (
+      <div className="flex items-center justify-center gap-4 bg-black/30 p-2 rounded-lg">
+          {sets.map(renderSetScores)}
+      </div>
+    );
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -106,22 +126,20 @@ const ScheduleView = ({ searchTerm }: { searchTerm: string }) => {
                    </div>
                    
                    <div className="space-y-2 mb-4">
-                        <div className="flex items-center gap-2">
+                        <div className={cn("flex items-center gap-2", match.winner === 'A' && match.status === 'FINISHED' ? 'font-black text-white' : 'font-bold text-foreground')}>
                             <span className="w-1.5 h-4 rounded-full bg-blue-500" />
-                            <p className="font-bold truncate text-foreground">{match.pA}</p>
+                            <p className="truncate">{match.pA}</p>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className={cn("flex items-center gap-2", match.winner === 'B' && match.status === 'FINISHED' ? 'font-black text-white' : 'font-bold text-foreground')}>
                             <span className="w-1.5 h-4 rounded-full bg-red-500" />
-                            <p className="font-bold truncate text-foreground">{match.pB}</p>
+                            <p className="truncate">{match.pB}</p>
                         </div>
                     </div>
                     
-                    {match.status === 'LIVE' && match.score && <LiveScore score={match.score} />}
-                    {match.status === 'FINISHED' && match.score && (
-                        <div className="text-center text-sm font-mono font-bold text-zinc-400 bg-black/30 p-2 rounded-lg">
-                           {Object.values(match.score).join(' / ')}
-                        </div>
+                    {match.score && (
+                      <ScoreDisplay score={match.score} status={match.status} winner={match.winner} />
                     )}
+
                 </Card>
               ))
             ) : (
