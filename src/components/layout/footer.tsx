@@ -10,7 +10,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
           {/* Kolom 1: Deskripsi */}
           <div>
-            <h3 className="font-headline text-lg font-bold mb-4 text-primary">Bandung Community Championship</h3>
+            <h3 className="font-headline text-lg font-bold mb-4 text-primary">BCC</h3>
             <p className="text-muted-foreground mb-4">
               Didedikasikan untuk para pecinta bulutangkis sejati. Kami berkomitmen untuk menyajikan turnamen yang adil, kompetitif, dan berkesan dengan standar profesional.
             </p>
