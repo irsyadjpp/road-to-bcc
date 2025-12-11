@@ -63,7 +63,7 @@ export function Header() {
              </ClientOnly>
              
              <Button asChild className="rounded-full font-bold bg-primary text-primary-foreground hover:brightness-110 shadow-lg shadow-primary/20 px-6 hidden sm:flex">
-                <Link href="/player/login">
+                <Link href="/manager/login">
                     <User className="w-4 h-4 mr-2"/> Masuk
                 </Link>
              </Button>
@@ -81,8 +81,7 @@ export function Header() {
                          <Link key={item.href} href={item.href} className="text-2xl font-black font-headline uppercase text-muted-foreground data-[active=true]:text-foreground">{item.name}</Link>
                       ))}
                       <div className="flex flex-col w-full gap-3 mt-8">
-                         <Button asChild size="lg" className="w-full rounded-full text-lg font-bold bg-primary"><Link href="/player/login">Login Atlet</Link></Button>
-                         <Button asChild size="lg" variant="secondary" className="w-full rounded-full text-lg font-bold"><Link href="/manager/login">Login Manajer</Link></Button>
+                         <Button asChild size="lg" className="w-full rounded-full text-lg font-bold bg-primary"><Link href="/manager/login">Login Manajer</Link></Button>
                       </div>
                    </div>
                 </SheetContent>
