@@ -9,11 +9,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { 
   Copy, UserPlus, Users, Zap, Trophy, Settings, Share2, 
-  QrCode, ShieldAlert, Swords
+  QrCode, ShieldAlert
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { DigitalPlayerCard } from "./digital-player-card"; 
 import { CourtLines } from "@/components/ui/court-lines";
+
+const ATHLETE_MOCK = {
+    id: "ATL-8821",
+    name: "Jonathan Christie",
+    team: "PB Djarum Official",
+    rank: "PRO",
+    points: 8500,
+    winRate: 78,
+    avatar: "https://github.com/shadcn.png",
+};
+
 
 export function DashboardClient({ session }: { session: any }) {
   const { toast } = useToast();
@@ -70,10 +81,10 @@ export function DashboardClient({ session }: { session: any }) {
                    <Card className="border-2 border-dashed border-primary/20 bg-secondary/30 rounded-[2rem] overflow-hidden">
                       <Tabs defaultValue="partner" className="w-full">
                          <div className="p-2 m-2 bg-background/50 rounded-[1.5rem]">
-                            <TabsList className="w-full bg-transparent p-0 flex gap-2">
+                           <TabsList className="w-full bg-transparent p-0 flex gap-2">
                                <TabsTrigger value="partner" className="w-1/2 rounded-3xl font-bold py-3 data-[state=active]:bg-primary data-[state=active]:text-white">Cari Pasangan</TabsTrigger>
                                <TabsTrigger value="community" className="w-1/2 rounded-3xl font-bold py-3 data-[state=active]:bg-zinc-900 data-[state=active]:text-white">Gabung Klub</TabsTrigger>
-                            </TabsList>
+                           </TabsList>
                          </div>
                          <div className="p-6 pt-2">
                             <TabsContent value="partner" className="space-y-4">

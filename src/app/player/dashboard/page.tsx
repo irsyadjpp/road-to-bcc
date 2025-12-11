@@ -2,6 +2,7 @@
 import { redirect } from 'next/navigation';
 import { getPlayerSession } from "../actions";
 import { DashboardClient } from "@/components/player/dashboard-full"; 
+import { ClientOnly } from '@/components/client-only';
 
 export default async function PlayerDashboardPage() {
   const session = await getPlayerSession();
@@ -16,7 +17,8 @@ export default async function PlayerDashboardPage() {
   }
 
   return (
-    <DashboardClient session={session} />
+    <ClientOnly>
+      <DashboardClient session={session} />
+    </ClientOnly>
   );
 }
-
