@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -6,13 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, X, Shuffle, ArrowRight, CheckCircle2, AlertTriangle } from "lucide-react";
+import { validatePairing, PlayerLevel } from "@/lib/game-logic";
 
 // Mock Data
 const UNPAIRED_PLAYERS = [
-  { id: 1, name: "Kevin", level: "Pro", tier: 1 },
-  { id: 2, name: "Marcus", level: "Pro", tier: 1 },
-  { id: 3, name: "Fajar", level: "Advance", tier: 1 },
-  { id: 4, name: "Rian", level: "Advance", tier: 2 },
+  { id: 1, name: "Kevin", level: "Advance" as PlayerLevel, tier: 1 },
+  { id: 2, name: "Marcus", level: "Advance" as PlayerLevel, tier: 1 },
+  { id: 3, name: "Fajar", level: "Intermediate" as PlayerLevel, tier: 1 },
+  { id: 4, name: "Rian", level: "Intermediate" as PlayerLevel, tier: 2 },
 ];
 
 export default function PairingPage() {
@@ -20,10 +22,8 @@ export default function PairingPage() {
   const [selectedP2, setSelectedP2] = useState<any>(null);
 
   // Simulasi Validasi Matriks (Fitur 6)
-  const isValid = selectedP1 && selectedP2 && !(selectedP1.level === 'Pro' && selectedP2.level === 'Pro');
-  const validationMsg = !isValid && selectedP1 && selectedP2 
-    ? "Kombinasi Pro + Pro tidak diizinkan." 
-    : "Kombinasi valid untuk kategori Ganda Dewasa.";
+  const validationResult = selectedP1 && selectedP2 ? validatePairingAndGetPrice(selectedP1.level, selectedP2.level) : null;
+  const isValid = validationResult?.isValid ?? false;
 
   return (
     <div className="space-y-6">
@@ -87,10 +87,10 @@ export default function PairingPage() {
                   </div>
 
                   {/* VALIDATION STATUS (Fitur 6) */}
-                  {(selectedP1 && selectedP2) && (
+                  {validationResult && (
                      <div className={`mt-8 px-6 py-3 rounded-2xl flex items-center gap-3 animate-in zoom-in ${isValid ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>
                         {isValid ? <CheckCircle2 size={20}/> : <AlertTriangle size={20}/>}
-                        <span className="font-bold text-sm">{validationMsg}</span>
+                        <span className="font-bold text-sm">{validationResult.reason || `Valid for ${validationResult.category} category. Price: Rp ${validationResult.pricePerTeam?.toLocaleString()}`}</span>
                      </div>
                   )}
 
@@ -142,7 +142,7 @@ export default function PairingPage() {
                            </div>
                            <div>
                               <p className="font-bold text-sm">{player.name}</p>
-                              <p className="text-[10px] text-muted-foreground">T{player.tier} • {player.level}</p>
+                              <p className="text-[10px] text-muted-foreground">Tier {player.tier} • {player.level}</p>
                            </div>
                         </div>
                         <Plus size={16} className="text-muted-foreground group-hover:text-primary" />
