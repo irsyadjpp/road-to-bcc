@@ -43,6 +43,7 @@ export default {
       animation: {
         'float-slow': 'float 8s ease-in-out infinite',
         'marquee': 'marquee 25s linear infinite',
+        'scan': 'scan 2s ease-in-out infinite',
       },
       keyframes: {
         marquee: {
@@ -52,7 +53,11 @@ export default {
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-20px)' },
-        }
+        },
+        scan: {
+            '0%, 100%': { transform: 'translateY(-10%)', opacity: '0' },
+            '50%': { transform: 'translateY(100%)', opacity: '1' },
+        },
       }
     },
   },

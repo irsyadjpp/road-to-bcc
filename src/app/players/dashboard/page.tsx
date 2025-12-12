@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,8 +16,11 @@ import {
   AlertCircle,
   Zap
 } from "lucide-react";
+import { QRCheckInDialog } from "@/components/player/qr-checkin-dialog";
 
 export default function PlayerDashboard() {
+  const [isQRScanOpen, setIsQRScanOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background text-foreground pb-24">
       {/* HEADER SECTION: Gen-Z Greeting with Sporty Gradient Text */}
@@ -151,11 +155,14 @@ export default function PlayerDashboard() {
       <div className="fixed bottom-6 right-6 z-50">
         <Button 
           size="icon" 
+          onClick={() => setIsQRScanOpen(true)}
           className="h-16 w-16 rounded-2xl bg-primary text-white shadow-m3-3 hover:scale-105 transition-transform"
         >
           <QrCode size={32} />
         </Button>
       </div>
+
+      <QRCheckInDialog isOpen={isQRScanOpen} onOpenChange={setIsQRScanOpen} />
     </div>
   );
 }
