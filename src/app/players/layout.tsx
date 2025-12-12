@@ -17,7 +17,7 @@ import { ClientOnly } from "@/components/client-only";
 // Menu Navigasi
 const NAV_ITEMS = [
   { icon: Home, label: "Dashboard", href: "/players/dashboard" },
-  { icon: PlayersIcon, label: "Players", href: "/players" },
+  { icon: PlayersIcon, label: "Participants", href: "/participants" },
   { icon: Trophy, label: "Turnamen", href: "/players/tournament/register" },
   { icon: Calendar, label: "Jadwal & Bagan", href: "/players/schedule" },
   { icon: User, label: "Profil & TPF", href: "/players/profile" },
@@ -46,7 +46,7 @@ export default function PlayerWebLayout({ children }: { children: React.ReactNod
       {/* MENU ITEMS */}
       <nav className="flex-1 space-y-1">
         {NAV_ITEMS.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive = pathname.startsWith(item.href);
           return (
             <Link key={item.href} href={item.href} onClick={() => setIsMobileOpen(false)}>
               <div 
@@ -106,9 +106,9 @@ export default function PlayerWebLayout({ children }: { children: React.ReactNod
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="p-0 w-72 border-none">
-                  <SheetHeader className="sr-only">
-                    <SheetTitle>Main Menu</SheetTitle>
-                    <SheetDescription>Player navigation panel for accessing all features.</SheetDescription>
+                   <SheetHeader className="sr-only">
+                    <SheetTitle>Player Menu</SheetTitle>
+                    <SheetDescription>Navigate through your player dashboard and tournament info.</SheetDescription>
                   </SheetHeader>
                   <NavigationContent />
                 </SheetContent>
@@ -116,7 +116,7 @@ export default function PlayerWebLayout({ children }: { children: React.ReactNod
 
               {/* Breadcrumbs / Page Title */}
               <h2 className="font-headline text-lg hidden md:block uppercase tracking-tight text-primary">
-                 {NAV_ITEMS.find(n => pathname === n.href)?.label || "Player"}
+                 {NAV_ITEMS.find(n => pathname.startsWith(n.href))?.label || "Dashboard"}
               </h2>
            </div>
 
