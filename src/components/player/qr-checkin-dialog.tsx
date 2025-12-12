@@ -39,6 +39,10 @@ export function QRCheckInDialog({ isOpen, onOpenChange }: QRCheckInProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md rounded-[2rem] border-none bg-background p-0 overflow-hidden shadow-2xl">
+        <DialogHeader className="sr-only">
+          <DialogTitle>Venue Check-in</DialogTitle>
+          <DialogDescription>Scan QR code at the registration desk to check in.</DialogDescription>
+        </DialogHeader>
         
         {/* Header Visual dengan Gradient Sport */}
         <div className="h-32 bg-gradient-sport flex items-center justify-center relative">
@@ -116,18 +120,3 @@ export function QRCheckInDialog({ isOpen, onOpenChange }: QRCheckInProps) {
     </Dialog>
   );
 }
-
-// Add this to your tailwind.config.ts keyframes if you don't have it
-/*
-keyframes: {
-  ...
-  scan: {
-    '0%, 100%': { transform: 'translateY(-10%)', opacity: 0 },
-    '50%': { transform: 'translateY(100%)', opacity: 1 },
-  },
-},
-animation: {
-  ...
-  'scan': 'scan 2s ease-in-out infinite',
-}
-*/
