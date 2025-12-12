@@ -1,154 +1,161 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
-import { Header } from '@/components/layout/header';
-import { Footer } from '@/components/layout/footer';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Search, ShieldCheck } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { CourtLines } from '@/components/ui/court-lines';
-import { ClientOnly } from '@/components/client-only';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Progress } from "@/components/ui/progress";
+import { 
+  Trophy, 
+  Users, 
+  Calendar, 
+  QrCode, 
+  ChevronRight, 
+  AlertCircle,
+  Zap
+} from "lucide-react";
 
-// MOCK DATA
-const PLAYERS = [
-  { id: 1, name: 'Kevin Sanjaya', community: 'PB Djarum', stage: 'Main Draw', category: 'Advance', avatar: '/avatars/kevin.jpg', verified: true },
-  { id: 2, name: 'Marcus Gideon', community: 'PB Djarum', stage: 'Main Draw', category: 'Advance', avatar: '/avatars/gideon.jpg', verified: true },
-  { id: 3, name: 'Anthony Ginting', community: 'SGS PLN', stage: 'Main Draw', category: 'Advance', verified: true },
-  { id: 4, name: 'Budi Santoso', community: 'PB Ceria', stage: 'Qualifying', category: 'Beginner', verified: true },
-  { id: 5, name: 'Siti Aminah', community: 'PB Gembira', stage: 'Qualifying', category: 'Beginner', verified: false },
-  { id: 6, name: 'Joko Anwar', community: 'Smash Community', stage: 'Main Draw', category: 'Intermediate', verified: true },
-  { id: 7, name: 'Rina Nose', community: 'Smash Community', stage: 'Reserve', category: 'Intermediate', verified: true },
-  { id: 8, name: 'Irsyad Jamal', community: 'Bandung BC', stage: 'Main Draw', category: 'Intermediate', verified: true },
-  { id: 9, name: 'Anindiffa Pandu', community: 'Bandung BC', stage: 'Qualifying', category: 'Intermediate', verified: true },
-];
-
-const STAGES = ['All', 'Main Draw', 'Qualifying', 'Reserve', 'Withdrawn'];
-const CATEGORIES = ['All', 'Beginner', 'Intermediate', 'Advance'];
-
-export default function PlayersPage() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [stageFilter, setStageFilter] = useState('All');
-  const [categoryFilter, setCategoryFilter] = useState('All');
-
-  const filteredPlayers = useMemo(() => {
-    return PLAYERS.filter(player => {
-      const matchesSearch = player.name.toLowerCase().includes(searchTerm.toLowerCase()) || player.community.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStage = stageFilter === 'All' || player.stage === stageFilter;
-      const matchesCategory = categoryFilter === 'All' || player.category === categoryFilter;
-      return matchesSearch && matchesStage && matchesCategory;
-    });
-  }, [searchTerm, stageFilter, categoryFilter]);
-
+export default function PlayerDashboard() {
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      <Header />
-      <main className="flex-grow py-16 md:py-24 relative">
-        <div className="absolute inset-0 pointer-events-none opacity-5">
-          <CourtLines />
-        </div>
-        <div className="absolute top-0 left-0 w-[50vw] h-[50vh] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
-
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-12">
-            <Badge variant="outline" className="mb-4 px-4 py-1.5 border-primary text-primary font-bold tracking-widest uppercase">
-              Roster
-            </Badge>
-            <h1 className="text-5xl md:text-7xl font-black font-headline uppercase tracking-tighter mb-6">
-              PARTICIPANT <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-500">LIST</span>
+    <div className="min-h-screen bg-background text-foreground pb-24">
+      {/* HEADER SECTION: Gen-Z Greeting with Sporty Gradient Text */}
+      <header className="px-6 pt-8 pb-6">
+        <div className="flex justify-between items-center mb-2">
+          <div>
+            <p className="text-muted-foreground font-medium">Welcome back,</p>
+            <h1 className="text-3xl font-headline tracking-tight">
+              IRSYAD <span className="text-primary">JPP</span>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-medium">
-              Temukan profil atlet yang berpartisipasi dalam Road to BCC 2026.
+          </div>
+          <Avatar className="h-12 w-12 border-2 border-primary">
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>IJ</AvatarFallback>
+          </Avatar>
+        </div>
+        
+        {/* NOTIFICATION TICKER (Marquee Animation from Tailwind Config) */}
+        <div className="bg-secondary/50 rounded-full px-4 py-2 flex items-center gap-2 overflow-hidden border border-border/50">
+          <Zap className="h-4 w-4 text-orange-500 shrink-0" />
+          <div className="whitespace-nowrap overflow-hidden w-full">
+            <p className="text-xs font-medium animate-marquee inline-block">
+              Batasan pembayaran Turnamen Road to BCC berakhir dalam 24 jam! • Penilaian TPF Anda telah selesai.
             </p>
           </div>
-          
-          <ClientOnly>
-            {/* Filter Controls */}
-            <Card className="p-4 mb-8 bg-card/50 backdrop-blur-sm border-border/30 rounded-3xl shadow-lg sticky top-24 z-20">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
-                <div className="relative lg:col-span-6">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <Input
-                    placeholder="Cari nama atau komunitas..."
-                    className="w-full h-14 pl-12 rounded-2xl bg-background/50 text-lg border-2 border-transparent focus:border-primary/50"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-                <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Select value={stageFilter} onValueChange={setStageFilter}>
-                    <SelectTrigger className="h-14 rounded-2xl bg-background/50 text-base font-bold">
-                      <SelectValue placeholder="Filter by Stage..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {STAGES.map(stage => (
-                        <SelectItem key={stage} value={stage}>{stage}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                   <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                    <SelectTrigger className="h-14 rounded-2xl bg-background/50 text-base font-bold">
-                      <SelectValue placeholder="Filter by Kategori..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                       {CATEGORIES.map(cat => (
-                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </Card>
-
-            {/* Player Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-              {filteredPlayers.map(player => (
-                <Card key={player.id} className="group bg-card/30 backdrop-blur-sm border-border/20 rounded-3xl overflow-hidden hover:-translate-y-1 transition-transform hover:shadow-2xl hover:border-primary/30">
-                  <CardContent className="p-0 flex flex-col text-center">
-                    <div className="relative aspect-[4/5] w-full">
-                       <Avatar className="w-full h-full rounded-none">
-                        <AvatarImage src={player.avatar} className="object-cover group-hover:scale-105 transition-transform duration-500"/>
-                        <AvatarFallback className="bg-secondary text-4xl font-bold">{player.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                      {player.verified && (
-                        <div className="absolute top-3 right-3 bg-green-500 text-white rounded-full p-1.5 border-2 border-background shadow-md">
-                          <ShieldCheck className="w-4 h-4" />
-                        </div>
-                      )}
-                      <div className="absolute bottom-4 left-4 right-4 text-white">
-                        <h3 className="font-black font-headline text-2xl leading-tight truncate w-full">{player.name}</h3>
-                        <p className="text-xs text-white/70 truncate w-full">{player.community}</p>
-                      </div>
-                    </div>
-                    <div className="p-4 flex flex-wrap justify-center gap-2 border-t border-border/20">
-                      <Badge variant="secondary" className="text-xs bg-secondary/50">{player.stage}</Badge>
-                      <Badge variant="outline" className="text-xs">{player.category}</Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            {filteredPlayers.length === 0 && (
-              <div className="text-center py-20 text-muted-foreground">
-                <p className="font-bold">Pemain tidak ditemukan.</p>
-                <p className="text-sm">Coba sesuaikan filter atau kata kunci pencarian Anda.</p>
-              </div>
-            )}
-          </ClientOnly>
         </div>
+      </header>
+
+      <main className="px-6 space-y-6">
+        
+        {/* ATHLETE ID CARD: High Impact, Gradient Background */}
+        <div className="relative overflow-hidden rounded-4xl bg-gradient-sport text-white shadow-m3-3 p-6">
+          <div className="relative z-10">
+            <div className="flex justify-between items-start mb-8">
+              <div>
+                <p className="text-white/80 text-sm font-medium mb-1">Athlete Code</p>
+                <p className="font-mono text-2xl font-bold tracking-wider">BCC-8821</p>
+              </div>
+              <Badge className="bg-white/20 text-white hover:bg-white/30 border-none backdrop-blur-md">
+                Verified
+              </Badge>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-white/80 text-xs uppercase tracking-widest mb-1">Tier</p>
+                <p className="font-headline text-3xl">ADVANCE</p>
+              </div>
+              <div>
+                <p className="text-white/80 text-xs uppercase tracking-widest mb-1">Rank</p>
+                <p className="font-headline text-3xl">#42</p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Decorative Background Pattern */}
+          <div className="absolute -right-10 -bottom-20 opacity-20">
+             <Trophy size={200} />
+          </div>
+        </div>
+
+        {/* STATUS TRACKER: Material 3 Card style */}
+        <Card className="rounded-3xl border-none shadow-m3-1 bg-card">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg font-bold flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-primary" />
+              Action Needed
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="bg-secondary/50 p-4 rounded-2xl flex items-center justify-between">
+              <div>
+                <p className="font-semibold text-sm">Lengkapi Profil</p>
+                <p className="text-xs text-muted-foreground">80% Selesai</p>
+              </div>
+              <Button size="sm" variant="default" className="rounded-pill px-6 shadow-lg shadow-primary/20">
+                Fix
+              </Button>
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs font-medium">
+                <span>TPF Assessment</span>
+                <span className="text-green-500">Completed</span>
+              </div>
+              <Progress value={100} className="h-2 rounded-full" />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* MENU GRID: Bento Box Style */}
+        <div className="grid grid-cols-2 gap-4">
+          <Card className="rounded-3xl border-none shadow-m3-1 hover:bg-secondary/50 transition-colors cursor-pointer group">
+            <CardContent className="p-5 flex flex-col items-center justify-center gap-3 text-center h-full">
+              <div className="h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                <Users size={24} />
+              </div>
+              <div>
+                <h3 className="font-bold text-sm">Cari Partner</h3>
+                <p className="text-[10px] text-muted-foreground mt-1">Find your duo</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-3xl border-none shadow-m3-1 hover:bg-secondary/50 transition-colors cursor-pointer group">
+            <CardContent className="p-5 flex flex-col items-center justify-center gap-3 text-center h-full">
+              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <Calendar size={24} />
+              </div>
+              <div>
+                <h3 className="font-bold text-sm">Jadwal</h3>
+                <p className="text-[10px] text-muted-foreground mt-1">Upcoming matches</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        
+        {/* TOURNAMENT REGISTRATION CTA */}
+        <div className="bg-foreground text-background rounded-3xl p-6 relative overflow-hidden">
+          <div className="relative z-10">
+            <h3 className="font-headline text-2xl mb-2 w-2/3 leading-tight">ROAD TO BCC 2025</h3>
+            <p className="text-sm opacity-80 mb-6 w-3/4">Pendaftaran dibuka. Validasi matriks otomatis aktif.</p>
+            <Button className="w-full rounded-pill bg-primary hover:bg-primary/90 text-white h-12 text-base font-bold shadow-lg shadow-red-900/20">
+              Daftar Sekarang
+            </Button>
+          </div>
+        </div>
+
       </main>
-      <Footer />
+
+      {/* FLOATING ACTION BUTTON (QR CODE) - Material Design Signature */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <Button 
+          size="icon" 
+          className="h-16 w-16 rounded-2xl bg-primary text-white shadow-m3-3 hover:scale-105 transition-transform"
+        >
+          <QrCode size={32} />
+        </Button>
+      </div>
     </div>
   );
 }
