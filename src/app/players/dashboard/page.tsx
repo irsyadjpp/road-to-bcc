@@ -1,10 +1,10 @@
-
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import { 
-  Copy, Users, UserCheck, Trophy, AlertTriangle, 
+  Copy, Check, // Import icon Check
+  Users, UserCheck, Trophy, AlertTriangle, 
   CheckCircle2, Clock, UploadCloud, ChevronRight, 
   Calendar, CreditCard, PlayCircle, Bell, History 
 } from "lucide-react";
@@ -18,14 +18,37 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 
 import { MOCK_PLAYER_DATA, TPFStatus, RegistrationStatus } from "@/lib/dashboard-types";
+import { useToast } from "@/hooks/use-toast"; // 1. Import Hook Toast
 
 export default function PlayerDashboard() {
   const data = MOCK_PLAYER_DATA; // Gunakan data mock
+  const { toast } = useToast(); // 2. Init Toast
+  const [isCopied, setIsCopied] = useState(false); // 3. State untuk animasi tombol
 
-  // Fungsi utilitas UI
-  const copyToClipboard = (text: string) => {
+
+  // 4. Fungsi Copy Baru yang Lebih Sporty
+  const copyToClipboard = (text: string, label: string = "Kode") => {
     navigator.clipboard.writeText(text);
-    alert(`Disalin: ${text}`);
+    
+    // Efek visual pada tombol (Ganti icon sesaat)
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+
+    // Tampilkan Toast Kustom
+    toast({
+      // Judul yang Bold & Gen-Z (Capslock)
+      title: "COPIED TO CLIPBOARD!", 
+      description: `${label} ${text} siap dibagikan.`,
+      // Styling Custom: Gelap, Rounded Besar, Border Neon/Primary
+      className: "rounded-[1.5rem] bg-zinc-900 border-2 border-primary/50 text-white shadow-xl shadow-primary/10",
+      duration: 3000,
+      // Ikon visual di dalam toast
+      action: (
+        <div className="h-10 w-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-500 border border-green-500/50">
+           <Check size={20} />
+        </div>
+      ),
+    });
   };
 
   return (
@@ -63,8 +86,16 @@ export default function PlayerDashboard() {
                    <p className="text-white/80 text-xs font-bold uppercase tracking-widest mb-1">Athlete Identity</p>
                    <div className="flex items-center gap-3">
                       <h2 className="font-mono text-3xl font-bold tracking-tighter">{data.athleteCode}</h2>
-                      <Button size="icon" variant="secondary" className="h-8 w-8 rounded-full bg-white/20 hover:bg-white/40 border-none text-white" onClick={() => copyToClipboard(data.athleteCode)}>
-                         <Copy size={14} />
+                      
+                      {/* 5. Update Tombol Copy */}
+                      <Button 
+                        size="icon" 
+                        variant="secondary" 
+                        className={`h-10 w-10 rounded-full border-none transition-all duration-300 ${isCopied ? 'bg-green-500 text-white scale-110' : 'bg-white/20 text-white hover:bg-white/40'}`} 
+                        onClick={() => copyToClipboard(data.athleteCode, "Athlete Code")}
+                      >
+                         {/* Animasi Icon Swap */}
+                         {isCopied ? <Check size={18} className="animate-in zoom-in spin-in-90 duration-300" /> : <Copy size={16} />}
                       </Button>
                    </div>
                 </div>
@@ -171,7 +202,7 @@ export default function PlayerDashboard() {
            />
            <ShortcutButton 
              icon={Trophy} title="Daftar Turnamen" desc="Road to BCC 2025" 
-             href="/players/tournament/register" highlight 
+             href="/players/tournament" highlight 
            />
         </section>
 
