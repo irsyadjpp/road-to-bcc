@@ -9,9 +9,10 @@ import {
   Menu, LogOut, Trophy, ChevronRight 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { ClientOnly } from "@/components/client-only";
 
 // Menu Navigasi
 const NAV_ITEMS = [
@@ -106,9 +107,7 @@ export default function PlayerWebLayout({ children }: { children: React.ReactNod
                 <SheetContent side="left" className="p-0 w-72 border-none">
                   <SheetHeader className="sr-only">
                     <SheetTitle>Main Menu</SheetTitle>
-                    <SheetDescription>
-                      Player navigation panel for accessing all features.
-                    </SheetDescription>
+                    <SheetDescription>Player navigation panel for accessing all features.</SheetDescription>
                   </SheetHeader>
                   <NavigationContent />
                 </SheetContent>
@@ -134,7 +133,9 @@ export default function PlayerWebLayout({ children }: { children: React.ReactNod
 
         {/* PAGE CONTENT */}
         <main className="flex-1 p-6 md:p-8 max-w-7xl mx-auto w-full">
-           {children}
+           <ClientOnly>
+             {children}
+           </ClientOnly>
         </main>
 
       </div>
