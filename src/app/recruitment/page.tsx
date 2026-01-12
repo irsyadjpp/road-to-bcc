@@ -67,7 +67,7 @@ export default function RecruitmentPage() {
     field.onChange(newValues);
   };
 
-  async function onSubmit(data: VolunteerFormValues) {
+  async function onSubmit(data: RecruitmentFormValues) {
     setIsSubmitting(true);
     console.log("Committee Data:", data); // Debug
     await new Promise((resolve) => setTimeout(resolve, 2500)); // Simulasi agak lama biar "serius"
@@ -110,7 +110,7 @@ export default function RecruitmentPage() {
             <ShieldCheck className="w-24 h-24 text-primary mx-auto mb-6 animate-bounce" />
             <h1 className="text-4xl font-black font-headline text-primary mb-4 uppercase">Aplikasi Diterima</h1>
             <p className="text-lg text-muted-foreground mb-8 font-medium">
-              Data Anda telah masuk ke sistem rekrutmen inti Road to BCC 2026.<br/>
+              Data Anda telah masuk ke sistem rekrutmen inti Badmintour Open #1.<br/>
               Harap stand-by di WhatsApp untuk jadwal <strong>Interview Tahap 1</strong>.
             </p>
             <Button asChild className="rounded-none font-bold tracking-widest px-8">
@@ -143,7 +143,7 @@ export default function RecruitmentPage() {
               Open Recruitment Phase 1
             </Badge>
             <h1 className="text-4xl md:text-6xl font-black font-headline text-foreground uppercase tracking-tight">
-              PANITIA <span className="text-primary underline decoration-4 decoration-primary/30 underline-offset-8">INTI</span> Road to BCC 2026
+              PANITIA <span className="text-primary underline decoration-4 decoration-primary/30 underline-offset-8">INTI</span> Badmintour Open #1
             </h1>
             <p className="text-xl font-medium text-muted-foreground max-w-2xl mx-auto">
               Bukan sekadar relawan. Ini adalah panggilan untuk para perancang strategi dan eksekutor lapangan.
@@ -412,7 +412,7 @@ export default function RecruitmentPage() {
                                         <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                                         <FormLabel className="font-normal text-xs text-muted-foreground">
                                            {index === 0 && "Saya menyatakan data yang diisi adalah benar, jujur, dan dapat dipertanggungjawabkan."}
-                                           {index === 1 && "Saya bersedia mematuhi SOP panitia dan menjaga nama baik BCC 2026."}
+                                           {index === 1 && "Saya bersedia mematuhi SOP panitia dan menjaga nama baik Badmintour Open #1."}
                                            {index === 2 && "Saya memahami seleksi ini bersifat kompetitif, keputusan panitia mutlak dan tidak dapat diganggu gugat."}
                                         </FormLabel>
                                     </FormItem>
@@ -422,8 +422,8 @@ export default function RecruitmentPage() {
                     </Card>
 
                     {/* SUBMIT */}
-                    <Button type="submit" size="lg" className="w-full h-14 font-headline font-black text-lg uppercase rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform" disabled={isSubmitting}>
-                         {isSubmitting ? <Loader2 className="animate-spin"/> : "KIRIM APLIKASI"}
+                    <Button type="submit" size="lg" className="w-full h-14 font-headline font-black text-lg uppercase rounded-xl shadow-lg hover:scale-[1.02] hover:shadow-primary/40 transition-transform" disabled={isSubmitting}>
+                         {isSubmitting ? <><Loader2 className="animate-spin"/> MENGIRIM DATA...</> : "KIRIM LAMARAN SAYA 🚀"}
                     </Button>
 
                 </div>

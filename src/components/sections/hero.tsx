@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -24,7 +25,7 @@ export function HeroSection() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
               </span>
-              Road to BCC 2026: Digital Prologue
+              Badmintour Open #1: The Digital Prologue
            </div>
 
            <h1 className="text-6xl sm:text-7xl md:text-8xl font-black font-headline tracking-tighter leading-[0.9] mb-6 text-foreground">
@@ -92,7 +93,7 @@ export function HeroSection() {
          <div className="flex whitespace-nowrap animate-marquee">
             {[1,2,3,4,5,6].map(i => (
                 <span key={i} className="text-xl md:text-2xl font-black font-headline mx-8 uppercase tracking-widest flex items-center gap-4">
-                   <Zap className="w-6 h-6 fill-black" /> ROAD TO BCC 2026 • THE DIGITAL PROLOGUE • LEVEL UP YOUR GAME
+                   <Zap className="w-6 h-6 fill-black" /> BADMINTOUR OPEN #1 • THE DIGITAL PROLOGUE • LEVEL UP YOUR GAME
                 </span>
             ))}
          </div>

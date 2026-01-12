@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -14,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, User, GraduationCap, Briefcase, Wrench, CalendarCheck, FileSignature, HeartHandshake, Shirt } from "lucide-react";
+import { Loader2, CheckCircle2, Briefcase, Calendar, Shirt, BrainCircuit, User, ShieldCheck, Target } from "lucide-react";
 import { useState, useEffect } from "react";
 import confetti from 'canvas-confetti';
 import Link from "next/link";
@@ -163,7 +164,7 @@ export default function VolunteerPage() {
               Open Recruitment Phase 1
             </Badge>
             <h1 className="text-4xl md:text-6xl font-black font-headline text-foreground tracking-tighter">
-              VOLUNTEER <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-red-600">BCC 2026</span>
+              VOLUNTEER <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-red-600">BADMINTOUR #1</span>
             </h1>
             <p className="text-xl font-medium text-muted-foreground max-w-2xl mx-auto">
               "Jadilah bagian dari sejarah turnamen komunitas terbesar di Bandung."
@@ -480,7 +481,7 @@ export default function VolunteerPage() {
                      </div>
                     {[
                         { id: "agreeData", label: "Saya menyatakan bahwa data yang diisi adalah benar, jujur, dan dapat dipertanggungjawabkan." },
-                        { id: "agreeRules", label: "Saya bersedia mematuhi segala peraturan panitia (SOP) dan menjaga nama baik BCC 2026." },
+                        { id: "agreeRules", label: "Saya bersedia mematuhi segala peraturan panitia (SOP) dan menjaga nama baik Badmintour Open #1." },
                         { id: "agreeCompetitive", label: "Saya memahami seleksi ini bersifat kompetitif, keputusan panitia mutlak dan tidak dapat diganggu gugat." }
                     ].map((item) => (
                         <FormField key={item.id} control={form.control} name={item.id as any} render={({ field }) => (

@@ -32,7 +32,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   
   useEffect(() => {
-    const sessionStr = sessionStorage.getItem('admin_session');
+    const sessionStr = sessionStorage.getItem('badmintour_admin_session');
     if (sessionStr) {
         try {
             const storedSession = JSON.parse(sessionStr);
@@ -43,7 +43,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             }
         } catch (error) {
             console.error("Failed to parse admin session", error);
-            sessionStorage.removeItem('admin_session');
+            sessionStorage.removeItem('badmintour_admin_session');
             if (pathname !== '/admin/login') redirect('/admin/login');
         }
     } else if (pathname !== '/admin/login') {
@@ -56,13 +56,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     if (!session) return;
     const updatedSession = { ...session, isOnboarded: true };
     setSession(updatedSession);
-    sessionStorage.setItem('admin_session', JSON.stringify(updatedSession));
+    sessionStorage.setItem('badmintour_admin_session', JSON.stringify(updatedSession));
   };
 
 
   const handleLogout = async () => {
     await logoutAdmin();
-    sessionStorage.removeItem('admin_session');
+    sessionStorage.removeItem('badmintour_admin_session');
     setSession(null);
     toast({ title: "Logout Berhasil" });
     redirect('/');
@@ -114,7 +114,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <SidebarTrigger className="text-zinc-400 hover:text-white hover:bg-white/10 rounded-full w-10 h-10 transition-all" />
                 <Separator orientation="vertical" className="mr-2 h-4 bg-zinc-700" />
                 <span className="text-sm font-black text-zinc-200 hidden md:block tracking-widest uppercase font-headline">
-                  BCC COMMAND CENTER
+                  BADMINTOUR COMMAND CENTER
                 </span>
             </div>
 

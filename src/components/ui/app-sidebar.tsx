@@ -118,7 +118,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <div className="flex aspect-square size-10 items-center justify-center rounded-xl bg-black/50 border border-white/10 shadow-[0_0_15px_rgba(220,38,38,0.3)] overflow-hidden p-1">
             <Image 
               src="/images/logo.png" 
-              alt="BCC 2026 Logo" 
+              alt="Badmintour Open #1 Logo" 
               width={40} 
               height={40} 
               className="w-full h-full object-contain"
@@ -126,7 +126,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </div>
 
           <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
-            <span className="truncate font-black font-headline text-lg tracking-tight text-white">BCC 2026</span>
+            <span className="truncate font-black font-headline text-lg tracking-tight text-white">Badmintour #1</span>
             <span className="truncate text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Official Admin</span>
           </div>
         </div>

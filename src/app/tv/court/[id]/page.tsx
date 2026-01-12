@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from "react";
@@ -35,7 +36,7 @@ export default function TVScoreboard({ params }: { params: { id: string } }) {
         <div className="flex items-center gap-4">
             <Image src="/images/logo.png" width={60} height={60} alt="Logo" />
             <div>
-                <h1 className="text-2xl font-black font-headline tracking-widest">BCC 2026</h1>
+                <h1 className="text-2xl font-black font-headline tracking-widest">BADMINTOUR #1</h1>
                 <p className="text-sm font-bold text-yellow-400 tracking-wider">BANDUNG COMMUNITY CHAMPIONSHIP</p>
             </div>
         </div>

@@ -1,3 +1,4 @@
+
 'use server';
 
 export type Mandate = {
@@ -14,7 +15,7 @@ export type Mandate = {
 let MANDATES: Mandate[] = [
   {
     id: "M-001",
-    refNumber: "002/SPT-TPF/BCC/XII/2025",
+    refNumber: "002/SPT-TPF/BTOUR/XII/2025",
     assigneeName: "Faiz Azilla Syaehon",
     role: "Koordinator TPF",
     duties: [

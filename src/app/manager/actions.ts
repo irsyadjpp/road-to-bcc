@@ -29,7 +29,7 @@ export async function loginManager(prevState: any, formData: FormData) {
   await new Promise(r => setTimeout(r, 1000));
 
   // Disini kita bypass password check untuk kemudahan testing, 
-  // atau gunakan logic: (email === 'demo@bcc.com' && password === '123456')
+  // atau gunakan logic: (email === 'demo@badmintour.com' && password === '123456')
   
   // Set Session Cookie
   const sessionData = JSON.stringify({
@@ -40,7 +40,7 @@ export async function loginManager(prevState: any, formData: FormData) {
   });
 
   const cookieStore = cookies();
-  cookieStore.set('bcc_manager_session', sessionData, {
+  cookieStore.set('badmintour_manager_session', sessionData, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     maxAge: 60 * 60 * 24 * 1, // 1 Hari
@@ -69,21 +69,21 @@ export async function registerManager(prevState: any, formData: FormData) {
   });
 
   const cookieStore = cookies();
-  cookieStore.set('bcc_manager_session', sessionData, { httpOnly: true, path: '/' });
+  cookieStore.set('badmintour_manager_session', sessionData, { httpOnly: true, path: '/' });
 
   return { success: true, message: "Registrasi berhasil!" };
 }
 
 export async function logoutManager() {
   const cookieStore = cookies();
-  cookieStore.delete('bcc_manager_session');
+  cookieStore.delete('badmintour_manager_session');
   redirect('/');
 }
 
 // Helper untuk mengambil session di Server Component
 export async function getManagerSession() {
   const cookieStore = cookies();
-  const session = cookieStore.get('bcc_manager_session');
+  const session = cookieStore.get('badmintour_manager_session');
   if (!session) return null;
   try {
     return JSON.parse(session.value);
@@ -108,7 +108,7 @@ export async function loginManagerGoogle() {
 
   // 3. Set Session Cookie
   const cookieStore = cookies();
-  cookieStore.set('bcc_manager_session', JSON.stringify(mockGoogleUser), {
+  cookieStore.set('badmintour_manager_session', JSON.stringify(mockGoogleUser), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     maxAge: 60 * 60 * 24 * 7, // 1 Minggu

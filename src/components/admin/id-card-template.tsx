@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { forwardRef } from "react";
@@ -34,11 +35,11 @@ export const IdCardTemplate = forwardRef<HTMLDivElement, IdCardProps>(({ user, c
         {/* Header Logo - DIPERBAIKI */}
         <div className="relative z-20 p-4 flex justify-between items-center">
              <div className="flex items-center gap-2">
-                {/* Logo BCC */}
+                {/* Logo Badmintour */}
                 <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center p-1">
-                    <img src="/images/logo.png" alt="BCC" className="w-full h-full object-contain" />
+                    <img src="/images/logo.png" alt="Badmintour" className="w-full h-full object-contain" />
                 </div>
-                <span className="text-white font-bold tracking-widest text-xs">BCC 2026</span>
+                <span className="text-white font-bold tracking-widest text-xs">Badmintour Open #1</span>
              </div>
              {/* Logo PBSI - Filter dikurangi agar aman */}
              <div className="w-12 h-8 flex items-center justify-end">
@@ -102,11 +103,11 @@ export const IdCardTemplate = forwardRef<HTMLDivElement, IdCardProps>(({ user, c
             </h4>
 
             <div className="bg-white p-2 rounded-lg shadow-lg mb-6">
-                <QRCodeSVG value={`https://bcc2026.com/verify/${user.id_number}`} size={100} />
+                <QRCodeSVG value={`https://badmintour.com/verify/${user.id_number}`} size={100} />
             </div>
 
             <p className="text-[9px] text-zinc-400 leading-relaxed mb-4 px-2">
-                Kartu ini adalah tanda pengenal resmi Panitia BCC 2026. 
+                Kartu ini adalah tanda pengenal resmi Panitia Badmintour Open #1. 
                 Wajib dikenakan selama bertugas di area GOR KONI.
                 Kehilangan kartu dikenakan denda Rp 50.000.
             </p>

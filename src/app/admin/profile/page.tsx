@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useActionState, useRef, useState } from "react";
@@ -22,10 +23,10 @@ import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, Dialog
 // MOCK DATA USER (Nanti diambil dari Session/DB)
 const MOCK_USER = {
   name: "Kevin Sanjaya",
-  email: "kevin.ops@bcc2026.com",
+  email: "kevin.ops@badmintour.com",
   role: "HEAD OF DIVISION",
   division: "MATCH CONTROL",
-  id_number: "BCC-26-001",
+  id_number: "BTOUR-26-001",
   avatar: "https://github.com/shadcn.png",
   signature: null, // Belum ada ttd
   // Data existing
@@ -110,7 +111,7 @@ export default function ProfilePage() {
       {/* Background Sporty Grid */}
       <div className="fixed inset-0 bg-grid-sporty pointer-events-none z-0 opacity-40"></div>
       
-      <main className="relative z-10 flex-grow py-10 px-4 md:px-8">
+      <main className="relative z-10 py-10 px-4 md:px-8">
         <div className="max-w-6xl mx-auto space-y-8">
           
           {/* HEADER: GREETING & STATUS */}

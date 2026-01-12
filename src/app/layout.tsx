@@ -5,8 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'Road to BCC 2026',
-  description: 'Road to BCC 2026: Integritas, Solidaritas, dan Sportivitas.',
+  title: 'Badmintour Open #1',
+  description: 'Badmintour Open #1: Integritas, Solidaritas, dan Sportivitas.',
   manifest: "/manifest.json",
   themeColor: "#9e1d24",
 };
