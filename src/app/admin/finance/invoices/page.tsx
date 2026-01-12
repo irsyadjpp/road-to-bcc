@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from "react";
@@ -51,7 +52,7 @@ const SPONSOR_INVOICES = [
     package: "SILVER",
     term: "Termin 1",
     amount: 25000000, 
-    dueDate: "10 Jun 2026", 
+    dueDate: "10 Apr 2026", 
     status: "PAID", 
     progress: 100,
     contact: "Kang Asep"
@@ -296,12 +297,12 @@ export default function SponsorshipBillingPage() {
                                 <div className="relative">
                                     <div className="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-zinc-700 border-2 border-zinc-950"></div>
                                     <p className="text-xs font-bold text-white">Invoice Created</p>
-                                    <p className="text-[10px] text-zinc-500">10 Mei 2026 • by Admin</p>
+                                    <p className="text-[10px] text-zinc-500">10 Maret 2026 • by Admin</p>
                                 </div>
                                 <div className="relative">
                                     <div className="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-zinc-700 border-2 border-zinc-950"></div>
                                     <p className="text-xs font-bold text-white">Sent to Sponsor</p>
-                                    <p className="text-[10px] text-zinc-500">11 Mei 2026 • via Email</p>
+                                    <p className="text-[10px] text-zinc-500">11 Maret 2026 • via Email</p>
                                 </div>
                                 {selectedInv.status === 'OVERDUE' && (
                                     <div className="relative">

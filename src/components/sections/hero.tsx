@@ -74,7 +74,7 @@ export function HeroSection() {
                            <ClientOnly>
                               <div className="text-center">
                                  <p className="text-xs uppercase tracking-widest text-zinc-300 mb-1">Pendaftaran Ditutup</p>
-                                 <Countdown targetDate="2026-02-06" />
+                                 <Countdown targetDate="2026-04-03" />
                               </div>
                            </ClientOnly>
                         </div>
@@ -93,7 +93,7 @@ export function HeroSection() {
          <div className="flex whitespace-nowrap animate-marquee">
             {[1,2,3,4,5,6].map(i => (
                 <span key={i} className="text-xl md:text-2xl font-black font-headline mx-8 uppercase tracking-widest flex items-center gap-4">
-                   <Zap className="w-6 h-6 fill-black" /> BADMINTOUR OPEN #1 • THE DIGITAL PROLOGUE • LEVEL UP YOUR GAME
+                   <Zap className="w-6 h-6 fill-black" /> Badmintour Open #1 • THE DIGITAL PROLOGUE • LEVEL UP YOUR GAME
                 </span>
             ))}
          </div>

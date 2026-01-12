@@ -64,9 +64,8 @@ export async function getCommitteeData() {
     honorarium: {
       total: 450000,
       breakdown: [
-        { date: "13 Juni", activity: "Day 1 - Setup", amount: 150000 },
-        { date: "14 Juni", activity: "Day 2 - Qualification", amount: 150000 },
-        { date: "20 Juni", activity: "Day 3 - Quarter Final", amount: 150000 },
+        { date: "3 April", activity: "Day 1 - Qualification", amount: 225000 },
+        { date: "4 April", activity: "Day 2 - Finals", amount: 225000 },
       ]
     },
     missions: [

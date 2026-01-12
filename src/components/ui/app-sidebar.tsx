@@ -66,7 +66,7 @@ const data = {
     { title: "Editor Jadwal", url: "/admin/match-control/schedule", icon: CalendarDays },
     { title: "Generate Bagan", url: "/admin/match-control/bracket", icon: Network },
     { title: "Verifikasi Hasil", url: "/admin/match-control/results", icon: FileText },
-    { title: "Verifikasi TPF", url: "/admin/tpf", icon: ShieldAlert },
+    { title: "Verifikasi TVT", url: "/admin/tpf", icon: ShieldAlert },
     { title: "Keputusan Protes", url: "/admin/protests", icon: Gavel },
     { title: "Papan Skor Wasit", url: "/admin/referee/match/1", icon: MonitorPlay },
   ],
@@ -95,6 +95,7 @@ const data = {
     { title: "Verifikasi Pendaftaran", url: "/admin/secretariat/verification", icon: UserCheck },
     { title: "E-Mandate (Surat Tugas)", url: "/admin/secretary/assignments", icon: FileCheck },
     { title: "Generator Sertifikat", url: "/admin/event/certificates", icon: Award },
+    { title: "Surat-menyurat", url: "/admin/secretary/correspondence", icon: Mail },
   ],
   // 9. MASTER DATA & PARTISIPAN
   navMaster: [

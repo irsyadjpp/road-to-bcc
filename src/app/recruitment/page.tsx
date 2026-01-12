@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -37,7 +38,7 @@ export default function VolunteerPage() {
 
   // Logic Khusus: "SAYA SIAP SEMUA TANGGAL"
   const handleAvailabilityChange = (checked: boolean, value: string, field: any) => {
-    const allDates = ["Week 1 (13-14 Juni)", "Week 2 (20-21 Juni)", "Week 3 (27-28 Juni)", "Grand Final (5 Juli) - WAJIB"];
+    const allDates = ["3 April 2026", "4 April 2026"];
     let newValues = [...(field.value || [])];
 
     if (value === "ALL") {
@@ -172,7 +173,7 @@ export default function VolunteerPage() {
                         <div className="p-3 bg-primary/10 rounded-full"><CalendarCheck className="w-6 h-6 text-primary"/></div>
                         <div>
                             <h4 className="font-bold font-headline">Waktu Bertugas</h4>
-                            <p className="text-sm text-muted-foreground">Sabtu & Minggu (Juni - Juli 2026)</p>
+                            <p className="text-sm text-muted-foreground">3 - 4 April 2026</p>
                         </div>
                     </CardContent>
                 </Card>
@@ -426,7 +427,7 @@ export default function VolunteerPage() {
                         <FormItem>
                             <div className="mb-4"><FormLabel className="text-base font-bold text-primary">Ketersediaan Waktu (Wajib Hadir Full Day)</FormLabel></div>
                             <div className="space-y-3">
-                                {["Week 1 (13-14 Juni)", "Week 2 (20-21 Juni)", "Week 3 (27-28 Juni)", "Grand Final (5 Juli) - WAJIB", "ALL"].map((item) => (
+                                {["3 April 2026", "4 April 2026", "ALL"].map((item) => (
                                     <FormField key={item} control={form.control} name="availability" render={({ field }) => (
                                         <FormItem className={`flex flex-row items-center space-x-3 space-y-0 p-4 rounded-xl border-2 transition-all 
                                             ${item === "ALL" ? "bg-primary text-white border-primary hover:bg-primary/90" : "bg-card hover:border-primary/50"}
@@ -435,7 +436,7 @@ export default function VolunteerPage() {
                                             <FormControl>
                                                 <Checkbox 
                                                     className={item === "ALL" ? "border-white data-[state=checked]:bg-white data-[state=checked]:text-primary" : ""}
-                                                    checked={item === 'ALL' ? field.value?.length === 5 : field.value?.includes(item)}
+                                                    checked={item === 'ALL' ? field.value?.length === 3 : field.value?.includes(item)}
                                                     onCheckedChange={(checked) => handleAvailabilityChange(!!checked, item, field)} 
                                                 />
                                             </FormControl>

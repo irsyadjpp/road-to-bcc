@@ -27,7 +27,7 @@ import { useToast } from "@/hooks/use-toast";
 const ACTIVE_MANDATES = [
   { 
     id: "SPT-001", 
-    no: "001/SPT-TVT/XII/2025", 
+    no: "001/SPT-TVT/IV/2026", 
     roleKey: "TVT",
     title: "Tim Verifikasi Teknis",
     issuedTo: [
@@ -35,19 +35,19 @@ const ACTIVE_MANDATES = [
       { name: "Anindiffa Pandu", avatar: "" },
       { name: "Aulia Febrianto", avatar: "" }
     ],
-    date: "08 Dec 2025",
+    date: "01 Apr 2026",
     status: "ACTIVE" 
   },
   { 
     id: "SPT-002", 
-    no: "002/SPT-MED/XII/2025", 
+    no: "002/SPT-MED/IV/2026", 
     roleKey: "MEDIS",
     title: "Tim Medis & Kesehatan",
     issuedTo: [
       { name: "Dr. Nanda", avatar: "https://github.com/shadcn.png" },
       { name: "Ns. Budi", avatar: "" }
     ],
-    date: "09 Dec 2025",
+    date: "02 Apr 2026",
     status: "ACTIVE" 
   },
 ];
@@ -69,7 +69,7 @@ export default function DigitalMandatePage() {
   // Create Form State
   const [selectedRole, setSelectedRole] = useState<string>("");
   const [selectedStaff, setSelectedStaff] = useState<string[]>([]);
-  const [letterNo, setLetterNo] = useState("003/SPT-XXX/BTOUR/VI/2026");
+  const [letterNo, setLetterNo] = useState("003/SPT-XXX/BTOUR/IV/2026");
 
   const activeRoleData = selectedRole ? ROLE_DEFINITIONS[selectedRole as keyof typeof ROLE_DEFINITIONS] : null;
 
