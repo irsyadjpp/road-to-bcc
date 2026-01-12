@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { Card } from "@/components/ui/card";
@@ -57,8 +56,8 @@ export function EventSummarySection() {
                   <CalendarClock className="w-6 h-6 text-primary" />
                </div>
                <div className="z-10 mt-auto">
-                   <h3 className="text-3xl font-black font-headline">31 JAN 2026</h3>
-                   <p className="text-lg font-medium text-muted-foreground">Sabtu, 08:00 WIB - Selesai</p>
+                   <h3 className="text-3xl font-black font-headline">3 - 4 APRIL 2026</h3>
+                   <p className="text-lg font-medium text-muted-foreground">Sabtu & Minggu, 08:00 WIB - Selesai</p>
                </div>
           </div>
 
@@ -74,7 +73,7 @@ export function EventSummarySection() {
               <div className="bg-background border rounded-[2.5rem] p-8 flex flex-col justify-between hover:border-primary/50 transition-colors">
                   <Swords className="w-8 h-8 text-primary mb-4" />
                   <div>
-                      <h4 className="text-xl font-bold font-headline">Sistem Pool</h4>
+                      <h4 className="text-xl font-bold font-headline">Sistem Pool & Gugur</h4>
                       <p className="text-muted-foreground">Main 3x (Anti Gugur Awal)</p>
                   </div>
               </div>
