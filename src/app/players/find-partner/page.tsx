@@ -12,14 +12,13 @@ import { useToast } from "@/hooks/use-toast";
 
 // Mock Data Pemain yang sedang mencari pasangan
 const AVAILABLE_PLAYERS = [
-  { id: "1", name: "Kevin Sanjaya", level: "Pro" as PlayerLevel, tier: 1 as PlayerTier, club: "PB Djarum", avatar: "KS" },
-  { id: "2", name: "Rian Ardianto", level: "Advance" as PlayerLevel, tier: 2 as PlayerTier, club: "Jaya Raya", avatar: "RA" },
-  { id: "3", name: "Budi Santoso", level: "Intermediate" as PlayerLevel, tier: 3 as PlayerTier, club: "Exist", avatar: "BS" },
-  { id: "4", name: "Anak Baru", level: "Beginner" as PlayerLevel, tier: 4 as PlayerTier, club: "Independen", avatar: "AB" },
+  { id: "1", name: "Budi Santoso", level: "Beginner" as PlayerLevel, tier: 3 as PlayerTier, club: "Komunitas ABC", avatar: "BS" },
+  { id: "2", name: "Anak Baru", level: "Beginner" as PlayerLevel, tier: 4 as PlayerTier, club: "Independen", avatar: "AB" },
+  { id: "3", name: "Pemain Jago", level: "Beginner" as PlayerLevel, tier: 1 as PlayerTier, club: "PB Djarum KW", avatar: "PJ" },
 ];
 
 // Mock Profil Saya (User yang sedang login)
-const MY_PROFILE = { id: "me", name: "Irsyad JPP", level: "Intermediate" as PlayerLevel, tier: 2 as PlayerTier };
+const MY_PROFILE = { id: "me", name: "Irsyad JPP", level: "Beginner" as PlayerLevel, tier: 2 as PlayerTier };
 
 export default function FindPartnerPage() {
   const { toast } = useToast();

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -18,7 +19,7 @@ const STEPS = [
 
 export default function TournamentRegistration() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [selectedCategory, setSelectedCategory] = useState("intermediate");
+  const [selectedCategory, setSelectedCategory] = useState("beginner");
   const [partnerCode, setPartnerCode] = useState("");
 
   // Handler Navigasi
@@ -67,36 +68,11 @@ export default function TournamentRegistration() {
         {currentStep === 1 && (
           <div className="animate-in fade-in slide-in-from-right-10 duration-500">
             <h2 className="text-lg font-bold mb-4">Pilih Kategori Pertandingan</h2>
-            <RadioGroup defaultValue="intermediate" onValueChange={setSelectedCategory} className="space-y-3">
-              
-              {/* Card Option 1 */}
-              <Label htmlFor="cat-inter" className="cursor-pointer">
-                <Card className={`relative p-5 rounded-3xl border-2 transition-all ${selectedCategory === 'intermediate' ? 'border-primary bg-primary/5' : 'border-transparent shadow-m3-1'}`}>
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`h-10 w-10 rounded-full flex items-center justify-center ${selectedCategory === 'intermediate' ? 'bg-primary text-white' : 'bg-secondary'}`}>
-                        <Trophy size={18} />
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-base">Ganda Dewasa Putra</h3>
-                        <p className="text-xs text-muted-foreground">Intermediate - Advance</p>
-                      </div>
-                    </div>
-                    <RadioGroupItem value="intermediate" id="cat-inter" className="data-[state=checked]:border-primary data-[state=checked]:text-primary" />
-                  </div>
-                  <div className="mt-4 flex gap-2">
-                    <Badge variant="outline" className="text-[10px] rounded-md">Kuota: 12/64</Badge>
-                    <Badge variant="outline" className="text-[10px] rounded-md bg-green-500/10 text-green-600 border-none">IDR 300K</Badge>
-                  </div>
-                </Card>
-              </Label>
-
-              {/* Card Option 2 */}
               <Label htmlFor="cat-begin" className="cursor-pointer">
-                <Card className={`relative p-5 rounded-3xl border-2 transition-all ${selectedCategory === 'beginner' ? 'border-primary bg-primary/5' : 'border-transparent shadow-m3-1'}`}>
+                <Card className={`relative p-5 rounded-3xl border-2 transition-all border-primary bg-primary/5`}>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className={`h-10 w-10 rounded-full flex items-center justify-center ${selectedCategory === 'beginner' ? 'bg-primary text-white' : 'bg-secondary'}`}>
+                      <div className={`h-10 w-10 rounded-full flex items-center justify-center bg-primary text-white`}>
                         <Trophy size={18} />
                       </div>
                       <div>
@@ -104,16 +80,14 @@ export default function TournamentRegistration() {
                         <p className="text-xs text-muted-foreground">Beginner Only</p>
                       </div>
                     </div>
-                    <RadioGroupItem value="beginner" id="cat-begin" className="data-[state=checked]:border-primary data-[state=checked]:text-primary" />
+                    <RadioGroupItem value="beginner" id="cat-begin" className="data-[state=checked]:border-primary data-[state=checked]:text-primary" checked={true} />
                   </div>
                   <div className="mt-4 flex gap-2">
                      <Badge variant="outline" className="text-[10px] rounded-md">Kuota: 40/64</Badge>
-                     <Badge variant="outline" className="text-[10px] rounded-md bg-green-500/10 text-green-600 border-none">IDR 250K</Badge>
+                     <Badge variant="outline" className="text-[10px] rounded-md bg-green-500/10 text-green-600 border-none">IDR 100K/org</Badge>
                   </div>
                 </Card>
               </Label>
-
-            </RadioGroup>
           </div>
         )}
 
@@ -162,8 +136,8 @@ export default function TournamentRegistration() {
             <Card className="rounded-[2rem] overflow-hidden border-none shadow-m3-1">
               <div className="bg-primary/10 p-6 flex flex-col items-center justify-center border-b border-primary/10">
                 <Trophy className="h-12 w-12 text-primary mb-2" />
-                <h3 className="font-headline text-xl">ROAD TO BCC 2025</h3>
-                <Badge className="mt-2 bg-primary">Ganda Dewasa Putra</Badge>
+                <h3 className="font-headline text-xl">ROAD TO BADMINTOUR #1</h3>
+                <Badge className="mt-2 bg-primary">Ganda Dewasa Beginner</Badge>
               </div>
               <div className="p-6 space-y-4">
                  <div className="flex justify-between items-center">
@@ -177,7 +151,7 @@ export default function TournamentRegistration() {
                  <Separator />
                  <div className="flex justify-between items-center text-lg">
                     <span className="font-bold">Total Biaya</span>
-                    <span className="font-headline text-primary">IDR 300.000</span>
+                    <span className="font-headline text-primary">IDR 200.000</span>
                  </div>
               </div>
             </Card>

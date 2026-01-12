@@ -72,26 +72,6 @@ const generateAllBrackets = () => ({
       createBracketRound("Final", 1),
     ]
   },
-  intermediate: { 
-    teams: 16, 
-    groups: 4, 
-    groupData: generateGroups(16, 4, 'I'),
-    knockout: [
-      createBracketRound("Perempat Final", 4),
-      createBracketRound("Semifinal", 2),
-      createBracketRound("Final", 1),
-    ]
-  },
-  advance: { 
-    teams: 16, 
-    groups: 4, 
-    groupData: generateGroups(16, 4, 'A'),
-    knockout: [
-      createBracketRound("Perempat Final", 4),
-      createBracketRound("Semifinal", 2),
-      createBracketRound("Final", 1),
-    ]
-  },
 });
 
 export default function LiveScorePage() {
@@ -126,39 +106,14 @@ export default function LiveScorePage() {
             </p>
           </div>
 
-          <Tabs defaultValue="beginner" className="w-full">
-            <div className="flex justify-center mb-8">
-              <TabsList className="bg-secondary/50 p-2 rounded-full h-auto">
-                <TabsTrigger value="beginner" className="text-base font-bold rounded-full px-8 py-3 data-[state=active]:bg-background data-[state=active]:text-primary">
-                  Beginner
-                </TabsTrigger>
-                <TabsTrigger value="intermediate" className="text-base font-bold rounded-full px-8 py-3 data-[state=active]:bg-background data-[state=active]:text-primary">
-                  Intermediate
-                </TabsTrigger>
-                <TabsTrigger value="advance" className="text-base font-bold rounded-full px-8 py-3 data-[state=active]:bg-background data-[state=active]:text-primary">
-                  Advance
-                </TabsTrigger>
-              </TabsList>
-            </div>
-            
-            {!bracketData ? (
-                <div className="flex justify-center items-center h-64">
-                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                </div>
-            ) : (
-                <>
-                    <TabsContent value="beginner">
-                      <CategoryView categoryData={bracketData.beginner} onGroupClick={setSelectedGroup} />
-                    </TabsContent>
-                    <TabsContent value="intermediate">
-                      <CategoryView categoryData={bracketData.intermediate} onGroupClick={setSelectedGroup} />
-                    </TabsContent>
-                    <TabsContent value="advance">
-                      <CategoryView categoryData={bracketData.advance} onGroupClick={setSelectedGroup} />
-                    </TabsContent>
-                </>
-            )}
-          </Tabs>
+          {!bracketData ? (
+              <div className="flex justify-center items-center h-64">
+                  <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+          ) : (
+             <CategoryView categoryData={bracketData.beginner} onGroupClick={setSelectedGroup} />
+          )}
+          
 
            <Dialog open={!!selectedGroup} onOpenChange={() => setSelectedGroup(null)}>
             <DialogContent className="max-w-xl bg-card border-border/50">

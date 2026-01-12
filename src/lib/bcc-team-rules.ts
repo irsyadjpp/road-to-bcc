@@ -1,7 +1,7 @@
 
 // src/lib/bcc-team-rules.ts
 
-export type PlayerLevel = "BEGINNER" | "INTERMEDIATE" | "ADVANCE";
+export type PlayerLevel = "BEGINNER";
 
 export interface TeamSlotRule {
   id: string;
@@ -31,6 +31,4 @@ const INDEPENDENT_TEAM_RULE: CategoryRule = {
 
 export const BCC_RULES: Record<string, CategoryRule> = {
   "BEGINNER": INDEPENDENT_TEAM_RULE,
-  "INTERMEDIATE": INDEPENDENT_TEAM_RULE,
-  "ADVANCE": INDEPENDENT_TEAM_RULE
 };
