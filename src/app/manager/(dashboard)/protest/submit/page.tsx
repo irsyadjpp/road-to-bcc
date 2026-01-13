@@ -16,7 +16,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { submitProtest } from '../actions';
+import { submitProtest } from '../../protest/actions';
 
 // Mock Data - Biasanya dari Session/DB
 const MOCK_SESSION_MANAGER = { name: "Rizki Karami", team: "PB Super", wa: "081119522228" };
@@ -159,7 +159,7 @@ export default function ProtestSubmissionPage() {
                 
                 <div className="grid grid-cols-3 gap-4">
                     <FormField control={form.control} name="incidentTime" render={({ field }) => (<FormItem><FormLabel>Waktu Kejadian</FormLabel><FormControl><div className="relative flex items-center"><Clock className="w-4 h-4 absolute left-3 text-muted-foreground" /><Input type="time" className="pl-9" {...field} /></div></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={form.control} name="courtNumber" render={({ field }) => (<FormItem><FormLabel>No. Lapangan</FormLabel><FormControl><div className="relative flex items-center"><MapPin className="w-4 h-4 absolute left-3 text-muted-foreground" /><Input type="number" min="1" max="5" className="pl-9" {...field} /></div></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="courtNumber" render={({ field }) => (<FormItem><FormLabel>No. Lapangan</FormLabel><FormControl><div className="relative flex items-center"><MapPin className="w-4 h-4 absolute left-3 text-muted-foreground" /><Input type="number" min="1" max="4" className="pl-9" {...field} /></div></FormControl><FormMessage /></FormItem>)} />
                     <FormField control={form.control} name="partaiNumber" render={({ field }) => (<FormItem><FormLabel>Partai Ke-</FormLabel><FormControl><div className="relative flex items-center"><ListOrdered className="w-4 h-4 absolute left-3 text-muted-foreground" /><Input type="number" min="1" max="5" className="pl-9" {...field} /></div></FormControl><FormMessage /></FormItem>)} />
                 </div>
                 
