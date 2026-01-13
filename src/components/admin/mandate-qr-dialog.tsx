@@ -14,7 +14,7 @@ interface MandateQRDialogProps {
 
 export function MandateQRDialog({ isOpen, onClose, mandateData }: MandateQRDialogProps) {
   // URL Publik (Ganti domain saat production)
-  const verifyUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/verify/mandate/${mandateData.id}`; // ID ini tokennya
+  const verifyUrl = `https://badmintour.site/verify/mandate/${mandateData.id}`; // ID ini tokennya
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
