@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { cn } from '@/lib/utils';
-import { ClientOnly } from '../client-only';
+import { ClientOnly } from '@/components/client-only';
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
