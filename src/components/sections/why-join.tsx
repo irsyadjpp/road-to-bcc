@@ -15,7 +15,7 @@ export function WhyJoinSection() {
     {
       icon: Trophy,
       title: "Golden Ticket",
-      desc: "Jalur VIP untuk Juara. Dapatkan slot prioritas & diskon khusus untuk turnamen utama Badmintour Open selanjutnya.",
+      desc: "Jalur VIP untuk Juara. Dapatkan slot prioritas untuk Badmintour Anniversary di Desember.",
       bg: "bg-yellow-400 text-black",
     },
     {
