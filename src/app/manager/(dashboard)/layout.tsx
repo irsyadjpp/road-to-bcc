@@ -6,10 +6,10 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { 
   LayoutDashboard, Users, LogOut, Settings, CheckCircle, 
-  Download, Menu, Home, FileText, AlertCircle, Swords, CreditCard, FilePenLine
+  Download, Menu, Home, FileText, AlertCircle, Swords, CreditCard, FilePenLine, UserPlus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { logoutManager } from '../../actions';
+import { logoutManager } from '../actions';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -29,7 +29,6 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
     {
         title: "MANAJEMEN TIM",
         items: [
-            { name: "Daftar Pemain", href: "/manager/members", icon: Users },
             { name: "Registrasi Komunitas", href: "/manager/register-team", icon: UserPlus },
             { name: "Status & Verifikasi", href: "/manager/status", icon: CheckCircle },
         ]
@@ -147,4 +146,3 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
     </div>
   );
 }
-
