@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { CheckCircle2, Circle, ChevronRight, UserPlus, Trophy } from "lucide-react";
 
 // Tahapan Pendaftaran
@@ -29,27 +30,26 @@ export default function TournamentRegistration() {
 
   return (
     <div className="min-h-screen bg-background pb-24 px-6 pt-8">
-      
+
       {/* HEADER WITH STEPPER */}
       <div className="mb-8">
         <h1 className="font-headline text-2xl mb-6">JOIN <span className="text-primary">TOURNAMENT</span></h1>
-        
+
         {/* Modern Stepper */}
         <div className="flex justify-between items-center relative">
           <div className="absolute top-1/2 left-0 w-full h-1 bg-secondary -z-10 rounded-full" />
-          <div 
-            className="absolute top-1/2 left-0 h-1 bg-primary -z-10 rounded-full transition-all duration-500" 
-            style={{ width: `${((currentStep - 1) / 2) * 100}%` }} 
+          <div
+            className="absolute top-1/2 left-0 h-1 bg-primary -z-10 rounded-full transition-all duration-500"
+            style={{ width: `${((currentStep - 1) / 2) * 100}%` }}
           />
-          
+
           {STEPS.map((step) => {
             const isActive = step.id <= currentStep;
             return (
               <div key={step.id} className="flex flex-col items-center gap-2 bg-background px-2">
-                <div 
-                  className={`h-8 w-8 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
-                    isActive ? "bg-primary border-primary text-white" : "bg-background border-muted text-muted-foreground"
-                  }`}
+                <div
+                  className={`h-8 w-8 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${isActive ? "bg-primary border-primary text-white" : "bg-background border-muted text-muted-foreground"
+                    }`}
                 >
                   {step.id < currentStep ? <CheckCircle2 size={16} /> : <span className="text-xs font-bold">{step.id}</span>}
                 </div>
@@ -64,48 +64,48 @@ export default function TournamentRegistration() {
 
       {/* STEP CONTENT */}
       <div className="space-y-6">
-        
+
         {/* STEP 1: PILIH KATEGORI */}
         {currentStep === 1 && (
           <div className="animate-in fade-in slide-in-from-right-10 duration-500">
             <h2 className="text-lg font-bold mb-4">Pilih Kategori Pertandingan</h2>
-              <Label htmlFor="cat-begin" className="cursor-pointer">
-                <Card className={`relative p-5 rounded-3xl border-2 transition-all border-primary bg-primary/5`}>
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`h-10 w-10 rounded-full flex items-center justify-center bg-primary text-white`}>
-                        <Trophy size={18} />
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-base">Tunggal Putra / Putri</h3>
-                        <p className="text-xs text-muted-foreground">Beginner Only</p>
-                      </div>
+            <Label htmlFor="cat-begin" className="cursor-pointer">
+              <Card className={`relative p-5 rounded-3xl border-2 transition-all border-primary bg-primary/5`}>
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`h-10 w-10 rounded-full flex items-center justify-center bg-primary text-white`}>
+                      <Trophy size={18} />
                     </div>
-                    <RadioGroupItem value="beginner" id="cat-begin" className="data-[state=checked]:border-primary data-[state=checked]:text-primary" checked={true} />
+                    <div>
+                      <h3 className="font-bold text-base">Tunggal Putra / Putri</h3>
+                      <p className="text-xs text-muted-foreground">Beginner Only</p>
+                    </div>
                   </div>
-                  <div className="mt-4 flex gap-2">
-                     <Badge variant="outline" className="text-[10px] rounded-md">Kuota: 40/64</Badge>
-                     <Badge variant="outline" className="text-[10px] rounded-md bg-green-500/10 text-green-600 border-none">IDR 100K/org</Badge>
-                  </div>
-                </Card>
-              </Label>
+                  <RadioGroupItem value="beginner" id="cat-begin" className="data-[state=checked]:border-primary data-[state=checked]:text-primary" checked={true} />
+                </div>
+                <div className="mt-4 flex gap-2">
+                  <Badge variant="outline" className="text-[10px] rounded-md">Kuota: 40/64</Badge>
+                  <Badge variant="outline" className="text-[10px] rounded-md bg-green-500/10 text-green-600 border-none">IDR 125K/org</Badge>
+                </div>
+              </Card>
+            </Label>
           </div>
         )}
 
         {/* STEP 2: PILIH PARTNER */}
         {currentStep === 2 && (
           <div className="animate-in fade-in slide-in-from-right-10 duration-500">
-             <h2 className="text-lg font-bold mb-4">Verifikasi Data Pemain</h2>
-             
-             <div className="bg-card rounded-[2rem] p-6 shadow-m3-1 mb-6">
-                <div className="mb-4">
-                  <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground mb-2 block">Cek Kembali Data Anda</Label>
-                   <div className="bg-secondary/30 p-4 rounded-xl border">
-                        <p className="font-bold">Irsyad JPP (Anda)</p>
-                        <p className="text-xs text-muted-foreground">TPF Level: Beginner</p>
-                    </div>
+            <h2 className="text-lg font-bold mb-4">Verifikasi Data Pemain</h2>
+
+            <div className="bg-card rounded-[2rem] p-6 shadow-m3-1 mb-6">
+              <div className="mb-4">
+                <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground mb-2 block">Cek Kembali Data Anda</Label>
+                <div className="bg-secondary/30 p-4 rounded-xl border">
+                  <p className="font-bold">Irsyad JPP (Anda)</p>
+                  <p className="text-xs text-muted-foreground">TPF Level: Beginner</p>
                 </div>
-             </div>
+              </div>
+            </div>
           </div>
         )}
 
@@ -113,7 +113,7 @@ export default function TournamentRegistration() {
         {currentStep === 3 && (
           <div className="animate-in fade-in slide-in-from-right-10 duration-500">
             <h2 className="text-lg font-bold mb-4">Cek Kembali Data</h2>
-            
+
             <Card className="rounded-[2rem] overflow-hidden border-none shadow-m3-1">
               <div className="bg-primary/10 p-6 flex flex-col items-center justify-center border-b border-primary/10">
                 <Trophy className="h-12 w-12 text-primary mb-2" />
@@ -121,23 +121,23 @@ export default function TournamentRegistration() {
                 <Badge className="mt-2 bg-primary">Tunggal Beginner</Badge>
               </div>
               <div className="p-6 space-y-4">
-                 <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Pemain</span>
-                    <span className="font-bold">Irsyad JPP (Anda)</span>
-                 </div>
-                 <Separator />
-                 <div className="flex justify-between items-center text-lg">
-                    <span className="font-bold">Total Biaya</span>
-                    <span className="font-headline text-primary">IDR 100.000</span>
-                 </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">Pemain</span>
+                  <span className="font-bold">Irsyad JPP (Anda)</span>
+                </div>
+                <Separator />
+                <div className="flex justify-between items-center text-lg">
+                  <span className="font-bold">Total Biaya</span>
+                  <span className="font-headline text-primary">IDR 125.000</span>
+                </div>
               </div>
             </Card>
-            
+
             <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-xl mt-4 flex gap-3">
-               <Circle className="h-2 w-2 fill-yellow-500 text-yellow-500 mt-1.5 shrink-0" />
-               <p className="text-xs text-yellow-700 dark:text-yellow-400">
-                 Dengan mendaftar, Anda menyetujui aturan fair play dan matriks level yang berlaku. Diskualifikasi dapat terjadi jika data dipalsukan.
-               </p>
+              <Circle className="h-2 w-2 fill-yellow-500 text-yellow-500 mt-1.5 shrink-0" />
+              <p className="text-xs text-yellow-700 dark:text-yellow-400">
+                Dengan mendaftar, Anda menyetujui aturan fair play dan matriks level yang berlaku. Diskualifikasi dapat terjadi jika data dipalsukan.
+              </p>
             </div>
           </div>
         )}

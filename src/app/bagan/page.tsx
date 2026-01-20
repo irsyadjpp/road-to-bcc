@@ -21,7 +21,7 @@ const generateTeams = (count: number, prefix: string) => {
   return Array.from({ length: count }, (_, i) => ({
     id: `${prefix}-${i + 1}`,
     name: `Tim ${prefix} ${i + 1}`,
-    players: `Pemain ${i*2+1} / Pemain ${i*2+2}`,
+    players: `Pemain ${i * 2 + 1} / Pemain ${i * 2 + 2}`,
     wins: Math.floor(Math.random() * 4),
     loss: 3 - Math.floor(Math.random() * 4),
     points: Math.floor(Math.random() * 100) + 50,
@@ -38,7 +38,7 @@ const generateGroups = (teamCount: number, groupCount: number, prefix: string) =
   for (let i = 0; i < teams.length; i++) {
     groups[i % groupCount].teams.push(teams[i]);
   }
-  
+
   groups.forEach(group => {
     group.teams.sort((a, b) => {
       if (b.wins !== a.wins) return b.wins - a.wins;
@@ -54,19 +54,20 @@ const createBracketRound = (name: string, numMatches: number, teamsPerMatch: num
   return {
     name,
     matches: Array.from({ length: numMatches }, (_, i) => ({
-      id: `${name.substring(0,3)}-${i+1}`,
-      teams: Array.from({ length: teamsPerMatch }, (_, j) => ({ name: `${name.substring(0,1)}${i+1}-W${j+1}` })),
+      id: `${name.substring(0, 3)}-${i + 1}`,
+      teams: Array.from({ length: teamsPerMatch }, (_, j) => ({ name: `${name.substring(0, 1)}${i + 1}-W${j + 1}` })),
     }))
   };
 };
 
 const generateAllBrackets = () => ({
-  beginner: { 
-    teams: 32, 
-    groups: 8, 
-    groupData: generateGroups(32, 8, 'B'),
+  beginner: {
+    teams: 64,
+    groups: 16,
+    groupData: generateGroups(64, 16, 'B'),
     knockout: [
-      createBracketRound("16 Besar", 8),
+      createBracketRound("32 Besar", 16),
+      createBracketRound("Perdelapan Final", 8),
       createBracketRound("Perempat Final", 4),
       createBracketRound("Semifinal", 2),
       createBracketRound("Final", 1),
@@ -89,7 +90,7 @@ export default function LiveScorePage() {
       <Header />
       <main className="flex-grow py-16 md:py-24 relative">
         <div className="absolute inset-0 pointer-events-none opacity-5">
-           <CourtLines />
+          <CourtLines />
         </div>
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
 
@@ -107,19 +108,19 @@ export default function LiveScorePage() {
           </div>
 
           {!bracketData ? (
-              <div className="flex justify-center items-center h-64">
-                  <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
+            <div className="flex justify-center items-center h-64">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
           ) : (
-             <CategoryView categoryData={bracketData.beginner} onGroupClick={setSelectedGroup} />
+            <CategoryView categoryData={bracketData.beginner} onGroupClick={setSelectedGroup} />
           )}
-          
 
-           <Dialog open={!!selectedGroup} onOpenChange={() => setSelectedGroup(null)}>
+
+          <Dialog open={!!selectedGroup} onOpenChange={() => setSelectedGroup(null)}>
             <DialogContent className="max-w-xl bg-card border-border/50">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-bold font-headline flex items-center gap-3">
-                  <ListOrdered className="w-6 h-6 text-primary"/>
+                  <ListOrdered className="w-6 h-6 text-primary" />
                   Klasemen {selectedGroup?.name}
                 </DialogTitle>
                 <DialogDescription>
@@ -127,28 +128,28 @@ export default function LiveScorePage() {
                 </DialogDescription>
               </DialogHeader>
               <div className="my-4">
-                  <Table>
-                      <TableHeader>
-                          <TableRow>
-                              <TableHead className="w-12">#</TableHead>
-                              <TableHead>Tim</TableHead>
-                              <TableHead className="text-center">W</TableHead>
-                              <TableHead className="text-center">L</TableHead>
-                              <TableHead className="text-right">Poin</TableHead>
-                          </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                          {selectedGroup?.teams.map((team: any, index: number) => (
-                              <TableRow key={team.id} className={cn(index < 2 && "bg-primary/5")}>
-                                  <TableCell className="font-bold text-lg">{index + 1}</TableCell>
-                                  <TableCell className="font-medium text-foreground">{team.name}</TableCell>
-                                  <TableCell className="text-center text-green-500 font-bold">{team.wins}</TableCell>
-                                  <TableCell className="text-center text-red-500 font-bold">{team.loss}</TableCell>
-                                  <TableCell className="text-right font-mono font-semibold">{team.points}</TableCell>
-                              </TableRow>
-                          ))}
-                      </TableBody>
-                  </Table>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-12">#</TableHead>
+                      <TableHead>Tim</TableHead>
+                      <TableHead className="text-center">W</TableHead>
+                      <TableHead className="text-center">L</TableHead>
+                      <TableHead className="text-right">Poin</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {selectedGroup?.teams.map((team: any, index: number) => (
+                      <TableRow key={team.id} className={cn(index < 2 && "bg-primary/5")}>
+                        <TableCell className="font-bold text-lg">{index + 1}</TableCell>
+                        <TableCell className="font-medium text-foreground">{team.name}</TableCell>
+                        <TableCell className="text-center text-green-500 font-bold">{team.wins}</TableCell>
+                        <TableCell className="text-center text-red-500 font-bold">{team.loss}</TableCell>
+                        <TableCell className="text-right font-mono font-semibold">{team.points}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </div>
             </DialogContent>
           </Dialog>
@@ -214,35 +215,35 @@ function GroupStageView({ groupData, onGroupClick }: { groupData: any[], onGroup
 }
 
 function KnockoutBracket({ knockoutData }: { knockoutData: any[] }) {
-    return (
-        <div className="animate-in fade-in-50 duration-500">
-            <h2 className="text-3xl font-black font-headline text-center mb-8 uppercase tracking-wider">
-                Babak <span className="text-primary">Gugur (Main Draw)</span>
-            </h2>
-            <ScrollArea className="w-full whitespace-nowrap rounded-lg">
-                <div className="flex gap-4 md:gap-8 items-center justify-start p-4 min-h-[600px]">
-                    {knockoutData.map((round, roundIndex) => (
-                        <div key={round.name} className="flex items-center gap-4 md:gap-8">
-                            <div className={`flex flex-col justify-around h-full gap-4 ${round.name === 'Final' ? 'gap-12' : ''}`}>
-                                <h3 className="text-sm text-center font-bold text-muted-foreground uppercase tracking-widest -mb-2">
-                                  {round.name}
-                                </h3>
-                                {round.matches.map((match: any, matchIndex: number) => (
-                                    <BracketMatch key={match.id} match={match} />
-                                ))}
-                            </div>
-                            {roundIndex < knockoutData.length - 1 && <BracketConnector numMatches={round.matches.length} isFinal={knockoutData[roundIndex+1]?.name === 'Final'} />}
-                        </div>
-                    ))}
-                    <div className="flex flex-col items-center ml-4">
-                        <Trophy className="w-16 h-16 text-yellow-500 mb-4" />
-                        <h3 className="text-sm font-bold text-yellow-500 uppercase tracking-widest">CHAMPION</h3>
-                    </div>
-                </div>
-                <ScrollBar orientation="horizontal" />
-            </ScrollArea>
+  return (
+    <div className="animate-in fade-in-50 duration-500">
+      <h2 className="text-3xl font-black font-headline text-center mb-8 uppercase tracking-wider">
+        Babak <span className="text-primary">Gugur (Main Draw)</span>
+      </h2>
+      <ScrollArea className="w-full whitespace-nowrap rounded-lg">
+        <div className="flex gap-4 md:gap-8 items-center justify-start p-4 min-h-[600px]">
+          {knockoutData.map((round, roundIndex) => (
+            <div key={round.name} className="flex items-center gap-4 md:gap-8">
+              <div className={`flex flex-col justify-around h-full gap-4 ${round.name === 'Final' ? 'gap-12' : ''}`}>
+                <h3 className="text-sm text-center font-bold text-muted-foreground uppercase tracking-widest -mb-2">
+                  {round.name}
+                </h3>
+                {round.matches.map((match: any, matchIndex: number) => (
+                  <BracketMatch key={match.id} match={match} />
+                ))}
+              </div>
+              {roundIndex < knockoutData.length - 1 && <BracketConnector numMatches={round.matches.length} isFinal={knockoutData[roundIndex + 1]?.name === 'Final'} />}
+            </div>
+          ))}
+          <div className="flex flex-col items-center ml-4">
+            <Trophy className="w-16 h-16 text-yellow-500 mb-4" />
+            <h3 className="text-sm font-bold text-yellow-500 uppercase tracking-widest">CHAMPION</h3>
+          </div>
         </div>
-    );
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+    </div>
+  );
 }
 
 function BracketMatch({ match }: { match: any }) {
@@ -265,8 +266,8 @@ function BracketConnector({ numMatches, isFinal }: { numMatches: number, isFinal
     <div className="flex flex-col items-center justify-around h-full w-8 md:w-12">
       {Array.from({ length: numMatches / 2 }).map((_, i) => (
         <div key={i} className="relative w-full" style={{ height: `${connectorHeight * (isFinal ? 2 : 1)}px` }}>
-            <div className="absolute top-1/4 left-0 h-1/2 w-1/2 border-y-2 border-l-2 border-border/30 rounded-l-lg"></div>
-            <div className="absolute top-1/2 left-1/2 w-1/2 h-[2px] bg-border/30"></div>
+          <div className="absolute top-1/4 left-0 h-1/2 w-1/2 border-y-2 border-l-2 border-border/30 rounded-l-lg"></div>
+          <div className="absolute top-1/2 left-1/2 w-1/2 h-[2px] bg-border/30"></div>
         </div>
       ))}
     </div>

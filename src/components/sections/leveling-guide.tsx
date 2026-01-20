@@ -10,7 +10,7 @@ export function LevelingGuideSection() {
     {
       title: "Beginner",
       subtitle: "Pemula",
-      price: "Rp 100.000",
+      price: "Rp 125.000",
       skills: ["Grip 'Panci' (Panhandle)", "Ayunan lengan besar (bahu)"],
       bans: ["DILARANG bisa Backhand Overhead Clear", "Tidak ada rotasi lengan bawah"],
       color: "text-green-600 bg-green-50 dark:bg-green-900/20 dark:text-green-400",
@@ -37,17 +37,17 @@ export function LevelingGuideSection() {
             <Card key={idx} className={cn("border-t-8 shadow-xl hover:-translate-y-2 transition-transform duration-300 rounded-[2rem] overflow-hidden", level.borderColor)}>
               <CardHeader className={cn("text-center pb-8 pt-8", level.color)}>
                 <CardTitle className="flex flex-col gap-1">
-                    <span className="text-3xl font-black font-headline uppercase tracking-tight">{level.title}</span>
-                    <span className="text-sm font-bold opacity-70 uppercase tracking-widest">{level.subtitle}</span>
+                  <span className="text-3xl font-black font-headline uppercase tracking-tight">{level.title}</span>
+                  <span className="text-sm font-bold opacity-70 uppercase tracking-widest">{level.subtitle}</span>
                 </CardTitle>
-                
+
                 <div className={cn("inline-flex items-center gap-2 px-4 py-2 rounded-full font-black text-lg mt-4 shadow-sm", level.priceColor)}>
-                    <Tag className="w-4 h-4" />
-                    {level.price}
-                    <span className="text-xs font-medium opacity-70">/org</span>
+                  <Tag className="w-4 h-4" />
+                  {level.price}
+                  <span className="text-xs font-medium opacity-70">/org</span>
                 </div>
               </CardHeader>
-              
+
               <CardContent className="pt-8 px-6 pb-8 bg-card">
                 <div className="space-y-6">
                   <div>
@@ -57,15 +57,15 @@ export function LevelingGuideSection() {
                     <ul className="text-sm text-muted-foreground space-y-3 pl-2">
                       {level.skills.map((item, i) => (
                         <li key={i} className="flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0" />
-                            {item}
+                          <span className="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shrink-0" />
+                          {item}
                         </li>
                       ))}
                     </ul>
                   </div>
-                  
+
                   <div className="h-px bg-border/50" />
-                  
+
                   <div>
                     <h4 className="font-bold mb-3 flex items-center gap-2 text-destructive">
                       <XCircle className="w-5 h-5" /> Pantangan:
@@ -73,8 +73,8 @@ export function LevelingGuideSection() {
                     <ul className="text-sm text-muted-foreground space-y-3 pl-2">
                       {level.bans.map((item, i) => (
                         <li key={i} className="flex items-start gap-2">
-                             <span className="w-1.5 h-1.5 rounded-full bg-destructive mt-1.5 shrink-0" />
-                            {item}
+                          <span className="w-1.5 h-1.5 rounded-full bg-destructive mt-1.5 shrink-0" />
+                          {item}
                         </li>
                       ))}
                     </ul>
