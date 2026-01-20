@@ -1,12 +1,13 @@
 
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'Road to BCC 2026',
-  description: 'Road to BCC 2026: Integritas, Solidaritas, dan Sportivitas.',
+  title: 'Badmintour Open #1',
+  description: 'Badmintour Open #1: Integritas, Solidaritas, dan Sportivitas.',
   manifest: "/manifest.json",
   themeColor: "#9e1d24",
 };
@@ -21,7 +22,7 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=JetBrains+Mono:wght@400;700&family=Geist+Sans:wght@400;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
         <ThemeProvider

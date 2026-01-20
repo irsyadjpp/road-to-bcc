@@ -1,3 +1,5 @@
+
+
 'use client';
 
 import { useActionState, useEffect, useState } from "react";
@@ -50,7 +52,7 @@ export default function AdminLoginPage() {
             isLoggedIn: true
         };
         // Simpan sesi di sessionStorage agar layout bisa mendeteksinya
-        sessionStorage.setItem('admin_session', JSON.stringify(sessionData));
+        sessionStorage.setItem('badmintour_admin_session', JSON.stringify(sessionData));
 
         toast({ title: "Google Login Berhasil", description: "Selamat datang!", className: "bg-green-600 text-white" });
         router.push(res.redirectUrl || '/admin/dashboard');
@@ -81,7 +83,7 @@ export default function AdminLoginPage() {
         <div className="relative z-10">
              <div className="flex items-center gap-3 mb-2">
                 <Image src="/images/logo.png" alt="Logo" width={40} height={40} />
-                <span className="font-bold text-xl tracking-widest uppercase text-white/80">BCC 2026</span>
+                <span className="font-bold text-xl tracking-widest uppercase text-white/80">Badmintour Open #1</span>
              </div>
         </div>
 
@@ -91,13 +93,13 @@ export default function AdminLoginPage() {
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-600">SATU GENGGAMAN.</span>
             </h1>
             <p className="text-lg text-zinc-400 font-medium leading-relaxed">
-                Selamat datang di BCC Admin Portal. Pusat komando untuk mengelola seluruh aspek turnamen, dari pendaftaran hingga laporan akhir.
+                Selamat datang di Admin Portal. Pusat komando untuk mengelola seluruh aspek turnamen, dari pendaftaran hingga laporan akhir.
             </p>
         </div>
 
         <div className="relative z-10 flex gap-6 text-sm text-zinc-500 font-mono">
-            <span>© 2026 BCC Dev Team</span>
-            <span>v2.0.1 (Beta)</span>
+            <span>© {new Date().getFullYear()} Badmintour Dev Team</span>
+            <span>v1.0.0 (Beta)</span>
         </div>
       </div>
 

@@ -17,39 +17,29 @@ import { ClientOnly } from '@/components/client-only';
 // --- UPDATED MOCK DATA ---
 const SCHEDULE_DATA = [
   // Court 1
-  { id: 'M101', court: 'Court 1', time: '09:00', round: 'R32', matchOrder: 1, category: 'Advance', pA: 'Kevin S / Marcus G', pB: 'Ahsan / Hendra', status: 'FINISHED', winner: 'A', score: {set1: '21-19', set2: '18-21', set3: '21-15'}, duration: '58m' },
-  { id: 'M102', court: 'Court 1', time: '09:45', round: 'QF', matchOrder: 2, category: 'Advance', pA: 'Anthony Ginting', pB: 'Jonatan Christie', status: 'LIVE', winner: null, score: {set1: '19-21', set2: '15-12'}, duration: null },
-  { id: 'M103', court: 'Court 1', time: '10:30', round: 'SF', matchOrder: 3, category: 'Advance', pA: 'Apriyani R / Siti Fadia', pB: 'Nami M / Chiharu S', status: 'UPCOMING', winner: null, score: null, duration: null },
+  { id: 'M101', court: 'Court 1', time: '09:00', round: 'R32', matchOrder: 1, category: 'Beginner', pA: 'Kevin S / Marcus G', pB: 'Ahsan / Hendra', status: 'FINISHED', winner: 'A', score: {set1: '21-19', set2: '18-21', set3: '21-15'}, duration: '58m' },
+  { id: 'M102', court: 'Court 1', time: '09:45', round: 'QF', matchOrder: 2, category: 'Beginner', pA: 'Anthony Ginting', pB: 'Jonatan Christie', status: 'LIVE', winner: null, score: {set1: '19-21', set2: '15-12'}, duration: null },
+  { id: 'M103', court: 'Court 1', time: '10:30', round: 'SF', matchOrder: 3, category: 'Beginner', pA: 'Apriyani R / Siti Fadia', pB: 'Nami M / Chiharu S', status: 'UPCOMING', winner: null, score: null, duration: null },
   { id: 'M104', court: 'Court 1', time: '11:15', round: 'R16', matchOrder: 4, category: 'Beginner', pA: 'Budi / Ani', pB: 'Joko / Wati', status: 'UPCOMING', winner: null, score: null, duration: null },
 
   // Court 2
-  { id: 'M201', court: 'Court 2', time: '09:00', round: 'R32', matchOrder: 1, category: 'Intermediate', pA: 'Fajar A / Rian A', pB: 'Leo C / Daniel M', status: 'FINISHED', winner: 'A', score: {set1: '21-18', set2: '22-20'}, duration: '45m' },
+  { id: 'M201', court: 'Court 2', time: '09:00', round: 'R32', matchOrder: 1, category: 'Beginner', pA: 'Fajar A / Rian A', pB: 'Leo C / Daniel M', status: 'FINISHED', winner: 'A', score: {set1: '21-18', set2: '22-20'}, duration: '45m' },
   { id: 'M202', court: 'Court 2', time: '09:45', round: 'R16', matchOrder: 2, category: 'Beginner', pA: 'Susi Susanti KW', pB: 'Mia Audina KW', status: 'FINISHED', winner: 'A', score: {set1: '21-10'}, duration: '25m' },
-  { id: 'M203', court: 'Court 2', time: '10:30', round: 'FINAL', matchOrder: 3, category: 'Advance', pA: 'Taufik Hidayat', pB: 'Lee Chong Wei', status: 'LIVE', winner: null, score: {set1: '20-22', set2: '5-1'}, duration: null },
+  { id: 'M203', court: 'Court 2', time: '10:30', round: 'FINAL', matchOrder: 3, category: 'Beginner', pA: 'Taufik Hidayat', pB: 'Lee Chong Wei', status: 'LIVE', winner: null, score: {set1: '20-22', set2: '5-1'}, duration: null },
   { id: 'M204', court: 'Court 2', time: '11:15', round: 'R32', matchOrder: 4, category: 'Beginner', pA: 'Tim A', pB: 'Tim B', status: 'UPCOMING', winner: null, score: null, duration: null },
 
   // Court 3
-  { id: 'M301', court: 'Court 3', time: '09:15', round: 'SF', matchOrder: 1, category: 'Intermediate', pA: 'Praveen J / Melati D', pB: 'Rinov R / Pitha H', status: 'FINISHED', winner: 'B', score: {set1: '15-21', set2: '18-21'}, duration: '48m' },
+  { id: 'M301', court: 'Court 3', time: '09:15', round: 'SF', matchOrder: 1, category: 'Beginner', pA: 'Praveen J / Melati D', pB: 'Rinov R / Pitha H', status: 'FINISHED', winner: 'B', score: {set1: '15-21', set2: '18-21'}, duration: '48m' },
   { id: 'M302', court: 'Court 3', time: '10:00', round: 'R16', matchOrder: 2, category: 'Beginner', pA: 'Tim C', pB: 'Tim D', status: 'LIVE', winner: null, score: {set1: '10-5'}, duration: null },
-  { id: 'M303', court: 'Court 3', time: '10:45', round: 'QF', matchOrder: 3, category: 'Advance', pA: 'Gregoria M', pB: 'Putri KW', status: 'UPCOMING', winner: null, score: null, duration: null },
+  { id: 'M303', court: 'Court 3', time: '10:45', round: 'QF', matchOrder: 3, category: 'Beginner', pA: 'Gregoria M', pB: 'Putri KW', status: 'UPCOMING', winner: null, score: null, duration: null },
 
   // Court 4
   { id: 'M401', court: 'Court 4', time: '09:15', round: 'R64', matchOrder: 1, category: 'Beginner', pA: 'Udin', pB: 'Asep', status: 'FINISHED', winner: 'A', score: {set1: '21-5'}, duration: '18m' },
-  { id: 'M402', court: 'Court 4', time: '10:00', round: 'R32', matchOrder: 2, category: 'Intermediate', pA: 'Pasangan X', pB: 'Pasangan Y', status: 'UPCOMING', winner: null, score: null, duration: null },
+  { id: 'M402', court: 'Court 4', time: '10:00', round: 'R32', matchOrder: 2, category: 'Beginner', pA: 'Pasangan X', pB: 'Pasangan Y', status: 'UPCOMING', winner: null, score: null, duration: null },
 ];
 
 
 const PODIUM_DATA = {
-  "Advance": [
-    { rank: 1, name: "Kevin S / Marcus G", team: "PB Jaya Raya" },
-    { rank: 2, name: "Ahsan / Hendra", team: "PB Djarum" },
-    { rank: 3, name: "Fajar A / Rian A", team: "SGS PLN" },
-  ],
-  "Intermediate": [
-    { rank: 1, name: "Praveen J / Melati D", team: "PB Djarum" },
-    { rank: 2, name: "Rinov R / Pitha H", team: "PB Jaya Raya" },
-    { rank: 3, name: "Pasangan X / Pasangan Y", team: "PB Exist" },
-  ],
   "Beginner": [
     { rank: 1, name: "Udin", team: "PB Ceria" },
     { rank: 2, name: "Asep", team: "PB Gembira" },
@@ -168,7 +158,7 @@ const ScheduleView = ({ searchTerm }: { searchTerm: string }) => {
 };
 
 const PodiumView = () => (
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+  <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-8 max-w-xl mx-auto">
     {Object.entries(PODIUM_DATA).map(([category, winners]) => (
       <Card key={category} className="bg-card/50 backdrop-blur-sm border-border/20 rounded-3xl overflow-hidden shadow-lg">
         <CardHeader className="bg-secondary/30 border-b border-border/20 p-4">
@@ -234,7 +224,7 @@ export default function SchedulePage() {
                   <div className="relative">
                     <Search className="absolute left-4 top-3.5 w-5 h-5 text-muted-foreground" />
                     <Input
-                      placeholder="Cari nama pemain, klub, atau kategori..."
+                      placeholder="Cari nama pemain atau klub..."
                       className="w-full h-12 pl-12 rounded-full border-none bg-transparent focus-visible:ring-2 focus-visible:ring-primary"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}

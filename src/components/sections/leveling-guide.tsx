@@ -17,26 +17,6 @@ export function LevelingGuideSection() {
       borderColor: "border-green-500",
       priceColor: "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
     },
-    {
-      title: "Intermediate",
-      subtitle: "Menengah",
-      price: "Rp 150.000",
-      skills: ["Power Smash baik", "Langkah Chassé & Lob baseline-to-baseline"],
-      bans: ["Backhand Overhead masih tanggung/datar", "Transisi menyerang ke bertahan lambat"],
-      color: "text-blue-600 bg-blue-50 dark:bg-blue-900/20 dark:text-blue-400",
-      borderColor: "border-blue-500",
-      priceColor: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
-    },
-    {
-      title: "Advance",
-      subtitle: "Mahir",
-      price: "Rp 150.000",
-      skills: ["Finger Power & Wrist Snap (Bunyi Nyaring)", "Split Step konsisten", "Backhand Clear silang/lurus"],
-      bans: ["Hanya untuk pemain non-profesional (Komunitas)"],
-      color: "text-purple-600 bg-purple-50 dark:bg-purple-900/20 dark:text-purple-400",
-      borderColor: "border-purple-500",
-      priceColor: "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
-    }
   ];
 
   return (
@@ -52,7 +32,7 @@ export function LevelingGuideSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 max-w-lg mx-auto">
           {levels.map((level, idx) => (
             <Card key={idx} className={cn("border-t-8 shadow-xl hover:-translate-y-2 transition-transform duration-300 rounded-[2rem] overflow-hidden", level.borderColor)}>
               <CardHeader className={cn("text-center pb-8 pt-8", level.color)}>

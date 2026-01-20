@@ -104,7 +104,7 @@ export default function SponsorReportPage() {
                     </Badge>
                 </div>
                 <p className="text-zinc-400 text-sm">
-                    Campaign: <span className="text-white font-bold">BCC 2026 Official Partner</span> • Duration: <span className="text-white font-bold">Jun - Jul 2026</span>
+                    Campaign: <span className="text-white font-bold">Badmintour Open #1 Official Partner</span> • Duration: <span className="text-white font-bold">Mar - Apr 2026</span>
                 </p>
             </div>
             

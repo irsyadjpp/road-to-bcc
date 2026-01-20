@@ -1,37 +1,23 @@
 
 'use server';
 
-import { revalidatePath } from "next/cache";
+import { teamRegistrationSchema, TeamRegistrationFormValues } from "@/lib/schemas/registration";
+import { generateUniqueCode } from "@/lib/game-logic";
 
-export async function registerTeamEntity(prevState: any, formData: FormData) {
-  // Simulasi Delay Database
+export async function registerTeamEntity(prevState: any, formData: FormData): Promise<{ success: boolean; teamCode: string | null; }> {
+  const data = Object.fromEntries(formData);
+  const validatedFields = teamRegistrationSchema.safeParse(data);
+
+  if (!validatedFields.success) {
+    console.error("Validation failed", validatedFields.error.flatten().fieldErrors);
+    return { success: false, teamCode: null };
+  }
+
   await new Promise(r => setTimeout(r, 1000));
 
-  const teamName = formData.get('name') as string;
-  const origin = formData.get('origin');
+  const teamCode = generateUniqueCode("COM");
+  console.log("New Team Registered:", { ...validatedFields.data, teamCode });
 
-  // LOGIC BARU: Generate Kode Tim dari Nama Tim
-  // Ambil 4 karakter pertama, ubah ke uppercase, hapus spasi, lalu tambahkan -2026
-  const teamCodePrefix = teamName.replace(/\s+/g, '').substring(0, 4).toUpperCase();
-  const teamCode = `${teamCodePrefix}-2026`;
-
-
-  // Simpan ke Database Tim
-  const newTeam = {
-    id: `TEAM-${Date.now()}`,
-    name: teamName,
-    origin: origin,
-    code: teamCode,
-    manager: formData.get('managerName'),
-    jersey: {
-      home: formData.get('jerseyHome'),
-      away: formData.get('jerseyAway')
-    },
-    members: [] // Masih kosong, nanti pemain join sendiri
-  };
-
-  // TODO: Insert 'newTeam' to Database
-  console.log("Team Registered:", newTeam);
-
-  return { success: true, teamCode: teamCode };
+  return { success: true, teamCode };
 }
+

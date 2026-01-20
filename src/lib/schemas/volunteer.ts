@@ -1,12 +1,14 @@
+
 import { z } from "zod";
 
 export const VOLUNTEER_DIVISIONS = [
-  "MATCH CONTROL: Input skor digital, asisten wasit.",
-  "GATE KEEPER: Cek aplikasi, tiket, keamanan.",
+  "MATCH CONTROL (Skor, Wasit, Jadwal)",
+  "GATE KEEPER (Keamanan & Ticketing)",
   "MEDIS & FISIO: P3K lapangan, bantu terapis.",
   "MEDIA & KREATIF: Foto, video reels, liputan story.",
   "LOGISTIK & RUNNER: Mobilitas tinggi, angkat barang.",
-  "LIAISON OFFICER (LO): Mendampingi Sponsor/VIP.",
+  "LIAISON OFFICER (LO - Tamu VIP)",
+  "SPONSORSHIP & FUNDRAISING"
 ] as const;
 
 export const volunteerSchema = z.object({
@@ -44,7 +46,7 @@ export const volunteerSchema = z.object({
   
   // BAGIAN 6: STUDI KASUS
   caseStudy1: z.string().min(20, "Jawaban terlalu pendek, berikan detail tindakan Anda."),
-  caseStudy2: z.string().min(20, "Jawaban terlalu pendek, berikan solusi konkret."),
+  caseStudy2: z.string().min(20, "Solusi konkret Anda."),
 
   // PERNYATAAN
   agreeData: z.literal(true, { errorMap: () => ({ message: "Wajib disetujui" }) }),

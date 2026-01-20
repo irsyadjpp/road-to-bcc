@@ -1,3 +1,5 @@
+
+
 'use client';
 
 import { useState } from "react";
@@ -25,35 +27,35 @@ import { useToast } from "@/hooks/use-toast";
 const ACTIVE_MANDATES = [
   { 
     id: "SPT-001", 
-    no: "001/SPT-TPF/XII/2025", 
-    roleKey: "TPF",
-    title: "Tim Pencari Fakta",
+    no: "001/SPT-TVT/IV/2026", 
+    roleKey: "TVT",
+    title: "Tim Verifikasi Teknis",
     issuedTo: [
       { name: "Faiz Azilla", avatar: "" },
       { name: "Anindiffa Pandu", avatar: "" },
       { name: "Aulia Febrianto", avatar: "" }
     ],
-    date: "08 Dec 2025",
+    date: "01 Apr 2026",
     status: "ACTIVE" 
   },
   { 
     id: "SPT-002", 
-    no: "002/SPT-MED/XII/2025", 
+    no: "002/SPT-MED/IV/2026", 
     roleKey: "MEDIS",
     title: "Tim Medis & Kesehatan",
     issuedTo: [
       { name: "Dr. Nanda", avatar: "https://github.com/shadcn.png" },
       { name: "Ns. Budi", avatar: "" }
     ],
-    date: "09 Dec 2025",
+    date: "02 Apr 2026",
     status: "ACTIVE" 
   },
 ];
 
 const STAFF_LIST = [
-  { id: "S1", name: "Faiz Azilla Syaehon", role: "Koordinator TPF" },
-  { id: "S2", name: "Anindiffa Pandu Prayuda", role: "Anggota TPF" },
-  { id: "S3", name: "Aulia Febrianto", role: "Anggota TPF" },
+  { id: "S1", name: "Faiz Azilla Syaehon", role: "Koordinator TVT" },
+  { id: "S2", name: "Anindiffa Pandu Prayuda", role: "Anggota TVT" },
+  { id: "S3", name: "Aulia Febrianto", role: "Anggota TVT" },
   { id: "S4", name: "Dr. Nanda", role: "Koordinator Medis" },
   { id: "S5", name: "Sidiq", role: "Koordinator Keamanan" },
   { id: "S6", name: "Agung", role: "Referee" },
@@ -67,7 +69,7 @@ export default function DigitalMandatePage() {
   // Create Form State
   const [selectedRole, setSelectedRole] = useState<string>("");
   const [selectedStaff, setSelectedStaff] = useState<string[]>([]);
-  const [letterNo, setLetterNo] = useState("003/SPT-XXX/BCC/VI/2026");
+  const [letterNo, setLetterNo] = useState("003/SPT-XXX/BTOUR/IV/2026");
 
   const activeRoleData = selectedRole ? ROLE_DEFINITIONS[selectedRole as keyof typeof ROLE_DEFINITIONS] : null;
 
@@ -183,6 +185,10 @@ export default function DigitalMandatePage() {
       {/* --- CREATE MANDATE MODAL --- */}
       <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
         <DialogContent className="bg-zinc-950 border-zinc-800 text-white rounded-[40px] max-w-4xl p-0 overflow-hidden shadow-2xl">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Issue New Mandate</DialogTitle>
+            <DialogDescription>Create a new digital mandate for a division or personnel.</DialogDescription>
+          </DialogHeader>
             <div className="grid grid-cols-1 lg:grid-cols-2 h-[600px]">
                 
                 {/* LEFT: FORM INPUT */}

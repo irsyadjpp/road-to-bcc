@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { cn } from '@/lib/utils';
-import { ClientOnly } from '../client-only';
+import { ClientOnly } from '@/components/client-only';
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -24,7 +24,7 @@ export function Header() {
     { name: 'Beranda', href: '/' },
     { name: 'Bagan', href: '/bagan' },
     { name: 'Jadwal', href: '/schedule' },
-    { name: 'Players', href: '/players' },
+    { name: 'Participants', href: '/participants' },
   ];
 
   return (
@@ -41,7 +41,7 @@ export function Header() {
                 <Image src="/images/logo.png" alt="Logo" fill className="object-contain" />
             </div>
             <span className={cn("font-headline font-black tracking-tighter uppercase hidden md:block transition-all", isScrolled ? "text-lg" : "text-xl")}>
-              BCC<span className="text-primary">2026</span>
+              BADMINTOUR
             </span>
         </Link>
 
@@ -63,7 +63,7 @@ export function Header() {
              </ClientOnly>
              
              <Button asChild className="rounded-full font-bold bg-primary text-primary-foreground hover:brightness-110 shadow-lg shadow-primary/20 px-6 hidden sm:flex">
-                <Link href="/manager/login">
+                <Link href="/admin/login">
                     <User className="w-4 h-4 mr-2"/> Masuk
                 </Link>
              </Button>
@@ -81,7 +81,7 @@ export function Header() {
                          <Link key={item.href} href={item.href} className="text-2xl font-black font-headline uppercase text-muted-foreground data-[active=true]:text-foreground">{item.name}</Link>
                       ))}
                       <div className="flex flex-col w-full gap-3 mt-8">
-                         <Button asChild size="lg" className="w-full rounded-full text-lg font-bold bg-primary"><Link href="/manager/login">Login Manajer</Link></Button>
+                         <Button asChild size="lg" className="w-full rounded-full text-lg font-bold bg-primary"><Link href="/admin/login">Login Admin</Link></Button>
                       </div>
                    </div>
                 </SheetContent>

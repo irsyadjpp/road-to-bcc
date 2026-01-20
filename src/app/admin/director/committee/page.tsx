@@ -37,11 +37,11 @@ const DIVISIONS = [
     border: "border-red-500/20",
     head: "Agung",
     members: 12,
-    description: "Menjamin integritas kompetisi, jadwal, wasit, dan penanganan sengketa (TPF).",
+    description: "Menjamin integritas kompetisi, jadwal, wasit, dan penanganan sengketa (TVT).",
     responsibilities: [
       "Perencanaan & Scheduling Pertandingan",
       "Regulasi & Integritas (Fair Play)",
-      "Koordinasi Tim Verifikasi (TPF)",
+      "Koordinasi Tim Verifikasi Teknis (TVT)",
       "Manajemen Referee & Umpire"
     ]
   },
@@ -187,7 +187,7 @@ export default function StructurePage() {
                 Team <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">Structure</span>
             </h1>
             <p className="text-zinc-400 mt-2 max-w-xl text-lg">
-                Hierarki komando dan distribusi tugas fungsional BCC 2026.
+                Hierarki komando dan distribusi tugas fungsional Badmintour Open #1.
             </p>
         </div>
       </div>

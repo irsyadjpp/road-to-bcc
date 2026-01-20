@@ -10,7 +10,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
           {/* Kolom 1: Deskripsi */}
           <div>
-            <h3 className="font-headline text-lg font-bold mb-4 text-primary">BCC</h3>
+            <h3 className="font-headline text-lg font-bold mb-4 text-primary">Badmintour</h3>
             <p className="text-muted-foreground mb-4">
               Didedikasikan untuk para pecinta bulutangkis sejati. Kami berkomitmen untuk menyajikan turnamen yang adil, kompetitif, dan berkesan dengan standar profesional.
             </p>
@@ -30,8 +30,8 @@ export function Footer() {
             <ul className="space-y-2 text-muted-foreground">
               <li className="flex items-center justify-center md:justify-start">
                 <Mail className="w-4 h-4 mr-2 text-primary/70" />
-                <a href="mailto:admin@managementbcc.com" className="hover:text-primary transition-colors">
-                  admin@managementbcc.com
+                <a href="mailto:admin@badmintour.com" className="hover:text-primary transition-colors">
+                  admin@badmintour.com
                 </a>
               </li>
               <li className="flex items-center justify-center md:justify-start">
@@ -44,7 +44,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-12 pt-8 border-t text-center">
-            <p className="mt-8 text-sm text-muted-foreground">&copy; {new Date().getFullYear()} Road to BCC 2026. All Rights Reserved.</p>
+            <p className="mt-8 text-sm text-muted-foreground">&copy; {new Date().getFullYear()} Badmintour Open #1. All Rights Reserved.</p>
         </div>
       </div>
     </footer>

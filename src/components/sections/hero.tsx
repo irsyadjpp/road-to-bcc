@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -24,7 +25,7 @@ export function HeroSection() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
               </span>
-              Road to BCC 2026: Digital Prologue
+              Badmintour Open #1
            </div>
 
            <h1 className="text-6xl sm:text-7xl md:text-8xl font-black font-headline tracking-tighter leading-[0.9] mb-6 text-foreground">
@@ -33,12 +34,12 @@ export function HeroSection() {
            </h1>
 
            <p className="text-lg md:text-xl text-zinc-600 dark:text-zinc-400 font-medium max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed">
-              Turnamen badminton digital pertama dengan integrasi Live Score & Statistik Real-time. Rasakan atmosfer profesional di level komunitas.
+              Turnamen badminton dengan integrasi digital penuh, dari Live Score hingga Statistik Real-time. Rasakan atmosfer profesional di level komunitas.
            </p>
 
            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button asChild size="lg" className="h-16 px-8 rounded-full text-lg font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-transform bg-primary text-white hover:bg-primary/90">
-                 <Link href="/manager/login">
+                 <Link href="/#register">
                     Daftar Sekarang <ArrowRight className="ml-2 w-5 h-5" />
                  </Link>
               </Button>
@@ -65,15 +66,15 @@ export function HeroSection() {
                     <div className="absolute bottom-8 left-8 right-8 text-white">
                         <div className="flex items-center gap-2 mb-2 text-yellow-400">
                              <Trophy className="w-5 h-5 fill-current" />
-                             <span className="font-bold tracking-wider">PRIZE POOL</span>
+                             <span className="font-bold tracking-wider">TOTAL PRIZE POOL</span>
                         </div>
-                        <p className="text-4xl font-black font-headline">RP 19 JUTA</p>
+                        <p className="text-4xl font-black font-headline">RP 5 JUTA</p>
                         
                         <div className="mt-6 bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
                            <ClientOnly>
                               <div className="text-center">
                                  <p className="text-xs uppercase tracking-widest text-zinc-300 mb-1">Pendaftaran Ditutup</p>
-                                 <Countdown targetDate="2026-02-06" />
+                                 <Countdown targetDate="2026-04-03" />
                               </div>
                            </ClientOnly>
                         </div>
@@ -92,7 +93,7 @@ export function HeroSection() {
          <div className="flex whitespace-nowrap animate-marquee">
             {[1,2,3,4,5,6].map(i => (
                 <span key={i} className="text-xl md:text-2xl font-black font-headline mx-8 uppercase tracking-widest flex items-center gap-4">
-                   <Zap className="w-6 h-6 fill-black" /> ROAD TO BCC 2026 • THE DIGITAL PROLOGUE • LEVEL UP YOUR GAME
+                   <Zap className="w-6 h-6 fill-black" /> Badmintour Open #1 • LEVEL UP YOUR GAME
                 </span>
             ))}
          </div>

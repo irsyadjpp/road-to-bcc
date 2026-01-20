@@ -9,11 +9,6 @@ import { cn } from "@/lib/utils";
 // Matrix Data (Rangkuman Simple)
 const simpleMatrix = [
   { p1: "Beginner", p2: "Beginner", res: "Beginner", tier: "Tier Bawah - Atas", status: "allowed", color: "bg-green-500" },
-  { p1: "Beginner", p2: "Intermediate", res: "Intermediate", tier: "Tier Menengah", status: "allowed", color: "bg-blue-500", note: "Naik Level" },
-  { p1: "Intermediate", p2: "Intermediate", res: "Intermediate", tier: "Tier Bawah - Atas", status: "allowed", color: "bg-blue-500" },
-  { p1: "Intermediate", p2: "Advance", res: "Advance", tier: "Tier Menengah", status: "allowed", color: "bg-purple-500", note: "Naik Level" },
-  { p1: "Advance", p2: "Advance", res: "Advance", tier: "Tier Atas (Seed)", status: "allowed", color: "bg-purple-500" },
-  { p1: "Beginner", p2: "Advance", res: "DILARANG", tier: "-", status: "banned", color: "bg-red-500" },
 ];
 
 export function CategoriesSection() {
@@ -32,7 +27,7 @@ export function CategoriesSection() {
                     Matrix <span className="text-primary">Kategori</span>
                 </h2>
                 <p className="text-xl text-muted-foreground font-medium leading-relaxed">
-                    Sistem <strong>Level + Tier</strong>. Level tertinggi menentukan kategori, Tier menentukan status unggulan (Seeding).
+                    Sistem <strong>Level + Tier</strong>. Turnamen ini hanya membuka kategori Beginner. Tier digunakan untuk penentuan unggulan (Seeding).
                 </p>
             </div>
              <div className="bg-surface-variant/50 p-6 rounded-[2rem] border border-white/10 max-w-md w-full backdrop-blur-sm">
@@ -40,7 +35,7 @@ export function CategoriesSection() {
                     <AlertTriangle className="w-5 h-5 text-yellow-500" /> Core Principle
                 </div>
                 <p className="text-sm font-medium opacity-90 leading-relaxed">
-                    "Kategori pasangan ditentukan berdasarkan <strong>pemain dengan level tertinggi</strong>. Tier digunakan untuk penyeimbangan grup (fairness)."
+                    "Tier digunakan untuk penyeimbangan grup (fairness) agar tidak ada Beginner Atas bertemu Beginner Bawah di fase awal."
                 </p>
             </div>
         </div>
@@ -122,11 +117,11 @@ export function CategoriesSection() {
 
                             <div className="bg-white/5 p-5 rounded-2xl border border-white/5 hover:bg-white/10 transition-colors">
                                 <div className="flex justify-between mb-2">
-                                    <span className="font-bold text-white">2. No Mismatch</span>
+                                    <span className="font-bold text-white">2. Validasi Internal</span>
                                     <Check className="w-5 h-5 text-green-500" />
                                 </div>
                                 <p className="text-sm text-zinc-400 leading-relaxed">
-                                    Kombinasi <strong className="text-red-400">Beginner + Advance</strong> tetap dilarang mutlak karena gap skill terlalu jauh, berisiko cedera & tidak fun.
+                                    TPF akan tetap memvalidasi skill untuk memastikan tidak ada pemain Advance yang menyamar sebagai Beginner.
                                 </p>
                             </div>
                         </div>
@@ -134,7 +129,7 @@ export function CategoriesSection() {
                         <div className="mt-8 pt-6 border-t border-white/10">
                             <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-zinc-500">
                                 <span>Logic Version</span>
-                                <span>v2.0 (Tier-Based)</span>
+                                <span>v2.1 (Beginner Only)</span>
                             </div>
                         </div>
                      </div>

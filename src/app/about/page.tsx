@@ -1,4 +1,5 @@
 
+
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -50,7 +51,7 @@ export default function AboutPage() {
         {/* --- HERO SECTION --- */}
         <div className="container mx-auto px-4 mb-24 relative z-10 text-center">
            <Badge variant="outline" className="mb-4 px-4 py-1.5 border-primary/50 text-primary bg-primary/10 font-bold tracking-widest uppercase">
-              The BCC Manifesto
+              The Badmintour Manifesto
            </Badge>
            <h1 className="text-5xl md:text-7xl font-black font-headline uppercase tracking-tighter mb-6">
               REVOLUSI <br/>TURNAMEN <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-500">KOMUNITAS.</span>
@@ -87,7 +88,7 @@ export default function AboutPage() {
                      <div className="mx-auto bg-card p-4 rounded-full w-fit mb-6 border-2 border-primary/30 shadow-2xl shadow-primary/20">
                         <Trophy className="w-12 h-12 text-primary" />
                      </div>
-                     <p className="text-3xl font-black text-white leading-tight">Road to BCC 2026</p>
+                     <p className="text-3xl font-black text-white leading-tight">Badmintour Open #1</p>
                      <p className="text-sm text-primary font-bold mt-1 tracking-widest uppercase">Fair Play Powered by Data</p>
                    </div>
                 </div>

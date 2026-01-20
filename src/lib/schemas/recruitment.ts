@@ -1,3 +1,4 @@
+
 import { z } from "zod";
 
 export const DIVISIONS = [
@@ -15,7 +16,7 @@ export const recruitmentSchema = z.object({
   fullName: z.string().min(2, "Nama lengkap wajib diisi"),
   nickname: z.string().min(2, "Nama panggilan wajib diisi"),
   gender: z.enum(["Laki-laki", "Perempuan"], { required_error: "Pilih jenis kelamin" }),
-  dob: z.string().min(1, "Tanggal lahir wajib diisi"),
+  dob: z.string().min(1, "Tanggal lahir wajib diisi"), // Input type='date' returns string YYYY-MM-DD
   whatsapp: z.string().min(10, "Nomor WhatsApp tidak valid").regex(/^\d+$/, "Hanya angka"),
   email: z.string().email("Email tidak valid"),
   address: z.string().min(10, "Alamat domisili lengkap wajib diisi"),
@@ -43,7 +44,7 @@ export const recruitmentSchema = z.object({
 
   // BAGIAN 6: STUDI KASUS (Lebih detail untuk panitia)
   caseStudy1: z.string().min(50, "Jawaban terlalu singkat. Jelaskan analisa Anda (min 50 karakter)."),
-  caseStudy2: z.string().min(50, "Jawaban terlalu singkat. Berikan solusi konkret (min 50 karakter)."),
+  caseStudy2: z.string().min(50, "Solusi konkret Anda..."),
 
   // PERNYATAAN
   agreeData: z.literal(true, { errorMap: () => ({ message: "Wajib disetujui" }) }),

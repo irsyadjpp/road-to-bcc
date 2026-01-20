@@ -1,11 +1,10 @@
+
 "use client";
 
 import { Trophy, Star } from "lucide-react";
 
 const prizes = [
-  { cat: "Beginner", pool: "4 JUTA", color: "text-green-500", bg: "bg-green-500/10" },
-  { cat: "Intermediate", pool: "7.5 JUTA", color: "text-blue-500", bg: "bg-blue-500/10" },
-  { cat: "Advance", pool: "7.5 JUTA", color: "text-purple-500", bg: "bg-purple-500/10" },
+  { cat: "Beginner", pool: "5 JUTA", color: "text-green-500", bg: "bg-green-500/10" },
 ];
 
 export function PrizesSection() {
@@ -17,14 +16,14 @@ export function PrizesSection() {
                 <Trophy className="w-10 h-10 text-yellow-600 dark:text-yellow-400" />
             </div>
             <h2 className="text-4xl md:text-6xl font-black font-headline uppercase mb-4">
-                Total Prize Pool Rp 19 Juta
+                Total Prize Pool Rp 5 Juta
             </h2>
             <p className="text-xl text-muted-foreground font-medium">
-                Total Hadiah Uang Tunai + Throphy + Merchandise
+                Total Hadiah Uang Tunai + Throphy + Merchandise untuk Kategori Beginner.
             </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-6 max-w-md mx-auto">
             {prizes.map((p, i) => (
                 <div key={i} className="bg-secondary rounded-[2.5rem] p-8 text-center hover:scale-105 transition-transform duration-300 border-2 border-transparent hover:border-primary/20">
                     <div className={`inline-flex items-center justify-center px-4 py-1.5 rounded-full ${p.bg} ${p.color} font-bold text-sm uppercase tracking-widest mb-6`}>

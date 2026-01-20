@@ -1,3 +1,5 @@
+
+
 'use server';
 
 import { z } from 'zod';
@@ -11,7 +13,7 @@ const formSchema = z.object({
 
 function generateVoucherCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let result = 'BCC-';
+  let result = 'BTOUR-';
   for (let i = 0; i < 4; i++) {
     result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
@@ -21,14 +23,14 @@ function generateVoucherCode() {
 // --- MOCK DATABASE (Simulasi Data Server) ---
 // Anggap ini adalah data yang ada di Firebase Anda
 const MOCK_DATABASE = [
-  { whatsapp: "08123456789", voucher: "BCC-LAMA", visitorId: "visitor-1" },
-  { whatsapp: "08111111111", voucher: "BCC-TEST", visitorId: "visitor-2" },
+  { whatsapp: "08123456789", voucher: "BTOUR-LAMA", visitorId: "visitor-1" },
+  { whatsapp: "08111111111", voucher: "BTOUR-TEST", visitorId: "visitor-2" },
 ];
 
 // --- ACTION 1: CHECK-IN ---
 export async function submitCheckin(prevState: any, formData: FormData) {
   const cookieStore = cookies();
-  const existingSession = cookieStore.get('bcc_event_session');
+  const existingSession = cookieStore.get('badmintour_event_session');
 
   // LAPIS 1: Cek Cookie (Device Fingerprint)
   if (existingSession) {
@@ -66,7 +68,7 @@ export async function submitCheckin(prevState: any, formData: FormData) {
         timestamp: Date.now()
     });
     
-    cookieStore.set('bcc_event_session', sessionData, {
+    cookieStore.set('badmintour_event_session', sessionData, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         maxAge: 60 * 60 * 24 * 7,
@@ -93,7 +95,7 @@ export async function submitCheckin(prevState: any, formData: FormData) {
     timestamp: Date.now()
   });
 
-  cookieStore.set('bcc_event_session', sessionData, {
+  cookieStore.set('badmintour_event_session', sessionData, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     maxAge: 60 * 60 * 24 * 7,
@@ -112,7 +114,7 @@ export async function submitCheckin(prevState: any, formData: FormData) {
 // --- ACTION 2: VOTING TIM ---
 export async function submitVote(visitorId: string, teamName: string) {
   const cookieStore = cookies();
-  if (!cookieStore.has('bcc_event_session')) {
+  if (!cookieStore.has('badmintour_event_session')) {
      return { success: false, message: "Silakan check-in terlebih dahulu" };
   }
   await new Promise((resolve) => setTimeout(resolve, 800));
@@ -130,7 +132,7 @@ const SPONSORS = [
 
 export async function visitBooth(visitorId: string, boothId: string) {
   const cookieStore = cookies();
-  if (!cookieStore.has('bcc_event_session')) {
+  if (!cookieStore.has('badmintour_event_session')) {
      return { success: false, message: "Scan Invalid" };
   }
 

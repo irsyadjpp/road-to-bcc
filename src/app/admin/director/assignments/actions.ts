@@ -1,8 +1,9 @@
+
 'use server';
 
 export type Mandate = {
   id: string;
-  refNumber: string; // Nomor Surat (002/SPT-TPF...)
+  refNumber: string; // Nomor Surat (002/SPT-TVT...)
   assigneeName: string;
   role: string;
   duties: string[];
@@ -14,9 +15,9 @@ export type Mandate = {
 let MANDATES: Mandate[] = [
   {
     id: "M-001",
-    refNumber: "002/SPT-TPF/BCC/XII/2025",
+    refNumber: "002/SPT-TVT/BTOUR/XII/2025",
     assigneeName: "Faiz Azilla Syaehon",
-    role: "Koordinator TPF",
+    role: "Koordinator TVT",
     duties: [
       "Verifikasi Pra-Event (Audit Video)",
       "Pengawasan Lapangan (Spot Check)",

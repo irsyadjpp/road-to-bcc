@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from "react"
@@ -65,7 +66,7 @@ const data = {
     { title: "Editor Jadwal", url: "/admin/match-control/schedule", icon: CalendarDays },
     { title: "Generate Bagan", url: "/admin/match-control/bracket", icon: Network },
     { title: "Verifikasi Hasil", url: "/admin/match-control/results", icon: FileText },
-    { title: "Verifikasi TPF", url: "/admin/tpf", icon: ShieldAlert },
+    { title: "Verifikasi TVT", url: "/admin/tpf", icon: ShieldAlert },
     { title: "Keputusan Protes", url: "/admin/protests", icon: Gavel },
     { title: "Papan Skor Wasit", url: "/admin/referee/match/1", icon: MonitorPlay },
   ],
@@ -94,6 +95,7 @@ const data = {
     { title: "Verifikasi Pendaftaran", url: "/admin/secretariat/verification", icon: UserCheck },
     { title: "E-Mandate (Surat Tugas)", url: "/admin/secretary/assignments", icon: FileCheck },
     { title: "Generator Sertifikat", url: "/admin/event/certificates", icon: Award },
+    { title: "Surat-menyurat", url: "/admin/secretary/correspondence", icon: Mail },
   ],
   // 9. MASTER DATA & PARTISIPAN
   navMaster: [
@@ -117,7 +119,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <div className="flex aspect-square size-10 items-center justify-center rounded-xl bg-black/50 border border-white/10 shadow-[0_0_15px_rgba(220,38,38,0.3)] overflow-hidden p-1">
             <Image 
               src="/images/logo.png" 
-              alt="BCC 2026 Logo" 
+              alt="Badmintour Open #1 Logo" 
               width={40} 
               height={40} 
               className="w-full h-full object-contain"
@@ -125,7 +127,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </div>
 
           <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
-            <span className="truncate font-black font-headline text-lg tracking-tight text-white">BCC 2026</span>
+            <span className="truncate font-black font-headline text-lg tracking-tight text-white">Badmintour #1</span>
             <span className="truncate text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Official Admin</span>
           </div>
         </div>

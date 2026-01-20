@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation';
 // Di production, ini diganti database query (Prisma/Supabase)
 const MOCK_DB_USERS = [
   { 
-    email: process.env.DIRECTOR_EMAIL || "director@bcc.com", 
+    email: process.env.DIRECTOR_EMAIL || "director@badmintour.com", 
     name: "Project Director", 
     role: "DIRECTOR", 
     isProfileCompleted: true 
@@ -36,7 +36,7 @@ export async function loginAdminGoogle() {
     isLoggedIn: true,
   });
 
-  cookies().set('bcc_admin_session', sessionData, { httpOnly: true, path: '/' });
+  cookies().set('badmintour_admin_session', sessionData, { httpOnly: true, path: '/' });
 
   // 3. Langsung Redirect ke Dashboard
   return { success: true, redirectUrl: '/admin/dashboard', user: userPayload };
@@ -62,18 +62,18 @@ export async function loginAdminByCode(prevState: any, formData: FormData) {
     isOnboarded: false, // NEW: Force onboarding check
   });
 
-  cookies().set('bcc_admin_session', sessionData, { httpOnly: true, path: '/' });
+  cookies().set('badmintour_admin_session', sessionData, { httpOnly: true, path: '/' });
   return { success: true, message: "Login berhasil!" };
 }
 
 
 export async function logoutAdmin() {
-  cookies().delete('bcc_admin_session');
+  cookies().delete('badmintour_admin_session');
   redirect('/');
 }
 
 export async function getAdminSession() {
-  const session = cookies().get('bcc_admin_session');
+  const session = cookies().get('badmintour_admin_session');
   if (!session) return null;
   try {
     return JSON.parse(session.value);
@@ -88,7 +88,7 @@ export async function signIntegrityPact() {
 
   const updatedSession = { ...session, isOnboarded: true };
 
-  cookies().set('bcc_admin_session', JSON.stringify(updatedSession), {
+  cookies().set('badmintour_admin_session', JSON.stringify(updatedSession), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     maxAge: 60 * 60 * 24 * 7,
