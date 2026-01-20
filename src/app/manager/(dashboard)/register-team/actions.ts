@@ -3,13 +3,13 @@
 
 import { revalidatePath } from "next/cache";
 
-export async function registerTeamEntity(formData: FormData) {
+export async function registerTeamEntity(prevState: any, formData: FormData) {
   // Simulasi Delay Database
   await new Promise(r => setTimeout(r, 1000));
 
   const teamName = formData.get('name') as string;
   const origin = formData.get('origin');
-  
+
   // LOGIC BARU: Generate Kode Tim dari Nama Tim
   // Ambil 4 karakter pertama, ubah ke uppercase, hapus spasi, lalu tambahkan -2026
   const teamCodePrefix = teamName.replace(/\s+/g, '').substring(0, 4).toUpperCase();
@@ -24,8 +24,8 @@ export async function registerTeamEntity(formData: FormData) {
     code: teamCode,
     manager: formData.get('managerName'),
     jersey: {
-        home: formData.get('jerseyHome'),
-        away: formData.get('jerseyAway')
+      home: formData.get('jerseyHome'),
+      away: formData.get('jerseyAway')
     },
     members: [] // Masih kosong, nanti pemain join sendiri
   };

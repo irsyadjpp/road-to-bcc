@@ -2,12 +2,13 @@
 
 "use client";
 
-import { useState, useActionState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { 
-  TeamRegistrationFormValues, 
-  teamRegistrationSchema 
+import {
+  TeamRegistrationFormValues,
+  teamRegistrationSchema
 } from "@/lib/schemas/registration";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -37,14 +38,14 @@ import { registerTeamEntity } from "./actions";
 
 const initialState = {
   success: false,
-  teamCode: null,
+  teamCode: "",
 };
 
 const CATEGORIES = ["Beginner", "Intermediate", "Advance"] as const;
 
 export default function RegisterTeamPage() {
   const { toast } = useToast();
-  const [state, formAction] = useActionState(registerTeamEntity, initialState);
+  const [state, formAction] = useFormState(registerTeamEntity, initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successData, setSuccessData] = useState<{ code: string; name: string } | null>(null);
 
@@ -71,12 +72,12 @@ export default function RegisterTeamPage() {
         description: "Tim telah dibuat. Silakan bagikan kode akses ke pemain.",
       });
       setIsSubmitting(false);
-    } else if (state.success === false && state.teamCode === null) {
+    } else if (state.success === false && state.teamCode === "") {
       toast({
-            title: "Gagal Mendaftar",
-            description: "Terjadi kesalahan pada server. Coba lagi nanti.",
-            variant: "destructive",
-        });
+        title: "Gagal Mendaftar",
+        description: "Terjadi kesalahan pada server. Coba lagi nanti.",
+        variant: "destructive",
+      });
       setIsSubmitting(false);
     }
   }, [state, form, toast]);
@@ -85,9 +86,9 @@ export default function RegisterTeamPage() {
     setIsSubmitting(true);
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
-        if (value) {
-            formData.append(key, value as string);
-        }
+      if (value) {
+        formData.append(key, value as string);
+      }
     });
     formAction(formData);
   }
@@ -112,14 +113,14 @@ export default function RegisterTeamPage() {
               Tim <strong>{successData.name}</strong> berhasil didaftarkan.
             </CardDescription>
           </CardHeader>
-          
+
           <CardContent className="space-y-6 pt-4">
             <div className="bg-background border rounded-xl p-6 text-center space-y-2 relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent" />
               <p className="text-sm text-muted-foreground uppercase tracking-wider font-semibold">
                 Kode Join Tim (Share Code)
               </p>
-              <div 
+              <div
                 className="text-4xl md:text-5xl font-mono font-bold tracking-widest text-primary cursor-pointer hover:opacity-80 transition-opacity"
                 onClick={copyToClipboard}
               >
@@ -155,45 +156,45 @@ export default function RegisterTeamPage() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              
+
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Identitas Tim & Manajer</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField control={form.control} name="entityName" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Nama Tim</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Contoh: PB. Badminton Ceria" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                    <FormItem>
+                      <FormLabel>Nama Tim</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Contoh: PB. Badminton Ceria" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )} />
                   <FormField control={form.control} name="officialLocation" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Domisili / Asal Klub</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Contoh: Cimahi" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                    <FormItem>
+                      <FormLabel>Domisili / Asal Klub</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Contoh: Cimahi" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )} />
                   <FormField control={form.control} name="contactPerson" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Nama Manajer (PIC)</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Nama Lengkap Anda" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                    <FormItem>
+                      <FormLabel>Nama Manajer (PIC)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Nama Lengkap Anda" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )} />
                   <FormField control={form.control} name="phoneNumber" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Nomor WhatsApp</FormLabel>
-                        <FormControl>
-                          <Input placeholder="08xxxxxxxx" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                    <FormItem>
+                      <FormLabel>Nomor WhatsApp</FormLabel>
+                      <FormControl>
+                        <Input placeholder="08xxxxxxxx" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )} />
                 </div>
               </div>
@@ -214,16 +215,16 @@ export default function RegisterTeamPage() {
                         className="grid grid-cols-1 md:grid-cols-3 gap-4"
                       >
                         {CATEGORIES.map((cat) => (
-                           <FormItem key={cat}>
-                             <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
-                               <FormControl>
-                                 <RadioGroupItem value={cat} className="sr-only" />
-                               </FormControl>
-                               <div className="items-center rounded-md border-2 border-muted p-4 hover:border-accent cursor-pointer transition-all">
-                                 <h4 className="font-semibold text-center">{cat}</h4>
-                               </div>
-                             </FormLabel>
-                           </FormItem>
+                          <FormItem key={cat}>
+                            <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
+                              <FormControl>
+                                <RadioGroupItem value={cat} className="sr-only" />
+                              </FormControl>
+                              <div className="items-center rounded-md border-2 border-muted p-4 hover:border-accent cursor-pointer transition-all">
+                                <h4 className="font-semibold text-center">{cat}</h4>
+                              </div>
+                            </FormLabel>
+                          </FormItem>
                         ))}
                       </RadioGroup>
                     </FormControl>
