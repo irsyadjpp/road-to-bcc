@@ -28,7 +28,7 @@ export default function PlayerProfilePage() {
         <div className="relative overflow-hidden rounded-[2.5rem] bg-card border border-border/50 shadow-m3-1">
           {/* Cover Image / Abstract BG */}
           <div className="h-32 bg-gradient-sport opacity-90"></div>
-          
+
           <div className="px-6 pb-6 -mt-12 relative z-10">
             <div className="flex justify-between items-end mb-4">
               <div className="relative group">
@@ -59,15 +59,15 @@ export default function PlayerProfilePage() {
           </div>
         </div>
 
-        {/* 2. TPF ASSESSMENT RESULT (Fitur No. 3) */}
+        {/* 2. TVT ASSESSMENT RESULT (Fitur No. 3) */}
         <div className="bg-foreground text-background rounded-[2rem] p-6 shadow-m3-3 relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-10">
             <ShieldCheck size={120} />
           </div>
-          
+
           <div className="flex items-center gap-2 mb-6">
             <Badge className="bg-primary text-white hover:bg-primary border-none px-3 py-1">
-              OFFICIAL TPF RESULT
+              OFFICIAL TVT RESULT
             </Badge>
             <span className="text-xs text-background/60 font-mono">UPDATED: 12 DEC</span>
           </div>
@@ -91,10 +91,10 @@ export default function PlayerProfilePage() {
               </div>
               <Progress value={82} className="h-3 rounded-full bg-white/20 [&>div]:bg-primary" />
             </div>
-            
+
             <div className="bg-background/10 rounded-xl p-4 backdrop-blur-sm">
               <p className="text-xs leading-relaxed font-medium">
-                <span className="text-primary font-bold">Catatan TPF:</span> "Footwork sangat baik, namun perlu peningkatan power pada smash belakang. Konsistensi defense sudah layak untuk level Intermediate."
+                <span className="text-primary font-bold">Catatan TVT:</span> "Footwork sangat baik, namun perlu peningkatan power pada smash belakang. Konsistensi defense sudah layak untuk level Intermediate."
               </p>
               <div className="mt-3 flex items-center gap-2">
                 <Avatar className="h-6 w-6">

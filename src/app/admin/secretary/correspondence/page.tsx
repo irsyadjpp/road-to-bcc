@@ -5,15 +5,15 @@ import * as React from "react"
 import Link from "next/link"
 import Image from "next/image" // Import Image dari Next.js
 import { usePathname } from "next/navigation"
-import { 
-  LayoutDashboard, User, Briefcase, CalendarRange, 
-  Activity, Users, Network, CheckSquare, 
-  PieChart, FileCheck, Stamp, Receipt, Store, Wallet, Coins, 
-  Trophy, CalendarDays, FileText, ShieldAlert, Mic2, LifeBuoy, ClipboardList, Gavel, MonitorPlay, ClipboardCheck, 
-  QrCode, Stethoscope, Package, Box, Database, Utensils, Gift, Upload, Layers, 
+import {
+  LayoutDashboard, User, Briefcase, CalendarRange,
+  Activity, Users, Network, CheckSquare,
+  PieChart, FileCheck, Stamp, Receipt, Store, Wallet, Coins,
+  Trophy, CalendarDays, FileText, ShieldAlert, Mic2, LifeBuoy, ClipboardList, Gavel, MonitorPlay, ClipboardCheck,
+  QrCode, Stethoscope, Package, Box, Database, Utensils, Gift, Upload, Layers,
   Timer, Navigation,
   BarChart3, Megaphone,
-  Mail, FileSignature, Award, 
+  Mail, FileSignature, Award,
   Tags, UserCog, Handshake, Newspaper, Settings, ChevronRight, LogOut, ShieldCheck as UserCheck
 } from "lucide-react"
 
@@ -66,7 +66,7 @@ const data = {
     { title: "Editor Jadwal", url: "/admin/match-control/schedule", icon: CalendarDays },
     { title: "Generate Bagan", url: "/admin/match-control/bracket", icon: Network },
     { title: "Verifikasi Hasil", url: "/admin/match-control/results", icon: FileText },
-    { title: "Verifikasi TVT", url: "/admin/tpf", icon: ShieldAlert },
+    { title: "Verifikasi TVT", url: "/admin/tvt", icon: ShieldAlert },
     { title: "Keputusan Protes", url: "/admin/protests", icon: Gavel },
     { title: "Papan Skor Wasit", url: "/admin/referee/match/1", icon: MonitorPlay },
   ],
@@ -110,18 +110,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="icon" {...props} className="border-r-0 bg-black">
-      
+
       {/* 1. HEADER (LOGO) */}
       <SidebarHeader className="h-20 flex justify-center border-b border-white/5 bg-zinc-950/50">
         <div className="flex items-center gap-3 px-2 group-data-[collapsible=icon]:justify-center">
-          
+
           {/* LOGO IMAGE */}
           <div className="flex aspect-square size-10 items-center justify-center rounded-xl bg-black/50 border border-white/10 shadow-[0_0_15px_rgba(220,38,38,0.3)] overflow-hidden p-1">
-            <Image 
-              src="/images/logo.png" 
-              alt="Badmintour Open #1 Logo" 
-              width={40} 
-              height={40} 
+            <Image
+              src="/images/logo.png"
+              alt="Badmintour Open #1 Logo"
+              width={40}
+              height={40}
               className="w-full h-full object-contain"
             />
           </div>
@@ -135,7 +135,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       {/* 2. CONTENT (MENU ITEMS) - Scrollable */}
       <SidebarContent className="px-3 py-4 space-y-6 bg-zinc-950/50 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-zinc-800">
-        
+
         <NavGroup label="UTAMA" items={data.navMain} currentPath={pathname} />
         <NavGroup label="DIRECTOR'S OFFICE" items={data.navDirector} currentPath={pathname} />
         <NavGroup label="KEUANGAN" items={data.navFinance} currentPath={pathname} />
@@ -151,20 +151,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {/* 3. FOOTER (USER PROFILE) */}
       <SidebarFooter className="p-4 bg-zinc-950/80 border-t border-white/5">
         <div className="flex items-center gap-3 group-data-[collapsible=icon]:justify-center">
-            <Avatar className="h-10 w-10 rounded-xl border-2 border-zinc-800 cursor-pointer hover:border-primary transition-colors">
-                <AvatarImage src={data.user.avatar} />
-                <AvatarFallback className="bg-zinc-900 font-bold text-zinc-400">IJ</AvatarFallback>
-            </Avatar>
-            <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
-                <span className="truncate font-bold text-white">{data.user.name}</span>
-                <span className="truncate text-xs text-zinc-500">{data.user.role}</span>
-            </div>
-            <Button size="icon" variant="ghost" className="h-8 w-8 text-zinc-500 hover:text-red-500 hover:bg-red-500/10 rounded-full group-data-[collapsible=icon]:hidden">
-                <LogOut className="h-4 w-4" />
-            </Button>
+          <Avatar className="h-10 w-10 rounded-xl border-2 border-zinc-800 cursor-pointer hover:border-primary transition-colors">
+            <AvatarImage src={data.user.avatar} />
+            <AvatarFallback className="bg-zinc-900 font-bold text-zinc-400">IJ</AvatarFallback>
+          </Avatar>
+          <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
+            <span className="truncate font-bold text-white">{data.user.name}</span>
+            <span className="truncate text-xs text-zinc-500">{data.user.role}</span>
+          </div>
+          <Button size="icon" variant="ghost" className="h-8 w-8 text-zinc-500 hover:text-red-500 hover:bg-red-500/10 rounded-full group-data-[collapsible=icon]:hidden">
+            <LogOut className="h-4 w-4" />
+          </Button>
         </div>
       </SidebarFooter>
-      
+
       <SidebarRail />
     </Sidebar>
   )
@@ -172,38 +172,38 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
 // --- SUB COMPONENT: NAV GROUP (MD3 STYLE) ---
 function NavGroup({ label, items, currentPath }: { label: string, items: any[], currentPath: string }) {
-    return (
-        <SidebarGroup>
-            <SidebarGroupLabel className="text-[10px] font-black tracking-[0.2em] text-zinc-600 uppercase mb-2 px-2 group-data-[collapsible=icon]:hidden">
-                {label}
-            </SidebarGroupLabel>
-            <SidebarMenu className="space-y-1">
-                {items.map((item) => {
-                    const isActive = currentPath === item.url;
-                    
-                    return (
-                        <SidebarMenuItem key={item.title}>
-                            <SidebarMenuButton asChild tooltip={item.title} 
-                                className={cn(
-                                    "h-10 rounded-full px-4 transition-all duration-300 font-medium text-sm group/btn relative overflow-hidden",
-                                    isActive 
-                                        ? "bg-primary text-primary-foreground shadow-[0_2px_10px_-5px_rgba(220,38,38,0.5)] font-bold hover:bg-primary" 
-                                        : "text-zinc-400 hover:text-white hover:bg-white/5"
-                                )}
-                            >
-                                <Link href={item.url} className="flex items-center w-full">
-                                    <item.icon className={cn("size-4 mr-3 transition-transform duration-300 group-hover/btn:scale-110", isActive && "animate-pulse-slow")} />
-                                    <span className="flex-1 truncate">{item.title}</span>
-                                    {isActive && <ChevronRight className="size-3 opacity-50 ml-auto" />}
-                                    
-                                    {/* Active Indicator Glow */}
-                                    {isActive && <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] animate-shimmer" />}
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                    )
-                })}
-            </SidebarMenu>
-        </SidebarGroup>
-    )
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel className="text-[10px] font-black tracking-[0.2em] text-zinc-600 uppercase mb-2 px-2 group-data-[collapsible=icon]:hidden">
+        {label}
+      </SidebarGroupLabel>
+      <SidebarMenu className="space-y-1">
+        {items.map((item) => {
+          const isActive = currentPath === item.url;
+
+          return (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton asChild tooltip={item.title}
+                className={cn(
+                  "h-10 rounded-full px-4 transition-all duration-300 font-medium text-sm group/btn relative overflow-hidden",
+                  isActive
+                    ? "bg-primary text-primary-foreground shadow-[0_2px_10px_-5px_rgba(220,38,38,0.5)] font-bold hover:bg-primary"
+                    : "text-zinc-400 hover:text-white hover:bg-white/5"
+                )}
+              >
+                <Link href={item.url} className="flex items-center w-full">
+                  <item.icon className={cn("size-4 mr-3 transition-transform duration-300 group-hover/btn:scale-110", isActive && "animate-pulse-slow")} />
+                  <span className="flex-1 truncate">{item.title}</span>
+                  {isActive && <ChevronRight className="size-3 opacity-50 ml-auto" />}
+
+                  {/* Active Indicator Glow */}
+                  {isActive && <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] animate-shimmer" />}
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )
+        })}
+      </SidebarMenu>
+    </SidebarGroup>
+  )
 }

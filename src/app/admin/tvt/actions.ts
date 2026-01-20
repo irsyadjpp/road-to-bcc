@@ -20,14 +20,14 @@ export type SkillModifiers = {
   backhandSmash: boolean;
   netKill: boolean;
   flickServe: boolean;
-  
+
   // B. Control
   spinningNet: boolean;
   crossNet: boolean;
   backhandDrop: boolean;
   backhandClear: boolean;
   crossDefense: boolean;
-  
+
   // C. IQ
   splitStep: boolean;
   divingDefense: boolean;
@@ -53,7 +53,7 @@ export type PlayerVerification = {
   category: string; // Beginner/Intermediate/Advance
   videoUrl: string;
   status: 'PENDING' | 'APPROVED' | 'UPGRADE_REQUIRED' | 'REJECTED';
-  tpfScore?: number;
+  tvtScore?: number;
   notes?: string;
 };
 
@@ -100,9 +100,9 @@ export async function submitSpotCheck(data: any) {
 }
 
 export async function submitVerificationResult(playerId: string, result: any) {
-    // Di real app: Update database
-    await new Promise(r => setTimeout(r, 1000));
-    return { success: true, message: `Status pemain ${playerId} diperbarui.` };
+  // Di real app: Update database
+  await new Promise(r => setTimeout(r, 1000));
+  return { success: true, message: `Status pemain ${playerId} diperbarui.` };
 }
 
 export async function getPlayerById(id: string) {

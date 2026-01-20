@@ -102,7 +102,7 @@ export default function TournamentRegistration() {
                 <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground mb-2 block">Cek Kembali Data Anda</Label>
                 <div className="bg-secondary/30 p-4 rounded-xl border">
                   <p className="font-bold">Irsyad JPP (Anda)</p>
-                  <p className="text-xs text-muted-foreground">TPF Level: Beginner</p>
+                  <p className="text-xs text-muted-foreground">TVT Level: Beginner</p>
                 </div>
               </div>
             </div>

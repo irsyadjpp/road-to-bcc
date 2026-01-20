@@ -23,63 +23,63 @@ export interface ValidationResult {
  * - Only Beginners can register.
  */
 export function validateIndividualRegistration(
-  p1: PlayerProfile, 
+  p1: PlayerProfile,
   mode: 'independent' | 'community' = 'independent' // Tambahkan parameter mode
 ): ValidationResult {
-  
-  // 1. Validasi SOP 4.3: Cek Kelengkapan Data TPF (Asumsi level ada jika profil ada)
+
+  // 1. Validasi SOP 4.3: Cek Kelengkapan Data TVT (Asumsi level ada jika profil ada)
   if (!p1.level) {
-    return { isValid: false, message: "Pemain belum dinilai oleh TPF (SOP 4.3)." };
+    return { isValid: false, message: "Pemain belum dinilai oleh TVT (SOP 4.3)." };
   }
 
   // 3. Validasi SOP 4.5: Matriks Level-Tier
   if (p1.level === 'Beginner') {
-     return {
-        isValid: true,
-        message: "Pemain Valid! Siap mendominasi lapangan.",
-        allowedCategory: "Beginner Open"
-      };
+    return {
+      isValid: true,
+      message: "Pemain Valid! Siap mendominasi lapangan.",
+      allowedCategory: "Beginner Open"
+    };
   }
 
   return {
-      isValid: false,
-      message: "Hanya pemain Beginner yang diizinkan mendaftar."
+    isValid: false,
+    message: "Hanya pemain Beginner yang diizinkan mendaftar."
   };
 }
 
 export function validatePairing(
-  p1: PlayerProfile, 
-  p2: PlayerProfile, 
+  p1: PlayerProfile,
+  p2: PlayerProfile,
   mode: 'independent' | 'community' = 'independent' // Tambahkan parameter mode
 ): ValidationResult {
-  
-  // 1. Validasi SOP 4.3: Cek Kelengkapan Data TPF
+
+  // 1. Validasi SOP 4.3: Cek Kelengkapan Data TVT
   if (!p1.level || !p2.level) {
-    return { isValid: false, message: "Salah satu pemain belum dinilai oleh TPF (SOP 4.3)." };
+    return { isValid: false, message: "Salah satu pemain belum dinilai oleh TVT (SOP 4.3)." };
   }
 
   // 2. Validasi SOP 4.4.B: Cek Kesamaan Komunitas (KHUSUS MODE KOMUNITAS)
   if (mode === 'community') {
     if (!p1.communityCode || !p2.communityCode || p1.communityCode !== p2.communityCode) {
-      return { 
-        valid: false, 
-        message: "Dalam Mode Komunitas, kedua pemain wajib berasal dari kode komunitas yang sama (SOP 4.4.B)." 
+      return {
+        valid: false,
+        message: "Dalam Mode Komunitas, kedua pemain wajib berasal dari kode komunitas yang sama (SOP 4.4.B)."
       };
     }
   }
 
   // 3. Validasi SOP 4.5: Matriks Level-Tier
   if (p1.level === 'Beginner' && p2.level === 'Beginner') {
-      return {
-        isValid: true,
-        message: "Pasangan Valid! Siap mendominasi lapangan.",
-        allowedCategory: "Beginner Open"
-      };
+    return {
+      isValid: true,
+      message: "Pasangan Valid! Siap mendominasi lapangan.",
+      allowedCategory: "Beginner Open"
+    };
   }
 
   return {
-      isValid: false,
-      message: "Hanya pemain Beginner yang diizinkan berpasangan."
+    isValid: false,
+    message: "Hanya pemain Beginner yang diizinkan berpasangan."
   };
 }
 

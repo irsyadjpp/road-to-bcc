@@ -13,9 +13,9 @@ const MOCK_TEAM_STATUS = {
     teamName: "PB Djarum KW",
     paymentStatus: "PAID",
     players: [
-        { name: "Kevin S. KW", nik: "3201...", tpfStatus: "APPROVED", note: "-" },
-        { name: "Taufik H. KW", nik: "3203...", tpfStatus: "UPGRADE_REQUIRED", note: "Skill melebihi Beginner" },
-        { name: "Lee C. W. KW", nik: "3204...", tpfStatus: "PENDING", note: "Video buram" }
+        { name: "Kevin S. KW", nik: "3201...", tvtStatus: "APPROVED", note: "-" },
+        { name: "Taufik H. KW", nik: "3203...", tvtStatus: "UPGRADE_REQUIRED", note: "Skill melebihi Beginner" },
+        { name: "Lee C. W. KW", nik: "3204...", tvtStatus: "PENDING", note: "Video buram" }
     ]
 };
 
@@ -35,7 +35,7 @@ export default function TeamStatusPage() {
         <div className="space-y-6">
             <div>
                 <h1 className="font-headline text-3xl mb-1">STATUS TIM & <span className="text-primary">VERIFIKASI</span></h1>
-                <p className="text-muted-foreground text-sm">Pantau status pembayaran & verifikasi TPF untuk tim Anda.</p>
+                <p className="text-muted-foreground text-sm">Pantau status pembayaran & verifikasi TVT untuk tim Anda.</p>
             </div>
 
             <Card className="rounded-[2rem] shadow-m3-1">
@@ -46,9 +46,9 @@ export default function TeamStatusPage() {
                             <CardDescription>Status Pendaftaran Kolektif</CardDescription>
                         </div>
                         {data.paymentStatus === "PAID" ? (
-                             <Badge className="bg-green-600 hover:bg-green-700">Pembayaran Lunas</Badge>
+                            <Badge className="bg-green-600 hover:bg-green-700">Pembayaran Lunas</Badge>
                         ) : (
-                             <Badge variant="destructive">Belum Lunas</Badge>
+                            <Badge variant="destructive">Belum Lunas</Badge>
                         )}
                     </div>
                 </CardHeader>
@@ -58,7 +58,7 @@ export default function TeamStatusPage() {
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>Nama Pemain</TableHead>
-                                    <TableHead>Status TPF</TableHead>
+                                    <TableHead>Status TVT</TableHead>
                                     <TableHead>Catatan Panitia</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -66,7 +66,7 @@ export default function TeamStatusPage() {
                                 {data.players.map((p, i) => (
                                     <TableRow key={i}>
                                         <TableCell className="font-medium">{p.name}</TableCell>
-                                        <TableCell><StatusBadge status={p.tpfStatus} /></TableCell>
+                                        <TableCell><StatusBadge status={p.tvtStatus} /></TableCell>
                                         <TableCell className="text-xs text-muted-foreground">{p.note}</TableCell>
                                     </TableRow>
                                 ))}
@@ -77,12 +77,12 @@ export default function TeamStatusPage() {
                     <div className="mt-6 bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg flex gap-3 border border-yellow-200 dark:border-yellow-800/50">
                         <ShieldAlert className="h-5 w-5 text-yellow-600 dark:text-yellow-500 shrink-0" />
                         <p className="text-xs text-yellow-800 dark:text-yellow-300">
-                           Tim baru bisa didaftarkan ke kategori pertandingan jika <strong>semua pemain sudah Lolos Verifikasi (APPROVED)</strong> dan <strong>pembayaran lunas</strong>.
+                            Tim baru bisa didaftarkan ke kategori pertandingan jika <strong>semua pemain sudah Lolos Verifikasi (APPROVED)</strong> dan <strong>pembayaran lunas</strong>.
                         </p>
                     </div>
                 </CardContent>
             </Card>
-            
+
             <div className="flex justify-end gap-3">
                 <Button variant="outline" asChild><Link href="/manager/dashboard"><FileText className="w-4 h-4 mr-2" />Lihat Dokumen</Link></Button>
                 <Button asChild><Link href="/manager/pairing">Daftarkan Tim ke Turnamen</Link></Button>
