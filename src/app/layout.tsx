@@ -1,6 +1,6 @@
 
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/theme-provider';
@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: 'Badmintour Open #1',
   description: 'Badmintour Open #1: Integritas, Solidaritas, dan Sportivitas.',
   manifest: "/manifest.json",
+};
+
+export const viewport: Viewport = {
   themeColor: "#9e1d24",
 };
 
